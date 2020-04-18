@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cosmos Street</title>
+    <style>
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+        background-color: black;
+      }
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      canvas {
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        height: 384px;
+        width: 384px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="128" height="128"></canvas>
+    <script src="game.js"></script>
+  </body>
+</html>
