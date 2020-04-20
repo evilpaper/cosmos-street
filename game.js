@@ -2,15 +2,12 @@ const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
 const player = new Image();
-console.log({ player });
 player.src = "spritesheet.png";
 player.tick = 0;
 player.frame = 0;
 player.ticksToNextFrame = 16;
 player.yy = 40;
-console.log(player.tick);
-console.log(player);
-console.log(player.ticksToNextFrame);
+player.speed = 1;
 
 const tile = new Image();
 tile.src = "spritesheet.png";
@@ -26,7 +23,7 @@ function update() {
     }
   }
 
-  tile.tick = (tile.tick + 1) % 16;
+  tile.tick = (tile.tick + player.speed) % 16;
 }
 
 function draw() {
@@ -49,12 +46,17 @@ function draw() {
 }
 
 document.addEventListener("keydown", (event) => {
-  console.log(event.keyCode);
   if (event.keyCode === 38) {
     player.yy = player.yy - 10;
   }
   if (event.keyCode === 40) {
     player.yy = player.yy + 10;
+  }
+  if (event.keyCode === 39) {
+    player.speed = 2;
+  }
+  if (event.keyCode === 37) {
+    player.speed = 1;
   }
 });
 
