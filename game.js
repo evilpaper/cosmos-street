@@ -48,7 +48,7 @@ function draw() {
     }
   }
   if (player.state === "jumping") {
-    context.drawImage(player, 52, 0, 26, 35, 51, player.yy, 26, 35);
+    context.drawImage(player, 52, 0, 26, 40, 51, player.yy, 26, 40);
   }
 }
 
