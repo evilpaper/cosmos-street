@@ -8,6 +8,8 @@ player.frame = 0;
 player.ticksToNextFrame = 16;
 player.yy = 40;
 player.speed = 1;
+player.states = ["skating", "jumping"];
+player.state = player.states[0];
 
 const tile = new Image();
 tile.src = "spritesheet.png";
@@ -38,19 +40,26 @@ function draw() {
   context.drawImage(tile, 0, 35, 16, 16, 19 - tile.tick, 75, 16, 16);
   context.drawImage(tile, 0, 35, 16, 16, 3 - tile.tick, 75, 16, 16);
   context.drawImage(tile, 0, 35, 16, 16, -13 - tile.tick, 75, 16, 16);
-  if (player.frame === 0) {
-    context.drawImage(player, 0, 0, 26, 35, 51, player.yy, 26, 35);
-  } else {
-    context.drawImage(player, 26, 0, 26, 35, 51, player.yy, 26, 35);
+  if (player.state === "skating") {
+    if (player.frame === 0) {
+      context.drawImage(player, 0, 0, 26, 35, 51, player.yy, 26, 35);
+    } else {
+      context.drawImage(player, 26, 0, 26, 35, 51, player.yy, 26, 35);
+    }
+  }
+  if (player.state === "jumping") {
+    context.drawImage(player, 52, 0, 26, 35, 51, player.yy, 26, 35);
   }
 }
 
 document.addEventListener("keydown", (event) => {
   if (event.keyCode === 38) {
     player.yy = player.yy - 10;
+    player.state = player.states[1];
   }
   if (event.keyCode === 40) {
     player.yy = player.yy + 10;
+    player.state = player.states[0];
   }
   if (event.keyCode === 39) {
     player.speed = 2;
