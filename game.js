@@ -52,6 +52,15 @@ function draw() {
   }
 }
 
+document.addEventListener("keyup", (event) => {
+  if (event.keyCode === 39) {
+    player.speed = 1;
+  }
+  if (event.keyCode === 37) {
+    player.speed = 1;
+  }
+});
+
 document.addEventListener("keydown", (event) => {
   if (event.keyCode === 38) {
     player.yy = player.yy - 10;
@@ -65,7 +74,7 @@ document.addEventListener("keydown", (event) => {
     player.speed = 2;
   }
   if (event.keyCode === 37) {
-    player.speed = 1;
+    player.speed = 0.5;
   }
 });
 
