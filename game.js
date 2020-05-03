@@ -1,12 +1,17 @@
+// Good sources
+// https://developer.mozilla.org/en-US/docs/Games/Techniques/Control_mechanisms/Desktop_with_mouse_and_keyboard
+
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
+
+const gravity = -1;
 
 const player = new Image();
 player.src = "spritesheet.png";
 player.tick = 0;
 player.frame = 0;
 player.ticksToNextFrame = 16;
-player.yy = 40;
+player.yy = 20;
 player.speed = 1;
 player.states = ["skating", "jumping"];
 player.state = player.states[0];
@@ -16,6 +21,14 @@ tile.src = "spritesheet.png";
 tile.tick = 0;
 
 function update() {
+  if (player.yy <= 38) {
+    player.yy = player.yy - gravity;
+  }
+
+  if (player.yy === 38) {
+    player.state = player.states[0];
+  }
+
   player.tick = (player.tick + 1) % player.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
   if (player.tick === 0) {
@@ -63,7 +76,7 @@ document.addEventListener("keyup", (event) => {
 
 document.addEventListener("keydown", (event) => {
   if (event.keyCode === 38) {
-    player.yy = player.yy - 10;
+    player.yy = player.yy - 40;
     player.state = player.states[1];
   }
   if (event.keyCode === 40) {
