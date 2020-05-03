@@ -21,11 +21,11 @@ tile.src = "spritesheet.png";
 tile.tick = 0;
 
 function update() {
-  if (player.yy <= 38) {
+  if (player.yy <= 39) {
     player.yy = player.yy - gravity;
   }
 
-  if (player.yy === 38) {
+  if (player.yy === 39) {
     player.state = player.states[0];
   }
 
@@ -61,7 +61,7 @@ function draw() {
     }
   }
   if (player.state === "jumping") {
-    context.drawImage(player, 52, 0, 26, 40, 51, player.yy, 26, 40);
+    context.drawImage(player, 52, 0, 26, 40, 51, player.yy - 3, 26, 40);
   }
 }
 
@@ -71,6 +71,7 @@ document.addEventListener("keyup", (event) => {
   }
   if (event.keyCode === 37) {
     player.speed = 1;
+    player.state = player.states[0];
   }
 });
 
@@ -88,6 +89,7 @@ document.addEventListener("keydown", (event) => {
   }
   if (event.keyCode === 37) {
     player.speed = 0.5;
+    player.state = player.states[1];
   }
 });
 
