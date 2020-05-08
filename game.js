@@ -1,37 +1,45 @@
 // Good sources
 // https://developer.mozilla.org/en-US/docs/Games/Techniques/Control_mechanisms/Desktop_with_mouse_and_keyboard
+// TODO
+// Collision
+// Physics
+// Animations
+// Levels
+// Life
+// Power-ups
+// Sound
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
 const gravity = -1;
 
-const p = {
-  name: "Player 1",
-  image: new Image(),
-  tick: 0,
-  frame: 0,
-  x: 51,
-  y: 0,
-  ticksToNextFrame: 16,
-  yy: 20,
-  speed: 1,
-  states: ["skating", "jumping"],
-  state: "skating",
-};
+function Player() {
+  this.name = "Player 1";
+  this.image = new Image();
+  this.image.src = "spritesheet.png";
+  this.tick = 0;
+  this.frame = 0;
+  this.x = 51;
+  this.y = 20;
+  this.ticksToNextFrame = 16;
+  this.speed = 1;
+  this.states = ["skating", "jumping"];
+  this.state = this.states[0];
+}
 
-p.image.src = "spritesheet.png";
+const p = new Player();
 
 const tile = new Image();
 tile.src = "spritesheet.png";
 tile.tick = 0;
 
 function update() {
-  if (p.yy <= 64) {
-    p.yy = p.yy - gravity;
+  if (p.y <= 64) {
+    p.y = p.y - gravity;
   }
 
-  if (p.yy === 64) {
+  if (p.y === 64) {
     p.state = p.states[0];
   }
 
@@ -77,13 +85,13 @@ function draw() {
   // context.drawImage(tile, 0, 35, 16, 16, -13 - tile.tick, 100, 16, 16);
   if (p.state === "skating") {
     if (p.frame === 0) {
-      context.drawImage(p.image, 0, 0, 26, 35, p.x, p.yy, 26, 35);
+      context.drawImage(p.image, 0, 0, 26, 35, p.x, p.y, 26, 35);
     } else {
-      context.drawImage(p.image, 26, 0, 26, 35, p.x, p.yy, 26, 35);
+      context.drawImage(p.image, 26, 0, 26, 35, p.x, p.y, 26, 35);
     }
   }
   if (p.state === "jumping") {
-    context.drawImage(p.image, 52, 0, 26, 40, p.x, p.yy - 3, 26, 40);
+    context.drawImage(p.image, 52, 0, 26, 40, p.x, p.y - 3, 26, 40);
   }
 }
 
@@ -99,11 +107,11 @@ document.addEventListener("keyup", (event) => {
 
 document.addEventListener("keydown", (event) => {
   if (event.keyCode === 38) {
-    p.yy = p.yy - 40;
+    p.y = p.y - 40;
     p.state = p.states[1];
   }
   if (event.keyCode === 40) {
-    p.yy = p.yy + 10;
+    p.y = p.y + 10;
     p.state = p.states[0];
   }
   if (event.keyCode === 39) {
