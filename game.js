@@ -28,11 +28,15 @@ function Player() {
   this.state = this.states[0];
 }
 
-const p = new Player();
+function Tile() {
+  this.name = "tile";
+  this.image = new Image();
+  this.image.src = "spritesheet.png";
+  this.tick = 0;
+}
 
-const tile = new Image();
-tile.src = "spritesheet.png";
-tile.tick = 0;
+const p = new Player();
+const tile = new Tile();
 
 function update() {
   if (p.y <= 64) {
@@ -57,32 +61,23 @@ function update() {
 
 function draw() {
   context.clearRect(0, 0, 256, 256);
-  context.drawImage(tile, 0, 35, 16, 16, -17 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 0 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 17 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 34 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 51 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 68 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 85 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 17 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 102 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 119 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 136 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 153 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 170 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 187 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 204 - tile.tick, 100, 16, 16);
-  context.drawImage(tile, 0, 35, 16, 16, 221 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, -17 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 0 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 17 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 34 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 51 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 68 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 85 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 17 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 102 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 119 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 136 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 153 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 170 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 187 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 204 - tile.tick, 100, 16, 16);
+  context.drawImage(tile.image, 0, 35, 16, 16, 221 - tile.tick, 100, 16, 16);
 
-  // context.drawImage(tile, 0, 35, 16, 16, 123 - tile.tick, 100, 16, 16);
-  // context.drawImage(tile, 0, 35, 16, 16, 106 - tile.tick, 100, 16, 16);
-  // context.drawImage(tile, 0, 35, 16, 16, 89 - tile.tick, 100, 16, 16);
-  // context.drawImage(tile, 0, 35, 16, 16, 72 - tile.tick, 100, 16, 16);
-  // context.drawImage(tile, 0, 35, 16, 16, 55 - tile.tick, 100, 16, 16);
-  // context.drawImage(tile, 0, 35, 16, 16, 38 - tile.tick, 100, 16, 16);
-  // context.drawImage(tile, 0, 35, 16, 16, 21 - tile.tick, 100, 16, 16);
-  // context.drawImage(tile, 0, 35, 16, 16, 4 - tile.tick, 100, 16, 16);
-  // context.drawImage(tile, 0, 35, 16, 16, -13 - tile.tick, 100, 16, 16);
   if (p.state === "skating") {
     if (p.frame === 0) {
       context.drawImage(p.image, 0, 0, 26, 35, p.x, p.y, 26, 35);
