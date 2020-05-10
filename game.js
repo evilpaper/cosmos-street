@@ -102,12 +102,10 @@ document.addEventListener("keyup", (event) => {
 
 document.addEventListener("keydown", (event) => {
   if (event.keyCode === 38) {
-    p.y = p.y - 40;
-    p.state = p.states[1];
-  }
-  if (event.keyCode === 40) {
-    p.y = p.y + 10;
-    p.state = p.states[0];
+    if (p.state === "skating") {
+      p.y = p.y - 40;
+      p.state = p.states[1];
+    }
   }
   if (event.keyCode === 39) {
     p.speed = 2;
