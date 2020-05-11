@@ -14,18 +14,25 @@ const context = canvas.getContext("2d");
 
 const gravity = -1;
 
-function Player() {
-  this.name = "Player 1";
-  this.image = new Image();
-  this.image.src = "spritesheet.png";
-  this.tick = 0;
-  this.frame = 0;
-  this.x = 51;
-  this.y = 20;
-  this.ticksToNextFrame = 16;
-  this.speed = 1;
-  this.states = ["skating", "jumping"];
-  this.state = this.states[0];
+class Player {
+  constructor() {
+    this.name = "Player 1";
+    this.image = new Image();
+    this.image.src = "spritesheet.png";
+    this.tick = 0;
+    this.frame = 0;
+    this.x = 51;
+    this.y = 20;
+    this.ticksToNextFrame = 16;
+    this.speed = 1;
+    this.states = ["skating", "jumping"];
+    this.state = this.states[0];
+  }
+  update() {
+    if (p.y <= 64) {
+      p.y = p.y - gravity;
+    }
+  }
 }
 
 function Tile() {
@@ -36,12 +43,11 @@ function Tile() {
 }
 
 const p = new Player();
+
 const tile = new Tile();
 
 function update() {
-  if (p.y <= 64) {
-    p.y = p.y - gravity;
-  }
+  p.update();
 
   if (p.y === 64) {
     p.state = p.states[0];
