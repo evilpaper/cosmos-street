@@ -29,8 +29,20 @@ class Player {
     this.state = this.states[0];
   }
   update() {
+    p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
+
     if (p.y <= 64) {
       p.y = p.y - gravity;
+    }
+    if (p.y === 64) {
+      p.state = p.states[0];
+    }
+
+    if (p.tick === 0) {
+      p.frame = p.frame + 1;
+      if (p.frame >= 2) {
+        p.frame = 0;
+      }
     }
   }
 }
@@ -48,19 +60,6 @@ const tile = new Tile();
 
 function update() {
   p.update();
-
-  if (p.y === 64) {
-    p.state = p.states[0];
-  }
-
-  p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
-
-  if (p.tick === 0) {
-    p.frame = p.frame + 1;
-    if (p.frame >= 2) {
-      p.frame = 0;
-    }
-  }
 
   tile.tick = (tile.tick + p.speed) % 34;
 }
