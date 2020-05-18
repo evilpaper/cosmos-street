@@ -1,6 +1,8 @@
 // Good sources
 // https://developer.mozilla.org/en-US/docs/Games/Techniques/Control_mechanisms/Desktop_with_mouse_and_keyboard
+
 // TODO
+
 // Collision
 // Physics
 // Animations
@@ -23,6 +25,7 @@ class Player {
     this.x = 51;
     this.y = 20;
     this.dy = 0;
+    this.dx = 0;
     this.ticksToNextFrame = 16;
     this.speed = 2;
     this.states = ["skating", "jumping"];
@@ -110,8 +113,8 @@ document.addEventListener("keydown", (event) => {
     if (p.state === "skating") {
       p.dy = 1;
       p.state = p.states[1];
+      p.y = p.y - 40;
     }
-    p.y = p.y - 40;
   }
   if (event.keyCode === 39) {
     p.speed = 3;
