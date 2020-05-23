@@ -34,7 +34,7 @@ class Player {
     this.dx = 0;
     this.ticksToNextFrame = 16;
     this.speed = 2;
-    this.states = ["skating", "jumping"];
+    this.states = ["skating", "jumping", "breaking"];
     this.state = this.states[0];
   }
   update() {
@@ -51,6 +51,9 @@ class Player {
     }
     if (key.right) {
       p.speed = 3;
+    }
+    if (!key.left && !key.right) {
+      p.speed = 2;
     }
 
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
@@ -122,7 +125,6 @@ function draw() {
 document.addEventListener("keyup", (event) => {
   if (event.keyCode === 37) {
     key.left = false;
-    p.speed = 2;
     p.state = p.states[0];
   }
   if (event.keyCode === 38) {
@@ -130,7 +132,6 @@ document.addEventListener("keyup", (event) => {
   }
   if (event.keyCode === 39) {
     key.right = false;
-    p.speed = 1;
   }
 });
 
