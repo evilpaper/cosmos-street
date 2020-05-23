@@ -14,6 +14,12 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
+const key = {
+  left: false,
+  up: false,
+  right: false,
+};
+
 const gravity = 1;
 class Player {
   constructor() {
@@ -32,6 +38,21 @@ class Player {
     this.state = this.states[0];
   }
   update() {
+    if (key.left) {
+      p.speed = 1;
+      p.state = p.states[1];
+    }
+    if (key.up) {
+      if (p.state === "skating") {
+        p.dy = 1;
+        p.state = p.states[1];
+        p.y = p.y - 40;
+      }
+    }
+    if (key.right) {
+      p.speed = 3;
+    }
+
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
     if (p.y <= 64) {
@@ -99,29 +120,29 @@ function draw() {
 }
 
 document.addEventListener("keyup", (event) => {
-  if (event.keyCode === 39) {
-    p.speed = 1;
-  }
   if (event.keyCode === 37) {
+    key.left = false;
     p.speed = 2;
     p.state = p.states[0];
+  }
+  if (event.keyCode === 38) {
+    key.up = false;
+  }
+  if (event.keyCode === 39) {
+    key.right = false;
+    p.speed = 1;
   }
 });
 
 document.addEventListener("keydown", (event) => {
+  if (event.keyCode === 37) {
+    key.left = true;
+  }
   if (event.keyCode === 38) {
-    if (p.state === "skating") {
-      p.dy = 1;
-      p.state = p.states[1];
-      p.y = p.y - 40;
-    }
+    key.up = true;
   }
   if (event.keyCode === 39) {
-    p.speed = 3;
-  }
-  if (event.keyCode === 37) {
-    p.speed = 1;
-    p.state = p.states[1];
+    key.right = true;
   }
 });
 
