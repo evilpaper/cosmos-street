@@ -14,13 +14,28 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
-const key = {
+const controller = {
   left: false,
   up: false,
   right: false,
+  keyListener: function (event) {
+    const eventType = event.type === "keydown" ? true : false;
+    switch (event.keyCode) {
+      case 37:
+        controller.left = eventType;
+        break;
+      case 38:
+        controller.up = eventType;
+        break;
+      case 39:
+        controller.right = eventType;
+        break;
+    }
+  },
 };
 
 const gravity = 1;
+const friction = 0.9;
 class Player {
   constructor() {
     this.name = "Player 1";
@@ -38,22 +53,23 @@ class Player {
     this.state = this.states[0];
   }
   update() {
-    if (key.left) {
+    if (controller.left) {
       p.speed = 1;
-      p.state = p.states[1];
+      p.state = p.states[2];
     }
-    if (key.up) {
-      if (p.state === "skating") {
-        p.dy = 1;
+    if (controller.up) {
+      if (p.state !== "jumping") {
+        p.y = p.y - 30;
         p.state = p.states[1];
-        p.y = p.y - 40;
       }
     }
-    if (key.right) {
+    if (controller.right) {
       p.speed = 3;
+      p.state = p.states[0];
     }
-    if (!key.left && !key.right) {
+    if (!controller.left && p.state === "breaking") {
       p.speed = 2;
+      p.state = p.states[0];
     }
 
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
@@ -92,6 +108,7 @@ function update() {
 }
 
 function draw() {
+  console.log(p.state);
   context.clearRect(0, 0, 256, 256);
   context.drawImage(tile.image, 0, 35, 16, 16, -17 - tile.tick, 100, 16, 16);
   context.drawImage(tile.image, 0, 35, 16, 16, 0 - tile.tick, 100, 16, 16);
@@ -117,37 +134,37 @@ function draw() {
       context.drawImage(p.image, 26, 0, 26, 35, p.x, p.y, 26, 35);
     }
   }
-  if (p.state === "jumping") {
+  if (p.state === "jumping" || p.state === "breaking") {
     context.drawImage(p.image, 52, 0, 26, 40, p.x, p.y - 3, 26, 40);
   }
 }
 
 document.addEventListener("keyup", (event) => {
-  if (event.keyCode === 37) {
-    key.left = false;
-    p.state = p.states[0];
-  }
-  if (event.keyCode === 38) {
-    key.up = false;
-  }
-  if (event.keyCode === 39) {
-    key.right = false;
-  }
+  controller.keyListener(event);
+  // if (event.keyCode === 37) {
+  //   controller.left = false;
+  //   p.state = p.states[0];
+  // }
+  // if (event.keyCode === 38) {
+  //   controller.up = false;
+  // }
+  // if (event.keyCode === 39) {
+  //   controller.right = false;
+  // }
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.keyCode === 37) {
-    key.left = true;
-  }
-  if (event.keyCode === 38) {
-    key.up = true;
-  }
-  if (event.keyCode === 39) {
-    key.right = true;
-  }
+  controller.keyListener(event);
+  // if (event.keyCode === 37) {
+  //   controller.left = true;
+  // }
+  // if (event.keyCode === 38) {
+  //   controller.up = true;
+  // }
+  // if (event.keyCode === 39) {
+  //   controller.right = true;
+  // }
 });
-
-function isColliding(a, b) {}
 
 function loop() {
   update();
