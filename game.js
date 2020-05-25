@@ -34,8 +34,8 @@ const controller = {
   },
 };
 
-const gravity = 1;
-const friction = 0.9;
+const gravity = 0.1;
+const friction = 0.4;
 class Player {
   constructor() {
     this.name = "Player 1";
@@ -50,7 +50,7 @@ class Player {
     this.ticksToNextFrame = 16;
     this.speed = 2;
     this.states = ["skating", "jumping", "breaking"];
-    this.state = this.states[0];
+    this.state = this.states[1];
   }
   update() {
     if (controller.left) {
@@ -59,7 +59,9 @@ class Player {
     }
     if (controller.up) {
       if (p.state !== "jumping") {
-        p.y = p.y - 30;
+        console.log("Jumping");
+        p.dy = -6;
+        // p.y = p.y - 30;
         p.state = p.states[1];
       }
     }
@@ -71,14 +73,25 @@ class Player {
       p.speed = 2;
       p.state = p.states[0];
     }
+    if (!controller.right && p.speed === 3) {
+      p.speed = 2;
+    }
 
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
-    if (p.y <= 64) {
-      p.y = Math.round(p.y + gravity);
+    if (p.state === "jumping") {
+      p.dy += gravity;
+      p.y = Math.round(p.y + p.dy);
+      p.dy += friction;
     }
-    if (p.y === 64) {
+
+    if (p.y < 64) {
+    }
+
+    if (p.y > 64) {
       p.state = p.states[0];
+      p.dy = 0;
+      p.y = 64;
     }
 
     if (p.tick === 0) {
@@ -141,29 +154,10 @@ function draw() {
 
 document.addEventListener("keyup", (event) => {
   controller.keyListener(event);
-  // if (event.keyCode === 37) {
-  //   controller.left = false;
-  //   p.state = p.states[0];
-  // }
-  // if (event.keyCode === 38) {
-  //   controller.up = false;
-  // }
-  // if (event.keyCode === 39) {
-  //   controller.right = false;
-  // }
 });
 
 document.addEventListener("keydown", (event) => {
   controller.keyListener(event);
-  // if (event.keyCode === 37) {
-  //   controller.left = true;
-  // }
-  // if (event.keyCode === 38) {
-  //   controller.up = true;
-  // }
-  // if (event.keyCode === 39) {
-  //   controller.right = true;
-  // }
 });
 
 function loop() {
