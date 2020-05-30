@@ -53,40 +53,41 @@ class Player {
     this.state = this.states[1];
   }
   update() {
-    if (controller.left) {
-      p.speed = 1;
-      p.state = p.states[2];
-    }
-    if (controller.up) {
-      if (p.state !== "jumping") {
-        console.log("Jumping");
+    if (p.state === "skating") {
+      p.speed = 2;
+      if (controller.left) {
+        p.state = p.states[2];
+      }
+      if (controller.up) {
         p.dy = -6;
-        // p.y = p.y - 30;
         p.state = p.states[1];
       }
+      if (controller.right) {
+        p.speed = 3;
+        p.state = p.states[0];
+      }
     }
-    if (controller.right) {
-      p.speed = 3;
-      p.state = p.states[0];
-    }
-    if (!controller.left && p.state === "breaking") {
-      p.speed = 2;
-      p.state = p.states[0];
-    }
-    if (!controller.right && p.speed === 3) {
-      p.speed = 2;
-    }
-
-    p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
-
     if (p.state === "jumping") {
       p.dy += gravity;
       p.y = Math.round(p.y + p.dy);
       p.dy += friction;
     }
-
-    if (p.y < 64) {
+    if (p.state === "breaking") {
+      p.speed = 1;
+      if (!controller.left) {
+        p.state = p.states[0];
+      }
     }
+
+    // if (!controller.left && p.state === "breaking") {
+    //   p.speed = 2;
+    //   p.state = p.states[0];
+    // }
+    // if (!controller.right && p.speed === 3) {
+    //   p.speed = 2;
+    // }
+
+    p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
     if (p.y > 64) {
       p.state = p.states[0];
