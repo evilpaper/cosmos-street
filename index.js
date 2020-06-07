@@ -1,9 +1,9 @@
 // Good sources
 // https://developer.mozilla.org/en-US/docs/Games/Techniques/Control_mechanisms/Desktop_with_mouse_and_keyboard
+// https://blog.jvscott.net/post/129647814999/holding-state
 
 // TODO
 
-// Remove p.x change on speed up
 // Implement landscape mode
 // Implement portrait mode (rotate or get a real screen)
 // Touch controlls
@@ -17,26 +17,7 @@
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
-
-const controller = {
-  left: false,
-  up: false,
-  right: false,
-  keyListener: function (event) {
-    const eventType = event.type === "keydown" ? true : false;
-    switch (event.keyCode) {
-      case 37:
-        controller.left = eventType;
-        break;
-      case 38:
-        controller.up = eventType;
-        break;
-      case 39:
-        controller.right = eventType;
-        break;
-    }
-  },
-};
+const controller = new Controller();
 
 const gravity = 0.1;
 const friction = 0.4;
@@ -141,7 +122,6 @@ function update() {
 }
 
 function draw() {
-  // console.log(p.state);
   context.clearRect(0, 0, 256, 256);
   context.drawImage(tile.image, 0, 35, 16, 16, -17 - tile.tick, 100, 16, 16);
   context.drawImage(tile.image, 0, 35, 16, 16, 0 - tile.tick, 100, 16, 16);
