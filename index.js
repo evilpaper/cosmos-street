@@ -97,8 +97,10 @@ function Star() {
   this.image = new Image();
   this.image.src = "star-1.png";
   this.tick = 0;
-  this.frame = 0;
+  this.frame = Math.floor(Math.random() * 6);
   this.ticksToNextFrame = 16;
+  this.x = Math.floor(Math.random() * 190);
+  this.y = Math.floor(Math.random() * 124);
   this.update = function () {
     this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
@@ -113,11 +115,20 @@ function Star() {
 
 const p = new Player();
 const tile = new Tile();
-const star1 = new Star();
+
+function createStars(amount) {
+  const result = [];
+  for (let i = 0; i < amount; i++) {
+    result.push(new Star());
+  }
+  return result;
+}
+
+const stars = createStars(10);
 
 function update() {
   p.update();
-  star1.update();
+  stars.forEach((star) => star.update());
   tile.tick = Math.round((tile.tick + p.speed) % 34);
 }
 
@@ -139,7 +150,19 @@ function draw() {
   context.drawImage(tile.image, 0, 35, 16, 16, 187 - tile.tick, 100, 16, 16);
   context.drawImage(tile.image, 0, 35, 16, 16, 204 - tile.tick, 100, 16, 16);
   context.drawImage(tile.image, 0, 35, 16, 16, 221 - tile.tick, 100, 16, 16);
-  context.drawImage(star1.image, 0 + star1.frame * 7, 0, 7, 7, 100, 34, 7, 7);
+  stars.forEach((star) => {
+    context.drawImage(
+      star.image,
+      0 + star.frame * 7,
+      0,
+      7,
+      7,
+      star.x,
+      star.y,
+      7,
+      7
+    );
+  });
 
   if (p.state === "skating" || p.state === "speeding") {
     if (p.frame === 0) {
