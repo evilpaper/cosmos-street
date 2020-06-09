@@ -101,8 +101,11 @@ function Star() {
   this.ticksToNextFrame = 16;
   this.x = Math.floor(Math.random() * 190);
   this.y = Math.floor(Math.random() * 124);
+  this.speed = Math.random();
   this.update = function () {
     this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
+
+    this.x = this.x - this.speed;
 
     if (this.tick === 0) {
       this.frame = this.frame + 1;
@@ -134,6 +137,20 @@ function update() {
 
 function draw() {
   context.clearRect(0, 0, 256, 256);
+
+  stars.forEach((star) => {
+    context.drawImage(
+      star.image,
+      0 + star.frame * 7,
+      0,
+      7,
+      7,
+      Math.round(star.x),
+      star.y,
+      7,
+      7
+    );
+  });
   context.drawImage(tile.image, 0, 35, 16, 16, -17 - tile.tick, 100, 16, 16);
   context.drawImage(tile.image, 0, 35, 16, 16, 0 - tile.tick, 100, 16, 16);
   context.drawImage(tile.image, 0, 35, 16, 16, 17 - tile.tick, 100, 16, 16);
@@ -150,19 +167,6 @@ function draw() {
   context.drawImage(tile.image, 0, 35, 16, 16, 187 - tile.tick, 100, 16, 16);
   context.drawImage(tile.image, 0, 35, 16, 16, 204 - tile.tick, 100, 16, 16);
   context.drawImage(tile.image, 0, 35, 16, 16, 221 - tile.tick, 100, 16, 16);
-  stars.forEach((star) => {
-    context.drawImage(
-      star.image,
-      0 + star.frame * 7,
-      0,
-      7,
-      7,
-      star.x,
-      star.y,
-      7,
-      7
-    );
-  });
 
   if (p.state === "skating" || p.state === "speeding") {
     if (p.frame === 0) {
