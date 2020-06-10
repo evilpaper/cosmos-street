@@ -101,11 +101,14 @@ function Star() {
   this.ticksToNextFrame = 16;
   this.x = Math.floor(Math.random() * 190);
   this.y = Math.floor(Math.random() * 124);
-  this.speed = Math.random();
+  this.speed = Math.random() * 0.1;
   this.update = function () {
     this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
     this.x = this.x - this.speed;
+    if (this.x < -10) {
+      this.x = 200;
+    }
 
     if (this.tick === 0) {
       this.frame = this.frame + 1;
