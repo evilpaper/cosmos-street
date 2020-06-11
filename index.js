@@ -96,12 +96,13 @@ function Star() {
   this.name = "star";
   this.image = new Image();
   this.image.src = "star-1.png";
+  this.blinking = Math.random() >= 0.8;
   this.tick = 0;
   this.frame = Math.floor(Math.random() * 6);
   this.ticksToNextFrame = 16;
   this.x = Math.floor(Math.random() * 190);
   this.y = Math.floor(Math.random() * 124);
-  this.speed = Math.random() * 0.1;
+  this.speed = Math.random() * 0.04;
   this.update = function () {
     this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
@@ -109,11 +110,12 @@ function Star() {
     if (this.x < -10) {
       this.x = 200;
     }
-
-    if (this.tick === 0) {
-      this.frame = this.frame + 1;
-      if (this.frame >= 6) {
-        this.frame = 0;
+    if (this.blinking) {
+      if (this.tick === 0) {
+        this.frame = this.frame + 1;
+        if (this.frame >= 6) {
+          this.frame = 0;
+        }
       }
     }
   };
