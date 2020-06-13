@@ -4,16 +4,13 @@
 
 // TODO
 
-// Implement landscape mode
-// Implement portrait mode (rotate or get a real screen)
-// Touch controlls
-// Continues integration
-// Collision
-// Game States (start, game, end)
-// Levels
-// Life
-// Power-ups
-// Sound
+// Decide canvas size that is a grid to make room for levels
+// Add continuos integration so I can keep pushing things to portfolio
+// Add proper levels
+// Add proper collision
+// Add game States (start, game, end)
+// Add game over
+// Add sound
 
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -67,10 +64,10 @@ class Player {
     }
 
     // Collision
-    if (p.y > 64) {
+    if (p.y > 65) {
       p.state = p.states[0];
       p.dy = 0;
-      p.y = 64;
+      p.y = 65;
     }
 
     // Animation
@@ -85,11 +82,13 @@ class Player {
   }
 }
 
-function Tile() {
+function Tile(x = 0) {
   this.name = "tile";
   this.image = new Image();
   this.image.src = "spritesheet.png";
   this.tick = 0;
+  this.x = x;
+  this.update = function () {};
 }
 
 function Star() {
@@ -121,8 +120,13 @@ function Star() {
   };
 }
 
-const p = new Player();
-const tile = new Tile();
+function createTiles(amount) {
+  const result = [];
+  for (let i = 0; i < amount; i++) {
+    result.push(new Tile(i * 17));
+  }
+  return result;
+}
 
 function createStars(amount) {
   const result = [];
@@ -132,6 +136,9 @@ function createStars(amount) {
   return result;
 }
 
+const p = new Player();
+const tile = new Tile();
+const tiles = createTiles(16);
 const stars = createStars(10);
 
 function update() {
