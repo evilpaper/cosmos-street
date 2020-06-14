@@ -3,11 +3,11 @@ body {
   padding: 0;
   margin: 0;
   background-color: black;
-  background-color: #0b0630;
 }
 body {
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -18,4 +18,8 @@ canvas {
   image-rendering: crisp-edges;
   width: 576px;
   height: 384px;
+  background-color: #0b0630;
+}
+h1 {
+  color: white;
 }

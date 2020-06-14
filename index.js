@@ -18,6 +18,8 @@ const controller = new Controller();
 
 const gravity = 0.1;
 const friction = 0.4;
+
+const level = [-17, 0, 17, 34, 51, 68, 85, 102, 119, 136, 170, 187, 204];
 class Player {
   constructor() {
     this.name = "Player 1";
@@ -88,7 +90,12 @@ function Tile(x = 0) {
   this.image.src = "spritesheet.png";
   this.tick = 0;
   this.x = x;
-  this.update = function () {};
+  this.update = function () {
+    this.x = this.x - p.speed;
+    // if (this.x <= -17) {
+    //   this.x = 238;
+    // }
+  };
 }
 
 function Star() {
@@ -101,7 +108,7 @@ function Star() {
   this.ticksToNextFrame = 16;
   this.x = Math.floor(Math.random() * 190);
   this.y = Math.floor(Math.random() * 124);
-  this.speed = Math.random() * 0.04;
+  this.speed = Math.random() * 0.1;
   this.update = function () {
     this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
@@ -120,11 +127,8 @@ function Star() {
   };
 }
 
-function createTiles(amount) {
-  const result = [];
-  for (let i = 0; i < amount; i++) {
-    result.push(new Tile(i * 17));
-  }
+function createTiles(level) {
+  const result = level.map((part) => new Tile(part));
   return result;
 }
 
@@ -137,88 +141,38 @@ function createStars(amount) {
 }
 
 const p = new Player();
-const tile = new Tile();
-const tiles = createTiles(16);
+const tiles = createTiles(level);
 const stars = createStars(10);
 
 function update() {
   p.update();
   stars.forEach((star) => star.update());
-  tile.tick = Math.round((tile.tick + p.speed) % 34);
+  tiles.forEach((tile) => tile.update());
+}
+
+function o(value) {
+  return Math.round(value);
 }
 
 function draw() {
   context.clearRect(0, 0, 256, 256);
 
-  stars.forEach((star) => {
-    context.drawImage(
-      star.image,
-      0 + star.frame * 7,
-      0,
-      7,
-      7,
-      Math.round(star.x),
-      star.y,
-      7,
-      7
-    );
+  stars.forEach((s) => {
+    context.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
-  context.drawImage(tile.image, 0, 35, 16, 16, -17 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 0 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 17 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 34 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 51 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 68 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 85 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 17 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 102 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 119 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 136 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 153 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 170 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 187 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 204 - tile.tick, 100, 16, 16);
-  context.drawImage(tile.image, 0, 35, 16, 16, 221 - tile.tick, 100, 16, 16);
+  tiles.forEach((t) => {
+    context.drawImage(t.image, 0, 35, 16, 16, t.x, 100, 16, 16);
+  });
 
   if (p.state === "skating" || p.state === "speeding") {
     if (p.frame === 0) {
-      context.drawImage(
-        p.image,
-        0,
-        0,
-        26,
-        35,
-        Math.round(p.x),
-        Math.round(p.y),
-        26,
-        35
-      );
+      context.drawImage(p.image, 0, 0, 26, 35, o(p.x), o(p.y), 26, 35);
     } else {
-      context.drawImage(
-        p.image,
-        26,
-        0,
-        26,
-        35,
-        Math.round(p.x),
-        Math.round(p.y),
-        26,
-        35
-      );
+      context.drawImage(p.image, 26, 0, 26, 35, o(p.x), o(p.y), 26, 35);
     }
   }
   if (p.state === "jumping" || p.state === "breaking") {
-    context.drawImage(
-      p.image,
-      52,
-      0,
-      26,
-      40,
-      Math.round(p.x),
-      Math.round(p.y - 3),
-      26,
-      40
-    );
+    context.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
   }
 }
 
