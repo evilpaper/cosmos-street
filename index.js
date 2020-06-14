@@ -19,7 +19,34 @@ const controller = new Controller();
 const gravity = 0.1;
 const friction = 0.4;
 
-const level = [-17, 0, 17, 34, 51, 68, 85, 102, 119, 136, 170, 187, 204];
+const level = [
+  -17,
+  0,
+  17,
+  34,
+  51,
+  68,
+  85,
+  102,
+  119,
+  136,
+  170,
+  187,
+  204,
+  238,
+  255,
+  272,
+  306,
+  323,
+  340,
+  374,
+  391,
+  408,
+  442,
+  459,
+  476,
+  493,
+];
 class Player {
   constructor() {
     this.name = "Player 1";
