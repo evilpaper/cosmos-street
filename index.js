@@ -4,9 +4,8 @@
 
 // TODO
 
-// Decide canvas size that is a grid to make room for levels
 // Add continuos integration so I can keep pushing things to portfolio
-// Add proper levels
+// Add proper levels => You don't have to create tiles for all, just x values
 // Add proper collision
 // Add game States (start, game, end)
 // Add game over
@@ -93,10 +92,10 @@ class Player {
     }
 
     // Collision
-    if (p.y > 65) {
+    if (p.y > 101) {
       p.state = p.states[0];
       p.dy = 0;
-      p.y = 65;
+      p.y = 101;
     }
 
     // Animation
@@ -111,18 +110,10 @@ class Player {
   }
 }
 
-function Tile(x = 0) {
+function Tile() {
   this.name = "tile";
   this.image = new Image();
   this.image.src = "spritesheet.png";
-  this.tick = 0;
-  this.x = x;
-  this.update = function () {
-    this.x = this.x - p.speed;
-    // if (this.x <= -17) {
-    //   this.x = 238;
-    // }
-  };
 }
 
 function Star() {
@@ -154,11 +145,6 @@ function Star() {
   };
 }
 
-function createTiles(level) {
-  const result = level.map((part) => new Tile(part));
-  return result;
-}
-
 function createStars(amount) {
   const result = [];
   for (let i = 0; i < amount; i++) {
@@ -168,13 +154,15 @@ function createStars(amount) {
 }
 
 const p = new Player();
-const tiles = createTiles(level);
+const tile = new Tile();
 const stars = createStars(10);
 
 function update() {
   p.update();
   stars.forEach((star) => star.update());
-  tiles.forEach((tile) => tile.update());
+  for (let i = 0; i < level.length; i++) {
+    level[i] = level[i] - p.speed;
+  }
 }
 
 function o(value) {
@@ -182,13 +170,13 @@ function o(value) {
 }
 
 function draw() {
-  context.clearRect(0, 0, 256, 256);
+  context.clearRect(0, 0, 288, 192);
 
   stars.forEach((s) => {
     context.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
-  tiles.forEach((t) => {
-    context.drawImage(t.image, 0, 35, 16, 16, t.x, 100, 16, 16);
+  level.forEach((item) => {
+    context.drawImage(tile.image, 0, 35, 16, 16, item, 136, 16, 16);
   });
 
   if (p.state === "skating" || p.state === "speeding") {
@@ -217,4 +205,4 @@ function loop() {
   window.requestAnimationFrame(loop);
 }
 
-window.requestAnimationFrame(loop);
+window.onload = window.requestAnimationFrame(loop);

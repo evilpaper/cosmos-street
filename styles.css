@@ -16,8 +16,8 @@ canvas {
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  width: 576px;
-  height: 384px;
+  width: 864px;
+  height: 576px;
   background-color: #0b0630;
 }
 h1 {
