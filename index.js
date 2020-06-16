@@ -5,7 +5,6 @@
 // TODO
 
 // Add continuos integration so I can keep pushing things to portfolio
-// Add proper levels => You don't have to create tiles for all, just x values
 // Add proper collision
 // Add game States (start, game, end)
 // Add game over
@@ -18,34 +17,7 @@ const controller = new Controller();
 const gravity = 0.1;
 const friction = 0.4;
 
-const level = [
-  -17,
-  0,
-  17,
-  34,
-  51,
-  68,
-  85,
-  102,
-  119,
-  136,
-  170,
-  187,
-  204,
-  238,
-  255,
-  272,
-  306,
-  323,
-  340,
-  374,
-  391,
-  408,
-  442,
-  459,
-  476,
-  493,
-];
+const level = createLevel(30);
 class Player {
   constructor() {
     this.name = "Player 1";
@@ -124,8 +96,8 @@ function Star() {
   this.tick = 0;
   this.frame = Math.floor(Math.random() * 6);
   this.ticksToNextFrame = 16;
-  this.x = Math.floor(Math.random() * 190);
-  this.y = Math.floor(Math.random() * 124);
+  this.x = Math.floor(Math.random() * 288);
+  this.y = Math.floor(Math.random() * 156);
   this.speed = Math.random() * 0.1;
   this.update = function () {
     this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
@@ -153,6 +125,19 @@ function createStars(amount) {
   return result;
 }
 
+function createLevel(tiles) {
+  const result = [];
+  let x = 0;
+  for (let i = 0; i < tiles; i++) {
+    x = i * 17;
+    result.push({
+      x: x,
+      tile: new Tile(),
+    });
+  }
+  return result;
+}
+
 const p = new Player();
 const tile = new Tile();
 const stars = createStars(10);
@@ -161,7 +146,7 @@ function update() {
   p.update();
   stars.forEach((star) => star.update());
   for (let i = 0; i < level.length; i++) {
-    level[i] = level[i] - p.speed;
+    level[i].x = level[i].x - p.speed;
   }
 }
 
@@ -176,7 +161,7 @@ function draw() {
     context.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
   level.forEach((item) => {
-    context.drawImage(tile.image, 0, 35, 16, 16, item, 136, 16, 16);
+    context.drawImage(item.tile.image, 0, 35, 16, 16, item.x, 136, 16, 16);
   });
 
   if (p.state === "skating" || p.state === "speeding") {
