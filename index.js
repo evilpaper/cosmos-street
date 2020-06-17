@@ -16,8 +16,6 @@ const controller = new Controller();
 
 const gravity = 0.1;
 const friction = 0.4;
-
-const level = createLevel(30);
 class Player {
   constructor() {
     this.name = "Player 1";
@@ -129,7 +127,11 @@ function createLevel(tiles) {
   const result = [];
   let x = 0;
   for (let i = 0; i < tiles; i++) {
-    x = i * 17;
+    if (i % 5 === 0) {
+      x = x + 51;
+    } else {
+      x = x + 17;
+    }
     result.push({
       x: x,
       tile: new Tile(),
@@ -141,6 +143,7 @@ function createLevel(tiles) {
 const p = new Player();
 const tile = new Tile();
 const stars = createStars(10);
+const level = createLevel(100);
 
 function update() {
   p.update();
