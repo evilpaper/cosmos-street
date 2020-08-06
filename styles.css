@@ -19,6 +19,8 @@ canvas {
   width: 864px;
   height: 576px;
   background-color: #0b0630;
+  border: 20px solid whitesmoke;
+  border-radius: 40px;
 }
 h1 {
   color: white;
