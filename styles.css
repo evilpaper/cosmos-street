@@ -16,10 +16,10 @@ canvas {
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  width: 864px;
+  width: 576px;
   height: 576px;
   background-color: #0b0630;
-  border: 20px solid whitesmoke;
+  border: 10px solid whitesmoke;
   border-radius: 40px;
 }
 h1 {
