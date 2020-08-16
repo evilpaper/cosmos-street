@@ -16,6 +16,7 @@ const controller = new Controller();
 
 const gravity = 0.1;
 const friction = 0.4;
+
 class Player {
   constructor() {
     this.name = "Player 1";
@@ -61,6 +62,11 @@ class Player {
       }
     }
 
+    // Check if pixel below is solid
+    if (isSolid(p.x, p.y)) {
+      console.log("Solid ground below");
+    }
+
     // Collision
     if (p.y > 101) {
       p.state = p.states[0];
@@ -78,6 +84,11 @@ class Player {
       }
     }
   }
+}
+
+function isSolid(x, y) {
+  // Add proper collision ehere
+  return false;
 }
 
 function Tile() {
@@ -125,6 +136,7 @@ function createStars(amount) {
 
 function createLevel(tiles) {
   const result = [];
+  const y = 136;
   let x = 0;
   for (let i = 0; i < tiles; i++) {
     if (i % 5 === 0) {
@@ -134,6 +146,7 @@ function createLevel(tiles) {
     }
     result.push({
       x: x,
+      y: y,
       tile: new Tile(),
     });
   }
@@ -164,7 +177,7 @@ function draw() {
     context.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
   level.forEach((item) => {
-    context.drawImage(item.tile.image, 0, 35, 16, 16, item.x, 136, 16, 16);
+    context.drawImage(item.tile.image, 0, 35, 16, 16, item.x, item.y, 16, 16);
   });
 
   if (p.state === "skating" || p.state === "speeding") {
