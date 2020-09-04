@@ -16,15 +16,22 @@ canvas {
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  width: 576px;
+  width: 720px;
   height: 576px;
   background-color: #0b0630;
-  border: 10px solid whitesmoke;
-  border-radius: 40px;
 }
+
 h1 {
   color: white;
   font-family: "Montserrat", sans-serif;
+}
+
+.crt-container {
+  position: relative;
+}
+
+.crt {
+  clip-path: url(#path);
 }
 
 .crt::before {
