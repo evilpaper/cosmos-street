@@ -39,7 +39,7 @@ class Player {
         p.state = p.states[2];
       }
       if (controller.up) {
-        p.dy = -6;
+        p.dy = -8;
         p.state = p.states[1];
       }
       if (controller.right) {
@@ -68,10 +68,10 @@ class Player {
     }
 
     // Collision
-    if (p.y > 101) {
+    if (p.y > 94) {
       p.state = p.states[0];
       p.dy = 0;
-      p.y = 101;
+      p.y = 94;
     }
 
     // Animation
@@ -134,29 +134,9 @@ function createStars(amount) {
   return result;
 }
 
-function createLevel(tiles) {
-  const result = [];
-  const y = 136;
-  let x = 0;
-  for (let i = 0; i < tiles; i++) {
-    if (i % 5 === 0) {
-      x = x + 51;
-    } else {
-      x = x + 17;
-    }
-    result.push({
-      x: x,
-      y: y,
-      tile: new Tile(),
-    });
-  }
-  return result;
-}
-
 const p = new Player();
 const tile = new Tile();
 const stars = createStars(10);
-const level = createLevel(100);
 
 function update() {
   p.update();
@@ -171,7 +151,7 @@ function o(value) {
 }
 
 function draw() {
-  context.clearRect(0, 0, 288, 192);
+  context.clearRect(0, 0, 270, 216);
 
   stars.forEach((s) => {
     context.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
