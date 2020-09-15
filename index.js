@@ -63,10 +63,11 @@ class Player {
     }
 
     // Check if pixel below is solid
-    if (isSolid(p.x, p.y)) {
+    if (isSolid(p.x + 16, p.y + 36)) {
+      console.log("Solid ground below");
     }
 
-    // Collision
+    // Stop player from falling out of screen before proper collison detections is in place
     if (p.y > 94) {
       p.state = p.states[0];
       p.dy = 0;
@@ -86,8 +87,14 @@ class Player {
 }
 
 function isSolid(x, y) {
+  for (const tile of level) {
+    if (tile.x === x) {
+      if (tile.y <= y) {
+        return true;
+      }
+    }
+  }
   return false;
-  // Maybe do something here
 }
 
 function Tile() {
@@ -139,7 +146,9 @@ const stars = createStars(10);
 
 function update() {
   p.update();
-  stars.forEach((star) => star.update());
+  for (const star of stars) {
+    star.update();
+  }
   for (let i = 0; i < level.length; i++) {
     level[i].x = level[i].x - p.speed;
   }
