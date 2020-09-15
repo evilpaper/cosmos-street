@@ -64,7 +64,6 @@ class Player {
 
     // Check if pixel below is solid
     if (isSolid(p.x, p.y)) {
-      console.log("Solid ground below");
     }
 
     // Collision
@@ -87,8 +86,8 @@ class Player {
 }
 
 function isSolid(x, y) {
-  // Add proper collision ehere
   return false;
+  // Maybe do something here
 }
 
 function Tile() {
