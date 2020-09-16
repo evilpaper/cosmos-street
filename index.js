@@ -64,17 +64,15 @@ class Player {
       }
     }
 
-    // Check if pixel below is solid
-    if (isSolid(p.x, p.y + p.height)) {
-      console.log("Solid ground below");
-    }
+    // Check collision
+    handelCollision(this.x, this.y);
 
     // Stop player from falling out of screen before proper collison detections is in place
-    if (p.y > 94) {
-      p.state = p.states[0];
-      p.dy = 0;
-      p.y = 94;
-    }
+    // if (p.y > 94) {
+    //   p.state = p.states[0];
+    //   p.dy = 0;
+    //   p.y = 94;
+    // }
 
     // Animation
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
@@ -88,15 +86,16 @@ class Player {
   }
 }
 
-function isSolid(x, y) {
+function handelCollision(x, y) {
   for (const tile of level) {
     if (tile.x === x) {
-      if (tile.y <= y) {
-        return true;
+      if (tile.y < y) {
+        p.state = p.states[0];
+        p.dy = 0;
+        p.y = tile.y - p.height;
       }
     }
   }
-  return false;
 }
 
 function Tile() {
