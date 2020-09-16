@@ -25,6 +25,8 @@ class Player {
     this.ticksToNextFrame = 16;
     this.tick = 0;
     this.frame = 0;
+    this.width = 26;
+    this.height = 36;
     this.x = 51;
     this.y = 20;
     this.dy = 0;
@@ -63,7 +65,7 @@ class Player {
     }
 
     // Check if pixel below is solid
-    if (isSolid(p.x + 16, p.y + 36)) {
+    if (isSolid(p.x, p.y + p.height)) {
       console.log("Solid ground below");
     }
 
@@ -178,6 +180,11 @@ function draw() {
   if (p.state === "jumping" || p.state === "breaking") {
     context.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
   }
+  context.lineWidth = 2;
+  context.strokeStyle = "green";
+  context.strokeRect(p.x, p.y, p.width, p.height);
+  // context.rect(p.x, p.y, p.width, p.height);
+  // context.stroke();
 }
 
 document.addEventListener("keyup", (event) => {
