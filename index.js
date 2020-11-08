@@ -87,14 +87,10 @@ class Player {
 }
 
 function handelCollision(x, y) {
-  for (const tile of level) {
-    if (tile.x === x) {
-      if (tile.y < y) {
-        p.state = p.states[0];
-        p.dy = 0;
-        p.y = tile.y - p.height;
-      }
-    }
+  if (y > 100) {
+    p.state = p.states[0];
+    p.dy = 0;
+    p.y = 100;
   }
 }
 
@@ -182,8 +178,6 @@ function draw() {
   context.lineWidth = 2;
   context.strokeStyle = "green";
   context.strokeRect(p.x, p.y, p.width, p.height);
-  // context.rect(p.x, p.y, p.width, p.height);
-  // context.stroke();
 }
 
 document.addEventListener("keyup", (event) => {
