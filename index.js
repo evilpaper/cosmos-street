@@ -52,10 +52,6 @@ class Player {
       p.dy += gravity;
       p.dy += friction;
       p.y = p.y + p.dy;
-      if (collision(p.x, p.y)) {
-        p.y = p.y - 2;
-        p.dy = 0;
-      };
     }
     if (p.state === "breaking") {
       p.speed = 1;
@@ -68,12 +64,20 @@ class Player {
       }
     }
 
-    // Stop player from falling out of screen before proper collison detections is in place
-    if (p.y > 140) {
-      p.state = p.states[0];
+    if (collision(p.x, p.y, p.width, p.height)) {
+      p.y = p.y - 10;
       p.dy = 0;
-      p.y = 140;
-    }
+      p.state = p.states[0];
+    } else {
+      p.state = p.states[1];
+    };
+
+    // Stop player from falling out of screen before proper collison detections is in place
+    // if (p.y > 140) {
+    //   p.state = p.states[0];
+    //   p.dy = 0;
+    //   p.y = 140;
+    // }
 
     // Animation
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
@@ -96,16 +100,19 @@ class Player {
 //   }
 // }
 
-const collision = (x,y) => {
-  console.log("Hello from collision");
-  debugger;
-  level.forEach(block =>{
-    if (block.x === x && block.y === y + p.height) {
-      console.log("Solid ground below")
-      return true;
+const collision = (x,y, width, height) => {
+  let result = false;
+  level.forEach(block => {
+    if (block.x > x && block.x < x + width) {
+      if (block.y < y + width && block.y > y) {
+        result = true
+      }
     }
+    // if (block.x === Math.floor(x + width) && block.y <= Math.floor(y + height)) {
+    //   result = true;
+    // }
   })
-  return false
+  return result;
 }
 
 function Tile() {
