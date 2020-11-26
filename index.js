@@ -52,6 +52,10 @@ class Player {
       p.dy += gravity;
       p.dy += friction;
       p.y = p.y + p.dy;
+      if (collision(p.x, p.y)) {
+        p.y = p.y - 2;
+        p.dy = 0;
+      };
     }
     if (p.state === "breaking") {
       p.speed = 1;
@@ -64,15 +68,12 @@ class Player {
       }
     }
 
-    // Check collision
-    handelCollision(this.x, this.y);
-
     // Stop player from falling out of screen before proper collison detections is in place
-    // if (p.y > 94) {
-    //   p.state = p.states[0];
-    //   p.dy = 0;
-    //   p.y = 94;
-    // }
+    if (p.y > 140) {
+      p.state = p.states[0];
+      p.dy = 0;
+      p.y = 140;
+    }
 
     // Animation
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
@@ -86,12 +87,25 @@ class Player {
   }
 }
 
-function handelCollision(x, y) {
-  if (y > 100) {
-    p.state = p.states[0];
-    p.dy = 0;
-    p.y = 100;
-  }
+// function canFall(x, y) {
+//   console.log(x)
+//   for (let tile of level) {
+//     if (tile.x === x) {
+//       console.log("Same!s")
+//     }
+//   }
+// }
+
+const collision = (x,y) => {
+  console.log("Hello from collision");
+  debugger;
+  level.forEach(block =>{
+    if (block.x === x && block.y === y + p.height) {
+      console.log("Solid ground below")
+      return true;
+    }
+  })
+  return false
 }
 
 function Tile() {
@@ -175,9 +189,10 @@ function draw() {
   if (p.state === "jumping" || p.state === "breaking") {
     context.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
   }
-  context.lineWidth = 2;
-  context.strokeStyle = "green";
-  context.strokeRect(p.x, p.y, p.width, p.height);
+  // Draw a green hitbox around the player
+  // context.lineWidth = 2;
+  // context.strokeStyle = "green";
+  // context.strokeRect(p.x, p.y, p.width, p.height);
 }
 
 document.addEventListener("keyup", (event) => {
