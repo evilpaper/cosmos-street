@@ -65,19 +65,12 @@ class Player {
     }
 
     if (collision(p.x, p.y, p.width, p.height)) {
-      p.y = p.y - 10;
+      p.y = p.y;
       p.dy = 0;
       p.state = p.states[0];
     } else {
       p.state = p.states[1];
-    };
-
-    // Stop player from falling out of screen before proper collison detections is in place
-    // if (p.y > 140) {
-    //   p.state = p.states[0];
-    //   p.dy = 0;
-    //   p.y = 140;
-    // }
+    }
 
     // Animation
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
@@ -91,26 +84,14 @@ class Player {
   }
 }
 
-// function canFall(x, y) {
-//   console.log(x)
-//   for (let tile of level) {
-//     if (tile.x === x) {
-//       console.log("Same!s")
-//     }
-//   }
-// }
-
 const collision = (x,y, width, height) => {
   let result = false;
   level.forEach(block => {
-    if (block.x > x && block.x < x + width) {
-      if (block.y < y + width && block.y > y) {
+    if (Math.floor(block.x) > Math.floor(x) && Math.floor(block.x) < Math.floor(x + width)) {
+      if (Math.floor(block.y) < Math.floor(y + height + 3) && Math.floor(block.y) > Math.floor(y)) {
         result = true
       }
     }
-    // if (block.x === Math.floor(x + width) && block.y <= Math.floor(y + height)) {
-    //   result = true;
-    // }
   })
   return result;
 }
