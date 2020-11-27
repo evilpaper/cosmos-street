@@ -67,7 +67,12 @@ class Player {
     if (collision(p.x, p.y, p.width, p.height)) {
       p.y = p.y;
       p.dy = 0;
-      p.state = p.states[0];
+      if (p.state === p.states[2]) {
+        p.state = p.states[2]
+      } else {
+        p.state = p.states[0]
+      }
+      
     } else {
       p.state = p.states[1];
     }
