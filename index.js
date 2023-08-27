@@ -1,7 +1,3 @@
-// Good sources
-// https://developer.mozilla.org/en-US/docs/Games/Techniques/Control_mechanisms/Desktop_with_mouse_and_keyboard
-// https://blog.jvscott.net/post/129647814999/holding-state
-
 // TODO
 
 // Add continuos integration so I can keep pushing things to portfolio
@@ -35,6 +31,8 @@ class Player {
     this.state = this.states[1];
   }
   update() {
+    console.log(`p.x: ${p.x}`);
+    console.log(`p.y: ${p.y}`);
     if (p.state === "skating") {
       p.speed = 2;
       if (controller.left) {
@@ -68,11 +66,10 @@ class Player {
       p.y = p.y;
       p.dy = 0;
       if (p.state === p.states[2]) {
-        p.state = p.states[2]
+        p.state = p.states[2];
       } else {
-        p.state = p.states[0]
+        p.state = p.states[0];
       }
-      
     } else {
       p.state = p.states[1];
     }
@@ -89,17 +86,23 @@ class Player {
   }
 }
 
-const collision = (x,y, width, height) => {
+const collision = (x, y, width, height) => {
   let result = false;
-  level.forEach(block => {
-    if (Math.floor(block.x) > Math.floor(x) && Math.floor(block.x) < Math.floor(x + width)) {
-      if (Math.floor(block.y) < Math.floor(y + height + 3) && Math.floor(block.y) > Math.floor(y)) {
-        result = true
+  level.forEach((block) => {
+    if (
+      Math.floor(block.x) > Math.floor(x) &&
+      Math.floor(block.x) < Math.floor(x + width)
+    ) {
+      if (
+        Math.floor(block.y) < Math.floor(y + height + 3) &&
+        Math.floor(block.y) > Math.floor(y)
+      ) {
+        result = true;
       }
     }
-  })
+  });
   return result;
-}
+};
 
 function Tile() {
   this.name = "tile";
@@ -183,9 +186,9 @@ function draw() {
     context.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
   }
   // Draw a green hitbox around the player
-  // context.lineWidth = 2;
-  // context.strokeStyle = "green";
-  // context.strokeRect(p.x, p.y, p.width, p.height);
+  context.lineWidth = 2;
+  context.strokeStyle = "green";
+  context.strokeRect(p.x, p.y, p.width, p.height);
 }
 
 document.addEventListener("keyup", (event) => {
@@ -199,7 +202,13 @@ document.addEventListener("keydown", (event) => {
 function loop() {
   update();
   draw();
-  window.requestAnimationFrame(loop);
+  // window.requestAnimationFrame(loop);
 }
 
-window.onload = window.requestAnimationFrame(loop);
+// window.onload = window.requestAnimationFrame(loop);
+
+document.addEventListener("keydown", (event) => {
+  if (event.keyCode === 13) {
+    loop();
+  }
+});
