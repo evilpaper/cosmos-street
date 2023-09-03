@@ -1,7 +1,3 @@
-// Good sources
-// https://developer.mozilla.org/en-US/docs/Games/Techniques/Control_mechanisms/Desktop_with_mouse_and_keyboard
-// https://blog.jvscott.net/post/129647814999/holding-state
-
 // TODO
 
 // Add continuos integration so I can keep pushing things to portfolio
@@ -35,6 +31,8 @@ class Player {
     this.state = this.states[1];
   }
   update() {
+    console.log(`p.x: ${p.x}`);
+    console.log(`p.y: ${p.y}`);
     if (p.state === "skating") {
       p.speed = 2;
       if (controller.left) {
@@ -65,14 +63,14 @@ class Player {
     }
 
     if (collision(p.x, p.y, p.width, p.height)) {
+      // Adjust to actual touch the tile
       p.y = p.y;
       p.dy = 0;
       if (p.state === p.states[2]) {
-        p.state = p.states[2]
+        p.state = p.states[2];
       } else {
-        p.state = p.states[0]
+        p.state = p.states[0];
       }
-      
     } else {
       p.state = p.states[1];
     }
@@ -86,20 +84,30 @@ class Player {
         p.frame = 0;
       }
     }
+
+    // Make sure p.y is always an integer
+    p.x = Math.floor(p.x);
+    p.y = Math.floor(p.y);
   }
 }
 
-const collision = (x,y, width, height) => {
+const collision = (x, y, width, height) => {
   let result = false;
-  level.forEach(block => {
-    if (Math.floor(block.x) > Math.floor(x) && Math.floor(block.x) < Math.floor(x + width)) {
-      if (Math.floor(block.y) < Math.floor(y + height + 3) && Math.floor(block.y) > Math.floor(y)) {
-        result = true
+  level.forEach((block) => {
+    if (
+      Math.floor(block.x) > Math.floor(x) &&
+      Math.floor(block.x) < Math.floor(x + width)
+    ) {
+      if (
+        Math.floor(block.y) < Math.floor(y + height + 3) &&
+        Math.floor(block.y) > Math.floor(y)
+      ) {
+        result = true;
       }
     }
-  })
+  });
   return result;
-}
+};
 
 function Tile() {
   this.name = "tile";
@@ -203,3 +211,10 @@ function loop() {
 }
 
 window.onload = window.requestAnimationFrame(loop);
+
+// Debug, use this to step through the code.
+// document.addEventListener("keydown", (event) => {
+//   if (event.keyCode === 13) {
+//     loop();
+//   }
+// });
