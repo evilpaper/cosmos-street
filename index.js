@@ -63,6 +63,7 @@ class Player {
     }
 
     if (collision(p.x, p.y, p.width, p.height)) {
+      // Adjust to actual touch the tile
       p.y = p.y;
       p.dy = 0;
       if (p.state === p.states[2]) {
@@ -83,6 +84,10 @@ class Player {
         p.frame = 0;
       }
     }
+
+    // Make sure p.y is always an integer
+    p.x = Math.floor(p.x);
+    p.y = Math.floor(p.y);
   }
 }
 
@@ -186,9 +191,9 @@ function draw() {
     context.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
   }
   // Draw a green hitbox around the player
-  context.lineWidth = 2;
-  context.strokeStyle = "green";
-  context.strokeRect(p.x, p.y, p.width, p.height);
+  // context.lineWidth = 2;
+  // context.strokeStyle = "green";
+  // context.strokeRect(p.x, p.y, p.width, p.height);
 }
 
 document.addEventListener("keyup", (event) => {
@@ -202,13 +207,14 @@ document.addEventListener("keydown", (event) => {
 function loop() {
   update();
   draw();
-  // window.requestAnimationFrame(loop);
+  window.requestAnimationFrame(loop);
 }
 
-// window.onload = window.requestAnimationFrame(loop);
+window.onload = window.requestAnimationFrame(loop);
 
-document.addEventListener("keydown", (event) => {
-  if (event.keyCode === 13) {
-    loop();
-  }
-});
+// Debug, use this to step through the code.
+// document.addEventListener("keydown", (event) => {
+//   if (event.keyCode === 13) {
+//     loop();
+//   }
+// });
