@@ -65,14 +65,17 @@ class Player {
     }
 
     if (collision(p.x, p.y, p.width, p.height)) {
+      // Get the blocks within the same x range
+      // Check if any of these blocks intersect
+      // If it intersect, return that block
+      // Set player y to same as block y
       p.y = p.y;
       p.dy = 0;
       if (p.state === p.states[2]) {
-        p.state = p.states[2]
+        p.state = p.states[2];
       } else {
-        p.state = p.states[0]
+        p.state = p.states[0];
       }
-      
     } else {
       p.state = p.states[1];
     }
@@ -89,17 +92,23 @@ class Player {
   }
 }
 
-const collision = (x,y, width, height) => {
+const collision = (x, y, width, height) => {
   let result = false;
-  level.forEach(block => {
-    if (Math.floor(block.x) > Math.floor(x) && Math.floor(block.x) < Math.floor(x + width)) {
-      if (Math.floor(block.y) < Math.floor(y + height + 3) && Math.floor(block.y) > Math.floor(y)) {
-        result = true
+  level.forEach((block) => {
+    if (
+      Math.floor(block.x) > Math.floor(x) &&
+      Math.floor(block.x) < Math.floor(x + width)
+    ) {
+      if (
+        Math.floor(block.y) < Math.floor(y + height + 3) &&
+        Math.floor(block.y) > Math.floor(y)
+      ) {
+        result = true;
       }
     }
-  })
+  });
   return result;
-}
+};
 
 function Tile() {
   this.name = "tile";
