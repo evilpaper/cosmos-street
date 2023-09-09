@@ -16,7 +16,6 @@ const controller = new Controller();
 
 const gravity = 0.1;
 const friction = 0.4;
-
 class Player {
   constructor() {
     this.name = "Player 1";
@@ -51,7 +50,7 @@ class Player {
     if (p.state === "jumping") {
       p.dy += gravity;
       p.dy += friction;
-      p.y = p.y + p.dy;
+      p.y = Math.floor(p.y + p.dy);
     }
     if (p.state === "breaking") {
       p.speed = 1;
@@ -69,7 +68,12 @@ class Player {
       // Check if any of these blocks intersect
       // If it intersect, return that block
       // Set player y to same as block y
-      p.y = p.y;
+
+      const blockY = getYFromBlockBelowPlayer(p.x);
+      console.log("p.y ", p.y);
+      console.log("blockY ", blockY);
+
+      p.y = blockY ? blockY - 35 : p.y;
       p.dy = 0;
       if (p.state === p.states[2]) {
         p.state = p.states[2];
@@ -91,6 +95,17 @@ class Player {
     }
   }
 }
+
+const getYFromBlockBelowPlayer = (playerX) => {
+  console.log("playerX ", playerX);
+  const tilesWithinX = level.filter((tile) => {
+    console.log("tile.x ", tile.x);
+    return tile.x >= playerX && tile.x <= playerX + 16;
+  });
+
+  const y = tilesWithinX[0]?.y;
+  return y;
+};
 
 const collision = (x, y, width, height) => {
   let result = false;
@@ -203,6 +218,14 @@ document.addEventListener("keyup", (event) => {
 
 document.addEventListener("keydown", (event) => {
   controller.keyListener(event);
+});
+
+// Used to step through each step with the enter key
+// Remember to comment out window.requestAnimationFrame before use
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    loop();
+  }
 });
 
 function loop() {
