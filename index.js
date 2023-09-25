@@ -66,7 +66,6 @@ class Player {
     }
 
     if (collision(p.x, p.y, p.width, p.height)) {
-      
       // Get the blocks within the same x range
       // Check if any of these blocks intersect
       // If it intersect, return that block
@@ -103,7 +102,6 @@ class Player {
     p.y = Math.floor(p.y);
   }
 }
-
 
 const getYFromBlockBelowPlayer = (playerX) => {
   console.log("playerX ", playerX);
@@ -203,10 +201,7 @@ function update() {
     const outsideScreen = -20;
 
     if (level[i].x < outsideScreen) {
-      // const item = { ...level[i] };
       level[i].x = level[i].x + 17 * 16;
-      // level.shift();
-      // level.push(item);
     }
   }
 }
@@ -249,13 +244,15 @@ document.addEventListener("keydown", (event) => {
   controller.keyListener(event);
 });
 
-// Used to step through each step with the enter key
-// Remember to comment out window.requestAnimationFrame before use
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    loop();
-  }
-});
+/**
+ * The following listener is used to step through each step with the enter key when debugging.
+ * Remember to comment out window.requestAnimationFrame before use.
+ */
+// document.addEventListener("keydown", (event) => {
+//   if (event.key === "Enter") {
+//     loop();
+//   }
+// });
 
 function loop() {
   update();
@@ -264,10 +261,3 @@ function loop() {
 }
 
 window.onload = window.requestAnimationFrame(loop);
-
-// Debug, use this to step through the code.
-// document.addEventListener("keydown", (event) => {
-//   if (event.keyCode === 13) {
-//     loop();
-//   }
-// });
