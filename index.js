@@ -32,7 +32,9 @@ class Player {
     this.speed = 2;
     this.states = ["skating", "jumping", "breaking"];
     this.state = this.states[1];
+    this.p = this;
   }
+
   update() {
     if (p.state === "skating") {
       p.speed = 2;
@@ -47,11 +49,13 @@ class Player {
         p.speed = 3;
       }
     }
+
     if (p.state === "jumping") {
       p.dy += gravity;
       p.dy += friction;
       p.y = Math.floor(p.y + p.dy);
     }
+
     if (p.state === "breaking") {
       p.speed = 1;
       if (!controller.left) {
@@ -107,8 +111,19 @@ const getYFromBlockBelowPlayer = (playerX) => {
   return y;
 };
 
+const collide = (currentPosition, nextPosition, level) => {
+  // New collide function
+  // If any tile is within currentPosition and nextPosition we have a collision
+  // nextPosition should be adjusted to y of the colliding tile
+  console.log("player ", player);
+  console.log("level ", level);
+};
+
 const collision = (x, y, width, height) => {
   let result = false;
+
+  // Get only the blocks within same x range here
+
   level.forEach((block) => {
     if (
       Math.floor(block.x) > Math.floor(x) &&
@@ -179,6 +194,15 @@ function update() {
   }
   for (let i = 0; i < level.length; i++) {
     level[i].x = level[i].x - p.speed;
+
+    const outsideScreen = -20;
+
+    if (level[i].x < outsideScreen) {
+      // const item = { ...level[i] };
+      level[i].x = level[i].x + 17 * 16;
+      // level.shift();
+      // level.push(item);
+    }
   }
 }
 

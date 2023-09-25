@@ -1,4 +1,8 @@
-const s = 16; // the side length of a single tile
+const s = 16; // the length of a single tile
+
+/**
+ * The canvas width is 270px.
+ */
 
 const level = [
   { x: 0, y: s * 8 + 1, tile: new Tile() },
@@ -16,34 +20,4 @@ const level = [
   { x: 12 * s + 1, y: s * 8 + 1, tile: new Tile() },
   { x: 13 * s + 1, y: s * 8 + 1, tile: new Tile() },
   { x: 14 * s + 1, y: s * 8 + 1, tile: new Tile() },
-  { x: 16 * s + 1, y: s * 7 + 1, tile: new Tile() },
-  { x: 17 * s + 1, y: s * 7 + 1, tile: new Tile() },
-  { x: 18 * s + 1, y: s * 7 + 1, tile: new Tile() },
-  { x: 19 * s + 1, y: s * 7 + 1, tile: new Tile() },
-  { x: 20 * s + 1, y: s * 7 + 1, tile: new Tile() },
-  { x: 21 * s + 1, y: s * 7 + 1, tile: new Tile() },
-  { x: 23 * s + 1, y: s * 8 + 1, tile: new Tile() },
-  { x: 24 * s + 1, y: s * 8 + 1, tile: new Tile() },
-  { x: 25 * s + 1, y: s * 8 + 1, tile: new Tile() },
-  { x: 26 * s + 1, y: s * 8 + 1, tile: new Tile() },
-  { x: 27 * s + 1, y: s * 8 + 1, tile: new Tile() },
-  { x: 28 * s + 1, y: s * 8 + 1, tile: new Tile() },
-  { x: 30 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 31 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 32 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 33 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 34 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 35 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 38 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 39 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 40 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 41 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 42 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 43 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 46 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 47 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 48 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 49 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 50 * s + 1, y: s * 9 + 1, tile: new Tile() },
-  { x: 51 * s + 1, y: s * 9 + 1, tile: new Tile() },
 ];
