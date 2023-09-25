@@ -12,7 +12,6 @@ const controller = new Controller();
 
 const gravity = 0.1;
 const friction = 0.4;
-
 class Player {
   constructor() {
     this.name = "Player 1";
@@ -29,7 +28,9 @@ class Player {
     this.speed = 2;
     this.states = ["skating", "jumping", "breaking"];
     this.state = this.states[1];
+    this.p = this;
   }
+
   update() {
     console.log(`p.x: ${p.x}`);
     console.log(`p.y: ${p.y}`);
@@ -46,11 +47,13 @@ class Player {
         p.speed = 3;
       }
     }
+
     if (p.state === "jumping") {
       p.dy += gravity;
       p.dy += friction;
-      p.y = p.y + p.dy;
+      p.y = Math.floor(p.y + p.dy);
     }
+
     if (p.state === "breaking") {
       p.speed = 1;
       if (!controller.left) {
@@ -63,8 +66,18 @@ class Player {
     }
 
     if (collision(p.x, p.y, p.width, p.height)) {
-      // Adjust to actual touch the tile
-      p.y = p.y;
+      
+      // Get the blocks within the same x range
+      // Check if any of these blocks intersect
+      // If it intersect, return that block
+      // Set player y to same as block y
+
+      const blockY = getYFromBlockBelowPlayer(p.x);
+      console.log("p.y ", p.y);
+      console.log("blockY ", blockY);
+
+      p.y = blockY ? blockY - 35 : p.y;
+
       p.dy = 0;
       if (p.state === p.states[2]) {
         p.state = p.states[2];
@@ -91,8 +104,31 @@ class Player {
   }
 }
 
+
+const getYFromBlockBelowPlayer = (playerX) => {
+  console.log("playerX ", playerX);
+  const tilesWithinX = level.filter((tile) => {
+    console.log("tile.x ", tile.x);
+    return tile.x >= playerX && tile.x <= playerX + 16;
+  });
+
+  const y = tilesWithinX[0]?.y;
+  return y;
+};
+
+const collide = (currentPosition, nextPosition, level) => {
+  // New collide function
+  // If any tile is within currentPosition and nextPosition we have a collision
+  // nextPosition should be adjusted to y of the colliding tile
+  console.log("player ", player);
+  console.log("level ", level);
+};
+
 const collision = (x, y, width, height) => {
   let result = false;
+
+  // Get only the blocks within same x range here
+
   level.forEach((block) => {
     if (
       Math.floor(block.x) > Math.floor(x) &&
@@ -163,6 +199,15 @@ function update() {
   }
   for (let i = 0; i < level.length; i++) {
     level[i].x = level[i].x - p.speed;
+
+    const outsideScreen = -20;
+
+    if (level[i].x < outsideScreen) {
+      // const item = { ...level[i] };
+      level[i].x = level[i].x + 17 * 16;
+      // level.shift();
+      // level.push(item);
+    }
   }
 }
 
@@ -202,6 +247,14 @@ document.addEventListener("keyup", (event) => {
 
 document.addEventListener("keydown", (event) => {
   controller.keyListener(event);
+});
+
+// Used to step through each step with the enter key
+// Remember to comment out window.requestAnimationFrame before use
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    loop();
+  }
 });
 
 function loop() {
