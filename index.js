@@ -1,7 +1,3 @@
-// Good sources
-// https://developer.mozilla.org/en-US/docs/Games/Techniques/Control_mechanisms/Desktop_with_mouse_and_keyboard
-// https://blog.jvscott.net/post/129647814999/holding-state
-
 // TODO
 
 // Add continuos integration so I can keep pushing things to portfolio
@@ -36,6 +32,8 @@ class Player {
   }
 
   update() {
+    console.log(`p.x: ${p.x}`);
+    console.log(`p.y: ${p.y}`);
     if (p.state === "skating") {
       p.speed = 2;
       if (controller.left) {
@@ -68,6 +66,7 @@ class Player {
     }
 
     if (collision(p.x, p.y, p.width, p.height)) {
+      
       // Get the blocks within the same x range
       // Check if any of these blocks intersect
       // If it intersect, return that block
@@ -78,6 +77,7 @@ class Player {
       console.log("blockY ", blockY);
 
       p.y = blockY ? blockY - 35 : p.y;
+
       p.dy = 0;
       if (p.state === p.states[2]) {
         p.state = p.states[2];
@@ -97,8 +97,13 @@ class Player {
         p.frame = 0;
       }
     }
+
+    // Make sure p.y is always an integer
+    p.x = Math.floor(p.x);
+    p.y = Math.floor(p.y);
   }
 }
+
 
 const getYFromBlockBelowPlayer = (playerX) => {
   console.log("playerX ", playerX);
@@ -259,3 +264,10 @@ function loop() {
 }
 
 window.onload = window.requestAnimationFrame(loop);
+
+// Debug, use this to step through the code.
+// document.addEventListener("keydown", (event) => {
+//   if (event.keyCode === 13) {
+//     loop();
+//   }
+// });
