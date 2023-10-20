@@ -118,13 +118,23 @@ const getYFromBlockBelowPlayer = (playerX) => {
   return y;
 };
 
-const collide = (currentPosition, nextPosition, level) => {
+function collide(rect1, rect2) {
   // New collide function
   // If any tile is within currentPosition and nextPosition we have a collision
   // nextPosition should be adjusted to y of the colliding tile
   console.log("player ", player);
   console.log("level ", level);
-};
+}
+
+// Function to detect collisions
+function isColliding(rect1, rect2) {
+  return (
+    rect1.x < rect2.x + rect2.width &&
+    rect1.x + rect1.width > rect2.x &&
+    rect1.y < rect2.y + rect2.height &&
+    rect1.y + rect1.height > rect2.y
+  );
+}
 
 const collision = (x, y, width, height) => {
   let result = false;
@@ -235,9 +245,9 @@ function draw() {
     context.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
   }
   // Draw a green hitbox around the player
-  // context.lineWidth = 2;
-  // context.strokeStyle = "green";
-  // context.strokeRect(p.x, p.y, p.width, p.height);
+  context.lineWidth = 2;
+  context.strokeStyle = "green";
+  context.strokeRect(p.x, p.y, p.width, p.height);
 }
 
 document.addEventListener("keyup", (event) => {
@@ -250,18 +260,18 @@ document.addEventListener("keydown", (event) => {
 
 /**
  * The following listener is used to step through each step with the enter key when debugging.
- * Remember to comment out window.requestAnimationFrame before use.
+ * Remember to comment out window.requestAnimationFrame inside loop before use.
  */
-// document.addEventListener("keydown", (event) => {
-//   if (event.key === "Enter") {
-//     loop();
-//   }
-// });
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    loop();
+  }
+});
 
 function loop() {
   update();
   draw();
-  window.requestAnimationFrame(loop);
+  // window.requestAnimationFrame(loop);
 }
 
 window.onload = window.requestAnimationFrame(loop);

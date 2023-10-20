@@ -1,3 +1,7 @@
+/**
+ * When you call a function expression with the new keyword in JavaScript, you are creating an instance of an object, and the function becomes a constructor function. This process is known as constructor invocation.
+ */
+
 const Controller = function () {
   this.left = false;
   this.up = false;
