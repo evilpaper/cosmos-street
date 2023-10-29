@@ -215,7 +215,7 @@ function update() {
     const outsideScreen = -20;
 
     if (level[i].x < outsideScreen) {
-      level[i].x = level[i].x + 17 * 16;
+      level[i].x = level[i].x + 19 * 16;
     }
   }
 }
@@ -271,7 +271,7 @@ document.addEventListener("keydown", (event) => {
 function loop() {
   update();
   draw();
-  // window.requestAnimationFrame(loop);
+  window.requestAnimationFrame(loop);
 }
 
 window.onload = window.requestAnimationFrame(loop);
