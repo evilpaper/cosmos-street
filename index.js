@@ -1,8 +1,9 @@
 // TODO
 
-// Add continuos integration so I can keep pushing things to portfolio
-// Add proper collision
-// Add game States (start, game, end)
+// Clean up, favor plain objects and functions, avoid using this
+// Replace setInterval with requestAnimationFrame and consistent 60 frame per seconds
+// Add random generated levels
+// Add game states (start, game, end)
 // Add game over
 // Add sound
 
