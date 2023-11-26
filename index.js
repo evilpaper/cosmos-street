@@ -21,21 +21,19 @@ class Player {
     this.tick = 0;
     this.frame = 0;
     this.width = 26;
-    this.height = 36;
+    this.height = 35;
     this.x = 51;
-    this.y = 20;
+    this.y = 40;
     this.dy = 0;
-    this.speed = 2;
-    this.states = ["skating", "jumping", "breaking"];
+    this.speed = 1;
+    this.states = ["skating", "airborne", "breaking"];
     this.state = this.states[1];
     this.p = this;
   }
 
   update() {
-    console.log(`p.x: ${p.x}`);
-    console.log(`p.y: ${p.y}`);
     if (p.state === "skating") {
-      p.speed = 2;
+      p.speed = 1;
       if (controller.left) {
         p.state = p.states[2];
       }
@@ -44,14 +42,14 @@ class Player {
         p.state = p.states[1];
       }
       if (controller.right) {
-        p.speed = 3;
+        p.speed = 2;
+      }
+      if (p.dy > 1) {
+        p.state = p.states[1];
       }
     }
 
-    if (p.state === "jumping") {
-      p.dy += gravity;
-      p.dy += friction;
-      p.y = Math.floor(p.y + p.dy);
+    if (p.state === "airborne") {
     }
 
     if (p.state === "breaking") {
@@ -65,27 +63,13 @@ class Player {
       }
     }
 
-    if (collision(p.x, p.y, p.width, p.height)) {
-      // Get the blocks within the same x range
-      // Check if any of these blocks intersect
-      // If it intersect, return that block
-      // Set player y to same as block y
+    p.dy += gravity;
+    p.dy += friction;
+    p.y = Math.floor(p.y + p.dy);
 
-      const blockY = getYFromBlockBelowPlayer(p.x);
-      console.log("p.y ", p.y);
-      console.log("blockY ", blockY);
-
-      p.y = blockY ? blockY - 35 : p.y;
-
-      p.dy = 0;
-      if (p.state === p.states[2]) {
-        p.state = p.states[2];
-      } else {
-        p.state = p.states[0];
-      }
-    } else {
-      p.state = p.states[1];
-    }
+    level.forEach((block) => {
+      checkCollisionWithBlock(p, block);
+    });
 
     // Animation
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
@@ -102,60 +86,12 @@ class Player {
     p.y = Math.floor(p.y);
 
     if (p.y > 300) {
-      location.reload();
+      setTimeout(() => {
+        location.reload();
+      }, 800);
     }
   }
 }
-
-const getYFromBlockBelowPlayer = (playerX) => {
-  console.log("playerX ", playerX);
-  const tilesWithinX = level.filter((tile) => {
-    console.log("tile.x ", tile.x);
-    return tile.x >= playerX && tile.x <= playerX + 16;
-  });
-
-  const y = tilesWithinX[0]?.y;
-  return y;
-};
-
-function collide(rect1, rect2) {
-  // New collide function
-  // If any tile is within currentPosition and nextPosition we have a collision
-  // nextPosition should be adjusted to y of the colliding tile
-  console.log("player ", player);
-  console.log("level ", level);
-}
-
-// Function to detect collisions
-function isColliding(rect1, rect2) {
-  return (
-    rect1.x < rect2.x + rect2.width &&
-    rect1.x + rect1.width > rect2.x &&
-    rect1.y < rect2.y + rect2.height &&
-    rect1.y + rect1.height > rect2.y
-  );
-}
-
-const collision = (x, y, width, height) => {
-  let result = false;
-
-  // Get only the blocks within same x range here
-
-  level.forEach((block) => {
-    if (
-      Math.floor(block.x) > Math.floor(x) &&
-      Math.floor(block.x) < Math.floor(x + width)
-    ) {
-      if (
-        Math.floor(block.y) < Math.floor(y + height + 3) &&
-        Math.floor(block.y) > Math.floor(y)
-      ) {
-        result = true;
-      }
-    }
-  });
-  return result;
-};
 
 function Tile() {
   this.name = "tile";
@@ -192,6 +128,50 @@ function Star() {
   };
 }
 
+function checkCollisionWithBlock(player, block) {
+  // Calculate the overlap on both X and Y axes
+  // Use the difference (d) to compare againt the combined with and height
+  const dx = player.x + player.width / 2 - (block.x + block.width / 2);
+  const dy = player.y + player.height / 2 - (block.y + block.height / 2);
+  const combinedHalfWidths = (player.width + block.width) / 2;
+  const combinedHalfHeights = (player.height + block.height) / 2;
+
+  // Check for collision
+  // If the difference in x or y is less than the combined halfs we have an overlap.
+  if (Math.abs(dx) < combinedHalfWidths && Math.abs(dy) < combinedHalfHeights) {
+    // Get a number on the overlap
+    const overlapX = combinedHalfWidths - Math.abs(dx);
+    const overlapY = combinedHalfHeights - Math.abs(dy);
+
+    // In case the overlap in x-axis is larger than overlap in y-axis
+    // we conclude collision has happend in y-direction
+    if (overlapX > overlapY) {
+      // Resolve collision on the Y axis
+      if (dy > 0) {
+        player.y += overlapY;
+      } else {
+        player.y -= overlapY;
+      }
+
+      player.dy = 0;
+
+      if (p.state === p.states[2]) {
+        p.state = p.states[2];
+      } else {
+        p.state = p.states[0];
+      }
+    } else {
+      // Resolve collision on the X axis
+      if (dx > 0) {
+        player.x += overlapX;
+      } else {
+        player.x -= overlapX;
+      }
+      player.dx = 0;
+    }
+  }
+}
+
 function createStars(amount) {
   const result = [];
   for (let i = 0; i < amount; i++) {
@@ -215,7 +195,7 @@ function update() {
     const outsideScreen = -20;
 
     if (level[i].x < outsideScreen) {
-      level[i].x = level[i].x + 19 * 16;
+      level[i].x = level[i].x + 18 * 16;
     }
   }
 }
@@ -241,13 +221,13 @@ function draw() {
       context.drawImage(p.image, 26, 0, 26, 35, o(p.x), o(p.y), 26, 35);
     }
   }
-  if (p.state === "jumping" || p.state === "breaking") {
+  if (p.state === "airborne" || p.state === "breaking") {
     context.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
   }
   // Draw a green hitbox around the player
-  context.lineWidth = 2;
-  context.strokeStyle = "green";
-  context.strokeRect(p.x, p.y, p.width, p.height);
+  // context.lineWidth = 2;
+  // context.strokeStyle = "green";
+  // context.strokeRect(p.x, p.y, p.width, p.height);
 }
 
 document.addEventListener("keyup", (event) => {
@@ -262,16 +242,20 @@ document.addEventListener("keydown", (event) => {
  * The following listener is used to step through each step with the enter key when debugging.
  * Remember to comment out window.requestAnimationFrame inside loop before use.
  */
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    loop();
-  }
-});
+// document.addEventListener("keydown", (event) => {
+//   if (event.key === "Enter") {
+//     loop();
+//   }
+// });
 
 function loop() {
   update();
   draw();
-  window.requestAnimationFrame(loop);
+  // window.requestAnimationFrame(loop);
 }
 
-window.onload = window.requestAnimationFrame(loop);
+// window.onload = window.requestAnimationFrame(loop);
+
+setInterval(() => {
+  loop();
+}, 16);
