@@ -84,12 +84,6 @@ class Player {
     // Make sure p.y is always an integer
     p.x = Math.floor(p.x);
     p.y = Math.floor(p.y);
-
-    if (p.y > 300) {
-      setTimeout(() => {
-        location.reload();
-      }, 800);
-    }
   }
 }
 
