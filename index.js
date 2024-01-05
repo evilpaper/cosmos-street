@@ -1,8 +1,5 @@
 // TODO
 
-// Clean up, favor plain objects and functions, avoid using this
-// Replace setInterval with requestAnimationFrame and consistent 60 frame per seconds
-// Add random generated levels
 // Add game states (start, game, end)
 // Add game over
 // Add sound
@@ -97,7 +94,7 @@ function Tile() {
 function Star() {
   this.name = "star";
   this.image = new Image();
-  this.image.src = "star-1.png";
+  this.image.src = "star-spritesheet.png";
   this.blinking = Math.random() >= 0.8;
   this.tick = 0;
   this.frame = Math.floor(Math.random() * 6);
@@ -186,12 +183,6 @@ function update() {
   }
   for (let i = 0; i < level.length; i++) {
     level[i].x = level[i].x - p.speed;
-
-    const outsideScreen = -20;
-
-    if (level[i].x < outsideScreen) {
-      level[i].x = level[i].x + 18 * 16;
-    }
   }
 }
 
@@ -243,14 +234,7 @@ document.addEventListener("keydown", (event) => {
 //   }
 // });
 
-function loop() {
+setInterval(() => {
   update();
   draw();
-  // window.requestAnimationFrame(loop);
-}
-
-// window.onload = window.requestAnimationFrame(loop);
-
-setInterval(() => {
-  loop();
-}, 16);
+}, 1000 / 60);
