@@ -172,17 +172,39 @@ function createStars(amount) {
   return result;
 }
 
+// Initialize on first render
 const p = new Player();
 const tile = new Tile();
 const stars = createStars(10);
+let x = 0;
+
+function init() {
+  // Reset player
+  p.tick = 0;
+  p.frame = 0;
+  p.x = 51;
+  p.y = 40;
+  p.dy = 0;
+  p.speed = 1;
+  p.state = "airborne";
+
+  for (let i = 0; i < level.length; i++) {
+    level[i].x = i * 16 + 1;
+  }
+}
 
 function update() {
   p.update();
   for (const star of stars) {
     star.update();
   }
+
   for (let i = 0; i < level.length; i++) {
     level[i].x = level[i].x - p.speed;
+  }
+
+  if (p.y > 500) {
+    init();
   }
 }
 
