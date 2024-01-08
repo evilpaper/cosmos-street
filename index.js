@@ -29,6 +29,16 @@ class Player {
     this.p = this;
   }
 
+  reset() {
+    p.tick = 0;
+    p.frame = 0;
+    p.x = 51;
+    p.y = 40;
+    p.dy = 0;
+    p.speed = 1;
+    p.state = "airborne";
+  }
+
   update() {
     if (p.state === "skating") {
       p.speed = 1;
@@ -179,14 +189,7 @@ const stars = createStars(10);
 let x = 0;
 
 function init() {
-  // Reset player
-  p.tick = 0;
-  p.frame = 0;
-  p.x = 51;
-  p.y = 40;
-  p.dy = 0;
-  p.speed = 1;
-  p.state = "airborne";
+  p.reset();
 
   for (let i = 0; i < level.length; i++) {
     level[i].x = i * 16 + 1;
