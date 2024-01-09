@@ -10,6 +10,14 @@ const controller = new Controller();
 
 const gravity = 0.1;
 const friction = 0.4;
+
+// prettier-ignore
+const track = [
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 1, 1, 0, 
+  0, 0, 1, 1, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0,
+];
 class Player {
   constructor() {
     this.name = "Player 1";
