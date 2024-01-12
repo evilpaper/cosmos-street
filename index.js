@@ -1,9 +1,3 @@
-// TODO
-
-// Add game states (start, game, end)
-// Add game over
-// Add sound
-
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 const controller = new Controller();
@@ -11,16 +5,19 @@ const controller = new Controller();
 const gravity = 0.1;
 const friction = 0.4;
 
-// prettier-ignore
-const track = [
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 1, 1, 0, 
-  0, 0, 1, 1, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0,
-];
+let levelPlan = `
+............................................
+............................................
+............................................
+............................................
+.............###............................
+.......###........#.........................
+....................##.##...................
+............................................
+............................................
+`;
 class Player {
   constructor() {
-    this.name = "Player 1";
     this.image = new Image();
     this.image.src = "spritesheet.png";
     this.ticksToNextFrame = 16;
