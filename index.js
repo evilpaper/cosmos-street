@@ -1,6 +1,6 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
-const controller = new Controller();
+// const controller = new Controller();
 
 const gravity = 0.1;
 const friction = 0.4;
@@ -245,14 +245,6 @@ function draw() {
   // context.strokeStyle = "green";
   // context.strokeRect(p.x, p.y, p.width, p.height);
 }
-
-document.addEventListener("keyup", (event) => {
-  controller.keyListener(event);
-});
-
-document.addEventListener("keydown", (event) => {
-  controller.keyListener(event);
-});
 
 /**
  * The following listener is used to step through each step with the enter key when debugging.
