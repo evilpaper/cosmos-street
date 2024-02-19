@@ -1,6 +1,5 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
-// const controller = new Controller();
 
 const gravity = 0.1;
 const friction = 0.4;
@@ -10,12 +9,40 @@ let levelPlan = `
 ............................................
 ............................................
 ............................................
-.............###............................
-.......###........#.........................
-....................##.##...................
+............................................
+............................................
+............................................
+............................................
+###############...#########...#########...##
+............................................
+............................................
+............................................
 ............................................
 ............................................
 `;
+
+const levelSeed = levelPlan
+  .trim()
+  .split("\n")
+  .map((l) => [...l]);
+
+let level = [];
+
+levelSeed.forEach((row, y) => {
+  row.forEach((ch, x) => {
+    if (ch === "#") {
+      level.push({
+        x: x * 16,
+        y: 16 * y + 1,
+        width: 16,
+        height: 16,
+        tile: new Tile(),
+      });
+    }
+  });
+});
+
+console.log(level);
 class Player {
   constructor() {
     this.image = new Image();
@@ -196,9 +223,9 @@ let x = 0;
 function init() {
   p.reset();
 
-  for (let i = 0; i < level.length; i++) {
-    level[i].x = i * 16 + 1;
-  }
+  // for (let i = 0; i < level.length; i++) {
+  //   level[i].x = i * 16 + 1;
+  // }
 }
 
 function update() {
@@ -226,6 +253,7 @@ function draw() {
   stars.forEach((s) => {
     context.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
+
   level.forEach((item) => {
     context.drawImage(item.tile.image, 0, 35, 16, 16, item.x, item.y, 16, 16);
   });
@@ -248,11 +276,12 @@ function draw() {
 
 /**
  * The following listener is used to step through each step with the enter key when debugging.
- * Remember to comment out window.requestAnimationFrame inside loop before use.
+ * Remember to comment out setInterval inside loop before use.
  */
 // document.addEventListener("keydown", (event) => {
 //   if (event.key === "Enter") {
-//     loop();
+//     update();
+//     draw();
 //   }
 // });
 

@@ -13,7 +13,6 @@ controller.keyListener = function (event) {
       controller.right = eventType;
       break;
   }
-  console.log(controller);
 };
 
 document.addEventListener("keyup", (event) => {
