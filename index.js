@@ -4,45 +4,31 @@ const context = canvas.getContext("2d");
 const gravity = 0.1;
 const friction = 0.4;
 
-let levelPlan = `
-............................................
-............................................
-............................................
-............................................
-............................................
-............................................
-............................................
-............................................
-###############...#########...#########...##
-............................................
-............................................
-............................................
-............................................
-............................................
-`;
-
-const levelSeed = levelPlan
-  .trim()
-  .split("\n")
-  .map((l) => [...l]);
-
-let level = [];
-
-levelSeed.forEach((row, y) => {
-  row.forEach((ch, x) => {
-    if (ch === "#") {
-      level.push({
-        x: x * 16,
-        y: 16 * y + 1,
-        width: 16,
-        height: 16,
-        tile: new Tile(),
-      });
-    }
+function getPlatforms(level) {
+  const result = [];
+  const cleaned = level
+    .trim()
+    .split("\n")
+    .map((l) => [...l]);
+  cleaned.forEach((row, y) => {
+    row.forEach((ch, x) => {
+      if (ch === "#") {
+        result.push({
+          x: x * 16,
+          y: 16 * y + 1,
+          width: 16,
+          height: 16,
+          tile: new Tile(),
+        });
+      }
+    });
   });
-});
 
-console.log(level);
+  return result;
+}
+
+const platforms = getPlatforms(level);
+
 class Player {
   constructor() {
     this.image = new Image();
@@ -107,7 +93,7 @@ class Player {
     p.dy += friction;
     p.y = Math.floor(p.y + p.dy);
 
-    level.forEach((block) => {
+    platforms.forEach((block) => {
       checkCollisionWithBlock(p, block);
     });
 
@@ -234,8 +220,8 @@ function update() {
     star.update();
   }
 
-  for (let i = 0; i < level.length; i++) {
-    level[i].x = level[i].x - p.speed;
+  for (let i = 0; i < platforms.length; i++) {
+    platforms[i].x = platforms[i].x - p.speed;
   }
 
   if (p.y > 500) {
@@ -254,7 +240,7 @@ function draw() {
     context.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
 
-  level.forEach((item) => {
+  platforms.forEach((item) => {
     context.drawImage(item.tile.image, 0, 35, 16, 16, item.x, item.y, 16, 16);
   });
 
