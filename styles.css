@@ -16,9 +16,11 @@ canvas {
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  width: 720px;
-  height: 576px;
+  min-width: 128px;
+  max-width: 720px;
+  width: 100vw;
   background-color: #0b0630;
+  aspect-ratio: 720 / 576;
 }
 
 .crt-container {

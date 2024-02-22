@@ -41,7 +41,7 @@ class Player {
     this.x = 51;
     this.y = 40;
     this.dy = 0;
-    this.speed = 1;
+    this.speed = 0.8;
     this.states = ["skating", "airborne", "breaking"];
     this.state = this.states[1];
     this.p = this;
@@ -53,7 +53,7 @@ class Player {
     p.x = 51;
     p.y = 40;
     p.dy = 0;
-    p.speed = 1;
+    p.speed = 0.8;
     p.state = "airborne";
   }
 
