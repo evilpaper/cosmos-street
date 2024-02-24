@@ -27,7 +27,7 @@ function getPlatforms(level) {
   return result;
 }
 
-const platforms = getPlatforms(level);
+let platforms = getPlatforms(level);
 
 class Player {
   constructor() {
@@ -94,7 +94,7 @@ class Player {
     p.y = Math.floor(p.y + p.dy);
 
     platforms.forEach((block) => {
-      checkCollisionWithBlock(p, block);
+      checkCollisionAndResolve(p, block);
     });
 
     // Animation
@@ -148,13 +148,13 @@ function Star() {
   };
 }
 
-function checkCollisionWithBlock(player, block) {
+function checkCollisionAndResolve(a, b) {
   // Calculate the overlap on both X and Y axes
   // Use the difference (d) to compare againt the combined with and height
-  const dx = player.x + player.width / 2 - (block.x + block.width / 2);
-  const dy = player.y + player.height / 2 - (block.y + block.height / 2);
-  const combinedHalfWidths = (player.width + block.width) / 2;
-  const combinedHalfHeights = (player.height + block.height) / 2;
+  const dx = a.x + a.width / 2 - (b.x + b.width / 2);
+  const dy = a.y + a.height / 2 - (b.y + b.height / 2);
+  const combinedHalfWidths = (a.width + b.width) / 2;
+  const combinedHalfHeights = (a.height + b.height) / 2;
 
   // Check for collision
   // If the difference in x or y is less than the combined halfs we have an overlap.
@@ -168,12 +168,12 @@ function checkCollisionWithBlock(player, block) {
     if (overlapX > overlapY) {
       // Resolve collision on the Y axis
       if (dy > 0) {
-        player.y += overlapY;
+        a.y += overlapY;
       } else {
-        player.y -= overlapY;
+        a.y -= overlapY;
       }
 
-      player.dy = 0;
+      a.dy = 0;
 
       if (p.state === p.states[2]) {
         p.state = p.states[2];
@@ -183,11 +183,11 @@ function checkCollisionWithBlock(player, block) {
     } else {
       // Resolve collision on the X axis
       if (dx > 0) {
-        player.x += overlapX;
+        a.x += overlapX;
       } else {
-        player.x -= overlapX;
+        a.x -= overlapX;
       }
-      player.dx = 0;
+      a.dx = 0;
     }
   }
 }
@@ -208,10 +208,8 @@ let x = 0;
 
 function init() {
   p.reset();
-
-  // for (let i = 0; i < level.length; i++) {
-  //   level[i].x = i * 16 + 1;
-  // }
+  platforms = getPlatforms(level);
+  x = 0;
 }
 
 function update() {
