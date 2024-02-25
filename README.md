@@ -10,7 +10,7 @@ A hackable auto runner in the making.
 
 ## About this project
 
-This project as a hackable auto runner video game. Playable in the browser. Made for fun and an urge to explore pixel art, interactivity and traditional video games limitations. Kept as plain and close to the platform as possible. Just HTML, CSS and JavaScript. No build step or things like that.
+This project as a hackable auto runner video game. Inspired by the skateboard sequences from the original Wonderboy on Sega Master System. Playable in the browser. Made for fun and an urge to explore pixel art, interactivity and traditional video games limitations. Kept as plain and close to the platform as possible. Just HTML, CSS and JavaScript. No build step or things like that.
 
 ## How to play
 
