@@ -20,7 +20,7 @@ canvas {
   max-width: 720px;
   width: 100vw;
   background-color: #0b0630;
-  aspect-ratio: 720 / 576;
+  aspect-ratio: 1;
 }
 
 .crt-container {
