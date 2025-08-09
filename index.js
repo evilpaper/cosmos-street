@@ -76,6 +76,7 @@ class Player {
     }
 
     if (p.state === "airborne") {
+      // Do airborne stuff here...
     }
 
     if (p.state === "breaking") {
@@ -94,7 +95,7 @@ class Player {
     p.y = Math.floor(p.y + p.dy);
 
     platforms.forEach((block) => {
-      checkCollisionAndResolve(p, block);
+      checkCollision(p, block);
     });
 
     // Animation
@@ -148,7 +149,7 @@ function Star() {
   };
 }
 
-function checkCollisionAndResolve(a, b) {
+function checkCollision(a, b) {
   // Calculate the overlap on both X and Y axes
   // Use the difference (d) to compare againt the combined with and height
   const dx = a.x + a.width / 2 - (b.x + b.width / 2);
@@ -231,8 +232,13 @@ function o(value) {
   return Math.round(value);
 }
 
+const CONSTANTS = {
+  SCREEN_WIDTH: 256,
+  SCREEN_HEIGHT: 256,
+};
+
 function draw() {
-  context.clearRect(0, 0, 270, 216);
+  context.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
   stars.forEach((s) => {
     context.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
