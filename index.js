@@ -27,7 +27,16 @@ function getPlatforms(level) {
   return result;
 }
 
-let platforms = getPlatforms(level);
+let platforms = [];
+for (let i = 0; i < 100; i++) {
+  platforms.push({
+    x: 64 + i * 16,
+    y: 160,
+    width: 16,
+    height: 16,
+    tile: new Tile(),
+  });
+}
 
 class Player {
   constructor() {
@@ -209,7 +218,17 @@ let x = 0;
 
 function init() {
   p.reset();
-  platforms = getPlatforms(level);
+
+  for (let i = 0; i < 20; i++) {
+    platforms.push({
+      x: 64 + i * 16,
+      y: 160,
+      width: 16,
+      height: 16,
+      tile: new Tile(),
+    });
+  }
+
   x = 0;
 }
 
