@@ -28,7 +28,7 @@ function getPlatforms(level) {
 }
 
 let platforms = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 25; i++) {
   platforms.push({
     x: 64 + i * 16,
     y: 160,
@@ -219,6 +219,8 @@ let x = 0;
 function init() {
   p.reset();
 
+  platforms = [];
+
   for (let i = 0; i < 20; i++) {
     platforms.push({
       x: 64 + i * 16,
@@ -232,15 +234,39 @@ function init() {
   x = 0;
 }
 
+function updatePlatforms() {
+  // Move all platforms to the left
+  for (let i = 0; i < platforms.length; i++) {
+    platforms[i].x = platforms[i].x - p.speed;
+  }
+  // If a platform is off the screen, remove it
+  platforms = platforms.filter((platform) => platform.x > -16);
+
+  // If a platform is off the screen, add a new one on a random height and a random gap from last platform
+  if (platforms.length < 20) {
+    // y should vary betwwen 130 and 160
+    const y = Math.floor(Math.random() * 30) + 130;
+    const gap = 96;
+    const numberOfPlatforms = 20;
+    for (let i = 0; i < numberOfPlatforms; i++) {
+      platforms.push({
+        x: 256 + i * 16 + gap,
+        y: y,
+        width: 16,
+        height: 16,
+        tile: new Tile(),
+      });
+    }
+  }
+}
+
 function update() {
   p.update();
   for (const star of stars) {
     star.update();
   }
 
-  for (let i = 0; i < platforms.length; i++) {
-    platforms[i].x = platforms[i].x - p.speed;
-  }
+  updatePlatforms();
 
   if (p.y > 500) {
     init();

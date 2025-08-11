@@ -8,6 +8,7 @@ alwaysApply: true
 {
 "match": "\*_/_",
 "actions": [
+
 // General coding style
 "Always write modern, clean, and readable JavaScript (ES6+).",
 "Prefer const/let over var.",
@@ -20,54 +21,6 @@ alwaysApply: true
         "The framerate is fixed and not changeable. The game is entirely frame-rate dependent, omitting the need to handle deltaTime and instead, working with number of frames directly (if you have ever used Pico-8, you'd get the idea)",
         "Encourage separating update logic from render logic.",
         "The game is renderd in canvas.",
-
-        // Physics & collisions
-        "Implement basic physics manually (gravity, friction, jump velocity) instead of using external physics engines unless explicitly requested.",
-        "Use axis-aligned bounding box (AABB) collision detection unless pixel-perfect collisions are needed.",
-
-        // Performance best practices
-        "Minimize unnecessary DOM manipulation during gameplay.",
-        "Batch draw calls where possible.",
-        "Keep the number of event listeners low — use a centralized input handler.",
-        "Avoid memory leaks by cleaning up references when removing objects.",
-
-        // Asset handling
-        "Load images, audio, and other assets asynchronously and provide loading feedback.",
-        "Cache assets to avoid reloading during gameplay.",
-
-        // AI help behavior
-        "When asked for code, provide self-contained working examples that can run directly in the browser.",
-        "Explain the reasoning behind any complex code suggestions.",
-        "When providing new game features, ensure compatibility with existing HTML/CSS/JS structure.",
-        "Do not suggest unrelated frameworks or libraries unless explicitly requested.",
-
-        // Style
-        "Follow consistent indentation (2 spaces).",
-        "Write comments for all non-trivial code blocks explaining what they do.",
-        "Keep CSS minimal and game-focused — avoid unnecessary animations unless requested."
-      ]
-    }
-
-]
-}
-{
-"description": "Rules for AI assistance when developing a 2D platform game in HTML, CSS, and JavaScript.",
-"rules": [
-{
-"match": "\*_/_",
-"actions": [
-// General coding style
-"Always write modern, clean, and readable JavaScript (ES6+).",
-"Prefer const/let over var.",
-"Avoid frameworks unless explicitly requested.",
-"Favor modular code structure — split code into separate files for player, enemies, levels, etc.",
-"Use descriptive names for variables, functions, and classes.",
-
-        // Game loop & rendering
-        "Use tick for the game loop.",
-        "Avoid setInterval/setTimeout for frame updates unless for specific delays.",
-        "Encourage separating update logic from render logic.",
-        "Prefer Canvas 2D API for rendering unless DOM elements are explicitly required.",
 
         // Physics & collisions
         "Implement basic physics manually (gravity, friction, jump velocity) instead of using external physics engines unless explicitly requested.",
