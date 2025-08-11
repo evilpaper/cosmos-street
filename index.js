@@ -4,6 +4,8 @@ const context = canvas.getContext("2d");
 const gravity = 0.1;
 const friction = 0.4;
 
+let pause = false;
+
 function getPlatforms(level) {
   const result = [];
   const cleaned = level
@@ -261,6 +263,10 @@ function updatePlatforms() {
 }
 
 function update() {
+  if (pause) {
+    return;
+  }
+
   p.update();
   for (const star of stars) {
     star.update();
@@ -319,6 +325,13 @@ function draw() {
 //     draw();
 //   }
 // });
+
+// If space is pressed, pause the game
+document.addEventListener("keydown", (event) => {
+  if (event.key === " ") {
+    pause = !pause;
+  }
+});
 
 setInterval(() => {
   update();
