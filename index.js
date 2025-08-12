@@ -244,15 +244,17 @@ function updatePlatforms() {
   // If a platform is off the screen, remove it
   platforms = platforms.filter((platform) => platform.x > -16);
 
-  // If a platform is off the screen, add a new one on a random height and a random gap from last platform
-  if (platforms.length < 13) {
-    // y should vary betwwen 130 and 160
+  const lastPlatformX = Math.floor(platforms[platforms.length - 1].x);
+
+  if (lastPlatformX < 256 + 16 * 4) {
     const y = Math.floor(Math.random() * 30) + 130;
-    const gap = 0;
-    const numberOfPlatforms = 13;
+    const gap = Math.floor(Math.random() * 48) + 32;
+    const numberOfPlatforms = Math.floor(Math.random() * 4) + 2;
+
+    // Add the new platforms to the platforms array
     for (let i = 0; i < numberOfPlatforms; i++) {
       platforms.push({
-        x: 256 + i * 16 + gap,
+        x: lastPlatformX + i * 16 + gap,
         y: y,
         width: 16,
         height: 16,
