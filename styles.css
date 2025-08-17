@@ -43,7 +43,7 @@ canvas {
 }
 
 /* Mobile landscape */
-@media (max-width: 720px) and (orientation: landscape) {
+@media (max-width: 960px) and (orientation: landscape) {
   canvas {
     width: 100vh;
   }
