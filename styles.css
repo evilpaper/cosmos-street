@@ -8,7 +8,7 @@ body {
 body {
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
@@ -25,24 +25,30 @@ canvas {
   aspect-ratio: 1;
 }
 
-/* Mobile landscape */
-@media (max-width: 720px) {
-  canvas {
-    width: 100vh;
-  }
+.controls {
+  display: none;
 }
 
 /* Mobile portrait */
-@media (max-width: 480px) and (orientation: portrait) {
+@media (max-width: 720px) and (orientation: portrait) {
+  body {
+    flex-direction: column;
+  }
   canvas {
     width: 100vw;
+  }
+  .controls {
+    display: block;
   }
 }
 
 /* Mobile landscape */
-@media (max-width: 480px) and (orientation: landscape) {
+@media (max-width: 720px) and (orientation: landscape) {
   canvas {
     width: 100vh;
+  }
+  .controls {
+    display: block;
   }
 }
 
