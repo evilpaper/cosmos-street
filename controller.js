@@ -5,7 +5,6 @@ const speedUpButton = document.getElementById("speed-up");
 const jumpButton = document.getElementById("jump");
 
 controller.keyListener = function (event) {
-  console.log(event);
   const eventType = event.type === "keydown" ? true : false;
   switch (event.keyCode) {
     case 37:
@@ -35,50 +34,25 @@ document.addEventListener("keyup", (event) => {
 // preventDefault() prevents scrolling, zooming, and touch delays
 // ensuring responsive game controls
 
-breakButton.addEventListener("touchstart", (event) => {
-  event.preventDefault();
-  controller.keyListener({ keyCode: 37, type: "keydown" });
-});
+// Helper function to create touch event handlers for a button
+function createTouchHandlers(button, keyCode) {
+  button.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    controller.keyListener({ keyCode, type: "keydown" });
+  });
 
-breakButton.addEventListener("touchend", (event) => {
-  event.preventDefault();
-  controller.keyListener({ keyCode: 37, type: "keyup" });
-});
+  button.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    controller.keyListener({ keyCode, type: "keyup" });
+  });
 
-// Also handle touch cancel (when touch is interrupted)
-breakButton.addEventListener("touchcancel", (event) => {
-  event.preventDefault();
-  controller.keyListener({ keyCode: 37, type: "keyup" });
-});
+  button.addEventListener("touchcancel", (event) => {
+    event.preventDefault();
+    controller.keyListener({ keyCode, type: "keyup" });
+  });
+}
 
-jumpButton.addEventListener("touchstart", (event) => {
-  event.preventDefault();
-  controller.keyListener({ keyCode: 38, type: "keydown" });
-});
-
-jumpButton.addEventListener("touchend", (event) => {
-  event.preventDefault();
-  controller.keyListener({ keyCode: 38, type: "keyup" });
-});
-
-// Also handle touch cancel (when touch is interrupted)
-jumpButton.addEventListener("touchcancel", (event) => {
-  event.preventDefault();
-  controller.keyListener({ keyCode: 38, type: "keyup" });
-});
-
-speedUpButton.addEventListener("touchstart", (event) => {
-  event.preventDefault();
-  controller.keyListener({ keyCode: 39, type: "keydown" });
-});
-
-speedUpButton.addEventListener("touchend", (event) => {
-  event.preventDefault();
-  controller.keyListener({ keyCode: 39, type: "keyup" });
-});
-
-// Also handle touch cancel (when touch is interrupted)
-speedUpButton.addEventListener("touchcancel", (event) => {
-  event.preventDefault();
-  controller.keyListener({ keyCode: 39, type: "keyup" });
-});
+// Apply touch handlers to all buttons
+createTouchHandlers(breakButton, 37); // Left arrow
+createTouchHandlers(jumpButton, 38); // Up arrow
+createTouchHandlers(speedUpButton, 39); // Right arrow
