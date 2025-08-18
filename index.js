@@ -345,7 +345,7 @@ setInterval(() => {
  * To get a truly fullscreen canvas, set its size with JS on resize:
  */
 function resizeCanvas() {
-  const canvas = document.getElementById("game");
+  const canvas = document.querySelector("body");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
