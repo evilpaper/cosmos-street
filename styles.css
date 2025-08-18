@@ -67,7 +67,11 @@ canvas {
     width: 100%;
   }
   .controls {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
   }
 }
 
