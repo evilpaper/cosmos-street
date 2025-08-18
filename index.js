@@ -339,3 +339,19 @@ setInterval(() => {
   update();
   draw();
 }, 1000 / 60);
+
+/**
+ * Mobile browsers often show/hide the address bar, so 100vh can be unreliable.
+ * To get a truly fullscreen canvas, set its size with JS on resize:
+ */
+function resizeCanvas() {
+  const canvas = document.getElementById("game");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", resizeCanvas);
+window.addEventListener("orientationchange", resizeCanvas);
+
+// Call once on load
+resizeCanvas();
