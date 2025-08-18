@@ -13,12 +13,10 @@ body {
 }
 
 body {
-  max-height: 100vh;
-  max-width: 100vw;
-  width: 100%;
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
   overflow: hidden; /* Prevents scrollbars */
-  position: fixed; /* Locks body in place */
   touch-action: none; /* Prevents touch scroll/zoom gestures */
   overscroll-behavior: none; /* Prevents overscroll bounce on mobile */
   display: flex;
@@ -36,7 +34,6 @@ canvas {
   width: 100vw;
   background-color: #0b0630;
   aspect-ratio: 1;
-  padding: 1rem;
 }
 
 .controls {
@@ -68,6 +65,7 @@ canvas {
 
 .crt-container {
   position: relative;
+  display: flex;
 }
 
 .crt {
