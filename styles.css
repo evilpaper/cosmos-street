@@ -19,8 +19,6 @@ body {
   height: 100%;
   overflow: hidden; /* Prevents scrollbars */
   position: fixed; /* Locks body in place */
-  top: 0;
-  left: 0;
   touch-action: none; /* Prevents touch scroll/zoom gestures */
   overscroll-behavior: none; /* Prevents overscroll bounce on mobile */
   display: flex;
@@ -38,6 +36,7 @@ canvas {
   width: 100vw;
   background-color: #0b0630;
   aspect-ratio: 1;
+  padding: 1rem;
 }
 
 .controls {
