@@ -7,29 +7,31 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="controls">
-      <button id="break">Break</button><button id="speed-up">Speed up</button>
-    </div>
-    <div class="crt-container">
-      <div class="crt">
-        <canvas id="canvas" width="256" height="256"></canvas>
+    <div class="game">
+      <div class="controls">
+        <button id="break">Break</button><button id="speed-up">Speed up</button>
       </div>
-      <svg width="0" height="0">
-        <defs>
-          <clipPath id="path" clipPathUnits="objectBoundingBox">
-            <path
-              d="M 0.167 0.167
+      <div class="crt-container">
+        <div class="crt">
+          <canvas id="canvas" width="256" height="256"></canvas>
+        </div>
+        <svg width="0" height="0">
+          <defs>
+            <clipPath id="path" clipPathUnits="objectBoundingBox">
+              <path
+                d="M 0.167 0.167
                  C 0.333 0.083 0.667 0.083 0.833 0.167
                  C 0.916 0.333 0.916 0.667 0.833 0.833
                  C 0.667 0.916 0.333 0.916 0.167 0.833
                  C 0.083 0.667 0.083 0.333 0.167 0.167
                  Z"
-            />
-          </clipPath>
-        </defs>
-      </svg>
+              />
+            </clipPath>
+          </defs>
+        </svg>
+      </div>
+      <div class="controls"><button id="jump">Jump</button></div>
     </div>
-    <div class="controls"><button id="jump">Jump</button></div>
     <script src="controller.js"></script>
     <script src="level.js"></script>
     <script src="index.js"></script>
