@@ -2,18 +2,23 @@ const controller = {};
 
 // Key code constants for better readability
 const KEY_CODES = {
-  LEFT: 37,
-  UP: 38,
-  RIGHT: 39,
+  UP: "ArrowUp",
+  RIGHT: "ArrowRight",
+  LEFT: "ArrowLeft",
 };
 
 const breakButton = document.getElementById("break");
 const speedUpButton = document.getElementById("speed-up");
 const jumpButton = document.getElementById("jump");
 
-controller.keyListener = function (event) {
-  const eventType = event.type === "keydown" ? true : false;
-  switch (event.keyCode) {
+/**
+ * code = KeyboardEvent: code property, a string
+ * type = KeyboardEvent: type property, a string
+ */
+controller.keyListener = function ({ code, type }) {
+  const eventType = type === "keydown" ? true : false;
+  console.log("code", code);
+  switch (code) {
     case KEY_CODES.LEFT:
       controller.left = eventType;
       // Toggle pressed state for break button
@@ -48,11 +53,13 @@ controller.keyListener = function (event) {
 
 // Keyboard events
 document.addEventListener("keydown", (event) => {
-  controller.keyListener(event);
+  const code = event.code;
+  controller.keyListener({ code, type: "keydown" });
 });
 
 document.addEventListener("keyup", (event) => {
-  controller.keyListener(event);
+  const code = event.code;
+  controller.keyListener({ code, type: "keyup" });
 });
 
 // Touch events
@@ -60,20 +67,20 @@ document.addEventListener("keyup", (event) => {
 // ensuring responsive game controls
 
 // Helper function to create touch event handlers for a button
-function createTouchHandlers(button, keyCode) {
+function createTouchHandlers(button, code) {
   button.addEventListener("touchstart", (event) => {
     event.preventDefault();
-    controller.keyListener({ keyCode, type: "keydown" });
+    controller.keyListener({ code, type: "keydown" });
   });
 
   button.addEventListener("touchend", (event) => {
     event.preventDefault();
-    controller.keyListener({ keyCode, type: "keyup" });
+    controller.keyListener({ code, type: "keyup" });
   });
 
   button.addEventListener("touchcancel", (event) => {
     event.preventDefault();
-    controller.keyListener({ keyCode, type: "keyup" });
+    controller.keyListener({ code, type: "keyup" });
   });
 }
 
