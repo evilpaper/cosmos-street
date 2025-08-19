@@ -349,6 +349,17 @@ function resizeCanvas() {
   const body = document.querySelector("body");
   body.width = window.innerWidth;
   body.height = window.innerHeight;
+
+  // Handle mobile landscape mode - set canvas height to 96% of body height
+  if (window.innerWidth <= 960 && window.innerHeight < window.innerWidth) {
+    const canvas = document.getElementById("canvas");
+    const bodyHeight = window.innerHeight;
+    const canvasHeight = bodyHeight * 0.96; // 96% of body height
+
+    // Set canvas height while maintaining aspect ratio
+    canvas.style.height = `${canvasHeight}px`;
+    canvas.style.width = `${canvasHeight}px`; // Keep it square
+  }
 }
 
 window.addEventListener("resize", resizeCanvas);
