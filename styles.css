@@ -168,6 +168,8 @@ canvas {
     align-items: center;
     gap: 2rem;
     flex: 1;
+    align-self: flex-end;
+    padding-bottom: 4rem;
   }
 }
 

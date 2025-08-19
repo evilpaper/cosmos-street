@@ -12,12 +12,11 @@ const speedUpButton = document.getElementById("speed-up");
 const jumpButton = document.getElementById("jump");
 
 /**
- * code = KeyboardEvent: code property, a string
- * type = KeyboardEvent: type property, a string
+ * code: string
+ * type: string
  */
 controller.keyListener = function ({ code, type }) {
   const eventType = type === "keydown" ? true : false;
-  console.log("code", code);
   switch (code) {
     case KEY_CODES.LEFT:
       controller.left = eventType;
@@ -88,3 +87,8 @@ function createTouchHandlers(button, code) {
 createTouchHandlers(breakButton, KEY_CODES.LEFT); // Left arrow
 createTouchHandlers(jumpButton, KEY_CODES.UP); // Up arrow
 createTouchHandlers(speedUpButton, KEY_CODES.RIGHT); // Right arrow
+
+// breakButton.addEventListener("click", (event) => {
+//   event.preventDefault();
+//   controller.keyListener({ code: KEY_CODES.LEFT, type: "keydown" });
+// });
