@@ -1,3 +1,60 @@
+:root {
+  --border-radius-200: 2px;
+  --border-radius-300: 3px;
+  --border-radius-500: 4px;
+  --color-background--100: #000;
+  --color-background--300: #171a1c;
+  --color-background--500: #22282c;
+  --color-primary: #ffffff;
+  --color-primary--500: #fca73f;
+  --color-primary--700: #d27503;
+  --color-secondary: #9a9ea3;
+
+  --color-tertiary--200: #d5cefd;
+  --color-tertiary--300: #b2b2fa;
+  --color-tertiary--400: #837cc7;
+  --color-tertiary--500: #6f6bc2;
+  --color-tertiary--600: #484592;
+  --color-tertiary--700: #373473;
+  --color-tertiary--800: #1e1c3f;
+
+  --color-surface--500: #faf2e6;
+
+  --color-accent0--500: #ffffff;
+
+  --color-accent1--400: #85a2fa;
+  --color-accent1--500: #668cff;
+  --color-accent1--600: #5275e0;
+  --color-accent1--700: #475fa8;
+  --color-accent1--800: #354880;
+
+  --color-accent2--400: #54e8b1;
+  --color-accent2--500: #19e197;
+  --color-accent2--600: #23c78a;
+  --color-accent2--700: #089b76;
+  --color-accent2--800: #007054;
+
+  --color-accent3--300: #e4cefd;
+  --color-accent3--400: #d4b2fb;
+  --color-accent3--400: #bc8fef;
+  --color-accent3--500: #9256d7;
+  --color-accent3--600: #9256d7;
+  --color-accent3--700: #785b99;
+  --color-accent3--800: #362649;
+
+  --color-accent4--400: #ff576d;
+  --color-accent4--500: #ff3a54;
+  --color-accent5--500: #fca73f;
+
+  --color-on-accent1: var(--color-background--100);
+  --color-on-background: #fff;
+  --color-on-surface: hsl(236, 18%, 30%);
+  --font-primary: "Share Tech Mono", sans-serif;
+  --font-secondary: "Dosis", sans-serif;
+  --nominal-gap: 4px;
+  --nominal-size: 3.33rem;
+}
+
 /* Disable long-press callout menu (Safari) */
 * {
   -webkit-touch-callout: none;
@@ -48,6 +105,38 @@ canvas {
   display: none;
 }
 
+.controls button {
+  background-color: var(--color-surface--500);
+  border-radius: var(--border-radius-500);
+  border-color: transparent;
+  color: var(--color-on-surface);
+  display: inline-block;
+  letter-spacing: 0.1em;
+  line-height: 1.15;
+  font-size: 1rem;
+  height: var(--nominal-size);
+  width: var(--nominal-size);
+  padding: 0.3rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* This add the round elevation on the button. Making it look crazy nice.*/
+.controls button::before {
+  border-radius: 50%;
+  box-shadow: 4px 6px 8px rgba(0, 0, 0, 0.2);
+  content: "";
+  display: flex;
+  height: 85%;
+  left: 7.5%;
+  position: absolute;
+  top: 7.5%;
+  width: 85%;
+}
+
 /* Mobile portrait */
 @media (max-width: 960px) and (orientation: portrait) {
   .game {
@@ -70,7 +159,7 @@ canvas {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
     flex: 1;
   }
 }
