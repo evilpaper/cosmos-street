@@ -16,12 +16,30 @@ controller.keyListener = function (event) {
   switch (event.keyCode) {
     case KEY_CODES.LEFT:
       controller.left = eventType;
+      // Toggle pressed state for break button
+      if (eventType) {
+        breakButton.classList.add("pressed");
+      } else {
+        breakButton.classList.remove("pressed");
+      }
       break;
     case KEY_CODES.UP:
       controller.up = eventType;
+      // Toggle pressed state for jump button
+      if (eventType) {
+        jumpButton.classList.add("pressed");
+      } else {
+        jumpButton.classList.remove("pressed");
+      }
       break;
     case KEY_CODES.RIGHT:
       controller.right = eventType;
+      // Toggle pressed state for speed-up button
+      if (eventType) {
+        speedUpButton.classList.add("pressed");
+      } else {
+        speedUpButton.classList.remove("pressed");
+      }
       break;
   }
 };

@@ -19,6 +19,7 @@
   --color-tertiary--800: #1e1c3f;
 
   --color-surface--500: #faf2e6;
+  --color-surface--600: #e0d8cc;
 
   --color-accent0--500: #ffffff;
 
@@ -121,7 +122,7 @@ canvas {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.2s, color 0.2s, transform 0.1s ease;
 }
 
 /* This add the round elevation on the button. Making it look crazy nice.*/
@@ -135,6 +136,12 @@ canvas {
   position: absolute;
   top: 7.5%;
   width: 85%;
+}
+
+/* Button pressed state - scale down to 0.9 */
+.controls button.pressed {
+  transform: scale(0.9);
+  background-color: var(--color-surface--600);
 }
 
 /* Mobile portrait */

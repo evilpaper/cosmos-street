@@ -30,6 +30,7 @@ function getPlatforms(level) {
 }
 
 let platforms = [];
+
 for (let i = 0; i < 25; i++) {
   platforms.push({
     x: 64 + i * 16,
