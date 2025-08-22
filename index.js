@@ -1,5 +1,6 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
+const jumpSound = document.querySelector(".jump");
 
 const gravity = 0.1;
 const friction = 0.4;
@@ -76,6 +77,7 @@ class Player {
         p.state = p.states[2];
       }
       if (controller.up) {
+        jumpSound.play();
         p.dy = -8;
         p.state = p.states[1];
       }
