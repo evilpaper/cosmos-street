@@ -7,18 +7,6 @@ const friction = 0.4;
 
 let pause = false;
 
-let platforms = [];
-
-for (let i = 0; i < 25; i++) {
-  platforms.push({
-    x: 64 + i * 16,
-    y: 160,
-    width: 16,
-    height: 16,
-    tile: new Tile(),
-  });
-}
-
 class Player {
   constructor() {
     this.image = new Image();
@@ -227,6 +215,19 @@ const p = new Player();
 const tile = new Tile();
 const stars = createStars(10);
 let x = 0;
+
+let platforms = [];
+
+// Populate platforms on first load
+for (let i = 0; i < 25; i++) {
+  platforms.push({
+    x: 64 + i * 16,
+    y: 160,
+    width: 16,
+    height: 16,
+    tile: new Tile(),
+  });
+}
 
 function init() {
   p.reset();
