@@ -59,6 +59,7 @@ class Player {
         p.state = p.states[1];
       }
       if (controller.right) {
+        p.x = 51;
         p.speed = 2;
       }
       if (p.dy > 1) {
@@ -71,7 +72,8 @@ class Player {
     }
 
     if (p.state === "breaking") {
-      p.speed = 1;
+      p.speed = 0.5;
+      p.x = 51;
       if (!controller.left) {
         p.state = p.states[0];
       }
@@ -102,6 +104,34 @@ class Player {
     // Make sure p.y is always an integer
     p.x = Math.floor(p.x);
     p.y = Math.floor(p.y);
+  }
+}
+
+function updatePlatforms() {
+  // Move all platforms to the left
+  for (let i = 0; i < platforms.length; i++) {
+    platforms[i].x = platforms[i].x - p.speed;
+  }
+  // If a platform is off the screen, remove it
+  platforms = platforms.filter((platform) => platform.x > -16);
+
+  const lastPlatformX = Math.floor(platforms[platforms.length - 1].x);
+
+  if (lastPlatformX < 256 + 16 * 4) {
+    const y = Math.floor(Math.random() * 30) + 130;
+    const gap = Math.floor(Math.random() * 48) + 32;
+    const numberOfPlatforms = Math.floor(Math.random() * 4) + 2;
+
+    // Add the new platforms to the platforms array
+    for (let i = 0; i < numberOfPlatforms; i++) {
+      platforms.push({
+        x: lastPlatformX + i * 16 + gap,
+        y: y,
+        width: 16,
+        height: 16,
+        tile: new Tile(),
+      });
+    }
   }
 }
 
@@ -214,34 +244,6 @@ function init() {
   }
 
   x = 0;
-}
-
-function updatePlatforms() {
-  // Move all platforms to the left
-  for (let i = 0; i < platforms.length; i++) {
-    platforms[i].x = platforms[i].x - p.speed;
-  }
-  // If a platform is off the screen, remove it
-  platforms = platforms.filter((platform) => platform.x > -16);
-
-  const lastPlatformX = Math.floor(platforms[platforms.length - 1].x);
-
-  if (lastPlatformX < 256 + 16 * 4) {
-    const y = Math.floor(Math.random() * 30) + 130;
-    const gap = Math.floor(Math.random() * 48) + 32;
-    const numberOfPlatforms = Math.floor(Math.random() * 4) + 2;
-
-    // Add the new platforms to the platforms array
-    for (let i = 0; i < numberOfPlatforms; i++) {
-      platforms.push({
-        x: lastPlatformX + i * 16 + gap,
-        y: y,
-        width: 16,
-        height: 16,
-        tile: new Tile(),
-      });
-    }
-  }
 }
 
 function update() {
