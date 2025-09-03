@@ -7,29 +7,6 @@ const friction = 0.4;
 
 let pause = false;
 
-function getPlatforms(level) {
-  const result = [];
-  const cleaned = level
-    .trim()
-    .split("\n")
-    .map((l) => [...l]);
-  cleaned.forEach((row, y) => {
-    row.forEach((ch, x) => {
-      if (ch === "#") {
-        result.push({
-          x: x * 16,
-          y: 16 * y + 1,
-          width: 16,
-          height: 16,
-          tile: new Tile(),
-        });
-      }
-    });
-  });
-
-  return result;
-}
-
 let platforms = [];
 
 for (let i = 0; i < 25; i++) {
@@ -77,7 +54,7 @@ class Player {
         p.state = p.states[2];
       }
       if (controller.up) {
-        jumpSound.play();
+        // jumpSound.play();
         p.dy = -8;
         p.state = p.states[1];
       }
