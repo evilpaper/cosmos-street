@@ -6,6 +6,7 @@ const gravity = 0.1;
 const friction = 0.4;
 
 let pause = false;
+let gameStarted = false;
 
 class Player {
   constructor() {
@@ -42,7 +43,7 @@ class Player {
         p.state = p.states[2];
       }
       if (controller.up) {
-        // jumpSound.play();
+        jumpSound.play();
         p.dy = -8;
         p.state = p.states[1];
       }
@@ -248,7 +249,7 @@ function init() {
 }
 
 function update() {
-  if (pause) {
+  if (pause || !gameStarted) {
     return;
   }
 
@@ -311,8 +312,30 @@ function draw() {
 //   }
 // });
 
-// If space is pressed, pause the game
+// Start game on any key press
+function startGame() {
+  if (!gameStarted) {
+    gameStarted = true;
+    const overlay = document.getElementById("start-overlay");
+    overlay.classList.add("hidden");
+  }
+}
+
+document.addEventListener("click", (event) => {
+  if (!gameStarted) {
+    startGame();
+    return;
+  }
+});
+
+// Listen for any key press to start the game
 document.addEventListener("keydown", (event) => {
+  if (!gameStarted) {
+    startGame();
+    return;
+  }
+
+  // If space is pressed, pause the game
   if (event.key === " ") {
     pause = !pause;
   }
