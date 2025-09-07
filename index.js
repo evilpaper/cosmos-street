@@ -1,5 +1,5 @@
 const canvas = document.getElementById("canvas");
-const context = canvas.getContext("2d");
+const screen = canvas.getContext("2d");
 const jumpSound = document.querySelector(".jump");
 
 const gravity = 0.1;
@@ -43,7 +43,7 @@ class Player {
         p.state = p.states[2];
       }
       if (controller.up) {
-        jumpSound.play();
+        // jumpSound.play();
         p.dy = -8;
         p.state = p.states[1];
       }
@@ -275,30 +275,30 @@ const CONSTANTS = {
 };
 
 function draw() {
-  context.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
+  screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
   stars.forEach((s) => {
-    context.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
+    screen.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
 
   platforms.forEach((item) => {
-    context.drawImage(item.tile.image, 0, 35, 16, 16, item.x, item.y, 16, 16);
+    screen.drawImage(item.tile.image, 0, 35, 16, 16, item.x, item.y, 16, 16);
   });
 
   if (p.state === "skating" || p.state === "speeding") {
     if (p.frame === 0) {
-      context.drawImage(p.image, 0, 0, 26, 35, o(p.x), o(p.y), 26, 35);
+      screen.drawImage(p.image, 0, 0, 26, 35, o(p.x), o(p.y), 26, 35);
     } else {
-      context.drawImage(p.image, 26, 0, 26, 35, o(p.x), o(p.y), 26, 35);
+      screen.drawImage(p.image, 26, 0, 26, 35, o(p.x), o(p.y), 26, 35);
     }
   }
   if (p.state === "airborne" || p.state === "breaking") {
-    context.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
+    screen.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
   }
   // Draw a green hitbox around the player
-  // context.lineWidth = 2;
-  // context.strokeStyle = "green";
-  // context.strokeRect(p.x, p.y, p.width, p.height);
+  // screen.lineWidth = 2;
+  // screen.strokeStyle = "green";
+  // screen.strokeRect(p.x, p.y, p.width, p.height);
 }
 
 /**
@@ -312,7 +312,6 @@ function draw() {
 //   }
 // });
 
-// Start game on any key press
 function startGame() {
   if (!gameStarted) {
     gameStarted = true;
@@ -340,11 +339,6 @@ document.addEventListener("keydown", (event) => {
     pause = !pause;
   }
 });
-
-setInterval(() => {
-  update();
-  draw();
-}, 1000 / 60);
 
 /**
  * Mobile browsers often show/hide the address bar, so 100vh can be unreliable.
