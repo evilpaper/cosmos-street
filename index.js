@@ -1,5 +1,3 @@
-const canvas = document.getElementById("canvas");
-const screen = canvas.getContext("2d");
 const jumpSound = document.querySelector(".jump");
 
 const gravity = 0.1;
@@ -274,7 +272,7 @@ const CONSTANTS = {
   SCREEN_HEIGHT: 256,
 };
 
-function draw() {
+function draw(screen) {
   screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
   stars.forEach((s) => {

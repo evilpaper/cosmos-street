@@ -1,24 +1,24 @@
-// Bootstrapping the loop
-function start() {
-  const canvas = document.querySelector("canvas");
-  const ctx = canvas.getContext("2d");
+const canvas = document.querySelector("canvas");
+const screen = canvas.getContext("2d");
+const fps = 60;
+const frameDuration = 1000 / fps;
 
+function start() {
   if (init) {
     init();
   }
 
-  const fps = 60;
-  const frameDuration = 1000 / fps;
-
-  function loop() {
-    if (update && draw) {
+  setInterval(() => {
+    if (update) {
       update();
-      draw(ctx);
     }
-  }
+  }, frameDuration);
 
-  // Call loop at ~60 fps
-  setInterval(loop, frameDuration);
+  setInterval(() => {
+    if (draw) {
+      draw(screen);
+    }
+  }, frameDuration);
 }
 
 window.onload = start;
