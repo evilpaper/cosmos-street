@@ -157,6 +157,11 @@ function Star() {
   };
 }
 
+function Characters() {
+  this.image = new Image();
+  this.image.src = "spritesheet.png";
+}
+
 function checkCollision(a, b) {
   // Calculate the overlap on both X and Y axes
   // Use the difference (d) to compare againt the combined with and height
@@ -213,6 +218,7 @@ function createStars(amount) {
 const p = new Player();
 const tile = new Tile();
 const stars = createStars(10);
+const characters = new Characters();
 let x = 0;
 
 let platforms = [];
@@ -275,6 +281,22 @@ const CONSTANTS = {
 function draw(screen) {
   screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
+  if (!gameStarted) {
+    screen.drawImage(characters.image, 16, 59, 8, 8, 68, 124, 8, 8);
+    screen.drawImage(characters.image, 32, 59, 8, 8, 76, 124, 8, 8);
+    screen.drawImage(characters.image, 32, 51, 8, 8, 84, 124, 8, 8);
+    screen.drawImage(characters.image, 40, 59, 8, 8, 92, 124, 8, 8);
+    screen.drawImage(characters.image, 40, 59, 8, 8, 100, 124, 8, 8);
+
+    screen.drawImage(characters.image, 0, 51, 8, 8, 116, 124, 8, 8);
+    screen.drawImage(characters.image, 0, 59, 8, 8, 124, 124, 8, 8);
+    screen.drawImage(characters.image, 88, 59, 8, 8, 132, 124, 8, 8);
+
+    screen.drawImage(characters.image, 80, 51, 8, 8, 148, 124, 8, 8);
+    screen.drawImage(characters.image, 32, 51, 8, 8, 156, 124, 8, 8);
+    screen.drawImage(characters.image, 88, 59, 8, 8, 164, 124, 8, 8);
+  }
+
   stars.forEach((s) => {
     screen.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
@@ -313,8 +335,6 @@ function draw(screen) {
 function startGame() {
   if (!gameStarted) {
     gameStarted = true;
-    const overlay = document.getElementById("start-overlay");
-    overlay.classList.add("hidden");
   }
 }
 
