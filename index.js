@@ -273,6 +273,18 @@ function o(value) {
   return Math.round(value);
 }
 
+function print(str) {
+  const normalized = str.toLowerCase();
+  console.log(normalized);
+  for (let i = 0; i < normalized.length; i++) {
+    if (normalized[i] === "a") {
+      screen.drawImage(characters.image, 0, 51, 8, 8, 116 + i * 8, 60, 8, 8);
+    } else {
+      screen.drawImage(characters.image, 8, 51, 8, 8, 116 + i * 8, 60, 8, 8);
+    }
+  }
+}
+
 const CONSTANTS = {
   SCREEN_WIDTH: 256,
   SCREEN_HEIGHT: 256,
@@ -282,6 +294,7 @@ function draw(screen) {
   screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
   if (!gameStarted) {
+    print("AK");
     screen.drawImage(characters.image, 16, 59, 8, 8, 68, 124, 8, 8);
     screen.drawImage(characters.image, 32, 59, 8, 8, 76, 124, 8, 8);
     screen.drawImage(characters.image, 32, 51, 8, 8, 84, 124, 8, 8);
