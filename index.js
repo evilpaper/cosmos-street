@@ -273,15 +273,131 @@ function o(value) {
   return Math.round(value);
 }
 
+letter = {
+  a: {
+    x: 0,
+    y: 51,
+  },
+  b: {
+    x: 8,
+    y: 51,
+  },
+  c: {
+    x: 16,
+    y: 51,
+  },
+  d: {
+    x: 24,
+    y: 51,
+  },
+  e: {
+    x: 32,
+    y: 51,
+  },
+  f: {
+    x: 40,
+    y: 51,
+  },
+  g: {
+    x: 48,
+    y: 51,
+  },
+  h: {
+    x: 56,
+    y: 51,
+  },
+  i: {
+    x: 64,
+    y: 51,
+  },
+  j: {
+    x: 72,
+    y: 51,
+  },
+  k: {
+    x: 80,
+    y: 51,
+  },
+  l: {
+    x: 88,
+    y: 51,
+  },
+  m: {
+    x: 96,
+    y: 51,
+  },
+  n: {
+    x: 0,
+    y: 59,
+  },
+  o: {
+    x: 8,
+    y: 59,
+  },
+  p: {
+    x: 16,
+    y: 59,
+  },
+  q: {
+    x: 24,
+    y: 59,
+  },
+  r: {
+    x: 32,
+    y: 59,
+  },
+  s: {
+    x: 40,
+    y: 59,
+  },
+  t: {
+    x: 48,
+    y: 59,
+  },
+  u: {
+    x: 56,
+    y: 59,
+  },
+  v: {
+    x: 64,
+    y: 59,
+  },
+  w: {
+    x: 72,
+    y: 59,
+  },
+  x: {
+    x: 80,
+    y: 59,
+  },
+  y: {
+    x: 88,
+    y: 59,
+  },
+  z: {
+    x: 96,
+    y: 59,
+  },
+};
+
 function print(str) {
   const normalized = str.toLowerCase();
-  console.log(normalized);
+  const width = 8;
+  const height = 8;
+  const x = 60;
+  const y = 120;
   for (let i = 0; i < normalized.length; i++) {
-    if (normalized[i] === "a") {
-      screen.drawImage(characters.image, 0, 51, 8, 8, 116 + i * 8, 60, 8, 8);
-    } else {
-      screen.drawImage(characters.image, 8, 51, 8, 8, 116 + i * 8, 60, 8, 8);
-    }
+    screen.drawImage(
+      characters.image,
+      letter[normalized[i]].x,
+      letter[normalized[i]].y,
+      width,
+      height,
+      x + i * 8,
+      y,
+      width,
+      height
+    );
   }
 }
 
@@ -294,20 +410,7 @@ function draw(screen) {
   screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
   if (!gameStarted) {
-    print("AK");
-    screen.drawImage(characters.image, 16, 59, 8, 8, 68, 124, 8, 8);
-    screen.drawImage(characters.image, 32, 59, 8, 8, 76, 124, 8, 8);
-    screen.drawImage(characters.image, 32, 51, 8, 8, 84, 124, 8, 8);
-    screen.drawImage(characters.image, 40, 59, 8, 8, 92, 124, 8, 8);
-    screen.drawImage(characters.image, 40, 59, 8, 8, 100, 124, 8, 8);
-
-    screen.drawImage(characters.image, 0, 51, 8, 8, 116, 124, 8, 8);
-    screen.drawImage(characters.image, 0, 59, 8, 8, 124, 124, 8, 8);
-    screen.drawImage(characters.image, 88, 59, 8, 8, 132, 124, 8, 8);
-
-    screen.drawImage(characters.image, 80, 51, 8, 8, 148, 124, 8, 8);
-    screen.drawImage(characters.image, 32, 51, 8, 8, 156, 124, 8, 8);
-    screen.drawImage(characters.image, 88, 59, 8, 8, 164, 124, 8, 8);
+    print("pressanykeytostart");
   }
 
   stars.forEach((s) => {
