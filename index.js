@@ -382,11 +382,15 @@ letter = {
 
 function print(str) {
   const normalized = str.toLowerCase();
+
   const width = 8;
   const height = 8;
-  const x = 60;
+  const x = 40;
   const y = 120;
   for (let i = 0; i < normalized.length; i++) {
+    if (normalized[i] === " ") {
+      continue;
+    }
     screen.drawImage(
       characters.image,
       letter[normalized[i]].x,
@@ -410,7 +414,7 @@ function draw(screen) {
   screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
   if (!gameStarted) {
-    print("pressanykeytostart");
+    print("press any key to start");
   }
 
   stars.forEach((s) => {
