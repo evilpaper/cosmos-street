@@ -15,23 +15,23 @@ class Player {
     this.frame = 0;
     this.width = 26;
     this.height = 35;
-    this.x = 51;
-    this.y = 40;
+    this.x = 50;
+    this.y = 125;
     this.dy = 0;
     this.speed = 0.8;
     this.states = ["skating", "airborne", "breaking"];
-    this.state = this.states[1];
+    this.state = this.states[0];
     this.p = this;
   }
 
   reset() {
     p.tick = 0;
     p.frame = 0;
-    p.x = 51;
-    p.y = 40;
+    p.x = 50;
+    p.y = 125;
     p.dy = 0;
     p.speed = 0.8;
-    p.state = "airborne";
+    p.state = "skating";
   }
 
   update() {
@@ -239,9 +239,9 @@ function init() {
 
   platforms = [];
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 30; i++) {
     platforms.push({
-      x: 64 + i * 16,
+      x: 8 + i * 16,
       y: 160,
       width: 16,
       height: 16,
