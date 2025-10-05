@@ -380,13 +380,10 @@ letter = {
   },
 };
 
-function print(str) {
+function print(str, x = 0, y = 0) {
   const normalized = str.toLowerCase();
-
   const width = 8;
   const height = 8;
-  const x = 40;
-  const y = 120;
   for (let i = 0; i < normalized.length; i++) {
     if (normalized[i] === " ") {
       continue;
@@ -414,7 +411,8 @@ function draw(screen) {
   screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
   if (!gameStarted) {
-    print("press any key to start");
+    print("press any key", 76, 112);
+    print("to start", 96, 128);
   }
 
   stars.forEach((s) => {
