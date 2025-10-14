@@ -9,7 +9,7 @@ let gameStarted = false;
 class Player {
   constructor() {
     this.image = new Image();
-    this.image.src = "spritesheet.png";
+    this.image.src = "./images/player-sprite-sheet.png";
     this.ticksToNextFrame = 16;
     this.tick = 0;
     this.frame = 0;
@@ -125,13 +125,13 @@ function updatePlatforms() {
 function Tile() {
   this.name = "tile";
   this.image = new Image();
-  this.image.src = "spritesheet.png";
+  this.image.src = "./images/tiles-sheet.png";
 }
 
 function Star() {
   this.name = "star";
   this.image = new Image();
-  this.image.src = "star-spritesheet.png";
+  this.image.src = "./images/star-sprite-sheet.png";
   this.blinking = Math.random() >= 0.8;
   this.tick = 0;
   this.frame = Math.floor(Math.random() * 6);
@@ -159,7 +159,7 @@ function Star() {
 
 function Characters() {
   this.image = new Image();
-  this.image.src = "spritesheet.png";
+  this.image.src = "./images/font.png";
 }
 
 function checkCollision(a, b) {
@@ -276,107 +276,107 @@ function o(value) {
 letter = {
   a: {
     x: 0,
-    y: 51,
+    y: 0,
   },
   b: {
     x: 8,
-    y: 51,
+    y: 0,
   },
   c: {
     x: 16,
-    y: 51,
+    y: 0,
   },
   d: {
     x: 24,
-    y: 51,
+    y: 0,
   },
   e: {
     x: 32,
-    y: 51,
+    y: 0,
   },
   f: {
     x: 40,
-    y: 51,
+    y: 0,
   },
   g: {
     x: 48,
-    y: 51,
+    y: 0,
   },
   h: {
     x: 56,
-    y: 51,
+    y: 0,
   },
   i: {
     x: 64,
-    y: 51,
+    y: 0,
   },
   j: {
     x: 72,
-    y: 51,
+    y: 0,
   },
   k: {
     x: 80,
-    y: 51,
+    y: 0,
   },
   l: {
     x: 88,
-    y: 51,
+    y: 0,
   },
   m: {
     x: 96,
-    y: 51,
+    y: 0,
   },
   n: {
     x: 0,
-    y: 59,
+    y: 8,
   },
   o: {
     x: 8,
-    y: 59,
+    y: 8,
   },
   p: {
     x: 16,
-    y: 59,
+    y: 8,
   },
   q: {
     x: 24,
-    y: 59,
+    y: 8,
   },
   r: {
     x: 32,
-    y: 59,
+    y: 8,
   },
   s: {
     x: 40,
-    y: 59,
+    y: 8,
   },
   t: {
     x: 48,
-    y: 59,
+    y: 8,
   },
   u: {
     x: 56,
-    y: 59,
+    y: 8,
   },
   v: {
     x: 64,
-    y: 59,
+    y: 8,
   },
   w: {
     x: 72,
-    y: 59,
+    y: 8,
   },
   x: {
     x: 80,
-    y: 59,
+    y: 8,
   },
   y: {
     x: 88,
-    y: 59,
+    y: 8,
   },
   z: {
     x: 96,
-    y: 59,
+    y: 8,
   },
 };
 
@@ -420,7 +420,7 @@ function draw(screen) {
   });
 
   platforms.forEach((item) => {
-    screen.drawImage(item.tile.image, 0, 35, 16, 16, item.x, item.y, 16, 16);
+    screen.drawImage(item.tile.image, 0, 0, 16, 16, item.x, item.y, 16, 16);
   });
 
   if (p.state === "skating" || p.state === "speeding") {
