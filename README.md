@@ -10,7 +10,9 @@ A hackable auto runner in the making.
 
 ## About this project
 
-This project as a hackable auto runner video game. Inspired by the skateboard sequences from the original Wonderboy on Sega Master System. Playable in the browser. Made for fun and an urge to explore pixel art, interactivity and traditional video games limitations. Kept as plain and close to the platform as possible. Just HTML, CSS and JavaScript. No build step or things like that.
+Cosmos Street is an old-school auto-runner, heavily inspired by the skateboard sequences from Wonder Boy on the Sega Master System. It is made for fun, and as an experiment in exploring the creative limits of traditional video games.
+
+The game runs right in your browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy. Just simple, direct, classic game development.
 
 ## How to play
 
@@ -19,8 +21,6 @@ Slow down = Arrow Left
 Speed up = Arrow Right
 
 The game restart automatically when the player fall off the screen.
-
-Tips: You can edit the level in the level object if you run the game locally. The level is just an JavaScript array.
 
 That's it!
 
@@ -32,14 +32,19 @@ That's it!
 
 ## Roadmap
 
+- [ ] Start screen
 - [ ] Ending
+- [ ] SFX
+- [ ] Music
 - [ ] Touch controls
-- [ ] Level editor
 - [ ] Highscore
+- [ ] Level editor
 
 ## Known Issues
 
 A list of things not working right now:
+
+- [ ] Player sometimes move forward even though she always should stay in place.
 
 ## Running Locally
 
