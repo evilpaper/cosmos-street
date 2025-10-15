@@ -1,4 +1,4 @@
-const controller = {};
+const input = {};
 
 // Key code constants for better readability
 const KEY_CODES = {
@@ -15,11 +15,11 @@ const jumpButton = document.getElementById("jump");
  * code: string
  * type: string
  */
-controller.keyListener = function ({ code, type }) {
+input.keyListener = function ({ code, type }) {
   const eventType = type === "keydown" ? true : false;
   switch (code) {
     case KEY_CODES.LEFT:
-      controller.left = eventType;
+      input.left = eventType;
       // Toggle pressed state for break button
       if (eventType) {
         breakButton.classList.add("pressed");
@@ -28,7 +28,7 @@ controller.keyListener = function ({ code, type }) {
       }
       break;
     case KEY_CODES.UP:
-      controller.up = eventType;
+      input.up = eventType;
       // Toggle pressed state for jump button
       if (eventType) {
         jumpButton.classList.add("pressed");
@@ -37,7 +37,7 @@ controller.keyListener = function ({ code, type }) {
       }
       break;
     case KEY_CODES.RIGHT:
-      controller.right = eventType;
+      input.right = eventType;
       // Toggle pressed state for speed-up button
       if (eventType) {
         speedUpButton.classList.add("pressed");
@@ -53,12 +53,12 @@ controller.keyListener = function ({ code, type }) {
 // Keyboard events
 document.addEventListener("keydown", (event) => {
   const code = event.code;
-  controller.keyListener({ code, type: "keydown" });
+  input.keyListener({ code, type: "keydown" });
 });
 
 document.addEventListener("keyup", (event) => {
   const code = event.code;
-  controller.keyListener({ code, type: "keyup" });
+  input.keyListener({ code, type: "keyup" });
 });
 
 // Touch events
@@ -69,17 +69,17 @@ document.addEventListener("keyup", (event) => {
 function createTouchHandlers(button, code) {
   button.addEventListener("touchstart", (event) => {
     event.preventDefault();
-    controller.keyListener({ code, type: "keydown" });
+    input.keyListener({ code, type: "keydown" });
   });
 
   button.addEventListener("touchend", (event) => {
     event.preventDefault();
-    controller.keyListener({ code, type: "keyup" });
+    input.keyListener({ code, type: "keyup" });
   });
 
   button.addEventListener("touchcancel", (event) => {
     event.preventDefault();
-    controller.keyListener({ code, type: "keyup" });
+    input.keyListener({ code, type: "keyup" });
   });
 }
 
@@ -90,5 +90,5 @@ createTouchHandlers(speedUpButton, KEY_CODES.RIGHT); // Right arrow
 
 // breakButton.addEventListener("click", (event) => {
 //   event.preventDefault();
-//   controller.keyListener({ code: KEY_CODES.LEFT, type: "keydown" });
+//   input.keyListener({ code: KEY_CODES.LEFT, type: "keydown" });
 // });

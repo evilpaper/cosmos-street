@@ -35,14 +35,14 @@ class Player {
   update() {
     if (p.state === "skating") {
       p.speed = 1;
-      if (controller.left) {
+      if (input.left) {
         p.state = p.states[2];
       }
-      if (controller.up) {
+      if (input.up) {
         p.dy = -8;
         p.state = p.states[1];
       }
-      if (controller.right) {
+      if (input.right) {
         p.x = 51;
         p.speed = 2;
       }
@@ -58,10 +58,10 @@ class Player {
     if (p.state === "breaking") {
       p.speed = 0.5;
       p.x = 51;
-      if (!controller.left) {
+      if (!input.left) {
         p.state = p.states[0];
       }
-      if (controller.up) {
+      if (input.up) {
         p.dy = -6;
         p.state = p.states[1];
       }
