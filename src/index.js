@@ -250,14 +250,15 @@ function init() {
 }
 
 function update() {
+  for (const star of stars) {
+    star.update();
+  }
+
   if (pause || !gameStarted) {
     return;
   }
 
   p.update();
-  for (const star of stars) {
-    star.update();
-  }
 
   updatePlatforms();
 
@@ -404,13 +405,20 @@ const CONSTANTS = {
   SCREEN_HEIGHT: 256,
 };
 
+function hcenter(s) {
+  // screen center minus the
+  // string length times the
+  // pixels in a char's width cut in half
+  return 128 - (s.length * 8) / 2;
+}
+
 function draw(screen) {
   screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
   if (!gameStarted) {
-    print("Cosmos Street", 76, 80);
-    print("Press any key", 76, 112);
-    print("to start", 96, 128);
+    print("Cosmos Street", hcenter("Cosmos Street"), 80);
+    print("Press any key", hcenter("Press any key"), 128);
+    print("to start", hcenter("to start"), 144);
   }
 
   stars.forEach((s) => {
