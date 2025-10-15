@@ -1,5 +1,3 @@
-const jumpSound = document.querySelector(".jump");
-
 const gravity = 0.1;
 const friction = 0.4;
 
@@ -41,7 +39,6 @@ class Player {
         p.state = p.states[2];
       }
       if (controller.up) {
-        // jumpSound.play();
         p.dy = -8;
         p.state = p.states[1];
       }
@@ -132,13 +129,13 @@ function Star() {
   this.name = "star";
   this.image = new Image();
   this.image.src = "./images/star-sprite-sheet.png";
-  this.blinking = Math.random() >= 0.8;
+  this.blinking = Math.random() >= 0.6;
   this.tick = 0;
   this.frame = Math.floor(Math.random() * 6);
   this.ticksToNextFrame = 16;
   this.x = Math.floor(Math.random() * 288);
-  this.y = Math.floor(Math.random() * 156);
-  this.speed = Math.random() * 0.1;
+  this.y = Math.floor(Math.random() * 256);
+  this.speed = Math.random() * 0.2;
   this.update = function () {
     this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
@@ -217,7 +214,7 @@ function createStars(amount) {
 // Initialize on first render
 const p = new Player();
 const tile = new Tile();
-const stars = createStars(10);
+const stars = createStars(20);
 const characters = new Characters();
 let x = 0;
 
@@ -411,7 +408,8 @@ function draw(screen) {
   screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
   if (!gameStarted) {
-    print("press any key", 76, 112);
+    print("Cosmos Street", 76, 80);
+    print("Press any key", 76, 112);
     print("to start", 96, 128);
   }
 
@@ -419,20 +417,23 @@ function draw(screen) {
     screen.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
 
-  platforms.forEach((item) => {
-    screen.drawImage(item.tile.image, 0, 0, 16, 16, item.x, item.y, 16, 16);
-  });
+  if (gameStarted) {
+    platforms.forEach((item) => {
+      screen.drawImage(item.tile.image, 0, 0, 16, 16, item.x, item.y, 16, 16);
+    });
 
-  if (p.state === "skating" || p.state === "speeding") {
-    if (p.frame === 0) {
-      screen.drawImage(p.image, 0, 0, 26, 35, o(p.x), o(p.y), 26, 35);
-    } else {
-      screen.drawImage(p.image, 26, 0, 26, 35, o(p.x), o(p.y), 26, 35);
+    if (p.state === "skating" || p.state === "speeding") {
+      if (p.frame === 0) {
+        screen.drawImage(p.image, 0, 0, 26, 35, o(p.x), o(p.y), 26, 35);
+      } else {
+        screen.drawImage(p.image, 26, 0, 26, 35, o(p.x), o(p.y), 26, 35);
+      }
+    }
+    if (p.state === "airborne" || p.state === "breaking") {
+      screen.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
     }
   }
-  if (p.state === "airborne" || p.state === "breaking") {
-    screen.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
-  }
+
   // Draw a green hitbox around the player
   // screen.lineWidth = 2;
   // screen.strokeStyle = "green";
