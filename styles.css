@@ -93,11 +93,10 @@ canvas {
   image-rendering: -webkit-crisp-edges;
   image-rendering: crisp-edges;
   image-rendering: pixelated;
-  min-width: 128px;
-  max-width: 720px;
-  width: 512px;
   background-color: #0b0630;
   aspect-ratio: 1;
+  width: min(100vw, 100vh);
+  height: min(100vw, 100vh);
 }
 
 .controls {
@@ -169,9 +168,6 @@ canvas {
     flex-direction: column;
     justify-content: flex-start;
   }
-  canvas {
-    width: 24rem;
-  }
   .controls {
     display: block;
   }
@@ -179,9 +175,6 @@ canvas {
 
 /* Mobile landscape */
 @media (max-width: 960px) and (orientation: landscape) {
-  canvas {
-    width: 100%;
-  }
   .controls {
     display: flex;
     justify-content: center;
