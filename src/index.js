@@ -415,15 +415,15 @@ function hcenter(s) {
 function draw(screen) {
   screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
 
-  if (!gameStarted) {
-    print("Cosmos Street", hcenter("Cosmos Street"), 80);
-    print("Press any key", hcenter("Press any key"), 128);
-    print("to start", hcenter("to start"), 144);
-  }
-
   stars.forEach((s) => {
     screen.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
+
+  if (!gameStarted) {
+    print("Cosmos Street", hcenter("Cosmos Street"), 80);
+    print("Press any key", hcenter("Press any key"), 156);
+    print("to start", hcenter("to start"), 172);
+  }
 
   if (gameStarted) {
     platforms.forEach((item) => {
