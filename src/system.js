@@ -35,14 +35,15 @@ function start() {
 window.onload = start;
 
 /**
- * Characters class
+ * Custom font
  */
-function Characters() {
-  this.image = new Image();
-  this.image.src = "./images/font.png";
+function fontImage() {
+  let image = new Image();
+  image.src = "./images/font.png";
+  return { image };
 }
 
-const characters = new Characters();
+const characters = fontImage();
 
 /**
  * A map of characters to their x and y coordinates on the font image
