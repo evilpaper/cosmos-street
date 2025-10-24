@@ -35,152 +35,92 @@ function start() {
 window.onload = start;
 
 /**
- * Custom font
+ * Load font image
  */
-function fontImage() {
-  let image = new Image();
+function loadFontImage() {
+  const image = new Image();
   image.src = "./images/font.png";
-  return { image };
+  return image;
 }
 
-const characters = fontImage();
+const characters = { image: loadFontImage() };
+
+/**
+ * Font system constants
+ */
+const FONT_WIDTH = 8;
+const FONT_HEIGHT = 8;
+const CHARS_PER_ROW = 13;
 
 /**
  * A map of characters to their x and y coordinates on the font image
  */
-const letters = {
-  a: {
-    x: 0,
-    y: 0,
-  },
-  b: {
-    x: 8,
-    y: 0,
-  },
-  c: {
-    x: 16,
-    y: 0,
-  },
-  d: {
-    x: 24,
-    y: 0,
-  },
-  e: {
-    x: 32,
-    y: 0,
-  },
-  f: {
-    x: 40,
-    y: 0,
-  },
-  g: {
-    x: 48,
-    y: 0,
-  },
-  h: {
-    x: 56,
-    y: 0,
-  },
-  i: {
-    x: 64,
-    y: 0,
-  },
-  j: {
-    x: 72,
-    y: 0,
-  },
-  k: {
-    x: 80,
-    y: 0,
-  },
-  l: {
-    x: 88,
-    y: 0,
-  },
-  m: {
-    x: 96,
-    y: 0,
-  },
-  n: {
-    x: 0,
-    y: 8,
-  },
-  o: {
-    x: 8,
-    y: 8,
-  },
-  p: {
-    x: 16,
-    y: 8,
-  },
-  q: {
-    x: 24,
-    y: 8,
-  },
-  r: {
-    x: 32,
-    y: 8,
-  },
-  s: {
-    x: 40,
-    y: 8,
-  },
-  t: {
-    x: 48,
-    y: 8,
-  },
-  u: {
-    x: 56,
-    y: 8,
-  },
-  v: {
-    x: 64,
-    y: 8,
-  },
-  w: {
-    x: 72,
-    y: 8,
-  },
-  x: {
-    x: 80,
-    y: 8,
-  },
-  y: {
-    x: 88,
-    y: 8,
-  },
-  z: {
-    x: 96,
-    y: 8,
-  },
-};
+function createCharMap() {
+  const chars = "abcdefghijklmnopqrstuvwxyz123456789";
+  const charMap = {};
+
+  for (let i = 0; i < chars.length; i++) {
+    const char = chars[i];
+    const x = (i % CHARS_PER_ROW) * FONT_WIDTH;
+    const y = Math.floor(i / CHARS_PER_ROW) * FONT_HEIGHT;
+    charMap[char] = { x, y };
+  }
+
+  return charMap;
+}
+
+const letters = createCharMap();
+/**
+ * Get character position with validation
+ */
+function getCharPosition(char) {
+  const lowerChar = char.toLowerCase();
+  return letters[lowerChar] || null;
+}
 
 /**
- * Print a string to the screen
+ * Calculate string width
  */
+function getStringWidth(str) {
+  return str.length * FONT_WIDTH;
+}
 
+/**
+ * Print a string to the screen with improved space handling
+ */
 function print(str, x = 0, y = 0) {
   const allLowerCaseString = str.toLowerCase();
-  const width = 8;
-  const height = 8;
+  let currentX = x;
+
   for (let i = 0; i < allLowerCaseString.length; i++) {
-    if (allLowerCaseString[i] === " ") {
+    const char = allLowerCaseString[i];
+
+    // Handle spaces properly - advance position but don't draw
+    if (char === " ") {
+      currentX += FONT_WIDTH;
       continue;
     }
 
-    const letterCharacter = allLowerCaseString[i];
+    const charPos = getCharPosition(char);
+    if (!charPos) {
+      // Skip unknown characters but still advance position
+      currentX += FONT_WIDTH;
+      continue;
+    }
 
     screen.drawImage(
       characters.image,
-      letters[letterCharacter].x,
-      letters[letterCharacter].y,
-      width,
-      height,
-      x + i * 8,
+      charPos.x,
+      charPos.y,
+      FONT_WIDTH,
+      FONT_HEIGHT,
+      currentX,
       y,
-      width,
-      height
+      FONT_WIDTH,
+      FONT_HEIGHT
     );
+
+    currentX += FONT_WIDTH;
   }
 }
 
