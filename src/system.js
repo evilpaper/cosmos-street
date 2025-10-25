@@ -1,15 +1,16 @@
 /**
- * Constants
+ * DOM Elements
  */
 const canvas = document.querySelector("canvas");
 const screen = canvas.getContext("2d");
-const fps = 60;
-const frameDuration = 1000 / fps;
-// TODO: Change this
-const CONSTANTS = {
-  SCREEN_WIDTH: 256,
-  SCREEN_HEIGHT: 256,
-};
+
+/**
+ * Constants
+ */
+const FPS = 60;
+const FRAME_DURATION = 1000 / FPS;
+const SCREEN_WIDTH = 256;
+const SCREEN_HEIGHT = 256;
 
 /**
  * Start the game loop
@@ -23,15 +24,17 @@ function start() {
     if (update) {
       update();
     }
-  }, frameDuration);
+  }, FRAME_DURATION);
 
   setInterval(() => {
     if (draw) {
       draw(screen);
     }
-  }, frameDuration);
+  }, FRAME_DURATION);
 }
-
+/**
+ * Start when the window have loaded
+ */
 window.onload = start;
 
 /**
@@ -70,19 +73,13 @@ function createCharMap() {
 }
 
 const letters = createCharMap();
+
 /**
  * Get character position with validation
  */
 function getCharPosition(char) {
   const lowerChar = char.toLowerCase();
   return letters[lowerChar] || null;
-}
-
-/**
- * Calculate string width
- */
-function getStringWidth(str) {
-  return str.length * FONT_WIDTH;
 }
 
 /**
@@ -102,6 +99,7 @@ function print(str, x = 0, y = 0) {
     }
 
     const charPos = getCharPosition(char);
+
     if (!charPos) {
       // Skip unknown characters but still advance position
       currentX += FONT_WIDTH;
@@ -134,15 +132,15 @@ function resizeCanvas() {
   body.height = window.innerHeight;
 
   // Handle mobile landscape mode - set canvas height to 96% of body height
-  if (window.innerWidth <= 960 && window.innerHeight < window.innerWidth) {
-    const canvas = document.getElementById("canvas");
-    const bodyHeight = window.innerHeight;
-    const canvasHeight = bodyHeight * 0.96; // 96% of body height
+  // if (window.innerWidth <= 960 && window.innerHeight < window.innerWidth) {
+  //   const canvas = document.getElementById("canvas");
+  //   const bodyHeight = window.innerHeight;
+  //   const canvasHeight = bodyHeight * 0.96; // 96% of body height
 
-    // Set canvas height while maintaining aspect ratio
-    canvas.style.height = `${canvasHeight}px`;
-    canvas.style.width = `${canvasHeight}px`; // Keep it square
-  }
+  //   // Set canvas height while maintaining aspect ratio
+  //   canvas.style.height = `${canvasHeight}px`;
+  //   canvas.style.width = `${canvasHeight}px`; // Keep it square
+  // }
 }
 
 window.addEventListener("resize", resizeCanvas);

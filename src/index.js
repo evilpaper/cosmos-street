@@ -262,7 +262,7 @@ function update() {
 }
 
 function draw(screen) {
-  screen.clearRect(0, 0, CONSTANTS.SCREEN_WIDTH, CONSTANTS.SCREEN_HEIGHT);
+  screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   stars.forEach((s) => {
     screen.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
