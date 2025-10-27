@@ -146,6 +146,11 @@ canvas {
     align-self: flex-end;
     padding-bottom: 4rem;
   }
+  .controls-left,
+  .controls-right {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
 }
 
 .crt-container {
