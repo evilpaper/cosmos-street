@@ -120,9 +120,13 @@ function updatePlatforms() {
 }
 
 function Tile() {
-  this.name = "tile";
-  this.image = new Image();
-  this.image.src = "./images/tiles-sheet.png";
+  const image = new Image();
+  image.src = "./images/tiles-sheet.png";
+
+  return {
+    name: "tile",
+    image: image,
+  };
 }
 
 function Star() {
