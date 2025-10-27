@@ -122,23 +122,24 @@ canvas {
     justify-content: flex-start;
   }
   canvas {
-    width: min(110vw, 110vh);
-    height: min(110vw, 110vh);
+    width: min(104vw, 104vh);
+    height: min(104vw, 104vh);
   }
   .controls {
     display: block;
+    padding: 0 1rem;
   }
   .controls-left,
   .controls-right {
-    bottom: 8rem;
+    bottom: 4rem;
   }
 }
 
 /* Mobile landscape */
 @media (max-width: 960px) and (orientation: landscape) {
   canvas {
-    width: min(110vw, 110vh);
-    height: min(110vw, 110vh);
+    width: min(104vw, 104vh);
+    height: min(104vw, 104vh);
   }
   .controls {
     display: flex;
