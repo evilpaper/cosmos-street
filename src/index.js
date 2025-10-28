@@ -130,31 +130,49 @@ function Tile() {
 }
 
 function Star() {
-  this.name = "star";
-  this.image = new Image();
-  this.image.src = "./images/star-sprite-sheet.png";
-  this.blinking = Math.random() >= 0.6;
-  this.tick = 0;
-  this.frame = Math.floor(Math.random() * 6);
-  this.ticksToNextFrame = 16;
-  this.x = Math.floor(Math.random() * 288);
-  this.y = Math.floor(Math.random() * 256);
-  this.speed = Math.random() * 0.2;
-  this.update = function () {
-    this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
+  const image = new Image();
+  image.src = "./images/star-sprite-sheet.png";
 
-    this.x = this.x - this.speed;
-    if (this.x < -10) {
-      this.x = 200;
-    }
-    if (this.blinking) {
-      if (this.tick === 0) {
-        this.frame = this.frame + 1;
-        if (this.frame >= 6) {
-          this.frame = 0;
+  const blinking = Math.random() >= 0.6;
+  let tick = 0;
+  let frame = Math.floor(Math.random() * 6);
+  const ticksToNextFrame = 16;
+  let x = Math.floor(Math.random() * 288);
+  let y = Math.floor(Math.random() * 256);
+  const speed = Math.random() * 0.2;
+
+  return {
+    name: "star",
+    image: image,
+    blinking: blinking,
+    get tick() {
+      return tick;
+    },
+    get frame() {
+      return frame;
+    },
+    get x() {
+      return x;
+    },
+    get y() {
+      return y;
+    },
+    get speed() {
+      return speed;
+    },
+    update() {
+      tick = (tick + 1) % ticksToNextFrame; // 1, 0, 1, 0 etc...
+
+      x = x - speed;
+      if (x < -10) {
+        x = 200;
+      }
+      if (blinking) {
+        if (tick === 0) {
+          frame = (frame + 1) % 6;
         }
       }
-    }
+    },
   };
 }
 
