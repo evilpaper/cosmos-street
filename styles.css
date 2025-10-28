@@ -115,8 +115,8 @@ canvas {
   background-color: var(--color-surface--200);
 }
 
-/* Mobile portrait */
-@media (max-width: 480px) and (orientation: portrait) {
+/* Mobile portrait - check for portrait orientation with height constraint */
+@media (max-width: 480px) and (max-height: 900px) {
   .game {
     flex-direction: column;
     justify-content: flex-start;
@@ -131,8 +131,8 @@ canvas {
   }
 }
 
-/* Mobile landscape */
-@media (max-width: 960px) and (orientation: landscape) {
+/* Mobile landscape - prioritize height over width */
+@media (max-height: 600px) {
   canvas {
     width: min(100vw, 100vh);
     height: min(100vw, 100vh);
