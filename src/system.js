@@ -159,7 +159,7 @@ function o(value) {
 /**
  * Center a string horizontally on the screen
  */
-function hcenter(s) {
+function center(s) {
   // screen center minus the
   // string length times the
   // pixels in a char's width cut in half

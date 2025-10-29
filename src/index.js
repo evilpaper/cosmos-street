@@ -291,9 +291,9 @@ function draw(screen) {
   });
 
   if (!gameStarted) {
-    print("Cosmos Street", hcenter("Cosmos Street"), 80);
-    print("Press any key", hcenter("Press any key"), 156);
-    print("to start", hcenter("to start"), 172);
+    print("Cosmos Street", center("Cosmos Street"), 80);
+    print("Press any key", center("Press any key"), 156);
+    print("to start", center("to start"), 172);
   }
 
   if (gameStarted) {
