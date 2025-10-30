@@ -233,8 +233,17 @@ const p = new Player();
 const tile = new Tile();
 const stars = createStars(20);
 let x = 0;
-
 let platforms = [];
+const title = createTitle();
+function createTitle() {
+  const image = new Image();
+  image.src = "./images/title-sheet.png";
+
+  return {
+    name: "title",
+    image: image,
+  };
+}
 
 // Populate platforms on first load
 for (let i = 0; i < 25; i++) {
@@ -291,7 +300,7 @@ function draw(screen) {
   });
 
   if (!gameStarted) {
-    print("Cosmos Street", center("Cosmos Street"), 80);
+    screen.drawImage(title.image, 64, 64, 128, 48);
     print("Press any key", center("Press any key"), 156);
     print("to start", center("to start"), 172);
   }
