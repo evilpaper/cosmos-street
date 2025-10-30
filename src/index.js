@@ -235,9 +235,10 @@ const stars = createStars(20);
 let x = 0;
 let platforms = [];
 const title = createTitle();
+
 function createTitle() {
   const image = new Image();
-  image.src = "./images/title-sheet.png";
+  image.src = "./images/title.png";
 
   return {
     name: "title",
@@ -302,7 +303,7 @@ function draw(screen) {
   if (!gameStarted) {
     screen.drawImage(title.image, 64, 64, 128, 48);
     print("Press any key", center("Press any key"), 156);
-    print("to start", center("to start"), 172);
+    print("to start", center("to start"), 168);
   }
 
   if (gameStarted) {
