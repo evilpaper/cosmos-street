@@ -113,13 +113,13 @@ function updatePlatforms() {
         y: y,
         width: 16,
         height: 16,
-        tile: new Tile(),
+        tile: createTile(),
       });
     }
   }
 }
 
-function Tile() {
+function createTile() {
   const image = new Image();
   image.src = "./images/tiles-sheet.png";
 
@@ -176,6 +176,24 @@ function Star() {
   };
 }
 
+function createStars(amount) {
+  const result = [];
+  for (let i = 0; i < amount; i++) {
+    result.push(new Star());
+  }
+  return result;
+}
+
+function createTitle() {
+  const image = new Image();
+  image.src = "./images/title.png";
+
+  return {
+    name: "title",
+    image: image,
+  };
+}
+
 function checkCollision(a, b) {
   // Calculate the overlap on both X and Y axes
   // Use the difference (d) to compare againt the combined with and height
@@ -220,31 +238,13 @@ function checkCollision(a, b) {
   }
 }
 
-function createStars(amount) {
-  const result = [];
-  for (let i = 0; i < amount; i++) {
-    result.push(new Star());
-  }
-  return result;
-}
-
 // Initialize on first render
 const p = new Player();
-const tile = new Tile();
 const stars = createStars(20);
 let x = 0;
 let platforms = [];
+
 const title = createTitle();
-
-function createTitle() {
-  const image = new Image();
-  image.src = "./images/title.png";
-
-  return {
-    name: "title",
-    image: image,
-  };
-}
 
 // Populate platforms on first load
 for (let i = 0; i < 25; i++) {
@@ -253,9 +253,16 @@ for (let i = 0; i < 25; i++) {
     y: 160,
     width: 16,
     height: 16,
-    tile: new Tile(),
+    tile: createTile(),
   });
 }
+
+/**
+ * Special game functions.
+ *
+ * Init is called once when the game starts.
+ * Update and draw are called by the system.js file every frame.
+ */
 
 function init() {
   p.reset();
@@ -268,7 +275,7 @@ function init() {
       y: 160,
       width: 16,
       height: 16,
-      tile: new Tile(),
+      tile: createTile(),
     });
   }
 
@@ -345,6 +352,10 @@ function startGame() {
     gameStarted = true;
   }
 }
+
+/**
+ * Event listener to start the game
+ */
 
 document.addEventListener("click", (event) => {
   if (!gameStarted) {
