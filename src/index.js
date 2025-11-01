@@ -1,8 +1,6 @@
 const gravity = 0.1;
 const friction = 0.4;
 
-let pause = false;
-
 const gameState = {
   status: "idle", // status can be: idle, playing, paused, gameover
 };
@@ -286,12 +284,12 @@ function init() {
 }
 
 function update() {
-  for (const star of stars) {
-    star.update();
+  if (gameState.status === "paused") {
+    return;
   }
 
-  if (pause) {
-    return;
+  for (const star of stars) {
+    star.update();
   }
 
   if (gameState.status === "idle") {
@@ -369,6 +367,10 @@ function startGame() {
 document.addEventListener("keydown", (event) => {
   // If space is pressed, pause the game
   if (event.key === " ") {
-    pause = !pause;
+    if (gameState.status !== "paused") {
+      gameState.status = "paused";
+    } else {
+      gameState.status = "playing";
+    }
   }
 });
