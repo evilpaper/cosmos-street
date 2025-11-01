@@ -1,8 +1,20 @@
 const gravity = 0.1;
 const friction = 0.4;
 
+/**
+ * A note on the game state object.
+ *
+ * status: "idle", "playing", "gameover"
+ * paused: boolean
+ *
+ * The game state object is used to track the current state of the game.
+ *
+ * The paused flag simple cause an early return in the update function.
+ * Effectively freezing the game.
+ */
 const gameState = {
-  status: "idle", // status can be: idle, playing, paused, gameover
+  status: "idle",
+  paused: false,
 };
 
 class Player {
@@ -284,7 +296,7 @@ function init() {
 }
 
 function update() {
-  if (gameState.status === "paused") {
+  if (gameState.paused) {
     return;
   }
 
@@ -294,7 +306,7 @@ function update() {
 
   if (gameState.status === "idle") {
     if (input.left || input.right || input.up) {
-      startGame();
+      gameState.status = "playing";
     }
   }
 
@@ -347,18 +359,13 @@ function draw(screen) {
  * The following listener is used to step through each step with the enter key when debugging.
  * Remember to comment out setInterval inside loop before use.
  */
+
 // document.addEventListener("keydown", (event) => {
 //   if (event.key === "Enter") {
 //     update();
 //     draw();
 //   }
 // });
-
-function startGame() {
-  if (gameState.status === "idle") {
-    gameState.status = "playing";
-  }
-}
 
 /**
  * Top level event listeners. Mostly for debugging.
@@ -367,10 +374,10 @@ function startGame() {
 document.addEventListener("keydown", (event) => {
   // If space is pressed, pause the game
   if (event.key === " ") {
-    if (gameState.status !== "paused") {
-      gameState.status = "paused";
+    if (gameState.paused) {
+      gameState.paused = false;
     } else {
-      gameState.status = "playing";
+      gameState.paused = true;
     }
   }
 });
