@@ -2,7 +2,10 @@ const gravity = 0.1;
 const friction = 0.4;
 
 let pause = false;
-let gameStarted = false;
+
+const gameState = {
+  status: "idle", // status can be: idle, playing, paused, gameover
+};
 
 class Player {
   constructor() {
@@ -287,8 +290,14 @@ function update() {
     star.update();
   }
 
-  if (pause || !gameStarted) {
+  if (pause) {
     return;
+  }
+
+  if (gameState.status === "idle") {
+    if (input.left || input.right || input.up) {
+      startGame();
+    }
   }
 
   p.update();
@@ -307,13 +316,13 @@ function draw(screen) {
     screen.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
   });
 
-  if (!gameStarted) {
+  if (gameState.status === "idle") {
     screen.drawImage(title.image, 64, 64, 128, 48);
-    print("Press any key", center("Press any key"), 156);
-    print("to start", center("to start"), 168);
+    print("Press left, right, or", center("Press left, right, or"), 156);
+    print(" up key to start", center("up key to start"), 168);
   }
 
-  if (gameStarted) {
+  if (gameState.status === "playing") {
     platforms.forEach((item) => {
       screen.drawImage(item.tile.image, 0, 0, 16, 16, item.x, item.y, 16, 16);
     });
@@ -348,34 +357,16 @@ function draw(screen) {
 // });
 
 function startGame() {
-  if (!gameStarted) {
-    gameStarted = true;
+  if (gameState.status === "idle") {
+    gameState.status = "playing";
   }
 }
 
 /**
- * Event listener to start the game
+ * Top level event listeners. Mostly for debugging.
  */
 
-if (!gameStarted) {
-  if (input.left || input.right || input.up) {
-    startGame();
-  }
-}
-
-document.addEventListener("click", (event) => {
-  if (!gameStarted) {
-    startGame();
-    return;
-  }
-});
-
 document.addEventListener("keydown", (event) => {
-  if (!gameStarted) {
-    startGame();
-    return;
-  }
-
   // If space is pressed, pause the game
   if (event.key === " ") {
     pause = !pause;
