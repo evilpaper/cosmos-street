@@ -357,6 +357,12 @@ function startGame() {
  * Event listener to start the game
  */
 
+if (!gameStarted) {
+  if (input.left || input.right || input.up) {
+    startGame();
+  }
+}
+
 document.addEventListener("click", (event) => {
   if (!gameStarted) {
     startGame();
@@ -364,7 +370,6 @@ document.addEventListener("click", (event) => {
   }
 });
 
-// Listen for any key press to start the game
 document.addEventListener("keydown", (event) => {
   if (!gameStarted) {
     startGame();
