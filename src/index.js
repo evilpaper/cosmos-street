@@ -4,14 +4,15 @@ const friction = 0.4;
 /**
  * A note on the game state object.
  *
+ * The game state object is used to control the current state of the game.
+ *
  * status: "idle", "playing", "gameover"
  * paused: boolean
- *
- * The game state object is used to track the current state of the game.
  *
  * The paused flag simple cause an early return in the update function.
  * Effectively freezing the game.
  */
+
 const gameState = {
   status: "idle",
   paused: false,
@@ -304,18 +305,26 @@ function update() {
     star.update();
   }
 
-  if (gameState.status === "idle") {
-    if (input.left || input.right || input.up) {
-      gameState.status = "playing";
+  if (gameState.status === "playing") {
+    p.update();
+
+    updatePlatforms();
+
+    if (p.y > 500) {
+      init();
     }
   }
 
-  p.update();
-
-  updatePlatforms();
-
-  if (p.y > 500) {
-    init();
+  if (gameState.status === "idle") {
+    if (input.left || input.right || input.up) {
+      // Reset the input flags to prevent any button clicked in the idle state
+      // too "bleed" into the playing state. Without this, the player would start
+      // moving cause the button state is still set to true.
+      input.left = false;
+      input.right = false;
+      input.up = false;
+      gameState.status = "playing";
+    }
   }
 }
 
