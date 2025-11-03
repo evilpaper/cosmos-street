@@ -1,12 +1,11 @@
 # Cosmos Street
 
-A hackable auto runner in the making.
+A nostalgic skate ride inspired by Wonder Boy’s legendary runs on the Sega Master System.
 
-[Play it here ->](https://evilpaper.com/cosmos-street/)
+[You can try it out here ->](https://evilpaper.github.io/cosmos-street/)
 
 > **Warning**
-> This game is a work in progress. I'm building this in public.
-> See the roadmap below.
+> This game is a work in progress.
 
 ## About this project
 
@@ -32,13 +31,13 @@ That's it!
 
 ## Roadmap
 
-- [ ] Start screen
+- [x] Start screen
 - [ ] Ending
 - [ ] SFX
 - [ ] Music
-- [ ] Touch controls
+- [x] Touch controls
 - [ ] Highscore
-- [ ] Level editor
+- [ ] Level editor (maybe)
 
 ## Known Issues
 
