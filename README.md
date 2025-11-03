@@ -2,7 +2,7 @@
 
 A nostalgic skate ride inspired by Wonder Boy’s legendary runs on the Sega Master System.
 
-[You can try it out here ->](https://evilpaper.github.io/cosmos-street/)
+[> You can try it out here <](https://evilpaper.github.io/cosmos-street/)
 
 > **Warning**
 > This game is a work in progress.
