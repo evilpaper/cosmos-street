@@ -1,5 +1,14 @@
+/**
+ * Global variables
+ */
+
 const gravity = 0.1;
 const friction = 0.4;
+const stars = createStars(20);
+const title = createTitle();
+
+let x = 0;
+let platforms = [];
 
 /**
  * A note on the game state object.
@@ -252,24 +261,19 @@ function checkCollision(a, b) {
   }
 }
 
-// Initialize on first render
-const p = new Player();
-const stars = createStars(20);
-let x = 0;
-let platforms = [];
-
-const title = createTitle();
-
 // Populate platforms on first load
-for (let i = 0; i < 25; i++) {
-  platforms.push({
-    x: 64 + i * 16,
-    y: 160,
-    width: 16,
-    height: 16,
-    tile: createTile(),
-  });
-}
+// for (let i = 0; i < 25; i++) {
+//   platforms.push({
+//     x: 64 + i * 16,
+//     y: 160,
+//     width: 16,
+//     height: 16,
+//     tile: createTile(),
+//   });
+// }
+
+// TODO: Refcator to factory function and move this to top. Classes aren't hoisted but functions are.
+const p = new Player();
 
 /**
  * Special game functions.
