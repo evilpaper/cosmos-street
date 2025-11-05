@@ -9,45 +9,45 @@ alwaysApply: true
 "match": "\*_/_",
 "actions": [
 
-// General coding style
-"Always write modern, clean, and readable JavaScript (ES6+).",
-"Prefer const/let over var.",
-"Avoid frameworks unless explicitly requested.",
-"Favor modular code structure — split code into separate files for player, enemies, levels, etc.",
-"Use descriptive names for variables, functions, and classes.",
+          // General coding style
+          "Always write modern, clean, and readable JavaScript (ES6+).",
+          "Prefer const/let over var.",
+          "Avoid frameworks unless explicitly requested.",
+          "Use descriptive names for variables, functions, and classes.",
+          "Use Factory Functions over Classes",
 
-        // Game loop & rendering
-        "Like most game engines, use an update() loop, running 60 times per second.",
-        "The framerate is fixed and not changeable. The game is entirely frame-rate dependent, omitting the need to handle deltaTime and instead, working with number of frames directly (if you have ever used Pico-8, you'd get the idea)",
-        "Encourage separating update logic from render logic.",
-        "The game is renderd in canvas.",
+          // Game loop & rendering
+          "Like most game engines, use an update() loop, running 60 times per second.",
+          "The framerate is fixed and not changeable. The game is entirely frame-rate dependent, omitting the need to handle deltaTime and instead, working with number of frames directly (if you have ever used Pico-8, you'd get the idea)",
+          "Encourage separating update logic from render logic.",
+          "The game is renderd in canvas.",
 
-        // Physics & collisions
-        "Implement basic physics manually (gravity, friction, jump velocity) instead of using external physics engines unless explicitly requested.",
-        "Use axis-aligned bounding box (AABB) collision detection unless pixel-perfect collisions are needed.",
+          // Physics & collisions
+          "Implement basic physics manually (gravity, friction, jump velocity) instead of using external physics engines unless explicitly requested.",
+          "Use axis-aligned bounding box (AABB) collision detection unless pixel-perfect collisions are needed.",
 
-        // Performance best practices
-        "Minimize unnecessary DOM manipulation during gameplay.",
-        "Batch draw calls where possible.",
-        "Keep the number of event listeners low — use a centralized input handler.",
-        "Avoid memory leaks by cleaning up references when removing objects.",
+          // Performance best practices
+          "Minimize unnecessary DOM manipulation during gameplay.",
+          "Batch draw calls where possible.",
+          "Keep the number of event listeners low — use a centralized input handler.",
+          "Avoid memory leaks by cleaning up references when removing objects.",
 
-        // Asset handling
-        "Load images, audio, and other assets asynchronously and provide loading feedback.",
-        "Cache assets to avoid reloading during gameplay.",
+          // Asset handling
+          "Load images, audio, and other assets asynchronously and provide loading feedback.",
+          "Cache assets to avoid reloading during gameplay.",
 
-        // AI help behavior
-        "When asked for code, provide self-contained working examples that can run directly in the browser.",
-        "Explain the reasoning behind any complex code suggestions.",
-        "When providing new game features, ensure compatibility with existing HTML/CSS/JS structure.",
-        "Do not suggest unrelated frameworks or libraries unless explicitly requested.",
+          // AI help behavior
+          "When asked for code, provide self-contained working examples that can run directly in the browser.",
+          "Explain the reasoning behind any complex code suggestions.",
+          "When providing new game features, ensure compatibility with existing HTML/CSS/JS structure.",
+          "Do not suggest unrelated frameworks or libraries unless explicitly requested.",
 
-        // Style
-        "Follow consistent indentation (2 spaces).",
-        "Write comments for all non-trivial code blocks explaining what they do.",
-        "Keep CSS minimal and game-focused — avoid unnecessary animations unless requested."
-      ]
-    }
+          // Style
+          "Follow consistent indentation (2 spaces).",
+          "Write comments for all non-trivial code blocks explaining what they do.",
+          "Keep CSS minimal and game-focused — avoid unnecessary animations unless requested."
+        ]
+      }
 
 ]
 }
