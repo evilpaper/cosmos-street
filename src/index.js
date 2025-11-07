@@ -85,7 +85,7 @@ class Player {
         p.state = p.states[0];
       }
       if (input.up) {
-        p.dy = -6;
+        p.dy = -8;
         p.state = p.states[1];
       }
     }
