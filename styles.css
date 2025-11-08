@@ -63,8 +63,8 @@ canvas {
   position: absolute;
   left: 0;
   bottom: 0;
-  padding-left: 4rem;
-  padding-bottom: 4rem;
+  padding-left: 5rem;
+  padding-bottom: 5rem;
   display: flex;
   gap: 0.2rem;
 }
@@ -73,8 +73,8 @@ canvas {
   position: absolute;
   right: 0;
   bottom: 0;
-  padding-right: 4rem;
-  padding-bottom: 4rem;
+  padding-right: 5rem;
+  padding-bottom: 5rem;
 }
 
 .controls button {
@@ -116,7 +116,7 @@ canvas {
 }
 
 /* Mobile portrait - check for portrait orientation with height constraint */
-@media (max-width: 480px) and (max-height: 900px) {
+@media (max-width: 480px) and (max-height: 960px) {
   .game {
     flex-direction: column;
     justify-content: flex-start;
@@ -148,8 +148,8 @@ canvas {
   }
   .controls-left,
   .controls-right {
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 4rem;
+    padding-left: 4rem;
   }
 }
 

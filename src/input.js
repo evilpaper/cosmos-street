@@ -3,12 +3,12 @@ const input = {};
 // Key code constants for better readability
 const KEY_CODES = {
   UP: "ArrowUp",
-  RIGHT: "ArrowRight",
+  // RIGHT: "ArrowRight",
   LEFT: "ArrowLeft",
 };
 
 const breakButton = document.getElementById("break");
-const speedUpButton = document.getElementById("speed-up");
+// const speedUpButton = document.getElementById("speed-up");
 const jumpButton = document.getElementById("jump");
 
 /**
@@ -36,15 +36,15 @@ input.keyListener = function ({ code, type }) {
         jumpButton.classList.remove("pressed");
       }
       break;
-    case KEY_CODES.RIGHT:
-      input.right = eventType;
-      // Toggle pressed state for speed-up button
-      if (eventType) {
-        speedUpButton.classList.add("pressed");
-      } else {
-        speedUpButton.classList.remove("pressed");
-      }
-      break;
+    // case KEY_CODES.RIGHT:
+    //   input.right = eventType;
+    //   // Toggle pressed state for speed-up button
+    //   if (eventType) {
+    //     speedUpButton.classList.add("pressed");
+    //   } else {
+    //     speedUpButton.classList.remove("pressed");
+    //   }
+    //   break;
   }
 };
 
@@ -86,7 +86,7 @@ function createTouchHandlers(button, code) {
 // Apply touch handlers to all buttons
 createTouchHandlers(breakButton, KEY_CODES.LEFT); // Left arrow
 createTouchHandlers(jumpButton, KEY_CODES.UP); // Up arrow
-createTouchHandlers(speedUpButton, KEY_CODES.RIGHT); // Right arrow
+// createTouchHandlers(speedUpButton, KEY_CODES.RIGHT); // Right arrow
 
 // breakButton.addEventListener("click", (event) => {
 //   event.preventDefault();

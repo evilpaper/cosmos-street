@@ -57,7 +57,7 @@ class Player {
 
   update() {
     if (p.state === "skating") {
-      p.speed = 1;
+      p.speed = 1.7;
       if (input.left) {
         p.state = p.states[2];
       }
@@ -65,10 +65,10 @@ class Player {
         p.dy = -8;
         p.state = p.states[1];
       }
-      if (input.right) {
-        p.x = 51;
-        p.speed = 2;
-      }
+      // if (input.right) {
+      //   p.x = 51;
+      //   p.speed = 2;
+      // }
       if (p.dy > 1) {
         p.state = p.states[1];
       }
@@ -341,8 +341,8 @@ function draw(screen) {
 
   if (gameState.status === "idle") {
     screen.drawImage(title.image, 64, 64, 128, 48);
-    print("Press left, right", center("Press left, right"), 156);
-    print("or up key to start", center("or up key to start"), 168);
+    print("Press left or up", center("Press left or up"), 156);
+    print("key to start", center("key to start"), 168);
   }
 
   if (gameState.status === "playing") {
