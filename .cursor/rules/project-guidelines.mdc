@@ -19,8 +19,9 @@ alwaysApply: true
           // Game loop & rendering
           "Like most game engines, use an update() loop, running 60 times per second.",
           "The framerate is fixed and not changeable. The game is entirely frame-rate dependent, omitting the need to handle deltaTime and instead, working with number of frames directly (if you have ever used Pico-8, you'd get the idea)",
-          "Encourage separating update logic from render logic.",
+          "update logic is separated from render logic. Encourage the separation.",
           "The game is renderd in canvas.",
+          "The game is rendered in pixels. Each pixel is a distinct thing and has integers values as x and y. No overlaps with decimal numbers are allowed"
 
           // Physics & collisions
           "Implement basic physics manually (gravity, friction, jump velocity) instead of using external physics engines unless explicitly requested.",

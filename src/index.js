@@ -15,9 +15,6 @@ let platforms = [];
  *
  * The game state object is used to control the current state of the game.
  *
- * status: "idle", "playing", "gameover"
- * paused: boolean
- *
  * The paused flag simple cause an early return in the update function.
  * Effectively freezing the game.
  */
@@ -25,6 +22,9 @@ let platforms = [];
 const gameState = {
   status: "idle",
   paused: false,
+  startFrames: 0,
+  blinkFrames: 0,
+  showPressPrompt: true,
 };
 
 class Player {
@@ -327,7 +327,25 @@ function update() {
       input.left = false;
       input.right = false;
       input.up = false;
+      gameState.status = "starting";
+      gameState.startFrames = 40;
+      gameState.blinkFrames = 0;
+    }
+  }
+
+  if (gameState.status === "starting") {
+    // Delay the transition into the playing state for a fixed number of frames.
+    gameState.startFrames -= 1;
+    gameState.blinkFrames += 1;
+
+    if (gameState.blinkFrames >= 4) {
+      gameState.showPressPrompt = !gameState.showPressPrompt;
+      gameState.blinkFrames = 0;
+    }
+
+    if (gameState.startFrames <= 0) {
       gameState.status = "playing";
+      gameState.showPressPrompt = false;
     }
   }
 }
@@ -341,8 +359,18 @@ function draw(screen) {
 
   if (gameState.status === "idle") {
     screen.drawImage(title.image, 64, 64, 128, 48);
+
     print("Press left or up", center("Press left or up"), 156);
     print("key to start", center("key to start"), 168);
+  }
+
+  if (gameState.status === "starting") {
+    screen.drawImage(title.image, 64, 64, 128, 48);
+
+    if (gameState.showPressPrompt) {
+      print("Press left or up", center("Press left or up"), 156);
+      print("key to start", center("key to start"), 168);
+    }
   }
 
   if (gameState.status === "playing") {
