@@ -152,49 +152,60 @@ function createTile() {
   };
 }
 
-function Star() {
+function createStar(options = {}) {
+  const {
+    totalFrames = 6,
+    ticksPerFrame = 16,
+    blinkProbability = 0.6,
+    spawnWidth = SCREEN_WIDTH, // initial spawn area
+    spawnHeight = SCREEN_HEIGHT,
+    wrapMargin = 10, // allowed off-screen before wrap
+    resetX = SCREEN_WIDTH + 32, // where the star re-enters
+    minSpeed = 0.05,
+    maxSpeed = 0.2,
+  } = options;
+
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
 
-  const blinking = Math.random() >= 0.6;
-  let tick = 0;
-  let frame = Math.floor(Math.random() * 6);
-  const ticksToNextFrame = 16;
-  let x = Math.floor(Math.random() * 288);
-  let y = Math.floor(Math.random() * 256);
-  const speed = Math.random() * 0.2;
+  // Configure the star
+  const blinking = Math.random() < blinkProbability;
+  const speed = Math.random() * (maxSpeed - minSpeed) + minSpeed;
+
+  // Mutable state (kept simple and explicit)
+  let animationTick = 0;
+  let frame = Math.floor(Math.random() * totalFrames);
+  let x = Math.floor(Math.random() * spawnWidth);
+  let y = Math.floor(Math.random() * spawnHeight);
 
   return {
     name: "star",
-    image: image,
-    blinking: blinking,
-    get tick() {
-      return tick;
-    },
-    get frame() {
-      return frame;
-    },
-    get x() {
-      return x;
-    },
-    get y() {
-      return y;
-    },
-    get speed() {
-      return speed;
-    },
-    update() {
-      tick = (tick + 1) % ticksToNextFrame; // 1, 0, 1, 0 etc...
+    image,
+    frame,
+    x,
+    y,
 
-      x = x - speed;
-      if (x < -10) {
-        x = 200;
+    update() {
+      // 1) advance animation tick
+      animationTick = (animationTick + 1) % ticksPerFrame;
+
+      // 2) move left
+      x -= speed;
+
+      // 3) wrap when fully off-screen (with margin)
+      if (x < -wrapMargin) {
+        x = resetX;
       }
-      if (blinking) {
-        if (tick === 0) {
-          frame = (frame + 1) % 6;
-        }
+
+      // 4) advance frame on blink cadence
+      if (blinking && animationTick === 0) {
+        frame = (frame + 1) % totalFrames;
       }
+
+      // keep exposed coords integers for downstream code expectations
+      this.x = Math.floor(x);
+      this.y = Math.floor(y);
+      this.frame = frame;
     },
   };
 }
@@ -202,7 +213,7 @@ function Star() {
 function createStars(amount) {
   const result = [];
   for (let i = 0; i < amount; i++) {
-    result.push(new Star());
+    result.push(createStar());
   }
   return result;
 }
