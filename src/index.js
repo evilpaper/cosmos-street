@@ -142,6 +142,14 @@ function updatePlatforms() {
   }
 }
 
+/**
+ *
+ * Factories
+ *
+ * These are not classes, but functions that return objects.
+ * They are used to create objects that are used in the game.
+ */
+
 function createTile() {
   const image = new Image();
   image.src = "./images/tiles-sheet.png";
@@ -294,17 +302,6 @@ function checkCollision(a, b) {
     }
   }
 }
-
-// Populate platforms on first load
-// for (let i = 0; i < 25; i++) {
-//   platforms.push({
-//     x: 64 + i * 16,
-//     y: 160,
-//     width: 16,
-//     height: 16,
-//     tile: createTile(),
-//   });
-// }
 
 // TODO: Refcator to factory function and move this to top. Classes aren't hoisted but functions are.
 const p = new Player();
