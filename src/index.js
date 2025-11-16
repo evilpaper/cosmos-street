@@ -207,6 +207,29 @@ function createStar(options = {}) {
       this.y = Math.floor(y);
       this.frame = frame;
     },
+
+    draw(screen) {
+      const FRAME_W = 7;
+      const FRAME_H = 7;
+      const sx = frame * FRAME_W; // sprite x
+      const sy = 0; // single row
+
+      // Round positions here to keep integer pixels
+      const dx = Math.round(x);
+      const dy = Math.round(y);
+
+      screen.drawImage(
+        image,
+        sx,
+        sy,
+        FRAME_W,
+        FRAME_H,
+        dx,
+        dy,
+        FRAME_W,
+        FRAME_H
+      );
+    },
   };
 }
 
@@ -364,9 +387,7 @@ function update() {
 function draw(screen) {
   screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  stars.forEach((s) => {
-    screen.drawImage(s.image, 0 + s.frame * 7, 0, 7, 7, o(s.x), s.y, 7, 7);
-  });
+  stars.forEach((s) => s.draw(screen));
 
   if (gameState.status === "idle") {
     screen.drawImage(title.image, 64, 64, 128, 48);
