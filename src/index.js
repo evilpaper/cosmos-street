@@ -9,6 +9,7 @@
 const gravity = 0.1;
 const friction = 0.4;
 const stars = createStars(20);
+const platforms = createPlatforms(30);
 const title = createTitle();
 const gameState = {
   status: "idle",
@@ -19,7 +20,6 @@ const gameState = {
 };
 
 let x = 0;
-let platforms = [];
 
 class Player {
   constructor() {
@@ -84,7 +84,7 @@ class Player {
     p.dy += friction;
     p.y = Math.floor(p.y + p.dy);
 
-    platforms.forEach((block) => {
+    platforms.platforms.forEach((block) => {
       checkCollision(p, block);
     });
 
@@ -104,34 +104,6 @@ class Player {
   }
 }
 
-function updatePlatforms() {
-  // Update all platforms
-  platforms.forEach((platform) => {
-    platform.update();
-  });
-
-  // If a platform is off the screen, remove it
-  platforms = platforms.filter((platform) => platform.x > -16);
-
-  const lastPlatformX = Math.floor(platforms[platforms.length - 1].x);
-
-  if (lastPlatformX < 256 + 16 * 4) {
-    const y = Math.floor(Math.random() * 30) + 130;
-    const gap = Math.floor(Math.random() * 48) + 32;
-    const numberOfPlatforms = Math.floor(Math.random() * 4) + 2;
-
-    // Add the new platforms to the platforms array
-    for (let i = 0; i < numberOfPlatforms; i++) {
-      platforms.push(
-        createPlatform({
-          x: lastPlatformX + i * 16 + gap,
-          y: y,
-        })
-      );
-    }
-  }
-}
-
 /**
  *
  * Factories
@@ -139,16 +111,6 @@ function updatePlatforms() {
  * These are not classes, but functions that return objects.
  * They are used to create objects that are used in the game.
  */
-
-function createTile() {
-  const image = new Image();
-  image.src = "./images/tiles-sheet.png";
-
-  return {
-    name: "tile",
-    image: image,
-  };
-}
 
 function createStar(options = {}) {
   const {
@@ -239,6 +201,16 @@ function createStars(amount) {
   return result;
 }
 
+function createTile() {
+  const image = new Image();
+  image.src = "./images/tiles-sheet.png";
+
+  return {
+    name: "tile",
+    image: image,
+  };
+}
+
 function createPlatform(options = {}) {
   const { x = 0, y = 0, width = 16, height = 16 } = options;
 
@@ -275,6 +247,53 @@ function createPlatform(options = {}) {
   };
 }
 
+function createPlatforms(amount) {
+  const platforms = [];
+
+  for (let i = 0; i < amount; i++) {
+    platforms.push(
+      createPlatform({
+        x: 8 + i * 16,
+        y: 160,
+      })
+    );
+  }
+
+  return {
+    platforms,
+
+    update() {
+      // Update all platforms
+      this.platforms.forEach((platform) => {
+        platform.update();
+      });
+
+      // If a platform is off the screen, remove it
+      this.platforms = this.platforms.filter((platform) => platform.x > -16);
+
+      const lastPlatformX = Math.floor(
+        this.platforms[this.platforms.length - 1].x
+      );
+
+      if (lastPlatformX < 256 + 16 * 4) {
+        const y = Math.floor(Math.random() * 30) + 130;
+        const gap = Math.floor(Math.random() * 48) + 32;
+        const numberOfPlatforms = Math.floor(Math.random() * 4) + 2;
+
+        // Add the new platforms to the platforms array
+        for (let i = 0; i < numberOfPlatforms; i++) {
+          this.platforms.push(
+            createPlatform({
+              x: lastPlatformX + i * 16 + gap,
+              y: y,
+            })
+          );
+        }
+      }
+    },
+  };
+}
+
 function createTitle() {
   const image = new Image();
   image.src = "./images/title.png";
@@ -284,6 +303,10 @@ function createTitle() {
     image: image,
   };
 }
+
+/**
+ * Check for collision between two objects.
+ */
 
 function checkCollision(a, b) {
   // Calculate the overlap on both X and Y axes
@@ -341,18 +364,6 @@ const p = new Player();
 
 function init() {
   p.reset();
-
-  platforms = [];
-
-  for (let i = 0; i < 30; i++) {
-    platforms.push(
-      createPlatform({
-        x: 8 + i * 16,
-        y: 160,
-      })
-    );
-  }
-
   x = 0;
 }
 
@@ -368,7 +379,7 @@ function update() {
   if (gameState.status === "playing") {
     p.update();
 
-    updatePlatforms();
+    platforms.update();
 
     if (p.y > 500) {
       init();
@@ -428,7 +439,7 @@ function draw(screen) {
   }
 
   if (gameState.status === "playing") {
-    platforms.forEach((platform) => {
+    platforms.platforms.forEach((platform) => {
       platform.draw(screen);
     });
 
