@@ -19,8 +19,6 @@ const gameState = {
   showPressPrompt: true,
 };
 
-let x = 0;
-
 class Player {
   constructor() {
     this.image = new Image();
@@ -364,7 +362,6 @@ const p = new Player();
 
 function init() {
   p.reset();
-  x = 0;
 }
 
 function update() {
