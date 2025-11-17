@@ -1,24 +1,15 @@
 /**
  * Global variables
+ *
+ * The game state object is used to control the current state of the game.
+ * The paused flag simple cause an early return in the update function.
+ * Effectively freezing the game.
  */
 
 const gravity = 0.1;
 const friction = 0.4;
 const stars = createStars(20);
 const title = createTitle();
-
-let x = 0;
-let platforms = [];
-
-/**
- * A note on the game state object.
- *
- * The game state object is used to control the current state of the game.
- *
- * The paused flag simple cause an early return in the update function.
- * Effectively freezing the game.
- */
-
 const gameState = {
   status: "idle",
   paused: false,
@@ -26,6 +17,9 @@ const gameState = {
   blinkFrames: 0,
   showPressPrompt: true,
 };
+
+let x = 0;
+let platforms = [];
 
 class Player {
   constructor() {
@@ -419,35 +413,11 @@ function draw(screen) {
     }
   }
 
-  // Draw a green hitbox around the player
+  /**
+   * Draw a green hitbox around the player
+   */
+
   // screen.lineWidth = 2;
   // screen.strokeStyle = "green";
   // screen.strokeRect(p.x, p.y, p.width, p.height);
 }
-
-/**
- * The following listener is used to step through each step with the enter key when debugging.
- * Remember to comment out setInterval inside loop before use.
- */
-
-// document.addEventListener("keydown", (event) => {
-//   if (event.key === "Enter") {
-//     update();
-//     draw();
-//   }
-// });
-
-/**
- * Top level event listeners. Mostly for debugging.
- */
-
-document.addEventListener("keydown", (event) => {
-  // If space is pressed, pause the game
-  if (event.key === " ") {
-    if (gameState.paused) {
-      gameState.paused = false;
-    } else {
-      gameState.paused = true;
-    }
-  }
-});
