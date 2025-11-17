@@ -59,10 +59,6 @@ class Player {
         p.dy = -8;
         p.state = p.states[1];
       }
-      // if (input.right) {
-      //   p.x = 51;
-      //   p.speed = 2;
-      // }
       if (p.dy > 1) {
         p.state = p.states[1];
       }
@@ -301,10 +297,10 @@ function checkCollision(a, b) {
 const p = new Player();
 
 /**
- * Special game functions.
+ * Game functions.
  *
  * Init is called once when the game starts.
- * Update and draw are called by the system.js file every frame.
+ * Update and draw called once per frame. Usually 60 times per second.
  */
 
 function init() {
