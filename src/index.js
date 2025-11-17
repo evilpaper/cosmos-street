@@ -105,10 +105,11 @@ class Player {
 }
 
 function updatePlatforms() {
-  // Move all platforms to the left
-  for (let i = 0; i < platforms.length; i++) {
-    platforms[i].x = platforms[i].x - p.speed;
-  }
+  // Update all platforms
+  platforms.forEach((platform) => {
+    platform.update();
+  });
+
   // If a platform is off the screen, remove it
   platforms = platforms.filter((platform) => platform.x > -16);
 
@@ -121,13 +122,12 @@ function updatePlatforms() {
 
     // Add the new platforms to the platforms array
     for (let i = 0; i < numberOfPlatforms; i++) {
-      platforms.push({
-        x: lastPlatformX + i * 16 + gap,
-        y: y,
-        width: 16,
-        height: 16,
-        tile: createTile(),
-      });
+      platforms.push(
+        createPlatform({
+          x: lastPlatformX + i * 16 + gap,
+          y: y,
+        })
+      );
     }
   }
 }
@@ -239,6 +239,42 @@ function createStars(amount) {
   return result;
 }
 
+function createPlatform(options = {}) {
+  const { x = 0, y = 0, width = 16, height = 16 } = options;
+
+  const tile = createTile();
+
+  // Mutable state
+  let platformX = x;
+  let platformY = y;
+
+  return {
+    name: "platform",
+    x: Math.floor(platformX),
+    y: Math.floor(platformY),
+    width,
+    height,
+    tile,
+
+    update() {
+      // Move platform to the left based on player speed
+      platformX -= p.speed;
+
+      // Keep exposed coords integers for downstream code expectations
+      this.x = Math.floor(platformX);
+      this.y = Math.floor(platformY);
+    },
+
+    draw(screen) {
+      // Round positions here to keep integer pixels
+      const dx = Math.round(platformX);
+      const dy = Math.round(platformY);
+
+      screen.drawImage(tile.image, 0, 0, width, height, dx, dy, width, height);
+    },
+  };
+}
+
 function createTitle() {
   const image = new Image();
   image.src = "./images/title.png";
@@ -309,13 +345,12 @@ function init() {
   platforms = [];
 
   for (let i = 0; i < 30; i++) {
-    platforms.push({
-      x: 8 + i * 16,
-      y: 160,
-      width: 16,
-      height: 16,
-      tile: createTile(),
-    });
+    platforms.push(
+      createPlatform({
+        x: 8 + i * 16,
+        y: 160,
+      })
+    );
   }
 
   x = 0;
@@ -393,8 +428,8 @@ function draw(screen) {
   }
 
   if (gameState.status === "playing") {
-    platforms.forEach((item) => {
-      screen.drawImage(item.tile.image, 0, 0, 16, 16, item.x, item.y, 16, 16);
+    platforms.forEach((platform) => {
+      platform.draw(screen);
     });
 
     if (p.state === "skating" || p.state === "speeding") {
