@@ -31,7 +31,7 @@ class Player {
     this.x = 50;
     this.y = 125;
     this.dy = 0;
-    this.speed = 0.8;
+    this.speed = 0.6;
     this.states = ["skating", "airborne", "breaking"];
     this.state = this.states[0];
     this.p = this;
@@ -41,15 +41,15 @@ class Player {
     p.tick = 0;
     p.frame = 0;
     p.x = 50;
-    p.y = 125;
+    p.y = 0;
     p.dy = 0;
-    p.speed = 0.8;
+    p.speed = 0.6;
     p.state = "skating";
   }
 
   update() {
     if (p.state === "skating") {
-      p.speed = 1.7;
+      p.speed = 1.4;
       if (input.left) {
         p.state = p.states[2];
       }
@@ -106,8 +106,9 @@ class Player {
  *
  * Factories
  *
+ * Used to create objects that are used in the game.
  * These are not classes, but functions that return objects.
- * They are used to create objects that are used in the game.
+ *
  */
 
 function createStar(options = {}) {
