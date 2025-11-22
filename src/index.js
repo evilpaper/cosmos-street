@@ -1,23 +1,17 @@
 /**
- * Global variables
+ * Define global variables
  *
  * The game state object is used to control the current state of the game.
  * The paused flag simple cause an early return in the update function.
  * Effectively freezing the game.
  */
 
-const gravity = 0.1;
-const friction = 0.4;
-const stars = createStars(20);
-const platforms = createPlatforms(30);
-const title = createTitle();
-const gameState = {
-  status: "idle",
-  paused: false,
-  startFrames: 0,
-  blinkFrames: 0,
-  showPressPrompt: true,
-};
+let gravity;
+let friction;
+let stars;
+let platforms;
+let title;
+let gameState;
 
 class Player {
   constructor() {
@@ -104,10 +98,9 @@ class Player {
 
 /**
  *
- * Factories
+ * Factories (functions that return objects)
  *
- * Used to create objects that are used in the game.
- * These are not classes, but functions that return objects.
+ * Creates objects used in the game..
  *
  */
 
@@ -362,6 +355,27 @@ const p = new Player();
  */
 
 function init() {
+  /**
+   * Initialize global variables
+   *
+   * The game state object is used to control the current state of the game.
+   * The paused flag simple cause an early return in the update function.
+   * Effectively freezing the game.
+   */
+
+  gravity = 0.1;
+  friction = 0.4;
+  stars = createStars(20);
+  platforms = createPlatforms(30);
+  title = createTitle();
+  gameState = {
+    status: "idle",
+    paused: false,
+    startFrames: 0,
+    blinkFrames: 0,
+    showPressPrompt: true,
+  };
+
   p.reset();
 }
 
