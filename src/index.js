@@ -100,7 +100,7 @@ class Player {
  *
  * Factories (functions that return objects)
  *
- * Creates objects used in the game..
+ * Creates objects used in the game.
  *
  */
 
