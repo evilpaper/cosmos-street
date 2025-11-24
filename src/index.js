@@ -108,7 +108,7 @@ class Player {
 function createStar() {
   // Constants. These are the same for all stars.
   const totalFrames = 6;
-  const ticksPerFrame = 16;
+  const ticksPerFrame = 30;
   const blinkProbability = 0.6;
   const spawnWidth = SCREEN_WIDTH; // initial spawn area
   const spawnHeight = SCREEN_HEIGHT;
