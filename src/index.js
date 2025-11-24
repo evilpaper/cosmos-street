@@ -105,7 +105,9 @@ class Player {
  *
  */
 
-function createStar() {
+function createStar(options = {}) {
+  const { small = false } = options;
+
   // Constants. These are the same for all stars.
   const totalFrames = 6;
   const ticksPerFrame = 30;
@@ -120,12 +122,14 @@ function createStar() {
   image.src = "./images/star-sprite-sheet.png";
 
   // Constants. These are different for each star.
-  const blinking = Math.random() < blinkProbability;
-  const speed = Math.random() * (maxSpeed - minSpeed) + minSpeed;
+  const blinking = small ? false : Math.random() < blinkProbability;
+  const speed = small
+    ? minSpeed
+    : Math.random() * (maxSpeed - minSpeed) + minSpeed;
 
   // Mutables
   let animationTick = 0;
-  let frame = Math.floor(Math.random() * totalFrames);
+  let frame = small ? 7 : Math.floor(Math.random() * totalFrames);
   let x = Math.floor(Math.random() * spawnWidth);
   let y = Math.floor(Math.random() * spawnHeight);
 
@@ -185,8 +189,12 @@ function createStar() {
 
 function createStars(amount) {
   const result = [];
-  for (let i = 0; i < amount; i++) {
+  // Random
+  for (let i = 0; i < amount / 2; i++) {
     result.push(createStar());
+  }
+  for (let i = 0; i < amount / 2; i++) {
+    result.push(createStar({ small: true }));
   }
   return result;
 }
@@ -360,10 +368,9 @@ function init() {
    * The paused flag simple cause an early return in the update function.
    * Effectively freezing the game.
    */
-
   gravity = 0.1;
   friction = 0.4;
-  stars = createStars(20);
+  stars = createStars(30);
   platforms = createPlatforms(30);
   title = createTitle();
   gameState = {
