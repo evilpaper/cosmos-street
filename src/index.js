@@ -12,6 +12,7 @@ let stars;
 let platforms;
 let title;
 let gameState;
+let twin;
 
 class Player {
   constructor() {
@@ -104,34 +105,31 @@ class Player {
  *
  */
 
-function createStar(options = {}) {
-  const {
-    totalFrames = 6,
-    ticksPerFrame = 16,
-    blinkProbability = 0.6,
-    spawnWidth = SCREEN_WIDTH, // initial spawn area
-    spawnHeight = SCREEN_HEIGHT,
-    wrapMargin = 10, // allowed off-screen before wrap
-    resetX = SCREEN_WIDTH + 32, // where the star re-enters
-    minSpeed = 0.05,
-    maxSpeed = 0.2,
-  } = options;
-
+function createStar() {
+  // Constants. These are the same for all stars.
+  const totalFrames = 6;
+  const ticksPerFrame = 16;
+  const blinkProbability = 0.6;
+  const spawnWidth = SCREEN_WIDTH; // initial spawn area
+  const spawnHeight = SCREEN_HEIGHT;
+  const wrapMargin = 10; // allowed off-screen before wrap
+  const resetX = SCREEN_WIDTH + 32; // where the star re-enters
+  const minSpeed = 0.05;
+  const maxSpeed = 0.2;
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
 
-  // Configure the star
+  // Constants. These are different for each star.
   const blinking = Math.random() < blinkProbability;
   const speed = Math.random() * (maxSpeed - minSpeed) + minSpeed;
 
-  // Mutable state (kept simple and explicit)
+  // Mutables
   let animationTick = 0;
   let frame = Math.floor(Math.random() * totalFrames);
   let x = Math.floor(Math.random() * spawnWidth);
   let y = Math.floor(Math.random() * spawnHeight);
 
   return {
-    name: "star",
     image,
     frame,
     x,
