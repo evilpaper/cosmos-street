@@ -399,7 +399,9 @@ function update() {
     platforms.update();
 
     if (p.y > 500) {
-      init();
+      // We could call init() here but that would restart the game.
+      // For now, we just reset the player to the start position.
+      p.reset();
     }
   }
 
