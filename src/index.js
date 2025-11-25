@@ -1,19 +1,3 @@
-/**
- * Define global variables
- *
- * The game state object is used to control the current state of the game.
- * The paused flag simple cause an early return in the update function.
- * Effectively freezing the game.
- */
-
-let gravity;
-let friction;
-let stars;
-let platforms;
-let title;
-let gameState;
-let twin;
-
 class Player {
   constructor() {
     this.image = new Image();
@@ -63,7 +47,6 @@ class Player {
 
     if (p.state === "breaking") {
       p.speed = 0.5;
-      p.x = 51;
       if (!input.left) {
         p.state = p.states[0];
       }
@@ -303,6 +286,24 @@ function createTitle() {
 }
 
 /**
+ * Define global variables
+ *
+ * The game state object is used to control the current state of the game.
+ * The paused flag simple cause an early return in the update function.
+ * Effectively freezing the game.
+ */
+
+let gravity;
+let friction;
+let stars;
+let platforms;
+let title;
+let gameState;
+let twin;
+
+const p = new Player();
+
+/**
  * Check for collision between two objects.
  */
 
@@ -349,9 +350,6 @@ function checkCollision(a, b) {
     }
   }
 }
-
-// TODO: Refcator to factory function and move this to top. Classes aren't hoisted but functions are.
-const p = new Player();
 
 /**
  * Game functions.
