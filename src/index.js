@@ -107,7 +107,7 @@ function createStar(options = {}) {
   // Constants. These are different for each star.
   const blinking = small ? false : Math.random() < blinkProbability;
   const speed = small
-    ? minSpeed
+    ? Math.random() * (0.1 - 0.02) + 0.02
     : Math.random() * (maxSpeed - minSpeed) + minSpeed;
 
   // Mutables
@@ -172,11 +172,10 @@ function createStar(options = {}) {
 
 function createStars(amount) {
   const result = [];
-  // Random
   for (let i = 0; i < amount / 2; i++) {
     result.push(createStar());
   }
-  for (let i = 0; i < amount / 2; i++) {
+  for (let i = 0; i < amount; i++) {
     result.push(createStar({ small: true }));
   }
   return result;
