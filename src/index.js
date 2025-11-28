@@ -34,7 +34,7 @@ function createStar(options = {}) {
   const wrapMargin = 10; // allowed off-screen before wrap
   const resetX = SCREEN_WIDTH + 32; // where the star re-enters
   const minSpeed = 0.05;
-  const maxSpeed = 0.2;
+  const maxSpeed = 0.4;
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
 
