@@ -1,0 +1,81 @@
+class Player {
+  constructor() {
+    this.image = new Image();
+    this.image.src = "./images/player-sprite-sheet.png";
+    this.ticksToNextFrame = 16;
+    this.tick = 0;
+    this.frame = 0;
+    this.width = 26;
+    this.height = 35;
+    this.x = 50;
+    this.y = 125;
+    this.dy = 0;
+    this.speed = 0.6;
+    this.states = ["skating", "airborne", "breaking"];
+    this.state = this.states[0];
+    this.p = this;
+  }
+
+  reset() {
+    p.tick = 0;
+    p.frame = 0;
+    p.x = 50;
+    p.y = 0;
+    p.dy = 0;
+    p.speed = 0.6;
+    p.state = "skating";
+  }
+
+  update() {
+    if (p.state === "skating") {
+      p.speed = 1.4;
+      if (input.left) {
+        p.state = p.states[2];
+      }
+      if (input.up) {
+        p.dy = -8;
+        p.state = p.states[1];
+      }
+      if (p.dy > 1) {
+        p.state = p.states[1];
+      }
+    }
+
+    if (p.state === "airborne") {
+      // Do airborne stuff here...
+    }
+
+    if (p.state === "breaking") {
+      p.speed = 0.5;
+      if (!input.left) {
+        p.state = p.states[0];
+      }
+      if (input.up) {
+        p.dy = -8;
+        p.state = p.states[1];
+      }
+    }
+
+    p.dy += gravity;
+    p.dy += friction;
+    p.y = Math.floor(p.y + p.dy);
+
+    platforms.platforms.forEach((block) => {
+      checkCollision(p, block);
+    });
+
+    // Animation
+    p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
+
+    if (p.tick === 0) {
+      p.frame = p.frame + 1;
+      if (p.frame >= 2) {
+        p.frame = 0;
+      }
+    }
+
+    // Make sure p.y is always an integer
+    p.x = Math.floor(p.x);
+    p.y = Math.floor(p.y);
+  }
+}
