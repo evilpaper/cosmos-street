@@ -26,7 +26,7 @@ class Player {
     p.state = "skating";
   }
 
-  update() {
+  update(collidables) {
     if (p.state === "skating") {
       p.speed = 1.4;
       if (input.left) {
@@ -60,7 +60,7 @@ class Player {
     p.dy += friction;
     p.y = Math.floor(p.y + p.dy);
 
-    platforms.platforms.forEach((block) => {
+    collidables.forEach((block) => {
       checkCollision(p, block);
     });
 

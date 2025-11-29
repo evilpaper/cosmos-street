@@ -12,7 +12,6 @@ let stars;
 let platforms;
 let title;
 let gameState;
-let twin;
 
 const p = new Player();
 
@@ -307,7 +306,7 @@ function update() {
   }
 
   if (gameState.status === "playing") {
-    p.update();
+    p.update(platforms.platforms);
 
     platforms.update();
 
