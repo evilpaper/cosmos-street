@@ -221,7 +221,8 @@ function createPlatform(options = {}) {
 }
 
 function createPlatforms(amount) {
-  const platforms = [];
+  // Mutable state: Internal array that gets updated
+  let platforms = [];
 
   for (let i = 0; i < amount; i++) {
     platforms.push(
@@ -233,20 +234,21 @@ function createPlatforms(amount) {
   }
 
   return {
-    platforms,
+    // Exposed property using getter: Always returns the current array
+    get platforms() {
+      return platforms;
+    },
 
     update() {
       // Update all platforms
-      this.platforms.forEach((platform) => {
+      platforms.forEach((platform) => {
         platform.update();
       });
 
       // If a platform is off the screen, remove it
-      this.platforms = this.platforms.filter((platform) => platform.x > -16);
+      platforms = platforms.filter((platform) => platform.x > -16);
 
-      const lastPlatformX = Math.floor(
-        this.platforms[this.platforms.length - 1].x
-      );
+      const lastPlatformX = Math.floor(platforms[platforms.length - 1].x);
 
       if (lastPlatformX < 256 + 16 * 4) {
         const y = Math.floor(Math.random() * 30) + 130;
@@ -255,7 +257,7 @@ function createPlatforms(amount) {
 
         // Add the new platforms to the platforms array
         for (let i = 0; i < numberOfPlatforms; i++) {
-          this.platforms.push(
+          platforms.push(
             createPlatform({
               x: lastPlatformX + i * 16 + gap,
               y: y,
