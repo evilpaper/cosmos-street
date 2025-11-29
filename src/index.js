@@ -374,16 +374,7 @@ function draw(screen) {
       platform.draw(screen);
     });
 
-    if (p.state === "skating" || p.state === "speeding") {
-      if (p.frame === 0) {
-        screen.drawImage(p.image, 0, 0, 26, 35, o(p.x), o(p.y), 26, 35);
-      } else {
-        screen.drawImage(p.image, 26, 0, 26, 35, o(p.x), o(p.y), 26, 35);
-      }
-    }
-    if (p.state === "airborne" || p.state === "breaking") {
-      screen.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
-    }
+    p.draw(screen);
   }
 
   /**

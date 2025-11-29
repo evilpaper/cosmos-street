@@ -78,4 +78,25 @@ class Player {
     p.x = Math.floor(p.x);
     p.y = Math.floor(p.y);
   }
+
+  draw(screen) {
+    if (p.state === "skating" || p.state === "speeding") {
+      if (p.frame === 0) {
+        screen.drawImage(p.image, 0, 0, 26, 35, o(p.x), o(p.y), 26, 35);
+      } else {
+        screen.drawImage(p.image, 26, 0, 26, 35, o(p.x), o(p.y), 26, 35);
+      }
+    }
+    if (p.state === "airborne" || p.state === "breaking") {
+      screen.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
+    }
+
+    /**
+     * Draw a green hitbox around the player. For debugging purposes.
+     */
+
+    // screen.lineWidth = 2;
+    // screen.strokeStyle = "green";
+    // screen.strokeRect(p.x, p.y, p.width, p.height);
+  }
 }
