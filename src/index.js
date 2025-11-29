@@ -159,32 +159,57 @@ function createTile() {
   };
 }
 
+/**
+ * Creates a platform object that moves left as the player moves forward.
+ *
+ * @param {Object} options - Configuration options
+ * @param {number} options.x - Initial x position (default: 0)
+ * @param {number} options.y - Initial y position (default: 0)
+ * @param {number} options.width - Platform width in pixels (default: 16)
+ * @param {number} options.height - Platform height in pixels (default: 16)
+ */
 function createPlatform(options = {}) {
   const { x = 0, y = 0, width = 16, height = 16 } = options;
 
+  // Create the tile image used for rendering
   const tile = createTile();
 
-  // Mutable state
+  // Mutable state: Internal variables allow sub-pixel movement for smooth scrolling
+  // We keep these separate from the exposed properties to maintain precision
   let platformX = x;
   let platformY = y;
 
   return {
     name: "platform",
-    x: Math.floor(platformX),
-    y: Math.floor(platformY),
+    // Exposed properties using getters: Computed on access, always returns integer
+    // This ensures downstream code (like createPlatforms) gets integer coordinates
+    get x() {
+      return Math.floor(platformX);
+    },
+    get y() {
+      return Math.floor(platformY);
+    },
+
+    // Constants
     width,
     height,
     tile,
 
+    /**
+     * Updates the platform position each frame.
+     * Moves the platform left at the player's speed to create scrolling effect.
+     */
     update() {
       // Move platform to the left based on player speed
       platformX -= p.speed;
-
-      // Keep exposed coords integers for downstream code expectations
-      this.x = Math.floor(platformX);
-      this.y = Math.floor(platformY);
     },
 
+    /**
+     * Draws the platform on the screen.
+     * Uses rounded positions to ensure integer pixel rendering.
+     *
+     * @param {CanvasRenderingContext2D} screen - The canvas context to draw on
+     */
     draw(screen) {
       // Round positions here to keep integer pixels
       const dx = Math.round(platformX);
