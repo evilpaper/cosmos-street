@@ -15,11 +15,51 @@ let gameState;
 
 const p = new Player();
 
+const character = createCharacter();
+
 /**
  * Creates objects used in the game.
  *
  * This use factories, that is, functions that return objects.
  */
+
+function createCharacter() {
+  const image = new Image();
+  image.src = "./images/player-sprite-sheet.png";
+
+  const frame = 0;
+  const width = 26;
+  const height = 35;
+  let x = 50;
+  let y = 50;
+
+  return {
+    image,
+    frame,
+    width,
+    height,
+    x,
+    y,
+
+    update() {
+      x = x + 1;
+    },
+
+    draw(screen) {
+      screen.drawImage(
+        image,
+        frame * width,
+        0,
+        width,
+        height,
+        x,
+        y,
+        width,
+        height
+      );
+    },
+  };
+}
 
 function createStar(options = {}) {
   const { small = false } = options;
@@ -71,11 +111,6 @@ function createStar(options = {}) {
       if (blinking && animationTick === 0) {
         frame = (frame + 1) % totalFrames;
       }
-
-      // keep exposed coords integers for downstream code expectations
-      this.x = Math.floor(x);
-      this.y = Math.floor(y);
-      this.frame = frame;
     },
 
     draw(screen) {
@@ -305,6 +340,8 @@ function update() {
     star.update();
   }
 
+  character.update();
+
   if (gameState.status === "playing") {
     p.update(platforms.platforms);
 
@@ -349,9 +386,14 @@ function update() {
 }
 
 function draw(screen) {
+  // Clear the screen
   screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+  // Draw the stars
   stars.forEach((s) => s.draw(screen));
+
+  // Draw the character
+  character.draw(screen);
 
   if (gameState.status === "idle") {
     screen.drawImage(title.image, 64, 64, 128, 48);
@@ -376,12 +418,4 @@ function draw(screen) {
 
     p.draw(screen);
   }
-
-  /**
-   * Draw a green hitbox around the player
-   */
-
-  // screen.lineWidth = 2;
-  // screen.strokeStyle = "green";
-  // screen.strokeRect(p.x, p.y, p.width, p.height);
 }
