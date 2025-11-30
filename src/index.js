@@ -145,12 +145,15 @@ function createStar(options = {}) {
 
 function createStars(amount) {
   const result = [];
+
   for (let i = 0; i < amount / 2; i++) {
     result.push(createStar());
   }
+
   for (let i = 0; i < amount; i++) {
     result.push(createStar({ small: true }));
   }
+
   return result;
 }
 
@@ -164,10 +167,6 @@ function createTile() {
   };
 }
 
-/**
- * Fractional values stored directly, rounded only when rendering.
- * Collision detection and filtering work with fractional values.
- */
 function createPlatform(options = {}) {
   const { x = 0, y = 0, width = 16, height = 16 } = options;
 
@@ -182,6 +181,7 @@ function createPlatform(options = {}) {
     tile,
 
     update() {
+      // Fractional values stored directly (x), rounded only when rendering.
       this.x -= p.speed;
     },
 
@@ -252,10 +252,6 @@ function createTitle() {
   };
 }
 
-/**
- * Check for collision between two objects.
- */
-
 function checkCollision(a, b) {
   // Calculate the overlap on both X and Y axes
   // Use the difference (d) to compare againt the combined with and height
@@ -303,8 +299,9 @@ function checkCollision(a, b) {
 /**
  * Game functions.
  *
- * Init is called once when the game starts.
- * Update and draw called once per frame. Usually 60 times per second.
+ * init is called once when the game starts.
+ * update and draw are called once per frame.
+ * Default frame rate is 60 times per second.
  */
 
 function init() {
