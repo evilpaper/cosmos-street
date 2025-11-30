@@ -95,6 +95,11 @@ function createStar(options = {}) {
     x,
     y,
 
+    /**
+     * Since update only works on local variables we rely on closure to keep the state.
+     * No need for the this keyword.
+     */
+
     update() {
       // 1) advance animation tick
       animationTick = (animationTick + 1) % ticksPerFrame;
@@ -181,14 +186,11 @@ function createPlatform(options = {}) {
 
   return {
     name: "platform",
-    // Exposed properties using getters: Computed on access, always returns integer
-    // This ensures downstream code (like createPlatforms) gets integer coordinates
-    get x() {
-      return Math.floor(platformX);
-    },
-    get y() {
-      return Math.floor(platformY);
-    },
+
+    // Exposed properties: Updated each frame to maintain integer coordinates
+    // while allowing sub-pixel precision for smooth movement
+    x: Math.floor(platformX),
+    y: Math.floor(platformY),
 
     // Constants
     width,
@@ -202,6 +204,10 @@ function createPlatform(options = {}) {
     update() {
       // Move platform to the left based on player speed
       platformX -= p.speed;
+
+      // Update exposed integer properties
+      this.x = Math.floor(platformX);
+      this.y = Math.floor(platformY);
     },
 
     /**
