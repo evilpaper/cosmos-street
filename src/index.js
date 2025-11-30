@@ -181,16 +181,16 @@ function createPlatform(options = {}) {
 
   // Mutable state: Internal variables allow sub-pixel movement for smooth scrolling
   // We keep these separate from the exposed properties to maintain precision
-  let platformX = x;
-  let platformY = y;
+  let _x = x;
+  let _y = y;
 
   return {
     name: "platform",
 
     // Exposed properties: Updated each frame to maintain integer coordinates
     // while allowing sub-pixel precision for smooth movement
-    x: Math.floor(platformX),
-    y: Math.floor(platformY),
+    x: Math.floor(_x),
+    y: Math.floor(_y),
 
     // Constants
     width,
@@ -203,11 +203,9 @@ function createPlatform(options = {}) {
      */
     update() {
       // Move platform to the left based on player speed
-      platformX -= p.speed;
-
-      // Update exposed integer properties
-      this.x = Math.floor(platformX);
-      this.y = Math.floor(platformY);
+      _x -= p.speed;
+      this.x = Math.floor(_x);
+      this.y = Math.floor(_y);
     },
 
     /**
@@ -218,8 +216,8 @@ function createPlatform(options = {}) {
      */
     draw(screen) {
       // Round positions here to keep integer pixels
-      const dx = Math.round(platformX);
-      const dy = Math.round(platformY);
+      const dx = Math.round(_x);
+      const dy = Math.round(_y);
 
       screen.drawImage(tile.image, 0, 0, width, height, dx, dy, width, height);
     },
