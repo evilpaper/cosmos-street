@@ -165,60 +165,29 @@ function createTile() {
 }
 
 /**
- * Creates a platform object that moves left as the player moves forward.
- *
- * @param {Object} options - Configuration options
- * @param {number} options.x - Initial x position (default: 0)
- * @param {number} options.y - Initial y position (default: 0)
- * @param {number} options.width - Platform width in pixels (default: 16)
- * @param {number} options.height - Platform height in pixels (default: 16)
+ * Fractional values stored directly, rounded only when rendering.
+ * Collision detection and filtering work with fractional values.
  */
 function createPlatform(options = {}) {
   const { x = 0, y = 0, width = 16, height = 16 } = options;
 
-  // Create the tile image used for rendering
   const tile = createTile();
-
-  // Mutable state: Internal variables allow sub-pixel movement for smooth scrolling
-  // We keep these separate from the exposed properties to maintain precision
-  let _x = x;
-  let _y = y;
 
   return {
     name: "platform",
-
-    // Exposed properties: Updated each frame to maintain integer coordinates
-    // while allowing sub-pixel precision for smooth movement
-    x: Math.floor(_x),
-    y: Math.floor(_y),
-
-    // Constants
+    x: x,
+    y: y,
     width,
     height,
     tile,
 
-    /**
-     * Updates the platform position each frame.
-     * Moves the platform left at the player's speed to create scrolling effect.
-     */
     update() {
-      // Move platform to the left based on player speed
-      _x -= p.speed;
-      this.x = Math.floor(_x);
-      this.y = Math.floor(_y);
+      this.x -= p.speed;
     },
 
-    /**
-     * Draws the platform on the screen.
-     * Uses rounded positions to ensure integer pixel rendering.
-     *
-     * @param {CanvasRenderingContext2D} screen - The canvas context to draw on
-     */
     draw(screen) {
-      // Round positions here to keep integer pixels
-      const dx = Math.round(_x);
-      const dy = Math.round(_y);
-
+      const dx = Math.round(this.x);
+      const dy = Math.round(this.y);
       screen.drawImage(tile.image, 0, 0, width, height, dx, dy, width, height);
     },
   };
