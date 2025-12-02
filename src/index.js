@@ -15,7 +15,7 @@ let gameState;
 
 const p = new Player();
 
-const character = createCharacter();
+// const character = createCharacter();
 
 /**
  * Creates objects used in the game.
@@ -326,7 +326,7 @@ function update() {
     star.update();
   }
 
-  character.update();
+  // character.update();
 
   if (gameState.status === "playing") {
     p.update(platforms.platforms);
@@ -379,7 +379,7 @@ function draw(screen) {
   stars.forEach((s) => s.draw(screen));
 
   // Draw the character
-  character.draw(screen);
+  // character.draw(screen);
 
   if (gameState.status === "idle") {
     screen.drawImage(title.image, 64, 64, 128, 48);
