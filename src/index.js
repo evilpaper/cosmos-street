@@ -274,12 +274,13 @@ function checkCollision(a, b) {
         p.state = p.states[0];
       }
     } else {
+      // This seems to cause a bug where the player "jumps" forward after landing on a platform.
       // Resolve collision on the X axis
-      if (dx > 0) {
-        a.x += overlapX;
-      } else {
-        a.x -= overlapX;
-      }
+      // if (dx > 0) {
+      //   a.x += overlapX;
+      // } else {
+      //   a.x -= overlapX;
+      // }
       a.dx = 0;
     }
   }

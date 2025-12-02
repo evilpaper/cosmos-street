@@ -30,14 +30,14 @@ class Player {
     if (p.state === "skating") {
       p.speed = 1.4;
       if (input.left) {
-        p.state = p.states[2];
+        p.state = p.states[2]; // skating -> breaking
       }
       if (input.up) {
         p.dy = -8;
-        p.state = p.states[1];
+        p.state = p.states[1]; // skating -> airborne
       }
       if (p.dy > 1) {
-        p.state = p.states[1];
+        p.state = p.states[1]; // skating -> airborne
       }
     }
 
