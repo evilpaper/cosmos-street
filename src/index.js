@@ -157,44 +157,33 @@ function createStars(amount) {
   return result;
 }
 
-function createTile() {
+function createPlatform(options = {}) {
+  const { x = 0, y = 0, width = 16, height = 16 } = options;
+
   const image = new Image();
   image.src = "./images/tiles-sheet.png";
 
   return {
-    name: "tile",
-    image: image,
-  };
-}
-
-function createPlatform(options = {}) {
-  const { x = 0, y = 0, width = 16, height = 16 } = options;
-
-  const tile = createTile();
-
-  return {
     name: "platform",
+    image: image,
     x: x,
     y: y,
     width,
     height,
-    tile,
 
     update() {
-      // Fractional values stored directly (x), rounded only when rendering.
       this.x -= p.speed;
     },
 
     draw(screen) {
       const dx = Math.round(this.x);
       const dy = Math.round(this.y);
-      screen.drawImage(tile.image, 0, 0, width, height, dx, dy, width, height);
+      screen.drawImage(image, 0, 0, width, height, dx, dy, width, height);
     },
   };
 }
 
 function createPlatforms(amount) {
-  // Mutable state: Internal array that gets updated
   let platforms = [];
 
   for (let i = 0; i < amount; i++) {
@@ -316,6 +305,7 @@ function init() {
   friction = 0.4;
   stars = createStars(30);
   platforms = createPlatforms(30);
+  console.log(platforms);
   title = createTitle();
   gameState = {
     status: "idle",
@@ -324,7 +314,6 @@ function init() {
     blinkFrames: 0,
     showPressPrompt: true,
   };
-
   p.reset();
 }
 
