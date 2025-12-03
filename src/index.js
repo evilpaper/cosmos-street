@@ -208,9 +208,9 @@ function createPlatforms(amount) {
       });
 
       // If a tiles is off the screen, remove it
-      tiles = tiles.filter((platform) => platform.x > -16);
+      tiles = tiles.filter((tile) => tile.x > -16);
 
-      const lastTileX = Math.floor(platforms[platforms.length - 1].x);
+      const lastTileX = Math.floor(tiles[tiles.length - 1].x);
 
       if (lastTileX < 256 + 16 * 4) {
         const y = Math.floor(Math.random() * 30) + 130;
@@ -306,7 +306,6 @@ function init() {
   friction = 0.4;
   stars = createStars(30);
   platforms = createPlatforms(30);
-  console.log(platforms);
   title = createTitle();
   gameState = {
     status: "idle",
@@ -330,7 +329,7 @@ function update() {
   // character.update();
 
   if (gameState.status === "playing") {
-    p.update(platforms.platforms);
+    p.update(platforms.tiles);
 
     platforms.update();
 
@@ -399,8 +398,8 @@ function draw(screen) {
   }
 
   if (gameState.status === "playing") {
-    platforms.platforms.forEach((platform) => {
-      platform.draw(screen);
+    platforms.tiles.forEach((tile) => {
+      tile.draw(screen);
     });
 
     p.draw(screen);
