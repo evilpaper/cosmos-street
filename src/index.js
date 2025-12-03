@@ -157,14 +157,14 @@ function createStars(amount) {
   return result;
 }
 
-function createPlatform(options = {}) {
+function createTile(options = {}) {
   const { x = 0, y = 0, width = 16, height = 16 } = options;
 
   const image = new Image();
   image.src = "./images/tiles-sheet.png";
 
   return {
-    name: "platform",
+    name: "tile",
     image: image,
     x: x,
     y: y,
@@ -184,11 +184,11 @@ function createPlatform(options = {}) {
 }
 
 function createPlatforms(amount) {
-  let platforms = [];
+  let tiles = [];
 
   for (let i = 0; i < amount; i++) {
-    platforms.push(
-      createPlatform({
+    tiles.push(
+      createTile({
         x: 8 + i * 16,
         y: 160,
       })
@@ -197,31 +197,31 @@ function createPlatforms(amount) {
 
   return {
     // Exposed property using getter: Always returns the current array
-    get platforms() {
-      return platforms;
+    get tiles() {
+      return tiles;
     },
 
     update() {
-      // Update all platforms
-      platforms.forEach((platform) => {
-        platform.update();
+      // Update all tiles
+      tiles.forEach((tile) => {
+        tile.update();
       });
 
-      // If a platform is off the screen, remove it
-      platforms = platforms.filter((platform) => platform.x > -16);
+      // If a tiles is off the screen, remove it
+      tiles = tiles.filter((platform) => platform.x > -16);
 
-      const lastPlatformX = Math.floor(platforms[platforms.length - 1].x);
+      const lastTileX = Math.floor(platforms[platforms.length - 1].x);
 
-      if (lastPlatformX < 256 + 16 * 4) {
+      if (lastTileX < 256 + 16 * 4) {
         const y = Math.floor(Math.random() * 30) + 130;
         const gap = Math.floor(Math.random() * 48) + 32;
-        const numberOfPlatforms = Math.floor(Math.random() * 4) + 2;
+        const numberOfTiles = Math.floor(Math.random() * 4) + 2;
 
         // Add the new platforms to the platforms array
-        for (let i = 0; i < numberOfPlatforms; i++) {
-          platforms.push(
-            createPlatform({
-              x: lastPlatformX + i * 16 + gap,
+        for (let i = 0; i < numberOfTiles; i++) {
+          tiles.push(
+            createTile({
+              x: lastTileX + i * 16 + gap,
               y: y,
             })
           );
