@@ -183,6 +183,18 @@ function createTile(options = {}) {
   };
 }
 
+/**
+ * Creates platforms object.
+ *
+ * The platforms object is used to store the tiles that make up the platforms.
+ * The tiles are created using the createTile function.
+ * The tiles are updated using the update function.
+ * The tiles are drawn using the draw function.
+ *
+ * @param {*} amount
+ * @returns Platforms object
+ */
+
 function createPlatforms(amount) {
   let tiles = [];
 
@@ -196,10 +208,7 @@ function createPlatforms(amount) {
   }
 
   return {
-    // Exposed property using getter: Always returns the current array
-    get tiles() {
-      return tiles;
-    },
+    tiles: tiles, // Direct property
 
     update() {
       // Update all tiles
@@ -207,8 +216,16 @@ function createPlatforms(amount) {
         tile.update();
       });
 
-      // If a tiles is off the screen, remove it
-      tiles = tiles.filter((tile) => tile.x > -16);
+      // If a tiles is off the screen, remove it (mutate in place)
+      // This is a more efficient way to remove tiles than using the filter method.
+      // If we would use the filter method, we would create a new array and copy the tiles to it.
+      // We would then have to reassign the tiles property to the new array.
+      // So we do "in place" mutation.
+      for (let i = tiles.length - 1; i >= 0; i--) {
+        if (tiles[i].x <= -16) {
+          tiles.splice(i, 1);
+        }
+      }
 
       const lastTileX = Math.floor(tiles[tiles.length - 1].x);
 
