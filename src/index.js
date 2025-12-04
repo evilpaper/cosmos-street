@@ -308,6 +308,7 @@ function checkCollision(a, b) {
  *
  * init is called once when the game starts.
  * update and draw are called once per frame.
+ *
  * Default frame rate is 60 times per second.
  */
 
