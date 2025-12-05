@@ -58,7 +58,10 @@ class Player {
 
     p.dy += gravity;
     p.dy += friction;
+
+    // Make sure p.y is always an integer
     p.y = Math.floor(p.y + p.dy);
+    p.x = Math.floor(p.x);
 
     collidables.forEach((block) => {
       checkCollision(p, block);

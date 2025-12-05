@@ -261,8 +261,9 @@ function createTitle() {
 function checkCollision(a, b) {
   // Calculate the overlap on both X and Y axes
   // Use the difference (d) to compare againt the combined with and height
-  const dx = a.x + a.width / 2 - (b.x + b.width / 2);
-  const dy = a.y + a.height / 2 - (b.y + b.height / 2);
+  // Math.floor is used to ensure the result is an integer.
+  const dx = Math.floor(a.x + a.width / 2 - (b.x + b.width / 2));
+  const dy = Math.floor(a.y + a.height / 2 - (b.y + b.height / 2));
   const combinedHalfWidths = (a.width + b.width) / 2;
   const combinedHalfHeights = (a.height + b.height) / 2;
 
@@ -291,13 +292,15 @@ function checkCollision(a, b) {
         p.state = p.states[0];
       }
     } else {
+      // Otherwise the collision has happened on the x-axis
       // This seems to cause a bug where the player "jumps" forward after landing on a platform.
       // Resolve collision on the X axis
-      // if (dx > 0) {
-      //   a.x += overlapX;
-      // } else {
-      //   a.x -= overlapX;
-      // }
+      if (dx > 0) {
+        a.x += overlapX;
+      } else {
+        a.x -= overlapX;
+      }
+
       a.dx = 0;
     }
   }
