@@ -245,6 +245,12 @@ function createPlatforms(amount) {
         }
       }
     },
+
+    draw(screen) {
+      tiles.forEach((tile) => {
+        tile.draw(screen);
+      });
+    },
   };
 }
 
@@ -419,10 +425,7 @@ function draw(screen) {
   }
 
   if (gameState.status === "playing") {
-    platforms.tiles.forEach((tile) => {
-      tile.draw(screen);
-    });
-
+    platforms.draw(screen);
     p.draw(screen);
   }
 }
