@@ -33,11 +33,17 @@ That's it!
 
 - [x] Start screen
 - [ ] Ending
+- [ ] Restart
 - [ ] SFX
 - [ ] Music
 - [x] Touch controls
-- [ ] Highscore
-- [ ] Level editor (maybe)
+- [ ] Score
+- [ ] Session high score
+- [ ] Speed up
+- [ ] Enemies (ufo's)
+- [ ] Power ups (air jump)
+- [ ] How to play - desktop (keyboard)
+- [ ] How to play - mobile
 
 ## Known Issues
 

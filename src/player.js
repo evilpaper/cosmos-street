@@ -29,6 +29,7 @@ class Player {
   update(collidables) {
     if (p.state === "skating") {
       p.speed = 1.4;
+
       if (input.left) {
         p.state = p.states[2]; // skating -> breaking
       }
@@ -59,7 +60,7 @@ class Player {
     p.dy += gravity;
     p.dy += friction;
 
-    // Make sure p.y is always an integer
+    // Make sure always an integer
     p.y = Math.floor(p.y + p.dy);
     p.x = Math.floor(p.x);
 
@@ -77,7 +78,7 @@ class Player {
       }
     }
 
-    // Make sure p.y is always an integer
+    // Make sure always an integer
     p.x = Math.floor(p.x);
     p.y = Math.floor(p.y);
   }
@@ -95,10 +96,20 @@ class Player {
     }
 
     /**
+     * Draw a green line from the player to the ground. For debugging purposes.
+     */
+    // screen.lineWidth = 1;
+    // screen.strokeStyle = "green";
+    // screen.beginPath();
+    // screen.moveTo(50, 0);
+    // screen.lineTo(50, 256);
+    // screen.stroke();
+    // screen.closePath();
+
+    /**
      * Draw a green hitbox around the player. For debugging purposes.
      */
-
-    // screen.lineWidth = 2;
+    // screen.lineWidth = 1;
     // screen.strokeStyle = "green";
     // screen.strokeRect(p.x, p.y, p.width, p.height);
   }

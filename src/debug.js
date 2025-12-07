@@ -18,12 +18,13 @@ document.addEventListener("keydown", (event) => {
 
 /**
  * Step through each step with the enter key when debugging.
- * Remember to comment out setInterval inside loop before use.
+ * Remember to comment out setInterval inside the main loop before use.
  */
 
 // document.addEventListener("keydown", (event) => {
 //   if (event.key === "Enter") {
+//     console.log("Enter key pressed");
 //     update();
-//     draw();
+//     draw(screen);
 //   }
 // });

@@ -172,13 +172,20 @@ function createTile(options = {}) {
     height,
 
     update() {
-      this.x -= p.speed;
+      this.x = Math.floor(this.x - p.speed);
     },
 
     draw(screen) {
       const dx = Math.round(this.x);
       const dy = Math.round(this.y);
       screen.drawImage(image, 0, 0, width, height, dx, dy, width, height);
+
+      /**
+       * Draw a cyan hitbox around the tile. For debugging purposes.
+       */
+      // screen.lineWidth = 1;
+      // screen.strokeStyle = "cyan";
+      // screen.strokeRect(dx, dy, width, height);
     },
   };
 }
@@ -267,14 +274,15 @@ function createTitle() {
 function checkCollision(a, b) {
   // Calculate the overlap on both X and Y axes
   // Use the difference (d) to compare againt the combined with and height
-  // Math.floor is used to ensure the result is an integer.
+
   const dx = Math.floor(a.x + a.width / 2 - (b.x + b.width / 2));
   const dy = Math.floor(a.y + a.height / 2 - (b.y + b.height / 2));
+
   const combinedHalfWidths = (a.width + b.width) / 2;
   const combinedHalfHeights = (a.height + b.height) / 2;
 
   // Check for collision
-  // If the difference in x or y is less than the combined halfs we have an overlap.
+  // If the difference in x and y is less than the combined halfs we have an overlap.
   if (Math.abs(dx) < combinedHalfWidths && Math.abs(dy) < combinedHalfHeights) {
     // Get a number on the overlap
     const overlapX = combinedHalfWidths - Math.abs(dx);
@@ -292,6 +300,7 @@ function checkCollision(a, b) {
 
       a.dy = 0;
 
+      // Not sure this is the right place for this.
       if (p.state === p.states[2]) {
         p.state = p.states[2];
       } else {
