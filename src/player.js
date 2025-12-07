@@ -11,7 +11,7 @@ class Player {
     this.y = 125;
     this.dy = 0;
     this.speed = 0.6;
-    this.states = ["skating", "airborne", "breaking"];
+    this.states = ["skating", "airborne", "breaking", "speeding"];
     this.state = this.states[0];
     this.p = this;
   }
@@ -28,7 +28,7 @@ class Player {
 
   update(collidables) {
     if (p.state === "skating") {
-      p.speed = 1.4;
+      p.speed = 1;
 
       if (input.left) {
         p.state = p.states[2]; // skating -> breaking
@@ -36,6 +36,9 @@ class Player {
       if (input.up) {
         p.dy = -8;
         p.state = p.states[1]; // skating -> airborne
+      }
+      if (input.right) {
+        p.speed = 2.0;
       }
       if (p.dy > 1) {
         p.state = p.states[1]; // skating -> airborne
