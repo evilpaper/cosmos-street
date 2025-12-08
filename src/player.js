@@ -67,9 +67,77 @@ class Player {
     p.y = Math.floor(p.y + p.dy);
     p.x = Math.floor(p.x);
 
+    // Collision
+
+    // Collect all collisions first
+    const collisions = [];
+
     collidables.forEach((block) => {
-      checkCollision(p, block);
+      const collision = checkCollision(p, block);
+      if (collision) {
+        collisions.push(collision);
+      }
     });
+
+    // Resolve collisions: prioritize Y-axis (ground) when falling
+    // This prevents the X-axis bug when landing on platform edges
+    let resolvedY = false;
+    let resolvedX = false;
+
+    // First pass: resolve Y-axis collisions if falling (dy > 0)
+    if (p.dy > 0) {
+      for (const collision of collisions) {
+        if (!resolvedY && collision.overlapY > 0) {
+          // Resolve Y collision (ground)
+          if (collision.directionY > 0) {
+            p.y += collision.overlapY + 1;
+          } else {
+            p.y -= collision.overlapY + 1;
+          }
+          p.dy = 0;
+          resolvedY = true;
+
+          // Update state when landing
+          if (p.state === p.states[2]) {
+            p.state = p.states[2];
+          } else {
+            p.state = p.states[0];
+          }
+        }
+      }
+    }
+
+    // Second pass: resolve X-axis collisions (walls)
+    if (!resolvedY) {
+      for (const collision of collisions) {
+        if (!resolvedX && collision.overlapX > 0) {
+          // Resolve X collision (wall)
+          if (collision.directionX > 0) {
+            p.x += collision.overlapX;
+          } else {
+            p.x -= collision.overlapX;
+          }
+          if (p.dx !== undefined) {
+            p.dx = 0;
+          }
+          resolvedX = true;
+        }
+      }
+    }
+
+    // If no Y collision was resolved but we have collisions, resolve Y anyway
+    // (for ceiling collisions when jumping)
+    if (!resolvedY && !resolvedX && collisions.length > 0) {
+      const collision = collisions[0];
+      if (collision.overlapY > 0) {
+        if (collision.directionY > 0) {
+          p.y += collision.overlapY;
+        } else {
+          p.y -= collision.overlapY;
+        }
+        p.dy = 0;
+      }
+    }
 
     // Animation
     p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
@@ -80,10 +148,6 @@ class Player {
         p.frame = 0;
       }
     }
-
-    // Make sure always an integer
-    p.x = Math.floor(p.x);
-    p.y = Math.floor(p.y);
   }
 
   draw(screen) {
