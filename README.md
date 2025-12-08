@@ -39,9 +39,12 @@ That's it!
 - [x] Touch controls
 - [ ] Score
 - [ ] Session high score
-- [ ] Speed up
+- [x] Speed up
+- [ ] Use a separate animation for speed up state
+- [ ] Scroll stars according to player speed
+- [ ] Implement better collision
 - [ ] Enemies (ufo's)
-- [ ] Power ups (air jump)
+- [ ] Power ups (apples, bananas etc.) Give air jump.
 - [ ] How to play - desktop (keyboard)
 - [ ] How to play - mobile
 
@@ -49,7 +52,7 @@ That's it!
 
 A list of things not working right now:
 
-- [ ] Player sometimes move forward even though she always should stay in place.
+- [ ] Player sometimes move forward even though she always should stay in place. Will be fixed with a better collision detection.
 
 ## Running Locally
 

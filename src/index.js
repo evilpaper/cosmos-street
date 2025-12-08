@@ -271,6 +271,18 @@ function createTitle() {
   };
 }
 
+/**
+ * Checks for collision between two objects.
+ *
+ * @param {*} a
+ * @param {*} b
+ * @returns true if collision has happened, false otherwise. Need to think about this.
+ * 
+ * This is AABB (Axis-Aligned Bounding Box) collision detection with Minimum Translation Vector (MTV) resolution.
+Detection: compares the distance between centers to the combined half-widths and half-heights to detect overlap.
+Resolution: computes overlap on both axes and resolves along the axis with the smallest overlap (MTV).
+ */
+
 function checkCollision(a, b) {
   // Calculate the overlap on both X and Y axes
   // Use the difference (d) to compare againt the combined with and height
@@ -318,7 +330,11 @@ function checkCollision(a, b) {
 
       a.dx = 0;
     }
+
+    return true;
   }
+
+  return false;
 }
 
 /**
