@@ -172,7 +172,8 @@ function createTile(options = {}) {
     height,
 
     update() {
-      this.x = Math.floor(this.x - p.dx);
+      console.log("update tile, p.dx", p.dx);
+      this.x = this.x - p.dx;
     },
 
     draw(screen) {

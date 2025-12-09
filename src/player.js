@@ -27,9 +27,12 @@ class Player {
   }
 
   update(collidables) {
+    console.log("p.state", p.state);
+    console.log("p.dx", p.dx);
+
     if (p.state === "skating") {
       p.ticksToNextFrame = 16;
-      p.dx = 1;
+      p.dx = 1.2;
 
       if (input.left) {
         p.state = p.states[2]; // skating -> breaking
@@ -40,7 +43,7 @@ class Player {
       }
       if (input.right) {
         p.ticksToNextFrame = 8;
-        p.dx = 2.0;
+        p.dx = 1.8;
       }
       if (p.dy > 1) {
         p.state = p.states[1]; // skating -> airborne
