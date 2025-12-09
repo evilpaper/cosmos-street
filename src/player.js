@@ -6,11 +6,11 @@ class Player {
     this.tick = 0;
     this.frame = 0;
     this.width = 26;
-    this.height = 35;
+    this.height = 36;
     this.x = 50;
     this.y = 125;
+    this.dx = 0.6;
     this.dy = 0;
-    this.speed = 0.6;
     this.states = ["skating", "airborne", "breaking", "speeding"];
     this.state = this.states[0];
     this.p = this;
@@ -22,13 +22,13 @@ class Player {
     p.x = 50;
     p.y = 0;
     p.dy = 0;
-    p.speed = 0.6;
+    p.dx = 0.6;
     p.state = "skating";
   }
 
   update(collidables) {
     if (p.state === "skating") {
-      p.speed = 1;
+      p.dx = 1;
 
       if (input.left) {
         p.state = p.states[2]; // skating -> breaking
@@ -38,7 +38,7 @@ class Player {
         p.state = p.states[1]; // skating -> airborne
       }
       if (input.right) {
-        p.speed = 2.0;
+        p.dx = 2.0;
       }
       if (p.dy > 1) {
         p.state = p.states[1]; // skating -> airborne
@@ -50,7 +50,7 @@ class Player {
     }
 
     if (p.state === "breaking") {
-      p.speed = 0.5;
+      p.dx = 0.5;
       if (!input.left) {
         p.state = p.states[0];
       }
@@ -72,9 +72,9 @@ class Player {
     // Collect all collisions first
     const collisions = [];
 
-    collidables.forEach((block) => {
-      const collision = checkCollision(p, block);
-      if (collision) {
+    collidables.forEach((tile) => {
+      const collision = checkCollision(p, tile);
+      if (collision.collided) {
         collisions.push(collision);
       }
     });
@@ -90,11 +90,13 @@ class Player {
         if (!resolvedY && collision.overlapY > 0) {
           // Resolve Y collision (ground)
           if (collision.directionY > 0) {
-            p.y += collision.overlapY + 1;
+            p.y += collision.overlapY;
           } else {
-            p.y -= collision.overlapY + 1;
+            p.y -= collision.overlapY;
           }
+
           p.dy = 0;
+
           resolvedY = true;
 
           // Update state when landing
@@ -117,25 +119,11 @@ class Player {
           } else {
             p.x -= collision.overlapX;
           }
-          if (p.dx !== undefined) {
-            p.dx = 0;
-          }
+
+          p.dx = 0;
+
           resolvedX = true;
         }
-      }
-    }
-
-    // If no Y collision was resolved but we have collisions, resolve Y anyway
-    // (for ceiling collisions when jumping)
-    if (!resolvedY && !resolvedX && collisions.length > 0) {
-      const collision = collisions[0];
-      if (collision.overlapY > 0) {
-        if (collision.directionY > 0) {
-          p.y += collision.overlapY;
-        } else {
-          p.y -= collision.overlapY;
-        }
-        p.dy = 0;
       }
     }
 

@@ -172,7 +172,7 @@ function createTile(options = {}) {
     height,
 
     update() {
-      this.x = Math.floor(this.x - p.speed);
+      this.x = Math.floor(this.x - p.dx);
     },
 
     draw(screen) {
@@ -299,39 +299,6 @@ function checkCollision(a, b) {
     // Get a number on the overlap
     const overlapX = combinedHalfWidths - Math.abs(dx);
     const overlapY = combinedHalfHeights - Math.abs(dy);
-
-    // In case the overlap in x-axis is larger than overlap in y-axis
-    // we conclude collision has happend in y-direction
-    // if (overlapX > overlapY) {
-    //   // Resolve collision on the Y axis
-    //   if (dy > 0) {
-    //     a.y += overlapY;
-    //   } else {
-    //     a.y -= overlapY;
-    //   }
-
-    //   a.dy = 0;
-
-    //   // Not sure this is the right place for this.
-    //   if (p.state === p.states[2]) {
-    //     p.state = p.states[2];
-    //   } else {
-    //     p.state = p.states[0];
-    //   }
-    // } else {
-    //   // Otherwise the collision has happened on the x-axis
-    //   // This seems to cause a bug where the player "jumps" forward after landing on a platform.
-    //   // Resolve collision on the X axis
-    //   if (dx > 0) {
-    //     a.x += overlapX;
-    //   } else {
-    //     a.x -= overlapX;
-    //   }
-
-    //   a.dx = 0;
-    // }
-
-    // return true;
 
     return {
       collided: true,
