@@ -79,7 +79,7 @@ function createStar(options = {}) {
 
   // Constants. These are different for each star.
   const blinking = small ? false : Math.random() < blinkProbability;
-  const speed = small
+  const dx = small
     ? Math.random() * (0.1 - 0.02) + 0.02
     : Math.random() * (maxSpeed - minSpeed) + minSpeed;
 
@@ -105,7 +105,7 @@ function createStar(options = {}) {
       animationTick = (animationTick + 1) % ticksPerFrame;
 
       // 2) move left
-      x -= speed + p.dx * 0.1;
+      x -= dx + p.dx * 0.2;
 
       // 3) wrap when fully off-screen (with margin)
       if (x < -wrapMargin) {
