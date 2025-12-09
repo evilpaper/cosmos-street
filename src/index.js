@@ -100,12 +100,12 @@ function createStar(options = {}) {
      * No need for the this keyword.
      */
 
-    update() {
+    update(playerSpeed) {
       // 1) advance animation tick
       animationTick = (animationTick + 1) % ticksPerFrame;
 
       // 2) move left
-      x -= dx + p.dx * 0.2;
+      x -= dx + playerSpeed * 0.2;
 
       // 3) wrap when fully off-screen (with margin)
       if (x < -wrapMargin) {
@@ -352,7 +352,7 @@ function update() {
   }
 
   for (const star of stars) {
-    star.update();
+    star.update(p.dx);
   }
 
   // character.update();
