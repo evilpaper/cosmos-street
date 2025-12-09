@@ -73,7 +73,7 @@ function createStar(options = {}) {
   const wrapMargin = 10; // allowed off-screen before wrap
   const resetX = SCREEN_WIDTH + 32; // where the star re-enters
   const minSpeed = 0.05;
-  const maxSpeed = 0.4;
+  const maxSpeed = 0.1;
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
 
@@ -105,7 +105,7 @@ function createStar(options = {}) {
       animationTick = (animationTick + 1) % ticksPerFrame;
 
       // 2) move left
-      x -= speed;
+      x -= speed + p.dx * 0.1;
 
       // 3) wrap when fully off-screen (with margin)
       if (x < -wrapMargin) {
@@ -277,10 +277,10 @@ function createTitle() {
  * @param {*} a
  * @param {*} b
  * @returns true if collision has happened, false otherwise. Need to think about this.
- * 
+ *
  * This is AABB (Axis-Aligned Bounding Box) collision detection with Minimum Translation Vector (MTV) resolution.
-Detection: compares the distance between centers to the combined half-widths and half-heights to detect overlap.
-Resolution: computes overlap on both axes and resolves along the axis with the smallest overlap (MTV).
+ * Detection: compares the distance between centers to the combined half-widths and half-heights to detect overlap.
+ * Resolution: computes overlap on both axes and resolves along the axis with the smallest overlap (MTV).
  */
 
 function checkCollision(a, b) {
