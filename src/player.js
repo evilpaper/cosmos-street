@@ -28,6 +28,7 @@ class Player {
 
   update(collidables) {
     if (p.state === "skating") {
+      p.ticksToNextFrame = 16;
       p.dx = 1;
 
       if (input.left) {
@@ -38,6 +39,7 @@ class Player {
         p.state = p.states[1]; // skating -> airborne
       }
       if (input.right) {
+        p.ticksToNextFrame = 8;
         p.dx = 2.0;
       }
       if (p.dy > 1) {
