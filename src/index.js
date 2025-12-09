@@ -413,16 +413,16 @@ function draw(screen) {
   if (gameState.status === "idle") {
     screen.drawImage(title.image, 64, 64, 128, 48);
 
-    print("Press left or up", center("Press left or up"), 156);
-    print("key to start", center("key to start"), 168);
+    print("Press left, right or", center("Press left, right or"), 156);
+    print("up key to start", center("up key to start"), 168);
   }
 
   if (gameState.status === "starting") {
     screen.drawImage(title.image, 64, 64, 128, 48);
 
     if (gameState.showPressPrompt) {
-      print("Press left or up", center("Press left or up"), 156);
-      print("key to start", center("key to start"), 168);
+      print("Press left, right or", center("Press left, right or"), 156);
+      print("up key to start", center("up key to start"), 168);
     }
   }
 
