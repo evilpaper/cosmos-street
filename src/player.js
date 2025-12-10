@@ -27,9 +27,6 @@ class Player {
   }
 
   update(collidables) {
-    console.log("p.state", p.state);
-    console.log("p.dx", p.dx);
-
     if (p.state === "skating") {
       p.ticksToNextFrame = 16;
       p.dx = 1.2;
@@ -38,15 +35,14 @@ class Player {
         p.state = p.states[2]; // skating -> breaking
       }
       if (input.up) {
-        p.dy = -8;
+        p.dy = -8; // Send the player up in the air
         p.state = p.states[1]; // skating -> airborne
       }
       if (input.right) {
-        p.ticksToNextFrame = 8;
-        p.dx = 1.8;
+        p.state = p.states[3]; // skating -> speeding
       }
       if (p.dy > 1) {
-        p.state = p.states[1]; // skating -> airborne
+        p.state = p.states[1]; // skating -> airborne. This happens when user fall of a platform.
       }
     }
 
@@ -56,10 +52,28 @@ class Player {
 
     if (p.state === "breaking") {
       p.dx = 0.5;
+
       if (!input.left) {
-        p.state = p.states[0];
+        p.state = p.states[0]; // Only stay in breaking state if left arrow is pressed
       }
       if (input.up) {
+        p.dy = -8;
+        p.state = p.states[1];
+      }
+    }
+
+    if (p.state === "speeding") {
+      p.ticksToNextFrame = 8; // Speed up animation
+      p.dx = 1.8; // Speed up movement
+
+      if (!input.right) {
+        p.state = p.states[0]; // -> Only stay in speeding state if right arrow is pressed
+      }
+      if (input.left) {
+        p.state = p.states[2]; // -> breaking
+      }
+      if (input.up) {
+        // -> jumping
         p.dy = -8;
         p.state = p.states[1];
       }
