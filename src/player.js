@@ -26,6 +26,11 @@ class Player {
     p.state = "skating";
   }
 
+  jump() {
+    p.dy = -8;
+    p.state = p.states[1]; // airborne
+  }
+
   update(collidables) {
     if (p.state === "skating") {
       p.ticksToNextFrame = 16;
@@ -35,8 +40,7 @@ class Player {
         p.state = p.states[2]; // skating -> breaking
       }
       if (input.up) {
-        p.dy = -8; // Send the player up in the air
-        p.state = p.states[1]; // skating -> airborne
+        p.jump();
       }
       if (input.right) {
         p.state = p.states[3]; // skating -> speeding
@@ -57,8 +61,7 @@ class Player {
         p.state = p.states[0]; // Only stay in breaking state if left arrow is pressed
       }
       if (input.up) {
-        p.dy = -8;
-        p.state = p.states[1];
+        p.jump();
       }
     }
 
@@ -73,9 +76,7 @@ class Player {
         p.state = p.states[2]; // -> breaking
       }
       if (input.up) {
-        // -> jumping
-        p.dy = -8;
-        p.state = p.states[1];
+        p.jump();
       }
     }
 
