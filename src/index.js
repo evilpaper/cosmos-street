@@ -23,43 +23,45 @@ const p = new Player();
  * This use factories, that is, functions that return objects.
  */
 
-function createCharacter() {
-  const image = new Image();
-  image.src = "./images/player-sprite-sheet.png";
+// Work in progress...see if it make sense to replace player class with this.
 
-  const frame = 0;
-  const width = 26;
-  const height = 35;
-  let x = 50;
-  let y = 50;
+// function createCharacter() {
+//   const image = new Image();
+//   image.src = "./images/player-sprite-sheet.png";
 
-  return {
-    image,
-    frame,
-    width,
-    height,
-    x,
-    y,
+//   const frame = 0;
+//   const width = 26;
+//   const height = 35;
+//   let x = 50;
+//   let y = 50;
 
-    update() {
-      x = x + 1;
-    },
+//   return {
+//     image,
+//     frame,
+//     width,
+//     height,
+//     x,
+//     y,
 
-    draw(screen) {
-      screen.drawImage(
-        image,
-        frame * width,
-        0,
-        width,
-        height,
-        x,
-        y,
-        width,
-        height
-      );
-    },
-  };
-}
+//     update() {
+//       x = x + 1;
+//     },
+
+//     draw(screen) {
+//       screen.drawImage(
+//         image,
+//         frame * width,
+//         0,
+//         width,
+//         height,
+//         x,
+//         y,
+//         width,
+//         height
+//       );
+//     },
+//   };
+// }
 
 function createStar(options = {}) {
   const { small = false } = options;
@@ -407,9 +409,6 @@ function draw(screen) {
 
   // Draw the stars
   stars.forEach((s) => s.draw(screen));
-
-  // Draw the character
-  // character.draw(screen);
 
   if (gameState.status === "idle") {
     screen.drawImage(title.image, 64, 64, 128, 48);

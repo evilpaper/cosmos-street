@@ -31,6 +31,12 @@ class Player {
     p.state = p.states[1]; // airborne
   }
 
+  speedUp() {
+    p.dx = 2;
+    p.state = p.states[3];
+    p.ticksToNextFrame = 8;
+  }
+
   update(collidables) {
     if (p.state === "skating") {
       p.ticksToNextFrame = 16;
@@ -43,7 +49,7 @@ class Player {
         p.jump();
       }
       if (input.right) {
-        p.state = p.states[3]; // skating -> speeding
+        p.speedUp();
       }
       if (p.dy > 1) {
         p.state = p.states[1]; // skating -> airborne. This happens when user fall of a platform.
@@ -66,9 +72,6 @@ class Player {
     }
 
     if (p.state === "speeding") {
-      p.ticksToNextFrame = 8; // Speed up animation
-      p.dx = 1.8; // Speed up movement
-
       if (!input.right) {
         p.state = p.states[0]; // -> Only stay in speeding state if right arrow is pressed
       }
