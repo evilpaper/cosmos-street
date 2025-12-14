@@ -86,8 +86,13 @@ function getCharPosition(char) {
  * Print a string to the screen with improved space handling
  */
 function print(str, x = 0, y = 0) {
+  const finalX = x === "center" ? center(str) : x;
+  const finalY = y === "center" ? center(str) : y;
+
   const allLowerCaseString = str.toLowerCase();
-  let currentX = x;
+
+  let currentX = finalX;
+  let currentY = finalY;
 
   for (let i = 0; i < allLowerCaseString.length; i++) {
     const char = allLowerCaseString[i];
@@ -113,7 +118,7 @@ function print(str, x = 0, y = 0) {
       FONT_WIDTH,
       FONT_HEIGHT,
       currentX,
-      y,
+      currentY,
       FONT_WIDTH,
       FONT_HEIGHT
     );
