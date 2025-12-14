@@ -40,8 +40,8 @@ That's it!
 - [ ] Score
 - [ ] Session high score
 - [x] Speed up
-- [ ] Use a separate animation for speed up state
-- [ ] Scroll stars according to player speed
+- [x] Use a separate animation for speed up state
+- [x] Scroll stars according to player speed
 - [ ] Implement better collision
 - [ ] Enemies (ufo's)
 - [ ] Power ups (apples, bananas etc.) Give air jump.
@@ -49,10 +49,6 @@ That's it!
 - [ ] How to play - mobile
 
 ## Known Issues
-
-A list of things not working right now:
-
-- [ ] Player sometimes move forward even though she always should stay in place. Will be fixed with a better collision detection.
 
 ## Running Locally
 
