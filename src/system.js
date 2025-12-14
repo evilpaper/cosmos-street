@@ -86,28 +86,28 @@ function getCharPosition(char) {
  * Print a string to the screen with improved space handling
  */
 function print(str, x = 0, y = 0) {
-  const finalX = x === "center" ? center(str) : x;
-  const finalY = y === "center" ? center(str) : y;
+  const startX = x === "center" ? center(str) : x;
+  const startY = y === "center" ? center(str) : y;
 
   const allLowerCaseString = str.toLowerCase();
 
-  let currentX = finalX;
-  let currentY = finalY;
+  let cursorX = startX;
+  let cursorY = startY;
 
   for (let i = 0; i < allLowerCaseString.length; i++) {
     const char = allLowerCaseString[i];
 
     // Handle spaces properly - advance position but don't draw
     if (char === " ") {
-      currentX += FONT_WIDTH;
+      cursorX += FONT_WIDTH;
       continue;
     }
 
     const charPos = getCharPosition(char);
 
+    // Skip unknown characters but still advance position
     if (!charPos) {
-      // Skip unknown characters but still advance position
-      currentX += FONT_WIDTH;
+      cursorX += FONT_WIDTH;
       continue;
     }
 
@@ -117,13 +117,13 @@ function print(str, x = 0, y = 0) {
       charPos.y,
       FONT_WIDTH,
       FONT_HEIGHT,
-      currentX,
-      currentY,
+      cursorX,
+      cursorY,
       FONT_WIDTH,
       FONT_HEIGHT
     );
 
-    currentX += FONT_WIDTH;
+    cursorX += FONT_WIDTH;
   }
 }
 
