@@ -13,6 +13,10 @@ Cosmos Street is an old-school auto-runner, heavily inspired by the skateboard s
 
 The game runs right in your browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy. Just simple, direct, classic game development.
 
+The game uses a limited palette of four colors, inspired by the original Game Boy.
+The game use a CRT effect created with CSS.
+The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
+
 ## How to play
 
 Jump = Arrow Up
