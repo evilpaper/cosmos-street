@@ -12,6 +12,7 @@ let stars;
 let platforms;
 let title;
 let gameState;
+let time;
 
 const p = new Player();
 
@@ -360,6 +361,7 @@ function update() {
   // character.update();
 
   if (gameState.status === "playing") {
+    time += 1;
     p.update(platforms.tiles);
 
     platforms.update();
@@ -372,6 +374,7 @@ function update() {
   }
 
   if (gameState.status === "idle") {
+    time = 0;
     if (input.left || input.right || input.up) {
       // Reset the input flags to prevent any button clicked in the idle state
       // too "bleed" into the playing state. Without this, the player would start
@@ -428,5 +431,6 @@ function draw(screen) {
   if (gameState.status === "playing") {
     platforms.draw(screen);
     p.draw(screen);
+    print(`Time:${Math.floor(time / 60)}`, "center", 36);
   }
 }
