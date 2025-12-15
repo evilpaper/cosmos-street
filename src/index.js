@@ -174,7 +174,6 @@ function createTile(options = {}) {
     height,
 
     update() {
-      console.log("update tile, p.dx", p.dx);
       this.x = this.x - p.dx;
     },
 
