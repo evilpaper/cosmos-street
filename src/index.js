@@ -12,6 +12,14 @@ let stars;
 let platforms;
 let title;
 let gameState;
+/**
+ * Ideas in time.
+ * Time is a global variable that is used to track the time elapsed since the game started.
+ * Time is used to track the time elapsed since the game started.
+ * Time starts when the game state is set to "playing".
+ * Time resets when the game state is set to "idle".
+ * Time is used to animate the title sliding out of the screen.
+ */
 let time;
 
 const p = new Player();
@@ -360,6 +368,10 @@ function update() {
 
   // character.update();
 
+  if (gameState.status === "starting") {
+    time += 1;
+  }
+
   if (gameState.status === "playing") {
     time += 1;
     p.update(platforms.tiles);
@@ -420,7 +432,7 @@ function draw(screen) {
   }
 
   if (gameState.status === "starting") {
-    screen.drawImage(title.image, 64, 64, 128, 48);
+    screen.drawImage(title.image, 64, 64 - time, 128, 48);
 
     if (gameState.showPressPrompt) {
       print("Press ← or → or ↑", "center", 156);
