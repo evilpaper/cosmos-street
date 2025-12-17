@@ -366,12 +366,6 @@ function update() {
     star.update(p.dx);
   }
 
-  // character.update();
-
-  if (gameState.status === "starting") {
-    time += 1;
-  }
-
   if (gameState.status === "playing") {
     time += 1;
     p.update(platforms.tiles);
@@ -394,25 +388,9 @@ function update() {
       input.left = false;
       input.right = false;
       input.up = false;
-      gameState.status = "starting";
+      gameState.status = "playing";
       gameState.startFrames = 40;
       gameState.blinkFrames = 0;
-    }
-  }
-
-  if (gameState.status === "starting") {
-    // Delay the transition into the playing state for a fixed number of frames.
-    gameState.startFrames -= 1;
-    gameState.blinkFrames += 1;
-
-    if (gameState.blinkFrames >= 4) {
-      gameState.showPressPrompt = !gameState.showPressPrompt;
-      gameState.blinkFrames = 0;
-    }
-
-    if (gameState.startFrames <= 0) {
-      gameState.status = "playing";
-      gameState.showPressPrompt = false;
     }
   }
 }
@@ -431,19 +409,9 @@ function draw(screen) {
     print("arrow key to start", "center", 168);
   }
 
-  if (gameState.status === "starting") {
-    // Slide out the title as time progresses.
-    screen.drawImage(title.image, 64, 64 - time, 128, 48);
-
-    if (gameState.showPressPrompt) {
-      print("Press ← or → or ↑", "center", 156);
-      print("arrow key to start", "center", 168);
-    }
-  }
-
   if (gameState.status === "playing") {
     // Continue sliding out as time progresses.
-    if (time < 2000) {
+    if (time < 80) {
       screen.drawImage(title.image, 64, 64 - time, 128, 48);
     }
     platforms.draw(screen);
