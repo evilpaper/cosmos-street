@@ -432,6 +432,7 @@ function draw(screen) {
   }
 
   if (gameState.status === "starting") {
+    // Slide out the title as time progresses.
     screen.drawImage(title.image, 64, 64 - time, 128, 48);
 
     if (gameState.showPressPrompt) {
@@ -441,6 +442,10 @@ function draw(screen) {
   }
 
   if (gameState.status === "playing") {
+    // Continue sliding out as time progresses.
+    if (time < 2000) {
+      screen.drawImage(title.image, 64, 64 - time, 128, 48);
+    }
     platforms.draw(screen);
     p.draw(screen);
     print(`Time:${Math.floor(time / 60)}`, "center", 36);
