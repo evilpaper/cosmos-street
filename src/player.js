@@ -22,7 +22,7 @@ class Player {
     p.x = 50;
     p.y = 0;
     p.dy = 0;
-    p.dx = 0.6;
+    p.dx = 1.2;
     p.state = "skating";
   }
 
@@ -37,7 +37,11 @@ class Player {
     p.ticksToNextFrame = 8;
   }
 
-  update(collidables) {
+  update(collidables, time) {
+    if (time < 160) {
+      return;
+    }
+
     if (p.state === "skating") {
       p.ticksToNextFrame = 16;
       p.dx = 1.2;

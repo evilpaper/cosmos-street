@@ -219,7 +219,7 @@ function createPlatforms(amount) {
   for (let i = 0; i < amount; i++) {
     tiles.push(
       createTile({
-        x: 8 + i * 16,
+        x: 256 + i * 16,
         y: 160,
       })
     );
@@ -366,13 +366,10 @@ function update() {
 
   if (gameState.status === "playing") {
     time += 1;
-    p.update(platforms.tiles);
 
-    if (
-      (time > 8 && time < 16) ||
-      (time > 24 && time < 36) ||
-      (time > 48 && time < 56)
-    ) {
+    p.update(platforms.tiles, time);
+
+    if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
       showPressPrompt = true;
     } else {
       showPressPrompt = false;
@@ -417,8 +414,8 @@ function draw(screen) {
   }
 
   if (gameState.status === "playing") {
+    platforms.draw(screen);
     if (time > 80) {
-      platforms.draw(screen);
       p.draw(screen);
     }
 
@@ -426,6 +423,7 @@ function draw(screen) {
     if (time < 80) {
       screen.drawImage(title.image, 64, 64 - time, 128, 48);
     }
+
     if (showPressPrompt) {
       print("Press ← or → or ↑", "center", 156);
       print("arrow key to start", "center", 168);
