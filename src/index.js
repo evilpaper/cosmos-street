@@ -417,6 +417,11 @@ function draw(screen) {
   }
 
   if (gameState.status === "playing") {
+    if (time > 80) {
+      platforms.draw(screen);
+      p.draw(screen);
+    }
+
     // Continue sliding out as time progresses.
     if (time < 80) {
       screen.drawImage(title.image, 64, 64 - time, 128, 48);
@@ -425,8 +430,9 @@ function draw(screen) {
       print("Press ← or → or ↑", "center", 156);
       print("arrow key to start", "center", 168);
     }
-    platforms.draw(screen);
-    p.draw(screen);
-    print(`Time:${Math.floor(time / 60)}`, "center", 36);
+
+    if (time > 80) {
+      print(`Time:${Math.floor(time / 60)}`, "center", 36);
+    }
   }
 }
