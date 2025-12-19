@@ -350,8 +350,6 @@ function init() {
   gameState = {
     status: "idle",
     paused: false,
-    startFrames: 0,
-    blinkFrames: 0,
     showPressPrompt: true,
   };
   p.reset();
@@ -370,6 +368,16 @@ function update() {
     time += 1;
     p.update(platforms.tiles);
 
+    if (
+      (time > 8 && time < 16) ||
+      (time > 24 && time < 36) ||
+      (time > 48 && time < 56)
+    ) {
+      showPressPrompt = true;
+    } else {
+      showPressPrompt = false;
+    }
+
     platforms.update();
 
     if (p.y > 500) {
@@ -381,6 +389,7 @@ function update() {
 
   if (gameState.status === "idle") {
     time = 0;
+
     if (input.left || input.right || input.up) {
       // Reset the input flags to prevent any button clicked in the idle state
       // too "bleed" into the playing state. Without this, the player would start
@@ -389,8 +398,6 @@ function update() {
       input.right = false;
       input.up = false;
       gameState.status = "playing";
-      gameState.startFrames = 40;
-      gameState.blinkFrames = 0;
     }
   }
 }
@@ -413,6 +420,10 @@ function draw(screen) {
     // Continue sliding out as time progresses.
     if (time < 80) {
       screen.drawImage(title.image, 64, 64 - time, 128, 48);
+    }
+    if (showPressPrompt) {
+      print("Press ← or → or ↑", "center", 156);
+      print("arrow key to start", "center", 168);
     }
     platforms.draw(screen);
     p.draw(screen);
