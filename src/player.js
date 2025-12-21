@@ -38,7 +38,8 @@ class Player {
   }
 
   update(collidables, time) {
-    if (time < 160) {
+    // Just a short delay before we introduce the player.
+    if (time < 20) {
       return;
     }
 

@@ -219,7 +219,7 @@ function createPlatforms(amount) {
   for (let i = 0; i < amount; i++) {
     tiles.push(
       createTile({
-        x: 256 + i * 16,
+        x: 0 + i * 16,
         y: 160,
       })
     );
@@ -400,24 +400,21 @@ function update() {
 }
 
 function draw(screen) {
-  // Clear the screen
   screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  // Draw the stars
   stars.forEach((s) => s.draw(screen));
+
+  platforms.draw(screen);
 
   if (gameState.status === "idle") {
     screen.drawImage(title.image, 64, 64, 128, 48);
 
-    print("Press ← or → or ↑", "center", 156);
-    print("arrow key to start", "center", 168);
+    print("Press ← or → or ↑", "center", 126);
+    print("arrow key to start", "center", 138);
   }
 
   if (gameState.status === "playing") {
-    platforms.draw(screen);
-    if (time > 80) {
-      p.draw(screen);
-    }
+    p.draw(screen);
 
     // Continue sliding out as time progresses.
     if (time < 80) {
@@ -425,8 +422,8 @@ function draw(screen) {
     }
 
     if (showPressPrompt) {
-      print("Press ← or → or ↑", "center", 156);
-      print("arrow key to start", "center", 168);
+      print("Press ← or → or ↑", "center", 126);
+      print("arrow key to start", "center", 138);
     }
 
     if (time > 80) {
