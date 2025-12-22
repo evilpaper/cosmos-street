@@ -9,6 +9,7 @@ let platforms;
 let title;
 let paused;
 let gameState;
+let startPromptState;
 /**
  * Ideas in time.
  * Time is a global variable that is used to track the time elapsed since the game started.
@@ -279,6 +280,24 @@ function createTitle() {
   };
 }
 
+function createBlinkState(blinkInterval = 6) {
+  let frame = 0;
+
+  return {
+    update() {
+      frame += 1;
+    },
+
+    get visible() {
+      return (frame > 6 && frame < 12) || (frame > 18 && frame < 24);
+    },
+
+    reset() {
+      frame = 0;
+    },
+  };
+}
+
 /**
  * Checks for collision between two objects.
  *
@@ -346,9 +365,10 @@ function init() {
   paused = false;
   gameState = {
     status: "idle",
-    showPressPrompt: true,
   };
+  startPromptState = createBlinkState();
   p.reset();
+  startPromptState.reset();
 }
 
 function update() {
@@ -362,14 +382,9 @@ function update() {
 
   if (gameState.status === "playing") {
     time += 1;
+    startPromptState.update();
 
     p.update(platforms.tiles, time);
-
-    if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
-      showPressPrompt = true;
-    } else {
-      showPressPrompt = false;
-    }
 
     platforms.update();
 
@@ -382,6 +397,7 @@ function update() {
 
   if (gameState.status === "idle") {
     time = 0;
+    startPromptState.reset();
 
     if (input.left || input.right || input.up) {
       // Reset the input flags to prevent any button clicked in the idle state
@@ -417,7 +433,7 @@ function draw(screen) {
       screen.drawImage(title.image, 64, 64 - time, 128, 48);
     }
 
-    if (showPressPrompt) {
+    if (startPromptState.visible) {
       print("Press ← or → or ↑", "center", 126);
       print("arrow key to start", "center", 138);
     }
