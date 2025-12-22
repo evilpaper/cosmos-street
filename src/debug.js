@@ -8,10 +8,10 @@
 
 document.addEventListener("keydown", (event) => {
   if (event.key === " ") {
-    if (gameState.paused) {
-      gameState.paused = false;
+    if (paused) {
+      paused = false;
     } else {
-      gameState.paused = true;
+      paused = true;
     }
   }
 });

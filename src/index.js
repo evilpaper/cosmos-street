@@ -1,9 +1,5 @@
 /**
  * Define global variables
- *
- * The game state object is used to control the current state of the game.
- * The paused flag simple cause an early return in the update function.
- * Effectively freezing the game.
  */
 
 let gravity;
@@ -11,6 +7,7 @@ let friction;
 let stars;
 let platforms;
 let title;
+let paused;
 let gameState;
 /**
  * Ideas in time.
@@ -339,24 +336,23 @@ function init() {
    * Initialize global variables
    *
    * The game state object is used to control the current state of the game.
-   * The paused flag simple cause an early return in the update function.
-   * Effectively freezing the game.
+   * The paused flag simple cause an early return in the update function. Effectively freezing the game.
    */
   gravity = 0.1;
   friction = 0.4;
   stars = createStars(30);
   platforms = createPlatforms(30);
   title = createTitle();
+  paused = false;
   gameState = {
     status: "idle",
-    paused: false,
     showPressPrompt: true,
   };
   p.reset();
 }
 
 function update() {
-  if (gameState.paused) {
+  if (paused) {
     return;
   }
 
