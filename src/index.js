@@ -1,5 +1,5 @@
 /**
- * Define global variables
+ * Global variables
  */
 
 let gravity;
@@ -12,53 +12,9 @@ let time;
 
 const p = new Player();
 
-// const character = createCharacter();
-
 /**
- * Creates objects used in the game.
- *
- * This use factories, that is, functions that return objects.
+ * Factory functions for creating objects used in the game.
  */
-
-// Work in progress...see if it make sense to replace player class with this.
-
-// function createCharacter() {
-//   const image = new Image();
-//   image.src = "./images/player-sprite-sheet.png";
-
-//   const frame = 0;
-//   const width = 26;
-//   const height = 35;
-//   let x = 50;
-//   let y = 50;
-
-//   return {
-//     image,
-//     frame,
-//     width,
-//     height,
-//     x,
-//     y,
-
-//     update() {
-//       x = x + 1;
-//     },
-
-//     draw(screen) {
-//       screen.drawImage(
-//         image,
-//         frame * width,
-//         0,
-//         width,
-//         height,
-//         x,
-//         y,
-//         width,
-//         height
-//       );
-//     },
-//   };
-// }
 
 function createStar(options = {}) {
   const { small = false } = options;
@@ -189,18 +145,6 @@ function createTile(options = {}) {
   };
 }
 
-/**
- * Creates platforms object.
- *
- * The platforms object is used to store the tiles that make up the platforms.
- * The tiles are created using the createTile function.
- * The tiles are updated using the update function.
- * The tiles are drawn using the draw function.
- *
- * @param {*} amount
- * @returns Platforms object
- */
-
 function createPlatforms(amount) {
   let tiles = [];
 
@@ -314,7 +258,7 @@ function checkCollision(a, b) {
 }
 
 /**
- * Game functions.
+ * Game functions
  *
  * init is called once when the game starts.
  * update and draw are called once per frame.

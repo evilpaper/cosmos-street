@@ -1,5 +1,5 @@
 /**
- * Tools to help with debugging.
+ * This file contains tools to help with debugging.
  */
 
 /**
