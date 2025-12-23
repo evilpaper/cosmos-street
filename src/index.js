@@ -8,16 +8,6 @@ let stars;
 let platforms;
 let title;
 let paused;
-let gameState;
-let startPrompt;
-/**
- * Ideas in time.
- * Time is a global variable that is used to track the time elapsed since the game started.
- * Time is used to track the time elapsed since the game started.
- * Time starts when the game state is set to "playing".
- * Time resets when the game state is set to "idle".
- * Time is used to animate the title sliding out of the screen.
- */
 let time;
 
 const p = new Player();
@@ -280,24 +270,6 @@ function createTitle() {
   };
 }
 
-function createBlinkState() {
-  let count = 0;
-
-  return {
-    update() {
-      count += 1;
-    },
-
-    reset() {
-      count = 0;
-    },
-
-    get visible() {
-      return (count > 6 && count < 12) || (count > 18 && count < 24);
-    },
-  };
-}
-
 /**
  * Checks for collision between two objects.
  *
@@ -363,12 +335,8 @@ function init() {
   platforms = createPlatforms(30);
   title = createTitle();
   paused = false;
-  gameState = {
-    status: "idle",
-  };
-  startPrompt = createBlinkState();
+  time = 0;
   p.reset();
-  startPrompt.reset();
 }
 
 function update() {
@@ -380,9 +348,23 @@ function update() {
     star.update(p.dx);
   }
 
-  if (gameState.status === "playing") {
+  if (time === 0) {
+    time = 0;
+
+    if (input.left || input.right || input.up) {
+      // Reset the input flags to prevent any button clicked in the idle state
+      // too "bleed" into the playing state. Without this, the player would start
+      // moving cause the button state is still set to true.
+      input.left = false;
+      input.right = false;
+      input.up = false;
+      time += 1;
+    }
+  }
+
+  if (time > 0) {
     time += 1;
-    startPrompt.update();
+    // startPrompt.update();
 
     p.update(platforms.tiles, time);
 
@@ -394,21 +376,6 @@ function update() {
       p.reset();
     }
   }
-
-  if (gameState.status === "idle") {
-    time = 0;
-    startPrompt.reset();
-
-    if (input.left || input.right || input.up) {
-      // Reset the input flags to prevent any button clicked in the idle state
-      // too "bleed" into the playing state. Without this, the player would start
-      // moving cause the button state is still set to true.
-      input.left = false;
-      input.right = false;
-      input.up = false;
-      gameState.status = "playing";
-    }
-  }
 }
 
 function draw(screen) {
@@ -418,14 +385,14 @@ function draw(screen) {
 
   platforms.draw(screen);
 
-  if (gameState.status === "idle") {
+  if (time === 0) {
     screen.drawImage(title.image, 64, 64, 128, 48);
 
     print("Press ← or → or ↑", "center", 126);
     print("arrow key to start", "center", 138);
   }
 
-  if (gameState.status === "playing") {
+  if (time > 0) {
     p.draw(screen);
 
     // Continue sliding out as time progresses.
@@ -433,7 +400,7 @@ function draw(screen) {
       screen.drawImage(title.image, 64, 64 - time, 128, 48);
     }
 
-    if (startPrompt.visible) {
+    if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
       print("Press ← or → or ↑", "center", 126);
       print("arrow key to start", "center", 138);
     }
