@@ -329,13 +329,19 @@ function draw(screen) {
 
   platforms.draw(screen);
 
+  /**
+   * Title State. Game is idle and waiting for the player to start.
+   */
   if (time === 0) {
     screen.drawImage(title.image, 64, 64, 128, 48);
 
-    print("Press ← or → or ↑", "center", 126);
-    print("arrow key to start", "center", 138);
+    print("Press ← or → or ↑", "center", 186);
+    print("arrow key to start", "center", 198);
   }
 
+  /**
+   * Playing State. Game is in progress.
+   */
   if (time > 0) {
     p.draw(screen);
 
@@ -345,8 +351,8 @@ function draw(screen) {
     }
 
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
-      print("Press ← or → or ↑", "center", 126);
-      print("arrow key to start", "center", 138);
+      print("Press ← or → or ↑", "center", 186);
+      print("arrow key to start", "center", 198);
     }
 
     if (time > 80) {
