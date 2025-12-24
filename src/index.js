@@ -212,6 +212,13 @@ function createTitle() {
     name: "title",
     image: image,
     y: 64,
+
+    update() {
+      this.y = lerp(this.y, -32, 0.06);
+    },
+    draw(screen) {
+      screen.drawImage(this.image, 64, this.y, 128, 48);
+    },
   };
 }
 
@@ -311,7 +318,7 @@ function update() {
     time += 1;
     // startPrompt.update();
 
-    title.y = lerp(title.y, -32, 0.06);
+    title.update();
 
     player.update(platforms.tiles, time);
 
@@ -336,7 +343,7 @@ function draw(screen) {
    * Title State. Game is idle and waiting for the player to start.
    */
   if (time === 0) {
-    screen.drawImage(title.image, 64, 64, 128, 48);
+    title.draw(screen);
 
     print("Press ← or → or ↑", "center", 186);
     print("arrow key to start", "center", 198);
@@ -348,10 +355,7 @@ function draw(screen) {
   if (time > 0) {
     player.draw(screen);
 
-    // Continue sliding out as time progresses.
-    // if (time < 80) {
-    screen.drawImage(title.image, 64, title.y, 128, 48);
-    // }
+    title.draw(screen);
 
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
       print("Press ← or → or ↑", "center", 186);
