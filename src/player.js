@@ -1,41 +1,44 @@
-class Player {
-  constructor() {
-    this.image = new Image();
-    this.image.src = "./images/player-sprite-sheet.png";
-    this.ticksToNextFrame = 16;
-    this.tick = 0;
-    this.frame = 0;
-    this.width = 26;
-    this.height = 36;
-    this.x = 50;
-    this.y = 125;
-    this.dx = 0.6;
-    this.dy = 0;
-    this.states = ["skating", "airborne", "breaking", "speeding"];
-    this.state = this.states[0];
-    this.p = this;
-  }
+const player = {
+  // Constants
+  image: (() => {
+    const img = new Image();
+    img.src = "./images/player-sprite-sheet.png";
+    return img;
+  })(),
+  states: ["skating", "airborne", "breaking", "speeding"],
+  width: 26,
+  height: 36,
+
+  // Mutables
+  ticksToNextFrame: 16,
+  tick: 0,
+  frame: 0,
+  x: 50,
+  y: 125,
+  dx: 0.6,
+  dy: 0,
+  state: "skating", // Initial state is "skating" (this.states[0])
 
   reset() {
-    p.tick = 0;
-    p.frame = 0;
-    p.x = 50;
-    p.y = 0;
-    p.dy = 0;
-    p.dx = 1.2;
-    p.state = "skating";
-  }
+    this.tick = 0;
+    this.frame = 0;
+    this.x = 50;
+    this.y = 0;
+    this.dy = 0;
+    this.dx = 1.2;
+    this.state = this.states[0];
+  },
 
   jump() {
-    p.dy = -8;
-    p.state = p.states[1]; // airborne
-  }
+    this.dy = -8;
+    this.state = this.states[1]; // airborne
+  },
 
   speedUp() {
-    p.dx = 2;
-    p.state = p.states[3];
-    p.ticksToNextFrame = 8;
-  }
+    this.dx = 2;
+    this.state = this.states[3];
+    this.ticksToNextFrame = 8;
+  },
 
   update(collidables, time) {
     // Just a short delay before we introduce the player.
@@ -43,57 +46,57 @@ class Player {
       return;
     }
 
-    if (p.state === "skating") {
-      p.ticksToNextFrame = 16;
-      p.dx = 1.2;
+    if (this.state === "skating") {
+      this.ticksToNextFrame = 16;
+      this.dx = 1.2;
 
       if (input.left) {
-        p.state = p.states[2]; // skating -> breaking
+        this.state = this.states[2]; // skating -> breaking
       }
       if (input.up) {
-        p.jump();
+        this.jump();
       }
       if (input.right) {
-        p.speedUp();
+        this.speedUp();
       }
-      if (p.dy > 1) {
-        p.state = p.states[1]; // skating -> airborne. This happens when user fall of a platform.
+      if (this.dy > 1) {
+        this.state = this.states[1]; // skating -> airborne. This happens when user fall of a platform.
       }
     }
 
-    if (p.state === "airborne") {
+    if (this.state === "airborne") {
       // Do airborne stuff here...
     }
 
-    if (p.state === "breaking") {
-      p.dx = 0.5;
+    if (this.state === "breaking") {
+      this.dx = 0.5;
 
       if (!input.left) {
-        p.state = p.states[0]; // Only stay in breaking state if left arrow is pressed
+        this.state = this.states[0]; // Only stay in breaking state if left arrow is pressed
       }
       if (input.up) {
-        p.jump();
+        this.jump();
       }
     }
 
-    if (p.state === "speeding") {
+    if (this.state === "speeding") {
       if (!input.right) {
-        p.state = p.states[0]; // -> Only stay in speeding state if right arrow is pressed
+        this.state = this.states[0]; // -> Only stay in speeding state if right arrow is pressed
       }
       if (input.left) {
-        p.state = p.states[2]; // -> breaking
+        this.state = this.states[2]; // -> breaking
       }
       if (input.up) {
-        p.jump();
+        this.jump();
       }
     }
 
-    p.dy += gravity;
-    p.dy += friction;
+    this.dy += gravity;
+    this.dy += friction;
 
     // Make sure always an integer
-    p.y = Math.floor(p.y + p.dy);
-    p.x = Math.floor(p.x);
+    this.y = Math.floor(this.y + this.dy);
+    this.x = Math.floor(this.x);
 
     // Collision
 
@@ -101,7 +104,7 @@ class Player {
     const collisions = [];
 
     collidables.forEach((tile) => {
-      const collision = checkCollision(p, tile);
+      const collision = checkCollision(this, tile);
       if (collision.collided) {
         collisions.push(collision);
       }
@@ -113,25 +116,25 @@ class Player {
     let resolvedX = false;
 
     // First pass: resolve Y-axis collisions if falling (dy > 0)
-    if (p.dy > 0) {
+    if (this.dy > 0) {
       for (const collision of collisions) {
         if (!resolvedY && collision.overlapY > 0) {
           // Resolve Y collision (ground)
           if (collision.directionY > 0) {
-            p.y += collision.overlapY;
+            this.y += collision.overlapY;
           } else {
-            p.y -= collision.overlapY;
+            this.y -= collision.overlapY;
           }
 
-          p.dy = 0;
+          this.dy = 0;
 
           resolvedY = true;
 
           // Update state when landing
-          if (p.state === p.states[2]) {
-            p.state = p.states[2];
+          if (this.state === this.states[2]) {
+            this.state = this.states[2];
           } else {
-            p.state = p.states[0];
+            this.state = this.states[0];
           }
         }
       }
@@ -143,12 +146,12 @@ class Player {
         if (!resolvedX && collision.overlapX > 0) {
           // Resolve X collision (wall)
           if (collision.directionX > 0) {
-            p.x += collision.overlapX;
+            this.x += collision.overlapX;
           } else {
-            p.x -= collision.overlapX;
+            this.x -= collision.overlapX;
           }
 
-          p.dx = 0;
+          this.dx = 0;
 
           resolvedX = true;
         }
@@ -156,26 +159,56 @@ class Player {
     }
 
     // Animation
-    p.tick = (p.tick + 1) % p.ticksToNextFrame; // 1, 0, 1, 0 etc...
+    this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
 
-    if (p.tick === 0) {
-      p.frame = p.frame + 1;
-      if (p.frame >= 2) {
-        p.frame = 0;
+    if (this.tick === 0) {
+      this.frame = this.frame + 1;
+      if (this.frame >= 2) {
+        this.frame = 0;
       }
     }
-  }
+  },
 
   draw(screen) {
-    if (p.state === "skating" || p.state === "speeding") {
-      if (p.frame === 0) {
-        screen.drawImage(p.image, 0, 0, 26, 35, o(p.x), o(p.y), 26, 35);
+    if (this.state === "skating" || this.state === "speeding") {
+      if (this.frame === 0) {
+        screen.drawImage(
+          this.image,
+          0,
+          0,
+          26,
+          35,
+          o(this.x),
+          o(this.y),
+          26,
+          35
+        );
       } else {
-        screen.drawImage(p.image, 26, 0, 26, 35, o(p.x), o(p.y), 26, 35);
+        screen.drawImage(
+          this.image,
+          26,
+          0,
+          26,
+          35,
+          o(this.x),
+          o(this.y),
+          26,
+          35
+        );
       }
     }
-    if (p.state === "airborne" || p.state === "breaking") {
-      screen.drawImage(p.image, 52, 0, 26, 40, o(p.x), o(p.y - 3), 26, 40);
+    if (this.state === "airborne" || this.state === "breaking") {
+      screen.drawImage(
+        this.image,
+        52,
+        0,
+        26,
+        40,
+        o(this.x),
+        o(this.y - 3),
+        26,
+        40
+      );
     }
 
     /**
@@ -194,6 +227,6 @@ class Player {
      */
     // screen.lineWidth = 1;
     // screen.strokeStyle = "green";
-    // screen.strokeRect(p.x, p.y, p.width, p.height);
-  }
-}
+    // screen.strokeRect(this.x, this.y, this.width, this.height);
+  },
+};

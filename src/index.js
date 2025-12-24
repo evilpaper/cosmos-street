@@ -10,7 +10,7 @@ let title;
 let paused;
 let time;
 
-const p = new Player();
+// Note that the player is defined in the player.js file.
 
 /**
  * Factory functions for creating objects used in the game.
@@ -127,7 +127,7 @@ function createTile(options = {}) {
     height,
 
     update() {
-      this.x = this.x - p.dx;
+      this.x = this.x - player.dx;
     },
 
     draw(screen) {
@@ -280,7 +280,7 @@ function init() {
   title = createTitle();
   paused = false;
   time = 0;
-  p.reset();
+  player.reset();
 }
 
 function update() {
@@ -289,7 +289,7 @@ function update() {
   }
 
   for (const star of stars) {
-    star.update(p.dx);
+    star.update(player.dx);
   }
 
   if (time === 0) {
@@ -310,14 +310,14 @@ function update() {
     time += 1;
     // startPrompt.update();
 
-    p.update(platforms.tiles, time);
+    player.update(platforms.tiles, time);
 
     platforms.update();
 
-    if (p.y > 500) {
+    if (player.y > 500) {
       // We could call init() here but that would restart the game.
       // For now, we just reset the player to the start position.
-      p.reset();
+      player.reset();
     }
   }
 }
@@ -343,7 +343,7 @@ function draw(screen) {
    * Playing State. Game is in progress.
    */
   if (time > 0) {
-    p.draw(screen);
+    player.draw(screen);
 
     // Continue sliding out as time progresses.
     if (time < 80) {
