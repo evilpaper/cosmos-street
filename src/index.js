@@ -211,6 +211,7 @@ function createTitle() {
   return {
     name: "title",
     image: image,
+    y: 64,
   };
 }
 
@@ -310,6 +311,8 @@ function update() {
     time += 1;
     // startPrompt.update();
 
+    title.y = lerp(title.y, -32, 0.06);
+
     player.update(platforms.tiles, time);
 
     platforms.update();
@@ -346,9 +349,9 @@ function draw(screen) {
     player.draw(screen);
 
     // Continue sliding out as time progresses.
-    if (time < 80) {
-      screen.drawImage(title.image, 64, 64 - time, 128, 48);
-    }
+    // if (time < 80) {
+    screen.drawImage(title.image, 64, title.y, 128, 48);
+    // }
 
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
       print("Press ← or → or ↑", "center", 186);
@@ -359,4 +362,20 @@ function draw(screen) {
       print(`Time:${Math.floor(time / 60)}`, "center", 36);
     }
   }
+}
+
+/**
+ * Utility functions
+ */
+
+function lerp(from, to, weight) {
+  const dist = to - from;
+
+  // If we are "close enough" to the target, return the target.
+  if (Math.abs(dist) < 0.2) {
+    return to;
+  }
+
+  // Otherwise, lerp between the from and to values.
+  return from + dist * weight;
 }
