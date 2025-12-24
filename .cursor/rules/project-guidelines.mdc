@@ -15,6 +15,7 @@ alwaysApply: true
           "Avoid frameworks unless explicitly requested.",
           "Use descriptive names for variables, functions, and classes.",
           "Use Factory Functions over Classes",
+          "Use Literals for One, Factories for Many",
           "Avoid magic numbers: Name things like 6 (frames), 16 (ticks per frame), -10 (left wrap margin), 200 (reset x) and reference SCREEN_WIDTH/HEIGHT.",
           "Strive for a clear and minimal API: Prefer plain fields over getters unless you need to enforce read-only or compute values.",
           "Group config and state: Separate constants (config) from mutable state; name them clearly.",
