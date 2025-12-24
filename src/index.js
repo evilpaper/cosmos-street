@@ -6,11 +6,11 @@ let gravity;
 let friction;
 let stars;
 let platforms;
-let title;
 let paused;
 let time;
 
 // Note that the player is defined in the player.js file.
+// Note that the title is defined in the title.js file.
 
 /**
  * Factory functions for creating objects used in the game.
@@ -204,24 +204,6 @@ function createPlatforms(amount) {
   };
 }
 
-function createTitle() {
-  const image = new Image();
-  image.src = "./images/title.png";
-
-  return {
-    name: "title",
-    image: image,
-    y: 64,
-
-    update() {
-      this.y = lerp(this.y, -32, 0.06);
-    },
-    draw(screen) {
-      screen.drawImage(this.image, 64, this.y, 128, 48);
-    },
-  };
-}
-
 /**
  * Checks for collision between two objects.
  *
@@ -285,7 +267,6 @@ function init() {
   friction = 0.4;
   stars = createStars(30);
   platforms = createPlatforms(30);
-  title = createTitle();
   paused = false;
   time = 0;
   player.reset();
@@ -316,11 +297,8 @@ function update() {
 
   if (time > 0) {
     time += 1;
-    // startPrompt.update();
-
-    title.update();
-
     player.update(platforms.tiles, time);
+    title.update();
 
     platforms.update();
 
@@ -334,9 +312,7 @@ function update() {
 
 function draw(screen) {
   screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
   stars.forEach((s) => s.draw(screen));
-
   platforms.draw(screen);
 
   /**
@@ -354,7 +330,6 @@ function draw(screen) {
    */
   if (time > 0) {
     player.draw(screen);
-
     title.draw(screen);
 
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
@@ -366,20 +341,4 @@ function draw(screen) {
       print(`Time:${Math.floor(time / 60)}`, "center", 36);
     }
   }
-}
-
-/**
- * Utility functions
- */
-
-function lerp(from, to, weight) {
-  const dist = to - from;
-
-  // If we are "close enough" to the target, return the target.
-  if (Math.abs(dist) < 0.2) {
-    return to;
-  }
-
-  // Otherwise, lerp between the from and to values.
-  return from + dist * weight;
 }

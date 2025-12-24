@@ -1,5 +1,5 @@
 const player = {
-  // Constants
+  name: "player",
   image: (() => {
     const img = new Image();
     img.src = "./images/player-sprite-sheet.png";
@@ -8,8 +8,6 @@ const player = {
   states: ["skating", "airborne", "breaking", "speeding"],
   width: 26,
   height: 36,
-
-  // Mutables
   ticksToNextFrame: 16,
   tick: 0,
   frame: 0,
