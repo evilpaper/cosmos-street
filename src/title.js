@@ -8,7 +8,7 @@ const title = {
   y: 64,
 
   update() {
-    this.y = lerp(this.y, -32, 0.06);
+    this.y = lerp(this.y, -32, 0.08);
   },
 
   draw(screen) {
@@ -28,6 +28,6 @@ function lerp(from, to, weight) {
     return to;
   }
 
-  // Otherwise, lerp between the from and to values.
+  // Otherwise, move a little bit towards the target.
   return from + dist * weight;
 }

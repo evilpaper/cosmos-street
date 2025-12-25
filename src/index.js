@@ -8,18 +8,19 @@ let stars;
 let platforms;
 let paused;
 let time;
-
-// Note that the player is defined in the player.js file.
-// Note that the title is defined in the title.js file.
+// player is defined in the player.js file.
+// title is defined in the title.js file.
 
 /**
- * Factory functions for creating objects used in the game.
+ * Factories
+ *
+ * Used to create objects that appear as multiple instances (stars, platforms, etc.).
  */
 
 function createStar(options = {}) {
   const { small = false } = options;
 
-  // Constants. These are the same for all stars.
+  // Constants. Same for all stars.
   const totalFrames = 6;
   const ticksPerFrame = 30;
   const blinkProbability = 0.6;
@@ -32,7 +33,7 @@ function createStar(options = {}) {
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
 
-  // Constants. These are different for each star.
+  // Constant for the star instance but but different for each star.
   const blinking = small ? false : Math.random() < blinkProbability;
   const dx = small
     ? Math.random() * (0.1 - 0.02) + 0.02
@@ -158,7 +159,7 @@ function createPlatforms(amount) {
   }
 
   return {
-    tiles: tiles, // Direct property
+    tiles: tiles, // Note, a direct property.
 
     update() {
       // Update all tiles
@@ -254,15 +255,18 @@ function checkCollision(a, b) {
  * update and draw are called once per frame.
  *
  * Default frame rate is 60 times per second.
+ *
+ * The time variable is used to control the state of the game.
+ * 0: idle state
+ * > 0: playing state
+ *
+ * The paused flag simple cause an early return in the update function. Effectively freezing the game.
  */
 
+/**
+ * Initialize global variables, reset global objects
+ */
 function init() {
-  /**
-   * Initialize global variables
-   *
-   * The game state object is used to control the current state of the game.
-   * The paused flag simple cause an early return in the update function. Effectively freezing the game.
-   */
   gravity = 0.1;
   friction = 0.4;
   stars = createStars(30);
@@ -281,6 +285,9 @@ function update() {
     star.update(player.dx);
   }
 
+  /*
+   * Title State. Game is idle and waiting for the player to start.
+   */
   if (time === 0) {
     time = 0;
 
@@ -295,6 +302,9 @@ function update() {
     }
   }
 
+  /**
+   * Playing State. Game is in progress.
+   */
   if (time > 0) {
     time += 1;
     player.update(platforms.tiles, time);
@@ -315,7 +325,7 @@ function draw(screen) {
   stars.forEach((s) => s.draw(screen));
   platforms.draw(screen);
 
-  /**
+  /*
    * Title State. Game is idle and waiting for the player to start.
    */
   if (time === 0) {
