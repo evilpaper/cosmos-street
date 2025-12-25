@@ -2,14 +2,24 @@
  * Global variables
  */
 
-let gravity;
-let friction;
+/**
+ * Constants
+ */
+const gravity = 0.1;
+const friction = 0.4;
+
+/**
+ * Mutable
+ */
+let paused = false;
+let time = 0;
 let stars;
 let platforms;
-let paused;
-let time;
-// player is defined in the player.js file.
-// title is defined in the title.js file.
+
+/**
+ *  player is defined in player.js file.
+ *  title is defined in title.js file.
+ */
 
 /**
  * Factories
@@ -162,7 +172,6 @@ function createPlatforms(amount) {
     tiles: tiles, // Note, a direct property.
 
     update() {
-      // Update all tiles
       tiles.forEach((tile) => {
         tile.update();
       });
@@ -249,6 +258,18 @@ function checkCollision(a, b) {
 }
 
 /**
+ * Helper functions
+ */
+
+function isIdle() {
+  return time === 0;
+}
+
+function isPlaying() {
+  return time > 0;
+}
+
+/**
  * Game functions
  *
  * init is called once when the game starts.
@@ -257,8 +278,6 @@ function checkCollision(a, b) {
  * Default frame rate is 60 times per second.
  *
  * The time variable is used to control the state of the game.
- * 0: idle state
- * > 0: playing state
  *
  * The paused flag simple cause an early return in the update function. Effectively freezing the game.
  */
@@ -267,12 +286,8 @@ function checkCollision(a, b) {
  * Initialize global variables, reset global objects
  */
 function init() {
-  gravity = 0.1;
-  friction = 0.4;
   stars = createStars(30);
   platforms = createPlatforms(30);
-  paused = false;
-  time = 0;
   player.reset();
 }
 
@@ -285,10 +300,7 @@ function update() {
     star.update(player.dx);
   }
 
-  /*
-   * Title State. Game is idle and waiting for the player to start.
-   */
-  if (time === 0) {
+  if (isIdle()) {
     time = 0;
 
     if (input.left || input.right || input.up) {
@@ -302,10 +314,7 @@ function update() {
     }
   }
 
-  /**
-   * Playing State. Game is in progress.
-   */
-  if (time > 0) {
+  if (isPlaying()) {
     time += 1;
     player.update(platforms.tiles, time);
     title.update();
@@ -325,20 +334,14 @@ function draw(screen) {
   stars.forEach((s) => s.draw(screen));
   platforms.draw(screen);
 
-  /*
-   * Title State. Game is idle and waiting for the player to start.
-   */
-  if (time === 0) {
+  if (isIdle()) {
     title.draw(screen);
 
     print("Press ← or → or ↑", "center", 186);
     print("arrow key to start", "center", 198);
   }
 
-  /**
-   * Playing State. Game is in progress.
-   */
-  if (time > 0) {
+  if (isPlaying()) {
     player.draw(screen);
     title.draw(screen);
 

@@ -36,23 +36,27 @@ That's it!
 ## Roadmap
 
 - [x] Start screen
+- [ ] Variation (platform distribution)
+- [ ] Progression (harder and harder)
+- [ ] Power ups (air jump). Apples, bananas etc.
+- [ ] Enemies (ufo's)
+- [ ] Score
+- [ ] Session high score
 - [ ] Ending
 - [ ] Restart
 - [ ] SFX
 - [ ] Music
+- [ ] Sound controls
 - [x] Touch controls
-- [ ] Score
-- [ ] Session high score
 - [x] Speed up
 - [x] Use a separate animation for speed up state
 - [x] Scroll stars according to player speed
-- [ ] Implement better collision
-- [ ] Enemies (ufo's)
-- [ ] Power ups (apples, bananas etc.) Give air jump.
 - [ ] How to play - desktop (keyboard)
 - [ ] How to play - mobile
 
 ## Known Issues
+
+- [ ] Collision is wanky
 
 ## Running Locally
 
