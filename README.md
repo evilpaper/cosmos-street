@@ -17,6 +17,8 @@ The game uses a limited palette of four colors, inspired by the original Game Bo
 The game use a CRT effect created with CSS.
 The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
 
+Font is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
+
 ## How to play
 
 Jump = Arrow Up
