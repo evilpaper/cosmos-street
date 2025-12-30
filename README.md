@@ -56,8 +56,6 @@ That's it!
 
 ## Known Issues
 
-- [ ] Collision is wanky
-
 ## Running Locally
 
 No need to install anything. Just open index.html in your web browser of choice and game along.

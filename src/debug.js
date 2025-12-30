@@ -21,9 +21,11 @@ document.addEventListener("keydown", (event) => {
  * Remember to comment out setInterval inside the main loop before use.
  */
 
+// console.log("Debug mode enabled");
+
 // document.addEventListener("keydown", (event) => {
 //   if (event.key === "Enter") {
-//     console.log("Enter key pressed");
+//     console.log("Stepping forward one frame...");
 //     update();
 //     draw(screen);
 //   }

@@ -89,70 +89,54 @@ const player = {
       }
     }
 
+    // Store previous position BEFORE movement
+    // Used to determine collision type (landing vs wall)
+    const prevY = this.y;
+
     this.dy += gravity;
     this.dy += friction;
 
-    // Make sure always an integer
+    // Apply movement (ensure integer coordinates)
     this.y = Math.floor(this.y + this.dy);
     this.x = Math.floor(this.x);
 
-    // Collision
-
-    // Collect all collisions first
+    // Collision detection
     const collisions = [];
 
     collidables.forEach((tile) => {
       const collision = checkCollision(this, tile);
       if (collision.collided) {
-        collisions.push(collision);
+        collisions.push({ ...collision, tile });
       }
     });
 
-    // Resolve collisions: prioritize Y-axis (ground) when falling
-    // This prevents the X-axis bug when landing on platform edges
-    let resolvedY = false;
-    let resolvedX = false;
+    // Collision resolution using previous position
+    // This determines collision type based on WHERE the player came from, not overlap geometry
+    let landed = false;
 
-    // First pass: resolve Y-axis collisions if falling (dy > 0)
-    if (this.dy > 0) {
-      for (const collision of collisions) {
-        if (!resolvedY && collision.overlapY > 0) {
-          // Resolve Y collision (ground)
-          if (collision.directionY > 0) {
-            this.y += collision.overlapY;
-          } else {
-            this.y -= collision.overlapY;
-          }
+    for (const collision of collisions) {
+      const { tile } = collision;
 
-          this.dy = 0;
+      // Was the player's bottom edge above the tile's top edge BEFORE this frame?
+      // +1 tolerance for rounding/edge cases
+      const wasAboveTile = prevY + this.height <= tile.y + 1;
 
-          resolvedY = true;
+      if (wasAboveTile && this.dy >= 0) {
+        // Player came from above → landing
+        this.y = tile.y - this.height;
+        this.dy = 0;
+        landed = true;
 
-          // Update state when landing
-          if (this.state === this.states[2]) {
-            this.state = this.states[2];
-          } else {
-            this.state = this.states[0];
-          }
+        // Update state when landing
+        if (this.state === this.states[2]) {
+          this.state = this.states[2]; // Stay in breaking state
+        } else {
+          this.state = this.states[0]; // Return to skating
         }
-      }
-    }
-
-    // Second pass: resolve X-axis collisions (walls)
-    if (!resolvedY) {
-      for (const collision of collisions) {
-        if (!resolvedX && collision.overlapX > 0) {
-          // Resolve X collision (wall)
-          if (collision.directionX > 0) {
-            this.x += collision.overlapX;
-          } else {
-            this.x -= collision.overlapX;
-          }
-
-          this.dx = 0;
-
-          resolvedX = true;
-        }
+      } else if (!landed) {
+        // Player came from the side → wall collision
+        // Push player backward (to the left of the tile)
+        this.x = tile.x - this.width;
       }
     }
 
