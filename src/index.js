@@ -13,6 +13,18 @@ const SCROLL_SPEED_SKATING = 1.2;
 const SCROLL_SPEED_BREAKING = 0.5;
 const SCROLL_SPEED_SPEEDING = 2;
 
+// Difficulty stages - each stage defines platform generation parameters
+// time: frame threshold to reach this stage (60 frames = 1 second)
+// gapMin/gapMax: pixel range for gaps between platform groups
+// tilesMin/tilesMax: number of tiles per platform group
+const DIFFICULTY_STAGES = [
+  { time: 0, gapMin: 32, gapMax: 48, tilesMin: 4, tilesMax: 6 }, // Easy
+  { time: 1200, gapMin: 40, gapMax: 64, tilesMin: 3, tilesMax: 5 }, // Medium
+  { time: 2400, gapMin: 48, gapMax: 80, tilesMin: 2, tilesMax: 4 }, // Hard
+  { time: 3600, gapMin: 56, gapMax: 96, tilesMin: 2, tilesMax: 3 }, // Harder
+  { time: 4800, gapMin: 64, gapMax: 128, tilesMin: 1, tilesMax: 2 }, // Hardest
+];
+
 /**
  * Mutable
  */
@@ -196,9 +208,16 @@ function createPlatforms(amount) {
       const lastTileX = Math.floor(tiles[tiles.length - 1].x);
 
       if (lastTileX < 256 + 16 * 4) {
+        // Get current difficulty parameters based on game time
+        const diff = getDifficulty();
+
         const y = Math.floor(Math.random() * 30) + 130;
-        const gap = Math.floor(Math.random() * 48) + 32;
-        const numberOfTiles = Math.floor(Math.random() * 4) + 2;
+        const gap =
+          Math.floor(Math.random() * (diff.gapMax - diff.gapMin + 1)) +
+          diff.gapMin;
+        const numberOfTiles =
+          Math.floor(Math.random() * (diff.tilesMax - diff.tilesMin + 1)) +
+          diff.tilesMin;
 
         // Add the new platforms to the platforms array
         for (let i = 0; i < numberOfTiles; i++) {
@@ -253,6 +272,20 @@ function isIdle() {
 
 function isPlaying() {
   return time > 0;
+}
+
+/**
+ * Returns the current difficulty parameters based on game time.
+ * Finds the highest stage the player has reached.
+ */
+function getDifficulty() {
+  let current = DIFFICULTY_STAGES[0];
+  for (const stage of DIFFICULTY_STAGES) {
+    if (time >= stage.time) {
+      current = stage;
+    }
+  }
+  return current;
 }
 
 /**
