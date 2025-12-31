@@ -221,21 +221,10 @@ function createPlatforms(amount) {
  * @param {*} b
  * @returns true if collision has happened, false otherwise. Need to think about this.
  *
- * This is AABB (Axis-Aligned Bounding Box) collision detection with Minimum Translation Vector (MTV) resolution.
+ * This is AABB (Axis-Aligned Bounding Box) collision. Also known as Rectangle–rectangle overlap test.
  * Detection: compares the distance between centers to the combined half-widths and half-heights to detect overlap.
- * Resolution: computes overlap on both axes and resolves along the axis with the smallest overlap (MTV).
  */
 
-/**
- * AABB (Axis-Aligned Bounding Box or Rectangle–rectangle overlap test) collision detection.
- * Using the center-point / half-extent method.
- * Instead of checking edges (left < right, etc.), this version:
- * Computes the distance between centers.
- * Compares that to the sum of half-widths / half-heights.
- * This is mathematically equivalent to the more common edge-based AABB check.
- *
- * Returns true if the two rectangles overlap.
- */
 function checkCollision(a, b) {
   const dx = a.x + a.width / 2 - (b.x + b.width / 2);
   const dy = a.y + a.height / 2 - (b.y + b.height / 2);
