@@ -104,9 +104,8 @@ const player = {
     const collisions = [];
 
     collidables.forEach((tile) => {
-      const collision = checkCollision(this, tile);
-      if (collision.collided) {
-        collisions.push({ ...collision, tile });
+      if (checkCollision(this, tile)) {
+        collisions.push(tile);
       }
     });
 
@@ -114,9 +113,7 @@ const player = {
     // This determines collision type based on WHERE the player came from, not overlap geometry
     let landed = false;
 
-    for (const collision of collisions) {
-      const { tile } = collision;
-
+    for (const tile of collisions) {
       // Was the player's bottom edge above the tile's top edge BEFORE this frame?
       // +1 tolerance for rounding/edge cases
       const wasAboveTile = prevY + this.height <= tile.y + 1;

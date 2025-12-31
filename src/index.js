@@ -226,35 +226,20 @@ function createPlatforms(amount) {
  * Resolution: computes overlap on both axes and resolves along the axis with the smallest overlap (MTV).
  */
 
+/**
+ * AABB (Axis-Aligned Bounding Box) collision detection.
+ * Returns true if the two rectangles overlap.
+ */
 function checkCollision(a, b) {
-  // Calculate the overlap on both X and Y axes
-  // Use the difference (d) to compare againt the combined with and height
-
-  const dx = Math.floor(a.x + a.width / 2 - (b.x + b.width / 2));
-  const dy = Math.floor(a.y + a.height / 2 - (b.y + b.height / 2));
+  const dx = a.x + a.width / 2 - (b.x + b.width / 2);
+  const dy = a.y + a.height / 2 - (b.y + b.height / 2);
 
   const combinedHalfWidths = (a.width + b.width) / 2;
   const combinedHalfHeights = (a.height + b.height) / 2;
 
-  // Check for collision
-  // If the difference in x and y is less than the combined halfs we have an overlap.
-  if (Math.abs(dx) < combinedHalfWidths && Math.abs(dy) < combinedHalfHeights) {
-    // Get a number on the overlap
-    const overlapX = combinedHalfWidths - Math.abs(dx);
-    const overlapY = combinedHalfHeights - Math.abs(dy);
-
-    return {
-      collided: true,
-      overlapX,
-      overlapY,
-      directionX: dx > 0 ? 1 : dx < 0 ? -1 : 0,
-      directionY: dy > 0 ? 1 : dy < 0 ? -1 : 0,
-    };
-  }
-
-  return {
-    collided: false,
-  };
+  return (
+    Math.abs(dx) < combinedHalfWidths && Math.abs(dy) < combinedHalfHeights
+  );
 }
 
 /**
