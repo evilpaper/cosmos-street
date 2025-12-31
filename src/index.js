@@ -227,7 +227,13 @@ function createPlatforms(amount) {
  */
 
 /**
- * AABB (Axis-Aligned Bounding Box) collision detection.
+ * AABB (Axis-Aligned Bounding Box or Rectangle–rectangle overlap test) collision detection.
+ * Using the center-point / half-extent method.
+ * Instead of checking edges (left < right, etc.), this version:
+ * Computes the distance between centers.
+ * Compares that to the sum of half-widths / half-heights.
+ * This is mathematically equivalent to the more common edge-based AABB check.
+ *
  * Returns true if the two rectangles overlap.
  */
 function checkCollision(a, b) {
