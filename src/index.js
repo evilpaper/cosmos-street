@@ -8,6 +8,11 @@
 const gravity = 0.1;
 const friction = 0.4;
 
+// Scroll speed constants for different player states
+const SCROLL_SPEED_SKATING = 1.2;
+const SCROLL_SPEED_BREAKING = 0.5;
+const SCROLL_SPEED_SPEEDING = 2;
+
 /**
  * Mutable
  */
@@ -15,6 +20,7 @@ let paused = false;
 let time = 0;
 let stars;
 let platforms;
+let scrollSpeed = SCROLL_SPEED_SKATING;
 
 /**
  *  player is defined in player.js file.
@@ -66,12 +72,12 @@ function createStar(options = {}) {
      * No need for the this keyword.
      */
 
-    update(playerSpeed) {
+    update() {
       // 1) advance animation tick
       animationTick = (animationTick + 1) % ticksPerFrame;
 
-      // 2) move left
-      x -= dx + playerSpeed * 0.2;
+      // 2) move left based on global scroll speed
+      x -= dx + scrollSpeed * 0.2;
 
       // 3) wrap when fully off-screen (with margin)
       if (x < -wrapMargin) {
@@ -138,7 +144,7 @@ function createTile(options = {}) {
     height,
 
     update() {
-      this.x = this.x - player.dx;
+      this.x = this.x - scrollSpeed;
     },
 
     draw(screen) {
@@ -268,6 +274,7 @@ function isPlaying() {
 function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
+  scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
 }
 
@@ -277,7 +284,7 @@ function update() {
   }
 
   for (const star of stars) {
-    star.update(player.dx);
+    star.update();
   }
 
   if (isIdle()) {

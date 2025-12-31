@@ -13,7 +13,6 @@ const player = {
   frame: 0,
   x: 50,
   y: 125,
-  dx: 0.6,
   dy: 0,
   state: "skating", // Initial state is "skating" (this.states[0])
 
@@ -23,7 +22,6 @@ const player = {
     this.x = 50;
     this.y = 0;
     this.dy = 0;
-    this.dx = 1.2;
     this.state = this.states[0];
   },
 
@@ -33,7 +31,7 @@ const player = {
   },
 
   speedUp() {
-    this.dx = 2;
+    scrollSpeed = SCROLL_SPEED_SPEEDING;
     this.state = this.states[3];
     this.ticksToNextFrame = 8;
   },
@@ -46,7 +44,7 @@ const player = {
 
     if (this.state === "skating") {
       this.ticksToNextFrame = 16;
-      this.dx = 1.2;
+      scrollSpeed = SCROLL_SPEED_SKATING;
 
       if (input.left) {
         this.state = this.states[2]; // skating -> breaking
@@ -67,7 +65,7 @@ const player = {
     }
 
     if (this.state === "breaking") {
-      this.dx = 0.5;
+      scrollSpeed = SCROLL_SPEED_BREAKING;
 
       if (!input.left) {
         this.state = this.states[0]; // Only stay in breaking state if left arrow is pressed
