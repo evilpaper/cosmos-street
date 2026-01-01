@@ -9,9 +9,9 @@ const gravity = 0.1;
 const friction = 0.4;
 
 // Scroll speed constants for different player states
-const SCROLL_SPEED_SKATING = 1.2;
-const SCROLL_SPEED_BREAKING = 0.5;
-const SCROLL_SPEED_SPEEDING = 2;
+const SCROLL_SPEED_SKATING = 1.4;
+const SCROLL_SPEED_BREAKING = 0.4;
+const SCROLL_SPEED_SPEEDING = 2.2;
 
 // Difficulty stages - each stage defines platform generation parameters
 // time: frame threshold to reach this stage (60 frames = 1 second)
@@ -19,10 +19,10 @@ const SCROLL_SPEED_SPEEDING = 2;
 // tilesMin/tilesMax: number of tiles per platform group
 const DIFFICULTY_STAGES = [
   { time: 0, gapMin: 32, gapMax: 48, tilesMin: 4, tilesMax: 6 }, // Easy
-  { time: 1200, gapMin: 40, gapMax: 64, tilesMin: 3, tilesMax: 5 }, // Medium
-  { time: 2400, gapMin: 48, gapMax: 80, tilesMin: 2, tilesMax: 4 }, // Hard
-  { time: 3600, gapMin: 56, gapMax: 96, tilesMin: 2, tilesMax: 3 }, // Harder
-  { time: 4800, gapMin: 64, gapMax: 128, tilesMin: 1, tilesMax: 2 }, // Hardest
+  { time: 5 * 60, gapMin: 40, gapMax: 64, tilesMin: 3, tilesMax: 5 }, // Medium
+  { time: 10 * 60, gapMin: 48, gapMax: 80, tilesMin: 2, tilesMax: 4 }, // Hard
+  { time: 15 * 60, gapMin: 56, gapMax: 96, tilesMin: 2, tilesMax: 3 }, // Harder
+  { time: 20 * 60, gapMin: 64, gapMax: 128, tilesMin: 1, tilesMax: 2 }, // Hardest
 ];
 
 /**
@@ -163,13 +163,6 @@ function createTile(options = {}) {
       const dx = Math.round(this.x);
       const dy = Math.round(this.y);
       screen.drawImage(image, 0, 0, width, height, dx, dy, width, height);
-
-      /**
-       * Draw a cyan hitbox around the tile. For debugging purposes.
-       */
-      // screen.lineWidth = 1;
-      // screen.strokeStyle = "cyan";
-      // screen.strokeRect(dx, dy, width, height);
     },
   };
 }
@@ -194,7 +187,8 @@ function createPlatforms(amount) {
         tile.update();
       });
 
-      // If a tiles is off the screen, remove it (mutate in place)
+      // Remove tiles that have move past left edge of the screen.
+      // Note, we do this "in place" mutation.
       // This is a more efficient way to remove tiles than using the filter method.
       // If we would use the filter method, we would create a new array and copy the tiles to it.
       // We would then have to reassign the tiles property to the new array.
@@ -205,13 +199,14 @@ function createPlatforms(amount) {
         }
       }
 
+      // Add new tiles when the rightmost tile is near the screen edge
       const lastTileX = Math.floor(tiles[tiles.length - 1].x);
 
       if (lastTileX < 256 + 16 * 4) {
         // Get current difficulty parameters based on game time
         const diff = getDifficulty();
 
-        const y = Math.floor(Math.random() * 30) + 130;
+        const y = Math.floor(Math.random() * 30) + 130; // Range is 130-159
         const gap =
           Math.floor(Math.random() * (diff.gapMax - diff.gapMin + 1)) +
           diff.gapMin;
