@@ -18,11 +18,11 @@ const SCROLL_SPEED_SPEEDING = 2.2;
 // gapMin/gapMax: pixel range for gaps between platform groups
 // tilesMin/tilesMax: number of tiles per platform group
 const DIFFICULTY_STAGES = [
-  { time: 0, gapMin: 32, gapMax: 48, tilesMin: 4, tilesMax: 6 }, // Easy
-  { time: 5 * 60, gapMin: 40, gapMax: 64, tilesMin: 3, tilesMax: 5 }, // Medium
-  { time: 10 * 60, gapMin: 48, gapMax: 80, tilesMin: 2, tilesMax: 4 }, // Hard
-  { time: 15 * 60, gapMin: 56, gapMax: 96, tilesMin: 2, tilesMax: 3 }, // Harder
-  { time: 20 * 60, gapMin: 64, gapMax: 128, tilesMin: 1, tilesMax: 2 }, // Hardest
+  { time: 0, gapMin: 32, gapMax: 48, tilesMin: 2, tilesMax: 24 }, // Easy
+  { time: 5 * 60, gapMin: 40, gapMax: 64, tilesMin: 3, tilesMax: 18 }, // Medium
+  { time: 10 * 60, gapMin: 48, gapMax: 80, tilesMin: 2, tilesMax: 12 }, // Hard
+  { time: 15 * 60, gapMin: 56, gapMax: 64, tilesMin: 2, tilesMax: 20 }, // Harder
+  { time: 20 * 60, gapMin: 64, gapMax: 96, tilesMin: 1, tilesMax: 24 }, // Hardest
 ];
 
 // Tile and platform constants
