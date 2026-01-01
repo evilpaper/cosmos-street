@@ -29,8 +29,8 @@ const DIFFICULTY_STAGES = [
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 const PLATFORM_Y_MIN = 130;
-const PLATFORM_Y_RANGE = 30; // y will be between 130 and 159
-const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // when to spawn new platforms
+const PLATFORM_Y_RANGE = 30;
+const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
 
 /**
  * Mutable
