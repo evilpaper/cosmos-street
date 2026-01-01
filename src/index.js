@@ -25,6 +25,13 @@ const DIFFICULTY_STAGES = [
   { time: 20 * 60, gapMin: 64, gapMax: 128, tilesMin: 1, tilesMax: 2 }, // Hardest
 ];
 
+// Tile and platform constants
+const TILE_WIDTH = 16;
+const TILE_HEIGHT = 16;
+const PLATFORM_Y_MIN = 130;
+const PLATFORM_Y_RANGE = 30; // y will be between 130 and 159
+const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // when to spawn new platforms
+
 /**
  * Mutable
  */
@@ -142,7 +149,7 @@ function createStars(amount) {
 }
 
 function createTile(options = {}) {
-  const { x = 0, y = 0, width = 16, height = 16 } = options;
+  const { x = 0, y = 0, width = TILE_WIDTH, height = TILE_HEIGHT } = options;
 
   const image = new Image();
   image.src = "./images/tiles-sheet.png";
@@ -173,63 +180,64 @@ function createPlatforms(amount) {
   for (let i = 0; i < amount; i++) {
     tiles.push(
       createTile({
-        x: 0 + i * 16,
+        x: i * TILE_WIDTH,
         y: 160,
       })
     );
   }
 
+  function moveTiles() {
+    for (const tile of tiles) {
+      tile.update();
+    }
+  }
+
+  function removeTilesOffscreen() {
+    // Iterate backwards to safely splice during iteration
+    for (let i = tiles.length - 1; i >= 0; i--) {
+      const isOffscreenLeft = tiles[i].x <= -TILE_WIDTH;
+      if (isOffscreenLeft) {
+        tiles.splice(i, 1);
+      }
+    }
+  }
+
+  function addTilesIfNeeded() {
+    const lastTileX = Math.floor(tiles[tiles.length - 1].x);
+    const shouldSpawn = lastTileX < SPAWN_THRESHOLD_X;
+
+    if (!shouldSpawn) {
+      return;
+    }
+
+    const diff = getDifficulty();
+    const y = randomInRange(PLATFORM_Y_MIN, PLATFORM_Y_MIN + PLATFORM_Y_RANGE);
+    const gap = randomInRange(diff.gapMin, diff.gapMax);
+    const tileCount = randomInRange(diff.tilesMin, diff.tilesMax);
+
+    for (let i = 0; i < tileCount; i++) {
+      tiles.push(
+        createTile({
+          x: lastTileX + gap + i * TILE_WIDTH,
+          y: y,
+        })
+      );
+    }
+  }
+
   return {
-    tiles: tiles, // Note, a direct property.
+    tiles: tiles,
 
     update() {
-      tiles.forEach((tile) => {
-        tile.update();
-      });
-
-      // Remove tiles that have move past left edge of the screen.
-      // Note, we do this "in place" mutation.
-      // This is a more efficient way to remove tiles than using the filter method.
-      // If we would use the filter method, we would create a new array and copy the tiles to it.
-      // We would then have to reassign the tiles property to the new array.
-      // So we do "in place" mutation.
-      for (let i = tiles.length - 1; i >= 0; i--) {
-        if (tiles[i].x <= -16) {
-          tiles.splice(i, 1);
-        }
-      }
-
-      // Add new tiles when the rightmost tile is near the screen edge
-      const lastTileX = Math.floor(tiles[tiles.length - 1].x);
-
-      if (lastTileX < 256 + 16 * 4) {
-        // Get current difficulty parameters based on game time
-        const diff = getDifficulty();
-
-        const y = Math.floor(Math.random() * 30) + 130; // Range is 130-159
-        const gap =
-          Math.floor(Math.random() * (diff.gapMax - diff.gapMin + 1)) +
-          diff.gapMin;
-        const numberOfTiles =
-          Math.floor(Math.random() * (diff.tilesMax - diff.tilesMin + 1)) +
-          diff.tilesMin;
-
-        // Add the new platforms to the platforms array
-        for (let i = 0; i < numberOfTiles; i++) {
-          tiles.push(
-            createTile({
-              x: lastTileX + i * 16 + gap,
-              y: y,
-            })
-          );
-        }
-      }
+      moveTiles();
+      removeTilesOffscreen();
+      addTilesIfNeeded();
     },
 
     draw(screen) {
-      tiles.forEach((tile) => {
+      for (const tile of tiles) {
         tile.draw(screen);
-      });
+      }
     },
   };
 }
@@ -267,6 +275,13 @@ function isIdle() {
 
 function isPlaying() {
   return time > 0;
+}
+
+/**
+ * Returns a random integer between min and max (inclusive).
+ */
+function randomInRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /**
