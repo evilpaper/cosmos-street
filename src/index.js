@@ -5,7 +5,7 @@
 /**
  * Constants
  */
-const gravity = 0.1;
+const gravity = 0.08;
 const friction = 0.4;
 
 // Scroll speed constants for different player states
