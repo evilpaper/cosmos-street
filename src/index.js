@@ -98,6 +98,10 @@ const angel = {
       this.height
     );
   },
+  reset() {
+    this.x = 256;
+    this.y = 120;
+  },
 };
 
 /**
@@ -422,6 +426,10 @@ function update() {
     platforms.update();
 
     angel.update();
+
+    if (checkCollision(player, angel)) {
+      angel.reset();
+    }
 
     if (player.y > 500) {
       // We could call init() here but that would restart the game.
