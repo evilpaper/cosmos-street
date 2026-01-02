@@ -36,7 +36,7 @@ const player = {
     this.ticksToNextFrame = 8;
   },
 
-  update(collidables, time) {
+  update(tiles, time) {
     // Just a short delay before we introduce the player.
     if (time < 20) {
       return;
@@ -98,12 +98,12 @@ const player = {
     this.y = Math.floor(this.y + this.dy);
     this.x = Math.floor(this.x);
 
-    // Collision detection
-    const collisions = [];
+    // Platform collision detection
+    const overlappingTiles = [];
 
-    collidables.forEach((tile) => {
+    tiles.forEach((tile) => {
       if (checkCollision(this, tile)) {
-        collisions.push(tile);
+        overlappingTiles.push(tile);
       }
     });
 
@@ -111,7 +111,7 @@ const player = {
     // This determines collision type based on WHERE the player came from, not overlap geometry
     let landed = false;
 
-    for (const tile of collisions) {
+    for (const tile of overlappingTiles) {
       // Was the player's bottom edge above the tile's top edge BEFORE this frame?
       // +1 tolerance for rounding/edge cases
       const wasAboveTile = prevY + this.height <= tile.y + 1;

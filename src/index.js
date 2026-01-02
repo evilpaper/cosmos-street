@@ -78,7 +78,7 @@ const angel = {
     img.src = "./images/collectibles-sprite-sheet.png";
     return img;
   })(),
-  x: 120,
+  x: 256,
   y: 120,
   width: 16,
   height: 16,
@@ -419,8 +419,9 @@ function update() {
     time += 1;
     player.update(platforms.tiles, time);
     title.update();
-
     platforms.update();
+
+    angel.update();
 
     if (player.y > 500) {
       // We could call init() here but that would restart the game.
@@ -445,6 +446,7 @@ function draw(screen) {
   if (isPlaying()) {
     player.draw(screen);
     title.draw(screen);
+    angel.draw(screen);
 
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
       print("Press ← or → or ↑", "center", 186);
