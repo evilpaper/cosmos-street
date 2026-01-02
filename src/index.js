@@ -79,11 +79,22 @@ const angel = {
     return img;
   })(),
   x: 256,
+  baseY: 120, // Original Y position for oscillation
   y: 120,
   width: 16,
   height: 16,
+  tick: 0,
+  oscillationAmplitude: 3, // Pixels to move up/down
+  oscillationSpeed: 0.1, // Controls the speed of oscillation
   update() {
     this.x -= scrollSpeed;
+
+    // Oscillate up and down using sine wave
+    this.tick += 1;
+    this.y = Math.round(
+      this.baseY +
+        Math.sin(this.tick * this.oscillationSpeed) * this.oscillationAmplitude
+    );
   },
   draw(screen) {
     screen.drawImage(
@@ -101,6 +112,7 @@ const angel = {
   reset() {
     this.x = 256;
     this.y = 120;
+    this.tick = 0;
   },
 };
 
