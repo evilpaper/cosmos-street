@@ -71,6 +71,35 @@ const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
 
+const angel = {
+  name: "angel",
+  image: (() => {
+    const img = new Image();
+    img.src = "./images/collectibles-sprite-sheet.png";
+    return img;
+  })(),
+  x: 120,
+  y: 120,
+  width: 16,
+  height: 16,
+  update() {
+    this.x -= scrollSpeed;
+  },
+  draw(screen) {
+    screen.drawImage(
+      this.image,
+      0,
+      0,
+      this.width,
+      this.height,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    );
+  },
+};
+
 /**
  * Mutable
  */
