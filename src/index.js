@@ -17,19 +17,58 @@ const SCROLL_SPEED_SPEEDING = 2.2;
 // time: frame threshold to reach this stage (60 frames = 1 second)
 // gapMin/gapMax: pixel range for gaps between platform groups
 // tilesMin/tilesMax: number of tiles per platform group
+// platformYMin/platformYRange: vertical spawn range for platforms
 const DIFFICULTY_STAGES = [
-  { time: 0, gapMin: 32, gapMax: 48, tilesMin: 2, tilesMax: 24 }, // Easy
-  { time: 5 * 60, gapMin: 40, gapMax: 64, tilesMin: 3, tilesMax: 18 }, // Medium
-  { time: 10 * 60, gapMin: 48, gapMax: 80, tilesMin: 2, tilesMax: 12 }, // Hard
-  { time: 15 * 60, gapMin: 56, gapMax: 64, tilesMin: 2, tilesMax: 20 }, // Harder
-  { time: 20 * 60, gapMin: 64, gapMax: 96, tilesMin: 1, tilesMax: 24 }, // Hardest
+  {
+    time: 0,
+    gapMin: 32,
+    gapMax: 48,
+    tilesMin: 2,
+    tilesMax: 14,
+    platformYMin: 80,
+    platformYRange: 120,
+  },
+  {
+    time: 5 * 60,
+    gapMin: 40,
+    gapMax: 64,
+    tilesMin: 3,
+    tilesMax: 16,
+    platformYMin: 80,
+    platformYRange: 120,
+  },
+  {
+    time: 10 * 60,
+    gapMin: 48,
+    gapMax: 80,
+    tilesMin: 2,
+    tilesMax: 12,
+    platformYMin: 80,
+    platformYRange: 120,
+  },
+  {
+    time: 15 * 60,
+    gapMin: 56,
+    gapMax: 64,
+    tilesMin: 2,
+    tilesMax: 16,
+    platformYMin: 80,
+    platformYRange: 120,
+  },
+  {
+    time: 20 * 60,
+    gapMin: 64,
+    gapMax: 96,
+    tilesMin: 1,
+    tilesMax: 10,
+    platformYMin: 80,
+    platformYRange: 120,
+  },
 ];
 
 // Tile and platform constants
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
-const PLATFORM_Y_MIN = 130;
-const PLATFORM_Y_RANGE = 30;
 const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
 
 /**
@@ -211,7 +250,10 @@ function createPlatforms(amount) {
     }
 
     const diff = getDifficulty();
-    const y = randomInRange(PLATFORM_Y_MIN, PLATFORM_Y_MIN + PLATFORM_Y_RANGE);
+    const y = randomInRange(
+      diff.platformYMin,
+      diff.platformYMin + diff.platformYRange
+    );
     const gap = randomInRange(diff.gapMin, diff.gapMax);
     const tileCount = randomInRange(diff.tilesMin, diff.tilesMax);
 
