@@ -72,6 +72,8 @@ const player = {
       }
     }
 
+    console.log(this.airJumps);
+
     if (this.state === "breaking") {
       scrollSpeed = SCROLL_SPEED_BREAKING;
 

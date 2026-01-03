@@ -71,6 +71,7 @@ const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
 
+// Define the angel object. This is a power-up that the player can collect to gain an extra jump.
 const angel = {
   name: "angel",
   image: (() => {
@@ -92,11 +93,9 @@ const angel = {
 
   // Returns the centered hitbox coordinates for collision detection
   getHitbox() {
-    const offsetX = (this.width - this.hitboxWidth) / 2;
-    const offsetY = (this.height - this.hitboxHeight) / 2;
     return {
-      x: this.x + offsetX,
-      y: this.y + offsetY,
+      x: this.x + this.hitboxWidth,
+      y: this.y + this.hitboxHeight,
       width: this.hitboxWidth,
       height: this.hitboxHeight,
     };
