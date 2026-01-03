@@ -52,14 +52,11 @@ const player = {
 
       if (input.left) {
         this.state = this.states[2]; // skating -> breaking
-      }
-      if (input.up) {
+      } else if (input.up) {
         this.jump();
-      }
-      if (input.right) {
+      } else if (input.right) {
         this.speedUp();
-      }
-      if (this.dy > 1) {
+      } else if (this.dy > 1) {
         this.state = this.states[1]; // skating -> airborne. This happens when user fall of a platform.
       }
     }
@@ -71,8 +68,6 @@ const player = {
         this.jump();
       }
     }
-
-    console.log(this.airJumps);
 
     if (this.state === "breaking") {
       scrollSpeed = SCROLL_SPEED_BREAKING;
