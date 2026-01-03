@@ -83,9 +83,25 @@ const angel = {
   y: 120,
   width: 16,
   height: 16,
+  // Centered 8x8 hitbox for tighter collision detection
+  hitboxWidth: 8,
+  hitboxHeight: 8,
   tick: 0,
   oscillationAmplitude: 3, // Pixels to move up/down
   oscillationSpeed: 0.1, // Controls the speed of oscillation
+
+  // Returns the centered hitbox coordinates for collision detection
+  getHitbox() {
+    const offsetX = (this.width - this.hitboxWidth) / 2;
+    const offsetY = (this.height - this.hitboxHeight) / 2;
+    return {
+      x: this.x + offsetX,
+      y: this.y + offsetY,
+      width: this.hitboxWidth,
+      height: this.hitboxHeight,
+    };
+  },
+
   update() {
     this.x -= scrollSpeed;
 
@@ -439,8 +455,8 @@ function update() {
 
     angel.update();
 
-    // Power-up collection
-    if (checkCollision(player, angel)) {
+    // Power-up collection (uses centered 8x8 hitbox)
+    if (checkCollision(player, angel.getHitbox())) {
       player.airJumps += 1;
       angel.reset();
     }
