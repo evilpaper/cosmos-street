@@ -90,6 +90,7 @@ const angel = {
   tick: 0,
   oscillationAmplitude: 3, // Pixels to move up/down
   oscillationSpeed: 0.1, // Controls the speed of oscillation
+  floatHeight: 12, // Pixels above platform when spawning
 
   // Returns the centered hitbox coordinates for collision detection
   getHitbox() {
@@ -124,9 +125,25 @@ const angel = {
       this.height
     );
   },
-  reset() {
-    this.x = 256;
-    this.y = 120;
+  reset(tiles = []) {
+    // Find platforms that are off-screen to the right
+    const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
+
+    if (eligibleTiles.length > 0) {
+      // Pick a random tile from eligible ones
+      const tile =
+        eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
+      // Center angel on the tile, floating above it
+      this.x = tile.x + tile.width / 2 - this.width / 2;
+      this.baseY = tile.y - this.height - this.floatHeight;
+      this.y = this.baseY;
+    } else {
+      // Fallback: spawn ahead of screen at default height
+      this.x = SCREEN_WIDTH + 64;
+      this.baseY = 120;
+      this.y = this.baseY;
+    }
+
     this.tick = 0;
   },
 };
@@ -454,10 +471,15 @@ function update() {
 
     angel.update();
 
+    // Respawn angel if it scrolled off the left side of the screen
+    if (angel.x + angel.width < 0) {
+      angel.reset(platforms.tiles);
+    }
+
     // Power-up collection (uses centered 8x8 hitbox)
     if (checkCollision(player, angel.getHitbox())) {
       player.airJumps += 1;
-      angel.reset();
+      angel.reset(platforms.tiles);
     }
 
     if (player.y > 500) {
