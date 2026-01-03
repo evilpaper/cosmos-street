@@ -15,6 +15,7 @@ const player = {
   y: 125,
   dy: 0,
   state: "skating", // Initial state is "skating" (this.states[0])
+  airJumps: 0, // Number of air jumps available (granted by collecting angels)
 
   reset() {
     this.tick = 0;
@@ -23,11 +24,14 @@ const player = {
     this.y = 0;
     this.dy = 0;
     this.state = this.states[0];
+    this.airJumps = 0;
   },
 
   jump() {
     this.dy = -8;
     this.state = this.states[1]; // airborne
+    // Consume input to require fresh key press for next jump
+    input.up = false;
   },
 
   speedUp() {
@@ -61,7 +65,11 @@ const player = {
     }
 
     if (this.state === "airborne") {
-      // Do airborne stuff here...
+      // Air jump: use a jump charge if available
+      if (input.up && this.airJumps > 0) {
+        this.airJumps -= 1;
+        this.jump();
+      }
     }
 
     if (this.state === "breaking") {

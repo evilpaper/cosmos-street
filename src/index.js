@@ -439,7 +439,9 @@ function update() {
 
     angel.update();
 
+    // Power-up collection
     if (checkCollision(player, angel)) {
+      player.airJumps += 1;
       angel.reset();
     }
 
