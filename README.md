@@ -39,7 +39,7 @@ That's it!
 
 - [x] Start screen
 - [x] Variation (platform distribution)
-- [ ] Power ups (air jump) - incl. visual pickup, possession and usage feedback
+- [ ] Power ups (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
 - [ ] Change player x position based on state (break,regular,speeding)
 - [ ] Feedback particles. Break, landing, speeding.
 - [ ] Enemies
