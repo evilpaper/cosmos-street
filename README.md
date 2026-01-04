@@ -9,9 +9,9 @@ A nostalgic skate ride inspired by Wonder Boy’s legendary runs on the Sega Mas
 
 ## About this project
 
-Cosmos Street is an old-school auto-runner, heavily inspired by the skateboard sequences from Wonder Boy on the Sega Master System. It is made for fun, and as an experiment in exploring the creative limits of traditional video games.
+Cosmos Street is an old-school auto-runner. Inspired by the skateboard sequences in Wonder Boy on the Sega Master System, complete with borrowed sprites. It’s made for fun and as an experiment in pushing the creative limits of classic video game design.
 
-The game runs right in your browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy. Just simple, direct, classic game development.
+The game runs right in the browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy. Just simple, direct, classic game development.
 
 The game uses a limited palette of four colors, inspired by the original Game Boy.
 The game use a CRT effect created with CSS.
@@ -29,35 +29,37 @@ The game restart automatically when the player fall off the screen.
 
 That's it!
 
-## Features
+## Some features
 
 - CSS Clip Path to get the shape of the screen
 - CRT/Scanline effect with CSS Keyframes
-- Mini traditional video Game Engine with Update and Draw methods
+- Keyboard and touch controls
 
 ## Roadmap
 
 - [x] Start screen
 - [x] Variation (platform distribution)
-- [x] Progression (harder and harder)
-- [ ] Power ups (air jump)
+- [ ] Power ups (air jump) - incl. visual pickup, possession and usage feedback
+- [ ] Change player x position based on state (break,regular,speeding)
+- [ ] Feedback particles. Break, landing, speeding.
 - [ ] Enemies
 - [ ] Score
 - [ ] Session high score
 - [ ] Ending
-- [ ] Better start screen
+- [ ] Better start screen (more interesting, player in the middle)
 - [ ] Restart
 - [ ] SFX
 - [ ] Music
 - [ ] Sound controls
-- [x] Touch controls
-- [x] Speed up
-- [x] Use a separate animation for speed up state
-- [x] Scroll stars according to player speed
+- [ ] Increased difficulty (harder and harder)
 - [ ] How to play - desktop (keyboard)
 - [ ] How to play - mobile
+- [ ] favicon
+- [ ] itch.io game page
 
 ## Known Issues
+
+- [ ] Player state handling can be better
 
 ## Running Locally
 
