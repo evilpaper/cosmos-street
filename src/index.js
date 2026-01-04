@@ -88,10 +88,9 @@ const angel = {
   hitboxWidth: 8,
   hitboxHeight: 8,
   tick: 0,
-  oscillationAmplitude: 3, // Pixels to move up/down
+  oscillationAmplitude: 2, // Pixels to move up/down
   oscillationSpeed: 0.1, // Controls the speed of oscillation
-  floatHeight: 12, // Pixels above platform when spawning
-
+  floatHeight: 5, // Pixels above platform when spawning
   // Returns the centered hitbox coordinates for collision detection
   getHitbox() {
     return {
