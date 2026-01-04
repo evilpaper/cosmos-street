@@ -64,6 +64,7 @@ let time = 0;
 let stars;
 let platforms;
 let angel;
+let sparkles;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 
 /**
@@ -275,7 +276,7 @@ function createSparkle(x, y) {
   const FRAME_WIDTH = 20;
   const FRAME_HEIGHT = 20;
   const TOTAL_FRAMES = 7;
-  const TICKS_PER_FRAME = 8; // Slow animation
+  const TICKS_PER_FRAME = 5;
 
   const image = new Image();
   image.src = "./images/sparkle-sprite-sheet.png";
@@ -508,6 +509,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angel = createAngel(platforms.tiles);
+  sparkles = [];
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
 }
@@ -550,9 +552,17 @@ function update() {
 
     // Power-up collection (uses centered 8x8 hitbox)
     if (checkCollision(player, angel.getHitbox())) {
+      // Spawn sparkle at angel position before respawn
+      sparkles.push(createSparkle(angel.x, angel.y - 4));
       player.airJumps += 1;
       angel.respawn(platforms.tiles);
     }
+
+    // Update sparkles and remove finished ones
+    for (const sparkle of sparkles) {
+      sparkle.update();
+    }
+    sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
 
     if (player.y > 500) {
       // We could call init() here but that would restart the game.
@@ -578,6 +588,10 @@ function draw(screen) {
     player.draw(screen);
     title.draw(screen);
     angel.draw(screen);
+
+    for (const sparkle of sparkles) {
+      sparkle.draw(screen);
+    }
 
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
       print("Press ←,→ or ↑", "center", 186);
