@@ -365,7 +365,7 @@ function createAngel(tiles) {
       );
     },
 
-    reset(tileList) {
+    respawn(tileList) {
       const pos = findPositionOnTile(tileList);
       this.x = pos.x;
       baseY = pos.y;
@@ -488,13 +488,13 @@ function update() {
 
     // Respawn angel if it scrolled off the left side of the screen
     if (angel.x + angel.width < 0) {
-      angel.reset(platforms.tiles);
+      angel.respawn(platforms.tiles);
     }
 
     // Power-up collection (uses centered 8x8 hitbox)
     if (checkCollision(player, angel.getHitbox())) {
       player.airJumps += 1;
-      angel.reset(platforms.tiles);
+      angel.respawn(platforms.tiles);
     }
 
     if (player.y > 500) {
