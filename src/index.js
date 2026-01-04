@@ -78,12 +78,11 @@ let paused = false;
 let time = 0;
 let stars;
 let platforms;
+let angel;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 
 /**
- *  wtf! Is this all? No...
  *  player is defined in player.js file.
- *  angel is defined in angel.js file.
  *  title is defined in title.js file.
  */
 
@@ -287,6 +286,92 @@ function createPlatforms(amount) {
 }
 
 /**
+ * Creates an angel power-up that grants an extra jump when collected.
+ * Floats above platforms and oscillates up/down.
+ */
+function createAngel() {
+  // Constants
+  const WIDTH = 16;
+  const HEIGHT = 16;
+  const HITBOX_WIDTH = 8;
+  const HITBOX_HEIGHT = 8;
+  const OSCILLATION_AMPLITUDE = 2; // Pixels to move up/down
+  const OSCILLATION_SPEED = 0.1;
+  const FLOAT_HEIGHT = 5; // Pixels above platform when spawning
+
+  const image = new Image();
+  image.src = "./images/collectibles-sprite-sheet.png";
+
+  // Mutable state
+  let x = 256;
+  let baseY = 120;
+  let y = 120;
+  let tick = 0;
+
+  function reset(tiles = []) {
+    // Find platforms that are off-screen to the right
+    const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
+
+    if (eligibleTiles.length > 0) {
+      // Pick a random tile from eligible ones
+      const tile =
+        eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
+      // Center angel on the tile, floating above it
+      x = tile.x + tile.width / 2 - WIDTH / 2;
+      baseY = tile.y - HEIGHT - FLOAT_HEIGHT;
+      y = baseY;
+    } else {
+      // Fallback: spawn ahead of screen at default height
+      x = SCREEN_WIDTH + 64;
+      baseY = 120;
+      y = baseY;
+    }
+
+    tick = 0;
+  }
+
+  return {
+    get x() {
+      return x;
+    },
+    get y() {
+      return y;
+    },
+    get width() {
+      return WIDTH;
+    },
+    get height() {
+      return HEIGHT;
+    },
+
+    getHitbox() {
+      return {
+        x: x + HITBOX_WIDTH / 2,
+        y: y + HITBOX_HEIGHT / 2,
+        width: HITBOX_WIDTH,
+        height: HITBOX_HEIGHT,
+      };
+    },
+
+    update() {
+      x -= scrollSpeed;
+
+      // Oscillate up and down using sine wave
+      tick += 1;
+      y = Math.round(
+        baseY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
+      );
+    },
+
+    draw(screen) {
+      screen.drawImage(image, 0, 0, WIDTH, HEIGHT, x, y, WIDTH, HEIGHT);
+    },
+
+    reset,
+  };
+}
+
+/**
  * Checks for collision between two objects.
  *
  * @param {*} a
@@ -361,6 +446,7 @@ function getDifficulty() {
 function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
+  angel = createAngel();
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
 }
