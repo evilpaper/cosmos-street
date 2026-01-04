@@ -67,6 +67,8 @@ const DIFFICULTY_STAGES = [
 ];
 
 // Tile and platform constants
+// Global because TILE_WIDTH is shared between createTile() and createPlatforms()
+// Keeping them here follows the "Group config and state" principle
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 
