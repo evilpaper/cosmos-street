@@ -289,7 +289,9 @@ function createPlatforms(amount) {
  * Creates an angel power-up that grants an extra jump when collected.
  * Floats above platforms and oscillates up/down.
  */
-function createAngel() {
+function createAngel(options = {}) {
+  const { x: initialX = 256, y: initialY = 120 } = options;
+
   // Constants
   const WIDTH = 16;
   const HEIGHT = 16;
@@ -303,9 +305,8 @@ function createAngel() {
   image.src = "./images/collectibles-sprite-sheet.png";
 
   // Mutable state
-  let x = 256;
-  let baseY = 120;
-  let y = 120;
+  let x = initialX;
+  let y = initialY;
   let tick = 0;
 
   function reset(tiles = []) {
@@ -318,13 +319,11 @@ function createAngel() {
         eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
       // Center angel on the tile, floating above it
       x = tile.x + tile.width / 2 - WIDTH / 2;
-      baseY = tile.y - HEIGHT - FLOAT_HEIGHT;
-      y = baseY;
+      y = tile.y - HEIGHT - FLOAT_HEIGHT;
     } else {
       // Fallback: spawn ahead of screen at default height
       x = SCREEN_WIDTH + 64;
-      baseY = 120;
-      y = baseY;
+      y = 120;
     }
 
     tick = 0;
@@ -335,7 +334,9 @@ function createAngel() {
       return x;
     },
     get y() {
-      return y;
+      return Math.round(
+        y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
+      );
     },
     get width() {
       return WIDTH;
@@ -345,9 +346,12 @@ function createAngel() {
     },
 
     getHitbox() {
+      const currentY = Math.round(
+        y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
+      );
       return {
         x: x + HITBOX_WIDTH / 2,
-        y: y + HITBOX_HEIGHT / 2,
+        y: currentY + HITBOX_HEIGHT / 2,
         width: HITBOX_WIDTH,
         height: HITBOX_HEIGHT,
       };
@@ -355,16 +359,14 @@ function createAngel() {
 
     update() {
       x -= scrollSpeed;
-
-      // Oscillate up and down using sine wave
       tick += 1;
-      y = Math.round(
-        baseY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
-      );
     },
 
     draw(screen) {
-      screen.drawImage(image, 0, 0, WIDTH, HEIGHT, x, y, WIDTH, HEIGHT);
+      const currentY = Math.round(
+        y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
+      );
+      screen.drawImage(image, 0, 0, WIDTH, HEIGHT, x, currentY, WIDTH, HEIGHT);
     },
 
     reset,
