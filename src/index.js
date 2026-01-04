@@ -69,7 +69,6 @@ const DIFFICULTY_STAGES = [
 // Tile and platform constants
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
-const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
 
 /**
  * Mutable
@@ -215,6 +214,8 @@ function createTile(options = {}) {
 }
 
 function createPlatforms(amount) {
+  const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
+
   let tiles = [];
 
   for (let i = 0; i < amount; i++) {

@@ -59,7 +59,7 @@ That's it!
 
 ## Known Issues
 
-- [ ] Player state handling can be better
+- [ ] Player state handling can be better. For example, sometimes when speeding and jumping the speed halt to skating.
 
 ## Running Locally
 
