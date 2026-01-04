@@ -270,6 +270,81 @@ function createPlatforms(amount) {
   };
 }
 
+function createSparkle(x, y) {
+  // Constants
+  const FRAME_WIDTH = 20;
+  const FRAME_HEIGHT = 20;
+  const TOTAL_FRAMES = 7;
+  const TICKS_PER_FRAME = 8; // Slow animation
+
+  const image = new Image();
+  image.src = "./images/sparkle-sprite-sheet.png";
+
+  // Mutable state (closure)
+  let animationTick = 0;
+  let frame = 0;
+  let posX = x;
+  let posY = y;
+  let done = false;
+
+  return {
+    x: posX,
+    y: posY,
+    width: FRAME_WIDTH,
+    height: FRAME_HEIGHT,
+
+    isDone() {
+      return done;
+    },
+
+    update() {
+      // Scroll with platforms
+      posX -= scrollSpeed;
+
+      // Advance animation tick
+      animationTick += 1;
+
+      // Advance frame when tick threshold reached
+      if (animationTick >= TICKS_PER_FRAME) {
+        animationTick = 0;
+        frame += 1;
+
+        // Signal done when animation completes
+        if (frame >= TOTAL_FRAMES) {
+          done = true;
+        }
+      }
+
+      // Update exposed position
+      this.x = posX;
+      this.y = posY;
+    },
+
+    draw(screen) {
+      if (done) return;
+
+      // Sprite sheet is horizontal: frames side by side
+      const sx = frame * FRAME_WIDTH;
+      const sy = 0;
+
+      const dx = Math.round(posX);
+      const dy = Math.round(posY);
+
+      screen.drawImage(
+        image,
+        sx,
+        sy,
+        FRAME_WIDTH,
+        FRAME_HEIGHT,
+        dx,
+        dy,
+        FRAME_WIDTH,
+        FRAME_HEIGHT
+      );
+    },
+  };
+}
+
 function createAngel(tiles) {
   const WIDTH = 16;
   const HEIGHT = 16;
