@@ -46,15 +46,16 @@ That's it!
 - [ ] Score
 - [ ] Session high score
 - [ ] Ending
-- [ ] Better start screen (more interesting, player in the middle)
+- [ ] Better start screen (more interesting, player in the middle, title shine effect)
 - [ ] Restart
 - [ ] SFX
 - [ ] Music
 - [ ] Sound controls
 - [ ] Increased difficulty (harder and harder)
+- [ ] Add changing stuff to the background (more interesting)
 - [ ] How to play - desktop (keyboard)
 - [ ] How to play - mobile
-- [ ] favicon
+- [x] favicon
 - [ ] itch.io game page
 
 ## Known Issues

@@ -75,7 +75,6 @@ let scrollSpeed = SCROLL_SPEED_SKATING;
 /**
  * Factories for creating objects that appear as multiple instances (stars, platforms, etc.).
  */
-
 function createStar(options = {}) {
   const { small = false } = options;
 
