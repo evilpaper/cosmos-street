@@ -1,23 +1,13 @@
 /**
- * Global variables
+ * Global constants
  */
-
-/**
- * Constants
- */
-const gravity = 0.08;
-const friction = 0.4;
-
-// Scroll speed constants for different player states
+const GRAVITY = 0.08;
+const FRICTION = 0.4;
 const SCROLL_SPEED_SKATING = 1.4;
 const SCROLL_SPEED_BREAKING = 0.4;
 const SCROLL_SPEED_SPEEDING = 2.2;
-
-// Difficulty stages - each stage defines platform generation parameters
-// time: frame threshold to reach this stage (60 frames = 1 second)
-// gapMin/gapMax: pixel range for gaps between platform groups
-// tilesMin/tilesMax: number of tiles per platform group
-// platformYMin/platformYRange: vertical spawn range for platforms
+const TILE_WIDTH = 16; // Shared between createTile() and createPlatforms()
+const TILE_HEIGHT = 16;
 const DIFFICULTY_STAGES = [
   {
     time: 0,
@@ -66,14 +56,8 @@ const DIFFICULTY_STAGES = [
   },
 ];
 
-// Tile and platform constants
-// Global because TILE_WIDTH is shared between createTile() and createPlatforms()
-// Keeping them here follows the "Group config and state" principle
-const TILE_WIDTH = 16;
-const TILE_HEIGHT = 16;
-
 /**
- * Mutable
+ * Global variables
  */
 let paused = false;
 let time = 0;
@@ -85,12 +69,11 @@ let scrollSpeed = SCROLL_SPEED_SKATING;
 /**
  *  player is defined in player.js file.
  *  title is defined in title.js file.
+ *  Follow the "Object literal for one, factory for many" principle.
  */
 
 /**
- * Factories
- *
- * Used to create objects that appear as multiple instances (stars, platforms, etc.).
+ * Factories for creating objects that appear as multiple instances (stars, platforms, etc.).
  */
 
 function createStar(options = {}) {
@@ -513,8 +496,8 @@ function draw(screen) {
   if (isIdle()) {
     title.draw(screen);
 
-    print("Press ← or → or ↑", "center", 186);
-    print("arrow key to start", "center", 198);
+    print("Press ←,→ or ↑", "center", 186);
+    print("key to start", "center", 198);
   }
 
   if (isPlaying()) {
@@ -523,12 +506,13 @@ function draw(screen) {
     angel.draw(screen);
 
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
-      print("Press ← or → or ↑", "center", 186);
-      print("arrow key to start", "center", 198);
+      print("Press ←,→ or ↑", "center", 186);
+      print("key to start", "center", 198);
     }
 
     if (time > 80) {
-      print(`Time:${Math.floor(time / 60)}`, "center", 36);
+      print(`Time ${Math.floor(time / 60)}`, "center", 36);
+      print(`Angels ${player.airJumps}`, "center", 216);
     }
   }
 }

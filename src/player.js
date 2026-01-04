@@ -96,8 +96,8 @@ const player = {
     // Used to determine collision type (landing vs wall)
     const prevY = this.y;
 
-    this.dy += gravity;
-    this.dy += friction;
+    this.dy += GRAVITY;
+    this.dy += FRICTION;
 
     // Apply movement (ensure integer coordinates)
     this.y = Math.floor(this.y + this.dy);
