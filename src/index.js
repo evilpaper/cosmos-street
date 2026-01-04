@@ -293,86 +293,79 @@ function createPlatforms(amount) {
  * Floats above platforms and oscillates up/down.
  */
 function createAngel(options = {}) {
-  const { x: initialX = 256, y: initialY = 120 } = options;
+  const { x = 256, y = 120 } = options;
 
   // Constants
   const WIDTH = 16;
   const HEIGHT = 16;
   const HITBOX_WIDTH = 8;
   const HITBOX_HEIGHT = 8;
-  const OSCILLATION_AMPLITUDE = 2; // Pixels to move up/down
+  const OSCILLATION_AMPLITUDE = 2;
   const OSCILLATION_SPEED = 0.1;
-  const FLOAT_HEIGHT = 5; // Pixels above platform when spawning
+  const FLOAT_HEIGHT = 5;
 
   const image = new Image();
   image.src = "./images/collectibles-sprite-sheet.png";
 
-  // Mutable state
-  let x = initialX;
-  let y = initialY;
+  // Mutable state (closure)
+  let baseY = y;
   let tick = 0;
 
-  function reset(tiles = []) {
-    // Find platforms that are off-screen to the right
-    const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
-
-    if (eligibleTiles.length > 0) {
-      // Pick a random tile from eligible ones
-      const tile =
-        eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
-      // Center angel on the tile, floating above it
-      x = tile.x + tile.width / 2 - WIDTH / 2;
-      y = tile.y - HEIGHT - FLOAT_HEIGHT;
-    } else {
-      // Fallback: spawn ahead of screen at default height
-      x = SCREEN_WIDTH + 64;
-      y = 120;
-    }
-
-    tick = 0;
-  }
-
   return {
-    get x() {
-      return x;
-    },
-    get y() {
-      return Math.round(
-        y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
-      );
-    },
-    get width() {
-      return WIDTH;
-    },
-    get height() {
-      return HEIGHT;
-    },
+    x,
+    y,
+    width: WIDTH,
+    height: HEIGHT,
 
     getHitbox() {
-      const currentY = Math.round(
-        y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
-      );
       return {
-        x: x + HITBOX_WIDTH / 2,
-        y: currentY + HITBOX_HEIGHT / 2,
+        x: this.x + HITBOX_WIDTH / 2,
+        y: this.y + HITBOX_HEIGHT / 2,
         width: HITBOX_WIDTH,
         height: HITBOX_HEIGHT,
       };
     },
 
     update() {
-      x -= scrollSpeed;
+      this.x -= scrollSpeed;
       tick += 1;
+      // Compute oscillated y and store it
+      this.y = Math.round(
+        baseY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
+      );
     },
 
     draw(screen) {
-      const currentY = Math.round(
-        y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
+      screen.drawImage(
+        image,
+        0,
+        0,
+        WIDTH,
+        HEIGHT,
+        this.x,
+        this.y,
+        WIDTH,
+        HEIGHT
       );
-      screen.drawImage(image, 0, 0, WIDTH, HEIGHT, x, currentY, WIDTH, HEIGHT);
     },
 
-    reset,
+    reset(tiles = []) {
+      const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
+
+      if (eligibleTiles.length > 0) {
+        const tile =
+          eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
+        this.x = tile.x + tile.width / 2 - WIDTH / 2;
+        baseY = tile.y - HEIGHT - FLOAT_HEIGHT;
+        this.y = baseY;
+      } else {
+        this.x = SCREEN_WIDTH + 64;
+        baseY = 120;
+        this.y = baseY;
+      }
+
+      tick = 0;
+    },
   };
 }
 
