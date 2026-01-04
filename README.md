@@ -38,13 +38,14 @@ That's it!
 ## Roadmap
 
 - [x] Start screen
-- [ ] Variation (platform distribution)
-- [ ] Progression (harder and harder)
-- [ ] Power ups (air jump). Apples, bananas etc.
-- [ ] Enemies (ufo's)
+- [x] Variation (platform distribution)
+- [x] Progression (harder and harder)
+- [ ] Power ups (air jump)
+- [ ] Enemies
 - [ ] Score
 - [ ] Session high score
 - [ ] Ending
+- [ ] Better start screen
 - [ ] Restart
 - [ ] SFX
 - [ ] Music
