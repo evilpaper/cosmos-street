@@ -288,14 +288,7 @@ function createPlatforms(amount) {
   };
 }
 
-/**
- * Creates an angel power-up that grants an extra jump when collected.
- * Floats above platforms and oscillates up/down.
- */
-function createAngel(options = {}) {
-  const { x = 256, y = 120 } = options;
-
-  // Constants
+function createAngel(tiles) {
   const WIDTH = 16;
   const HEIGHT = 16;
   const HITBOX_WIDTH = 8;
@@ -308,12 +301,35 @@ function createAngel(options = {}) {
   image.src = "./images/collectibles-sprite-sheet.png";
 
   // Mutable state (closure)
-  let baseY = y;
+  let baseY = 120;
   let tick = 0;
 
+  // Find initial position on a tile
+  function findPositionOnTile(tileList) {
+    const eligibleTiles = tileList.filter((tile) => tile.x > SCREEN_WIDTH);
+
+    if (eligibleTiles.length > 0) {
+      const tile =
+        eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
+      return {
+        x: tile.x + tile.width / 2 - WIDTH / 2,
+        y: tile.y - HEIGHT - FLOAT_HEIGHT,
+      };
+    }
+
+    // Fallback: spawn ahead of screen at default height
+    return {
+      x: SCREEN_WIDTH + 64,
+      y: 120,
+    };
+  }
+
+  const initialPos = findPositionOnTile(tiles);
+  baseY = initialPos.y;
+
   return {
-    x,
-    y,
+    x: initialPos.x,
+    y: initialPos.y,
     width: WIDTH,
     height: HEIGHT,
 
@@ -349,21 +365,11 @@ function createAngel(options = {}) {
       );
     },
 
-    reset(tiles = []) {
-      const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
-
-      if (eligibleTiles.length > 0) {
-        const tile =
-          eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
-        this.x = tile.x + tile.width / 2 - WIDTH / 2;
-        baseY = tile.y - HEIGHT - FLOAT_HEIGHT;
-        this.y = baseY;
-      } else {
-        this.x = SCREEN_WIDTH + 64;
-        baseY = 120;
-        this.y = baseY;
-      }
-
+    reset(tileList) {
+      const pos = findPositionOnTile(tileList);
+      this.x = pos.x;
+      baseY = pos.y;
+      this.y = baseY;
       tick = 0;
     },
   };
@@ -444,7 +450,7 @@ function getDifficulty() {
 function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
-  angel = createAngel();
+  angel = createAngel(platforms.tiles);
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
 }
