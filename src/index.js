@@ -346,6 +346,81 @@ function createSparkle(x, y) {
   };
 }
 
+function createSkateboardSparkle(x, y) {
+  // Constants
+  const FRAME_WIDTH = 36;
+  const FRAME_HEIGHT = 16;
+  const TOTAL_FRAMES = 10;
+  const TICKS_PER_FRAME = 6;
+
+  const image = new Image();
+  image.src = "./images/skateboard-sparkle-sprite-sheet.png";
+
+  // Mutable state (closure)
+  let animationTick = 0;
+  let frame = 0;
+  let posX = x;
+  let posY = y;
+  let done = false;
+
+  return {
+    x: posX,
+    y: posY,
+    width: FRAME_WIDTH,
+    height: FRAME_HEIGHT,
+
+    isDone() {
+      return done;
+    },
+
+    update() {
+      // Scroll with platforms
+      posX -= scrollSpeed;
+
+      // Advance animation tick
+      animationTick += 1;
+
+      // Advance frame when tick threshold reached
+      if (animationTick >= TICKS_PER_FRAME) {
+        animationTick = 0;
+        frame += 1;
+
+        // Signal done when animation completes
+        if (frame >= TOTAL_FRAMES) {
+          done = true;
+        }
+      }
+
+      // Update exposed position
+      this.x = posX;
+      this.y = posY;
+    },
+
+    draw(screen) {
+      if (done) return;
+
+      // Sprite sheet is horizontal: frames side by side
+      const sx = frame * FRAME_WIDTH;
+      const sy = 0;
+
+      const dx = Math.round(posX);
+      const dy = Math.round(posY);
+
+      screen.drawImage(
+        image,
+        sx,
+        sy,
+        FRAME_WIDTH,
+        FRAME_HEIGHT,
+        dx,
+        dy,
+        FRAME_WIDTH,
+        FRAME_HEIGHT
+      );
+    },
+  };
+}
+
 function createAngel(tiles) {
   const WIDTH = 16;
   const HEIGHT = 16;
