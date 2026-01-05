@@ -3,7 +3,7 @@
  */
 const GRAVITY = 0.08;
 const FRICTION = 0.4;
-const SCROLL_SPEED_SKATING = 1.4;
+const SCROLL_SPEED_SKATING = 1.6;
 const SCROLL_SPEED_BREAKING = 0.4;
 const SCROLL_SPEED_SPEEDING = 2.2;
 const TILE_WIDTH = 16; // Shared between createTile() and createPlatforms()
@@ -276,7 +276,7 @@ function createSparkle(x, y) {
   const FRAME_WIDTH = 20;
   const FRAME_HEIGHT = 20;
   const TOTAL_FRAMES = 7;
-  const TICKS_PER_FRAME = 5;
+  const TICKS_PER_FRAME = 6;
 
   const image = new Image();
   image.src = "./images/sparkle-sprite-sheet.png";
@@ -553,7 +553,7 @@ function update() {
     // Power-up collection (uses centered 8x8 hitbox)
     if (checkCollision(player, angel.getHitbox())) {
       // Spawn sparkle at angel position before respawn
-      sparkles.push(createSparkle(angel.x, angel.y - 4));
+      sparkles.push(createSparkle(angel.x, angel.y - 8));
       player.airJumps += 1;
       angel.respawn(platforms.tiles);
     }
