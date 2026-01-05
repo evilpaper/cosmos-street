@@ -65,6 +65,7 @@ let stars;
 let platforms;
 let angel;
 let sparkles;
+let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 
 /**
@@ -346,12 +347,16 @@ function createSparkle(x, y) {
   };
 }
 
-function createSkateboardSparkle(x, y) {
+function createSkateboardSparkle(target) {
   // Constants
   const FRAME_WIDTH = 36;
   const FRAME_HEIGHT = 16;
   const TOTAL_FRAMES = 10;
   const TICKS_PER_FRAME = 6;
+
+  // Offset to center sparkle on skateboard (bottom of player)
+  const OFFSET_X = (target.width - FRAME_WIDTH) / 2; // Center horizontally
+  const OFFSET_Y = target.height - FRAME_HEIGHT; // Align to bottom
 
   const image = new Image();
   image.src = "./images/skateboard-sparkle-sprite-sheet.png";
@@ -359,24 +364,12 @@ function createSkateboardSparkle(x, y) {
   // Mutable state (closure)
   let animationTick = 0;
   let frame = 0;
-  let posX = x;
-  let posY = y;
-  let done = false;
 
   return {
-    x: posX,
-    y: posY,
     width: FRAME_WIDTH,
     height: FRAME_HEIGHT,
 
-    isDone() {
-      return done;
-    },
-
     update() {
-      // Scroll with platforms
-      posX -= scrollSpeed;
-
       // Advance animation tick
       animationTick += 1;
 
@@ -385,26 +378,21 @@ function createSkateboardSparkle(x, y) {
         animationTick = 0;
         frame += 1;
 
-        // Signal done when animation completes
+        // Loop animation
         if (frame >= TOTAL_FRAMES) {
-          done = true;
+          frame = 0;
         }
       }
-
-      // Update exposed position
-      this.x = posX;
-      this.y = posY;
     },
 
     draw(screen) {
-      if (done) return;
-
       // Sprite sheet is horizontal: frames side by side
       const sx = frame * FRAME_WIDTH;
       const sy = 0;
 
-      const dx = Math.round(posX);
-      const dy = Math.round(posY);
+      // Follow target position with offset
+      const dx = Math.round(target.x + OFFSET_X);
+      const dy = Math.round(target.y + OFFSET_Y);
 
       screen.drawImage(
         image,
@@ -585,6 +573,7 @@ function init() {
   platforms = createPlatforms(30);
   angel = createAngel(platforms.tiles);
   sparkles = [];
+  skateboardSparkle = createSkateboardSparkle(player);
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
 }
@@ -639,6 +628,11 @@ function update() {
     }
     sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
 
+    // Update skateboard sparkle when player has air jumps
+    if (player.airJumps > 0) {
+      skateboardSparkle.update();
+    }
+
     if (player.y > 500) {
       // We could call init() here but that would restart the game.
       // For now, we just reset the player to the start position.
@@ -666,6 +660,11 @@ function draw(screen) {
 
     for (const sparkle of sparkles) {
       sparkle.draw(screen);
+    }
+
+    // Draw skateboard sparkle when player has air jumps
+    if (player.airJumps > 0) {
+      skateboardSparkle.draw(screen);
     }
 
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
