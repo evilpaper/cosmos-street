@@ -9,15 +9,9 @@ A nostalgic skate ride inspired by Wonder Boy’s legendary runs on the Sega Mas
 
 ## About this project
 
-Cosmos Street is an old-school auto-runner. Inspired by the skateboard sequences in Wonder Boy on the Sega Master System, complete with borrowed sprites. It’s made for fun and as an experiment in pushing the creative limits of classic video game design.
+Cosmos Street is an old-school auto-runner. Inspired by the skateboard sequences in Wonder Boy on the Sega Master System, complete with borrowed sprites. It’s made for fun and as an experiment in pushing the creative limits within the restrictions of classic video game design.
 
 The game runs right in the browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy. Just simple, direct, classic game development.
-
-The game uses a limited palette of four colors, inspired by the original Game Boy.
-The game use a CRT effect created with CSS.
-The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
-
-Font is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
 
 ## How to play
 
@@ -53,15 +47,23 @@ That's it!
 - [ ] Music
 - [ ] Sound controls
 - [ ] Increased difficulty (harder and harder)
-- [ ] Add changing stuff to the background (more interesting)
+- [ ] Dynamic, vibrant space background, make it more interesting.
 - [ ] How to play - desktop (keyboard)
 - [ ] How to play - mobile
-- [x] favicon
-- [ ] itch.io game page
+- [x] favicon (sparkle)
+- [ ] itch.io game page. Maybe.
 
 ## Known Issues
 
 - [ ] Player state handling can be better. For example, sometimes when speeding and jumping the speed halt to skating.
+
+## Under the Hood
+
+The game uses a limited palette of four colors. Inspired by the original Game Boy and tweak for a distinct look.
+The game use a CRT effect created with CSS.
+The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
+
+Font used is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
 
 ## Running Locally
 
