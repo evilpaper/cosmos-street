@@ -80,7 +80,7 @@ const player = {
     }
 
     if (this.state === "speeding") {
-      if (!input.right && this.state !== this.states[1]) {
+      if (!input.right) {
         this.state = this.states[0]; // -> Only stay in speeding state if right arrow is pressed
       } else if (input.left) {
         this.state = this.states[2]; // -> breaking
@@ -125,8 +125,10 @@ const player = {
         landed = true;
 
         // Update state when landing
-        if (this.state === this.states[2]) {
+        if (scrollSpeed === SCROLL_SPEED_BREAKING) {
           this.state = this.states[2]; // Stay in breaking state
+        } else if (scrollSpeed === SCROLL_SPEED_SPEEDING) {
+          this.state = this.states[3]; // Stay in speeding state
         } else {
           this.state = this.states[0]; // Return to skating
         }

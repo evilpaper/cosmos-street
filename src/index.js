@@ -756,8 +756,8 @@ function draw(screen) {
     }
 
     if (time > 24) {
-      print("Speed: " + scrollSpeed, "center", 186);
-      print("P state: " + player.state, "center", 198);
+      print(" " + scrollSpeed, "center", 186);
+      print(" " + player.state, "center", 198);
     }
   }
 }
