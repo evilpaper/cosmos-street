@@ -23,12 +23,6 @@ The game restart automatically when the player fall off the screen.
 
 That's it!
 
-## Some features
-
-- CSS Clip Path to get the shape of the screen
-- CRT/Scanline effect with CSS Keyframes
-- Keyboard and touch controls
-
 ## Roadmap
 
 - [x] Start screen
@@ -57,19 +51,24 @@ That's it!
 
 - [ ] Player state handling can be better. For example, sometimes when speeding and jumping the speed halt to skating.
 
-## Under the Hood
+## Constraints and Requirements
 
-The game uses a limited palette of four colors. Inspired by the original Game Boy and tweak for a distinct look.
-The game use a CRT effect created with CSS.
-The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
+- Limited palette. Only allowed to use four colors palette. Inspired by the original Game Boy and tweaked for a distinct vintage futuristic look. Can't remember the inspiration source.
+- Small screen, 256 x 256 px. Wrapped in a CSS Clip Path to get a round-ish shape. No other reason than it's nice.
+- Only use standard HTML, CSS and JavaScript. No dependecies.
+- Should have Keyboard and Touch Controls.
 
-Font used is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
+## Notes on development
+
+- The CRT effect is created with CSS. More precise CSS Keyframes.
+- The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
+- Font used is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
 
 ## Running Locally
 
 No need to install anything. Just open index.html in your web browser of choice and game along.
 
-If you have cloned the repo you can run it from your shell with the open command, something like this:
+If you have cloned the repo you can run it from your shell with the open command, like this:
 
 ```sh
 open -a "Google Chrome" index.html
