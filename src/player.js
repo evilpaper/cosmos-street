@@ -81,7 +81,7 @@ const player = {
     }
 
     if (this.state === "speeding") {
-      if (!input.right) {
+      if (!input.right && this.state !== this.states[1]) {
         this.state = this.states[0]; // -> Only stay in speeding state if right arrow is pressed
       }
       if (input.left) {
