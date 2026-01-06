@@ -304,7 +304,7 @@ function createSparkle(x, y) {
       posX -= scrollSpeed;
 
       // Move sparkle upward
-      posY -= 0.4;
+      posY -= 0.2;
 
       // Advance animation tick
       animationTick += 1;
@@ -355,7 +355,7 @@ function createSkateboardSparkle(target) {
   const FRAME_WIDTH = 36;
   const FRAME_HEIGHT = 16;
   const TOTAL_FRAMES = 10;
-  const TICKS_PER_FRAME = 8;
+  const TICKS_PER_FRAME = 6;
 
   // Offset to center sparkle on skateboard (bottom of player)
   const OFFSET_X = (target.width - FRAME_WIDTH) / 2; // Center horizontally
