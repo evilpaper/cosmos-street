@@ -81,29 +81,29 @@ function createStar(options = {}) {
   const { small = false } = options;
 
   // Constants. Same for all stars.
-  const totalFrames = 6;
-  const ticksPerFrame = 30;
-  const blinkProbability = 0.6;
-  const spawnWidth = SCREEN_WIDTH; // initial spawn area
-  const spawnHeight = SCREEN_HEIGHT;
-  const wrapMargin = 10; // allowed off-screen before wrap
-  const resetX = SCREEN_WIDTH + 32; // where the star re-enters
-  const minSpeed = 0.05;
-  const maxSpeed = 0.1;
+  const TOTAL_FRAMES = 6;
+  const TICKS_PER_FRAME = 30;
+  const BLINK_PROBABILITY = 0.6;
+  const SPAWN_WIDTH = SCREEN_WIDTH; // initial spawn area
+  const SPAWN_HEIGHT = SCREEN_HEIGHT;
+  const WRAP_MARGIN = 10; // allowed off-screen before wrap
+  const RESET_X = SCREEN_WIDTH + 32; // where the star re-enters
+  const MIN_SPEED = 0.05;
+  const MAX_SPEED = 0.1;
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
 
   // Constant for the star instance but but different for each star.
-  const blinking = small ? false : Math.random() < blinkProbability;
+  const blinking = small ? false : Math.random() < BLINK_PROBABILITY;
   const dx = small
     ? Math.random() * (0.1 - 0.02) + 0.02
-    : Math.random() * (maxSpeed - minSpeed) + minSpeed;
+    : Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
 
   // Mutables
   let animationTick = 0;
-  let frame = small ? 7 : Math.floor(Math.random() * totalFrames);
-  let x = Math.floor(Math.random() * spawnWidth);
-  let y = Math.floor(Math.random() * spawnHeight);
+  let frame = small ? 7 : Math.floor(Math.random() * TOTAL_FRAMES);
+  let x = Math.floor(Math.random() * SPAWN_WIDTH);
+  let y = Math.floor(Math.random() * SPAWN_HEIGHT);
 
   return {
     image,
@@ -118,19 +118,19 @@ function createStar(options = {}) {
 
     update() {
       // 1) advance animation tick
-      animationTick = (animationTick + 1) % ticksPerFrame;
+      animationTick = (animationTick + 1) % TICKS_PER_FRAME;
 
       // 2) move left based on global scroll speed
       x -= dx + scrollSpeed * 0.2;
 
       // 3) wrap when fully off-screen (with margin)
-      if (x < -wrapMargin) {
-        x = resetX;
+      if (x < -WRAP_MARGIN) {
+        x = RESET_X;
       }
 
       // 4) advance frame on blink cadence
       if (blinking && animationTick === 0) {
-        frame = (frame + 1) % totalFrames;
+        frame = (frame + 1) % TOTAL_FRAMES;
       }
     },
 
