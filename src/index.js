@@ -504,7 +504,7 @@ function createEnemy(x, y) {
   const WIDTH = 16;
   const HEIGHT = 25;
   const TICKS_PER_FRAME = 8;
-  const TOTAL_FRAMES = 8;
+  const TOTAL_FRAMES = 10;
 
   const image = new Image();
   image.src = "./images/enemy-sprite-sheet.png";
