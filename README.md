@@ -58,11 +58,13 @@ That's it!
 - Small screen, 256 x 256 px. Wrapped in a CSS Clip Path to get a round-ish shape. No other reason than it's nice.
 - Only use standard HTML, CSS and JavaScript. No dependecies.
 - Should have Keyboard and Touch Controls.
+- Create as few original assets as possible; reuse existing ones where feasible. Producing art, sound effects, and music is time-consuming. One reason modified sprites from the original Wonder Boy (Sega Master System) are used.
 
 ## Notes on development
 
 - The CRT effect is created with CSS. More precise CSS Keyframes.
 - The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
+- The enemy art for Blip Blip is sourced from the image Mega Man Custom Enemies by calegaea75432, discovered online. Full credit goes to calegaea75432.
 - Font used is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
 
 ## Running Locally

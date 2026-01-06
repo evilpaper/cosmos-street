@@ -499,6 +499,64 @@ function createAngel(tiles) {
   };
 }
 
+function createEnemy(x, y) {
+  const WIDTH = 16;
+  const HEIGHT = 25;
+  const TICKS_PER_FRAME = 8;
+  const TOTAL_FRAMES = 7;
+
+  const image = new Image();
+  image.src = "./images/enemy-sprite-sheet.png";
+
+  // Mutable state (closure)
+  let speed = 2.4;
+  let animationTick = 0;
+  let frame = 0;
+
+  return {
+    x: x,
+    y: y,
+    width: WIDTH,
+    height: HEIGHT,
+
+    update() {
+      this.x -= speed;
+
+      // Advance animation tick
+      animationTick += 1;
+
+      // Advance frame when tick threshold reached
+      if (animationTick >= TICKS_PER_FRAME) {
+        animationTick = 0;
+        frame += 1;
+
+        // Loop animation
+        if (frame >= TOTAL_FRAMES) {
+          frame = 0;
+        }
+      }
+    },
+
+    draw(screen) {
+      // Sprite sheet is horizontal: frames side by side
+      const sx = frame * WIDTH;
+      const sy = 0;
+
+      screen.drawImage(
+        image,
+        sx,
+        sy,
+        WIDTH,
+        HEIGHT,
+        this.x,
+        this.y,
+        WIDTH,
+        HEIGHT
+      );
+    },
+  };
+}
+
 /**
  * Checks for collision between two objects.
  *
@@ -575,10 +633,12 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angel = createAngel(platforms.tiles);
-  sparkles = [];
   skateboardSparkle = createSkateboardSparkle(player);
+  sparkles = [];
+  enemies = [];
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
+  enemies.push(createEnemy(SCREEN_WIDTH, 72));
 }
 
 function update() {
@@ -609,6 +669,10 @@ function update() {
     player.update(platforms.tiles, time);
     title.update();
     platforms.update();
+
+    enemies.forEach((enemy) => {
+      enemy.update();
+    });
 
     angel.update();
 
@@ -648,6 +712,10 @@ function draw(screen) {
   screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
   stars.forEach((s) => s.draw(screen));
   platforms.draw(screen);
+
+  enemies.forEach((enemy) => {
+    enemy.draw(screen);
+  });
 
   if (isIdle()) {
     title.draw(screen);
