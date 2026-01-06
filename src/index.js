@@ -303,6 +303,9 @@ function createSparkle(x, y) {
       // Scroll with platforms
       posX -= scrollSpeed;
 
+      // Move sparkle upward
+      posY -= 0.4;
+
       // Advance animation tick
       animationTick += 1;
 
