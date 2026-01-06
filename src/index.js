@@ -3,9 +3,9 @@
  */
 const GRAVITY = 0.08;
 const FRICTION = 0.4;
-const SCROLL_SPEED_SKATING = 1.6;
+const SCROLL_SPEED_SKATING = 1.4;
 const SCROLL_SPEED_BREAKING = 0.4;
-const SCROLL_SPEED_SPEEDING = 2.2;
+const SCROLL_SPEED_SPEEDING = 2.0;
 const TILE_WIDTH = 16; // Shared between createTile() and createPlatforms(), therefore global.
 const TILE_HEIGHT = 16;
 const DIFFICULTY_STAGES = [
@@ -483,8 +483,8 @@ function createAngel(tiles) {
         0,
         WIDTH,
         HEIGHT,
-        this.x,
-        this.y,
+        Math.floor(this.x),
+        Math.floor(this.y),
         WIDTH,
         HEIGHT
       );
@@ -503,14 +503,12 @@ function createAngel(tiles) {
 function createEnemy(x, y) {
   const WIDTH = 16;
   const HEIGHT = 25;
-  const TICKS_PER_FRAME = 9;
-  const TOTAL_FRAMES = 7;
+  const TICKS_PER_FRAME = 8;
+  const TOTAL_FRAMES = 8;
 
   const image = new Image();
   image.src = "./images/enemy-sprite-sheet.png";
 
-  // Mutable state (closure)
-  let speed = 1.8;
   let animationTick = 0;
   let frame = 0;
 
@@ -521,7 +519,7 @@ function createEnemy(x, y) {
     height: HEIGHT,
 
     update() {
-      this.x -= speed;
+      this.x -= scrollSpeed + 0.6;
 
       // Advance animation tick
       animationTick += 1;
@@ -549,8 +547,8 @@ function createEnemy(x, y) {
         sy,
         WIDTH,
         HEIGHT,
-        this.x,
-        this.y,
+        Math.floor(this.x),
+        Math.floor(this.y),
         WIDTH,
         HEIGHT
       );
@@ -688,6 +686,16 @@ function update() {
 
     for (const enemy of enemies) {
       enemy.update();
+      if (checkCollision(player, enemy)) {
+        // player.reset();
+        enemies.splice(enemies.indexOf(enemy), 1);
+        enemies.push(createEnemy(SCREEN_WIDTH, Math.random() * 100 + 100));
+      }
+
+      if (enemy.x + enemy.width < 0) {
+        enemies.splice(enemies.indexOf(enemy), 1);
+        enemies.push(createEnemy(SCREEN_WIDTH, Math.random() * 100 + 100));
+      }
     }
 
     // Update sparkles and remove finished ones
