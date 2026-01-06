@@ -6,7 +6,7 @@ const FRICTION = 0.4;
 const SCROLL_SPEED_SKATING = 1.6;
 const SCROLL_SPEED_BREAKING = 0.4;
 const SCROLL_SPEED_SPEEDING = 2.2;
-const TILE_WIDTH = 16; // Shared between createTile() and createPlatforms()
+const TILE_WIDTH = 16; // Shared between createTile() and createPlatforms(), therefore global.
 const TILE_HEIGHT = 16;
 const DIFFICULTY_STAGES = [
   {
@@ -57,7 +57,7 @@ const DIFFICULTY_STAGES = [
 ];
 
 /**
- * Global variables
+ * Global mutable variables
  */
 let paused = false;
 let time = 0;
@@ -69,18 +69,21 @@ let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 
 /**
- *  player is defined in player.js file.
- *  title is defined in title.js file.
- *  Follow the "Object literal for one, factory for many" principle.
+ *  Note!
+ *  - The player variable is defined in player.js file.
+ *  - The title variable is defined in title.js file.
+ *  Following the "object literal for one, factory for many" principle.
  */
 
 /**
- * Factories for creating objects that appear as multiple instances (stars, platforms, etc.).
+ * Global Factory Functions
+ *
+ * Create objects that appear as multiple instances (stars, platforms, etc.).
  */
+
 function createStar(options = {}) {
   const { small = false } = options;
 
-  // Constants. Same for all stars.
   const TOTAL_FRAMES = 6;
   const TICKS_PER_FRAME = 30;
   const BLINK_PROBABILITY = 0.6;
@@ -90,10 +93,11 @@ function createStar(options = {}) {
   const RESET_X = SCREEN_WIDTH + 32; // where the star re-enters
   const MIN_SPEED = 0.05;
   const MAX_SPEED = 0.1;
+
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
 
-  // Constant for the star instance but but different for each star.
+  // These are different for each star.
   const blinking = small ? false : Math.random() < BLINK_PROBABILITY;
   const dx = small
     ? Math.random() * (0.1 - 0.02) + 0.02
@@ -273,7 +277,6 @@ function createPlatforms(amount) {
 }
 
 function createSparkle(x, y) {
-  // Constants
   const FRAME_WIDTH = 20;
   const FRAME_HEIGHT = 20;
   const TOTAL_FRAMES = 8;
@@ -351,12 +354,10 @@ function createSparkle(x, y) {
 }
 
 function createSkateboardSparkle(target) {
-  // Constants
   const FRAME_WIDTH = 36;
   const FRAME_HEIGHT = 16;
   const TOTAL_FRAMES = 10;
   const TICKS_PER_FRAME = 6;
-
   // Offset to center sparkle on skateboard (bottom of player)
   const OFFSET_X = (target.width - FRAME_WIDTH) / 2; // Center horizontally
   const OFFSET_Y = target.height - FRAME_HEIGHT; // Align to bottom
@@ -502,14 +503,14 @@ function createAngel(tiles) {
 function createEnemy(x, y) {
   const WIDTH = 16;
   const HEIGHT = 25;
-  const TICKS_PER_FRAME = 8;
+  const TICKS_PER_FRAME = 9;
   const TOTAL_FRAMES = 7;
 
   const image = new Image();
   image.src = "./images/enemy-sprite-sheet.png";
 
   // Mutable state (closure)
-  let speed = 2.4;
+  let speed = 1.8;
   let animationTick = 0;
   let frame = 0;
 
@@ -670,10 +671,6 @@ function update() {
     title.update();
     platforms.update();
 
-    enemies.forEach((enemy) => {
-      enemy.update();
-    });
-
     angel.update();
 
     // Respawn angel if it scrolled off the left side of the screen
@@ -687,6 +684,10 @@ function update() {
       sparkles.push(createSparkle(angel.x, angel.y - 8));
       player.airJumps += 1;
       angel.respawn(platforms.tiles);
+    }
+
+    for (const enemy of enemies) {
+      enemy.update();
     }
 
     // Update sparkles and remove finished ones
@@ -709,17 +710,17 @@ function update() {
 }
 
 function draw(screen) {
+  // Clear the screen
   screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-  stars.forEach((s) => s.draw(screen));
-  platforms.draw(screen);
 
-  enemies.forEach((enemy) => {
-    enemy.draw(screen);
-  });
+  for (const star of stars) {
+    star.draw(screen);
+  }
+
+  platforms.draw(screen);
 
   if (isIdle()) {
     title.draw(screen);
-
     print("Press ←,→ or ↑", "center", 186);
     print("key to start", "center", 198);
   }
@@ -728,6 +729,10 @@ function draw(screen) {
     player.draw(screen);
     title.draw(screen);
     angel.draw(screen);
+
+    for (const enemy of enemies) {
+      enemy.draw(screen);
+    }
 
     for (const sparkle of sparkles) {
       sparkle.draw(screen);

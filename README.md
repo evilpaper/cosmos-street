@@ -16,12 +16,12 @@ The game runs right in the browser, built with just plain HTML, CSS, and JavaScr
 ## How to play
 
 Jump = Arrow Up
+
 Slow down = Arrow Left
+
 Speed up = Arrow Right
 
-The game restart automatically when the player fall off the screen.
-
-That's it!
+That's it! Good luck!
 
 ## Roadmap
 
