@@ -665,7 +665,6 @@ function draw(screen) {
       sparkle.draw(screen);
     }
 
-    // Draw skateboard sparkle when player has air jumps
     if (player.airJumps > 0) {
       skateboardSparkle.draw(screen);
     }
@@ -673,11 +672,6 @@ function draw(screen) {
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
       print("Press ←,→ or ↑", "center", 186);
       print("key to start", "center", 198);
-    }
-
-    if (time > 80) {
-      print(`Time ${Math.floor(time / 60)}`, "center", 36);
-      print(`Angels ${player.airJumps}`, "center", 216);
     }
   }
 }

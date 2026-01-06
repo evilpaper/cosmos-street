@@ -39,14 +39,15 @@ That's it!
 
 - [x] Start screen
 - [x] Variation (platform distribution)
-- [ ] Power ups (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
+- [x] Power ups (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
 - [ ] Change player x position based on state (break,regular,speeding)
 - [ ] Feedback particles. Break, landing, speeding.
 - [ ] Enemies
+- [ ] Death
 - [ ] Score
 - [ ] Session high score
 - [ ] Ending
-- [ ] Better start screen (more interesting, player in the middle, title shine effect)
+- [ ] Better start screen (more interesting, show player in the middle maybe, shine effect on title)
 - [ ] Restart
 - [ ] SFX
 - [ ] Music
