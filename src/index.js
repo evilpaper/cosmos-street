@@ -754,5 +754,10 @@ function draw(screen) {
       print("Press ←,→ or ↑", "center", 186);
       print("key to start", "center", 198);
     }
+
+    if (time > 24) {
+      print("Speed: " + scrollSpeed, "center", 186);
+      print("P state: " + player.state, "center", 198);
+    }
   }
 }

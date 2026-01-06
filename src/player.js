@@ -74,8 +74,7 @@ const player = {
 
       if (!input.left) {
         this.state = this.states[0]; // Only stay in breaking state if left arrow is pressed
-      }
-      if (input.up) {
+      } else if (input.up) {
         this.jump();
       }
     }
@@ -83,11 +82,9 @@ const player = {
     if (this.state === "speeding") {
       if (!input.right && this.state !== this.states[1]) {
         this.state = this.states[0]; // -> Only stay in speeding state if right arrow is pressed
-      }
-      if (input.left) {
+      } else if (input.left) {
         this.state = this.states[2]; // -> breaking
-      }
-      if (input.up) {
+      } else if (input.up) {
         this.jump();
       }
     }
