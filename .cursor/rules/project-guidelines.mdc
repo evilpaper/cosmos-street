@@ -19,6 +19,7 @@ alwaysApply: true
           "Avoid magic numbers: Name things like 6 (frames), 16 (ticks per frame), -10 (left wrap margin), 200 (reset x) and reference SCREEN_WIDTH/HEIGHT.",
           "Strive for a clear and minimal API: Prefer plain fields over getters unless you need to enforce read-only or compute values.",
           "Group config and state: Separate constants (config) from mutable state; name them clearly.",
+          "In factory functions, use UPPERCASE_SNAKE_CASE for local constants (e.g., TOTAL_FRAMES, TICKS_PER_FRAME) and camelCase for mutable state variables.",
 
           // Game loop & rendering
           "Like most game engines, use an update() loop, running 60 times per second.",
