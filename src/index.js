@@ -276,7 +276,7 @@ function createSparkle(x, y) {
   // Constants
   const FRAME_WIDTH = 20;
   const FRAME_HEIGHT = 20;
-  const TOTAL_FRAMES = 7;
+  const TOTAL_FRAMES = 8;
   const TICKS_PER_FRAME = 6;
 
   const image = new Image();
@@ -352,7 +352,7 @@ function createSkateboardSparkle(target) {
   const FRAME_WIDTH = 36;
   const FRAME_HEIGHT = 16;
   const TOTAL_FRAMES = 10;
-  const TICKS_PER_FRAME = 6;
+  const TICKS_PER_FRAME = 8;
 
   // Offset to center sparkle on skateboard (bottom of player)
   const OFFSET_X = (target.width - FRAME_WIDTH) / 2; // Center horizontally
@@ -416,7 +416,7 @@ function createAngel(tiles) {
   const HITBOX_HEIGHT = 8;
   const OSCILLATION_AMPLITUDE = 2;
   const OSCILLATION_SPEED = 0.1;
-  const FLOAT_HEIGHT = 5;
+  const FLOAT_HEIGHT = 10;
 
   const image = new Image();
   image.src = "./images/collectibles-sprite-sheet.png";
