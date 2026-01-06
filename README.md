@@ -28,9 +28,7 @@ That's it!
 - [x] Start screen
 - [x] Variation (platform distribution)
 - [x] Power ups (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
-- [ ] Change player x position based on state (break,regular,speeding)
-- [ ] Feedback particles. Break, landing, speeding.
-- [ ] Enemies
+- [ ] Enemy
 - [ ] Death
 - [ ] Score
 - [ ] Session high score
@@ -39,13 +37,16 @@ That's it!
 - [ ] Restart
 - [ ] SFX
 - [ ] Music
-- [ ] Sound controls
+- [ ] Sound controls (on/off)
 - [ ] Increased difficulty (harder and harder)
-- [ ] Dynamic, vibrant space background, make it more interesting.
-- [ ] How to play - desktop (keyboard)
-- [ ] How to play - mobile
+- [ ] Optional - Feedback particles. Break, landing, speeding.
+- [ ] Optional - Change player x position based on state (break,regular,speeding)
+- [ ] Optional - Dynamic, vibrant space background, make it more interesting.
+- [ ] Optional - How to play - desktop (keyboard)
+- [ ] Optional - How to play - mobile
 - [x] favicon (sparkle)
 - [ ] itch.io game page. Maybe.
+- [ ] Replace .cursor/rules with AGENTS.md in the root (a simple and platform independent alternative)
 
 ## Known Issues
 
