@@ -28,7 +28,7 @@ That's it! Good luck!
 - [x] Start screen
 - [x] Variation (platform distribution)
 - [x] Power ups (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
-- [ ] Enemy
+- [x] Enemy
 - [ ] Death
 - [ ] Score
 - [ ] Session high score
