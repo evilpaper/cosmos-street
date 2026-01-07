@@ -739,6 +739,9 @@ function update() {
  * -----------------------------
  * Draw the game state to the screen
  * -----------------------------
+ *
+ * Screen is 256x256 pixels. But it has a rounded mask applied to it.
+ * So in essens the only visible area is about 36-212 pixels.
  */
 
 function draw(screen) {
@@ -755,9 +758,6 @@ function draw(screen) {
     title.draw(screen);
     print("Press ←,→ or ↑", "center", 186);
     print("key to start", "center", 198);
-
-    // print("top", "center", 36);
-    // print("bottom", "center", 212);
   }
 
   if (isPlaying()) {
@@ -780,11 +780,6 @@ function draw(screen) {
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
       print("Press ←,→ or ↑", "center", 186);
       print("key to start", "center", 198);
-    }
-
-    if (time > 24) {
-      print(" " + scrollSpeed, "center", 186);
-      print(" " + player.state, "center", 198);
     }
   }
 }
