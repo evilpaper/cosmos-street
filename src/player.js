@@ -179,17 +179,7 @@ const player = {
       }
     }
     if (this.state === "airborne" || this.state === "breaking") {
-      screen.drawImage(
-        this.image,
-        52,
-        0,
-        26,
-        40,
-        o(this.x),
-        o(this.y - 3),
-        26,
-        40
-      );
+      screen.drawImage(this.image, 52, 0, 26, 35, o(this.x), o(this.y), 26, 35);
     }
 
     /**
