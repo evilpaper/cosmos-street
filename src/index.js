@@ -626,7 +626,9 @@ function getDifficulty() {
  */
 
 /**
- * Initialize global variables, reset global objects
+ * -----------------------------
+ * Initialize global mutable variables, reset global objects
+ * -----------------------------
  */
 function init() {
   stars = createStars(30);
@@ -639,6 +641,12 @@ function init() {
   player.reset();
   enemies.push(createEnemy(SCREEN_WIDTH, 72));
 }
+
+/**
+ * -----------------------------
+ * Update the game state
+ * -----------------------------
+ */
 
 function update() {
   if (paused) {
@@ -689,12 +697,22 @@ function update() {
       if (checkCollision(player, enemy)) {
         // player.reset();
         enemies.splice(enemies.indexOf(enemy), 1);
-        enemies.push(createEnemy(SCREEN_WIDTH, Math.random() * 100 + 100));
+        enemies.push(
+          createEnemy(
+            SCREEN_WIDTH + 12,
+            Math.floor(Math.random() * (164 - 48 + 1)) + 48
+          )
+        );
       }
 
       if (enemy.x + enemy.width < 0) {
         enemies.splice(enemies.indexOf(enemy), 1);
-        enemies.push(createEnemy(SCREEN_WIDTH, Math.random() * 100 + 100));
+        enemies.push(
+          createEnemy(
+            SCREEN_WIDTH + 12,
+            Math.floor(Math.random() * (164 - 48 + 1)) + 48
+          )
+        );
       }
     }
 
@@ -717,6 +735,12 @@ function update() {
   }
 }
 
+/**
+ * -----------------------------
+ * Draw the game state to the screen
+ * -----------------------------
+ */
+
 function draw(screen) {
   // Clear the screen
   screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -731,6 +755,9 @@ function draw(screen) {
     title.draw(screen);
     print("Press ←,→ or ↑", "center", 186);
     print("key to start", "center", 198);
+
+    // print("top", "center", 36);
+    // print("bottom", "center", 212);
   }
 
   if (isPlaying()) {
