@@ -5,9 +5,10 @@ const player = {
     img.src = "./images/player-sprite-sheet.png";
     return img;
   })(),
-  states: ["skating", "airborne", "breaking", "speeding"],
+  states: ["skating", "airborne", "breaking", "speeding", "obliterating"],
   width: 26,
   height: 36,
+  totalFrames: 2,
   ticksToNextFrame: 16,
   tick: 0,
   frame: 0,
@@ -16,6 +17,7 @@ const player = {
   dy: 0,
   state: "skating", // Initial state is "skating" (this.states[0])
   airJumps: 0, // Number of air jumps available (granted by collecting angels)
+  isDead: false,
 
   reset() {
     this.tick = 0;
@@ -25,6 +27,7 @@ const player = {
     this.dy = 0;
     this.state = this.states[0];
     this.airJumps = 0;
+    this.isDead = false;
   },
 
   jump() {
@@ -47,6 +50,7 @@ const player = {
     }
 
     if (this.state === "skating") {
+      this.totalFrames = 2;
       this.ticksToNextFrame = 16;
       scrollSpeed = SCROLL_SPEED_SKATING;
 
@@ -62,6 +66,7 @@ const player = {
     }
 
     if (this.state === "airborne") {
+      this.totalFrames = 1;
       // Air jump: use a jump charge if available
       if (input.up && this.airJumps > 0) {
         this.airJumps -= 1;
@@ -70,6 +75,7 @@ const player = {
     }
 
     if (this.state === "breaking") {
+      this.totalFrames = 1;
       scrollSpeed = SCROLL_SPEED_BREAKING;
 
       if (!input.left) {
@@ -80,12 +86,22 @@ const player = {
     }
 
     if (this.state === "speeding") {
+      this.totalFrames = 2;
       if (!input.right) {
         this.state = this.states[0]; // -> Only stay in speeding state if right arrow is pressed
       } else if (input.left) {
         this.state = this.states[2]; // -> breaking
       } else if (input.up) {
         this.jump();
+      }
+    }
+
+    if (this.state === "obliterating") {
+      this.totalFrames = 6;
+      this.ticksToNextFrame = 6;
+      this.dy = 0;
+      if (this.isDead) {
+        this.reset();
       }
     }
 
@@ -129,6 +145,8 @@ const player = {
           this.state = this.states[2]; // Stay in breaking state
         } else if (scrollSpeed === SCROLL_SPEED_SPEEDING) {
           this.state = this.states[3]; // Stay in speeding state
+        } else if (this.state === "obliterating") {
+          this.state = this.states[4]; // Stay in obliterating state
         } else {
           this.state = this.states[0]; // Return to skating
         }
@@ -144,13 +162,20 @@ const player = {
 
     if (this.tick === 0) {
       this.frame = this.frame + 1;
-      if (this.frame >= 2) {
-        this.frame = 0;
+      if (this.frame >= this.totalFrames) {
+        if (this.state === "obliterating") {
+          this.isDead = true;
+        } else {
+          this.frame = 0;
+        }
       }
     }
   },
 
   draw(screen) {
+    const sx = this.frame * 40;
+    const sy = 35;
+
     if (this.state === "skating" || this.state === "speeding") {
       if (this.frame === 0) {
         screen.drawImage(
@@ -178,11 +203,29 @@ const player = {
         );
       }
     }
+
     if (this.state === "airborne" || this.state === "breaking") {
       screen.drawImage(this.image, 52, 0, 26, 35, o(this.x), o(this.y), 26, 35);
     }
 
+    if (this.state === "obliterating") {
+      if (!this.isDead) {
+        screen.drawImage(
+          this.image,
+          sx,
+          sy,
+          40,
+          40,
+          o(this.x),
+          o(this.y),
+          40,
+          40
+        );
+      }
+    }
+
     /**
+     *
      * Draw a green line from the player to the ground. For debugging purposes.
      */
     // screen.lineWidth = 1;

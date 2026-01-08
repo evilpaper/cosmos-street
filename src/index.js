@@ -695,7 +695,9 @@ function update() {
     for (const enemy of enemies) {
       enemy.update();
       if (checkCollision(player, enemy)) {
-        // player.reset();
+        player.state = "obliterating";
+        scrollSpeed = 0;
+        player.dy = 0;
         enemies.splice(enemies.indexOf(enemy), 1);
         enemies.push(
           createEnemy(

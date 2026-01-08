@@ -29,16 +29,17 @@ That's it! Good luck!
 - [x] Variation (platform distribution)
 - [x] Power ups (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
 - [x] Enemy
-- [ ] Death
+- [x] Death
+- [ ] Restart
 - [ ] Score
 - [ ] Session high score
-- [ ] Ending
 - [ ] Better start screen (more interesting, show player in the middle maybe, shine effect on title)
-- [ ] Restart
 - [ ] SFX
 - [ ] Music
 - [ ] Sound controls (on/off)
-- [ ] Increased difficulty (harder and harder)
+- [ ] Progression. Increase difficulty over time (harder and harder)
+- [ ] Playtest and one thousand tweaks. Make it fun and tight.
+- [ ] Optional - Electric sparks around enemy.
 - [ ] Optional - Feedback particles. Break, landing, speeding.
 - [ ] Optional - Change player x position based on state (break,regular,speeding)
 - [ ] Optional - Dynamic, vibrant space background, make it more interesting.
