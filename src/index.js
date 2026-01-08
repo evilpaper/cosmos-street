@@ -507,7 +507,7 @@ function createEnemy(x, y) {
   const TOTAL_FRAMES = 10;
 
   const image = new Image();
-  image.src = "./images/enemy-sprite-sheet-updated.png";
+  image.src = "./images/enemy-sprite-sheet.png";
 
   let animationTick = 0;
   let frame = 0;
