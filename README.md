@@ -30,15 +30,15 @@ That's it! Good luck!
 - [x] Power ups (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
 - [x] Enemy
 - [x] Death
-- [ ] Restart
+- [x] Restart
 - [ ] Score
 - [ ] Session high score
 - [ ] Better start screen (more interesting, show player in the middle maybe, shine effect on title)
 - [ ] SFX
 - [ ] Music
 - [ ] Sound controls (on/off)
-- [ ] Progression. Increase difficulty over time (harder and harder)
-- [ ] Playtest and one thousand tweaks. Make it fun and tight.
+- [ ] Increase difficulty over time (harder and harder)
+- [ ] Playtest, playtest, playtest and tweaks and tweak and tweak until it's fun, juicy and tight.
 - [ ] Optional - Electric sparks around enemy.
 - [ ] Optional - Feedback particles. Break, landing, speeding.
 - [ ] Optional - Change player x position based on state (break,regular,speeding)
