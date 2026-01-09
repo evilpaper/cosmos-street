@@ -698,15 +698,10 @@ function update() {
         player.state = "obliterating";
         scrollSpeed = 0;
         player.dy = 0;
-        // enemies.splice(enemies.indexOf(enemy), 1);
-        // enemies.push(
-        //   createEnemy(
-        //     SCREEN_WIDTH + 12,
-        //     Math.floor(Math.random() * (164 - 48 + 1)) + 48
-        //   )
-        // );
         // Restart the game
-        // init();
+        if (player.isDead) {
+          init();
+        }
       }
 
       if (enemy.x + enemy.width < 0) {
