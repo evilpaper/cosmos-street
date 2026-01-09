@@ -61,7 +61,7 @@ That's it! Good luck!
 - Should have Keyboard and Touch Controls.
 - Create as few original assets as possible; reuse existing ones where feasible. Producing art, sound effects, and music is time-consuming. One reason modified sprites from the original Wonder Boy (Sega Master System) are used.
 
-## Notes on development
+## Development notes
 
 - The CRT effect is created with CSS. More precise CSS Keyframes.
 - The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
