@@ -698,13 +698,15 @@ function update() {
         player.state = "obliterating";
         scrollSpeed = 0;
         player.dy = 0;
-        enemies.splice(enemies.indexOf(enemy), 1);
-        enemies.push(
-          createEnemy(
-            SCREEN_WIDTH + 12,
-            Math.floor(Math.random() * (164 - 48 + 1)) + 48
-          )
-        );
+        // enemies.splice(enemies.indexOf(enemy), 1);
+        // enemies.push(
+        //   createEnemy(
+        //     SCREEN_WIDTH + 12,
+        //     Math.floor(Math.random() * (164 - 48 + 1)) + 48
+        //   )
+        // );
+        // Restart the game
+        // init();
       }
 
       if (enemy.x + enemy.width < 0) {
@@ -763,9 +765,7 @@ function draw(screen) {
   }
 
   if (isPlaying()) {
-    player.draw(screen);
     title.draw(screen);
-    angel.draw(screen);
 
     for (const enemy of enemies) {
       enemy.draw(screen);
@@ -774,6 +774,9 @@ function draw(screen) {
     for (const sparkle of sparkles) {
       sparkle.draw(screen);
     }
+
+    player.draw(screen);
+    angel.draw(screen);
 
     if (player.airJumps > 0) {
       skateboardSparkle.draw(screen);
