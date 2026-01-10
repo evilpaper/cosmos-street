@@ -1,12 +1,15 @@
 /**
- * Global constants
+ * Global Constants
  */
 const GRAVITY = 0.08;
 const FRICTION = 0.4;
 const SCROLL_SPEED_SKATING = 1.4;
 const SCROLL_SPEED_BREAKING = 0.4;
 const SCROLL_SPEED_SPEEDING = 2.0;
-const TILE_WIDTH = 16; // Shared between createTile() and createPlatforms(), therefore global.
+// TILE_WIDTH AND TILE_HEIGHT are shared between the functions createTile() and createPlatforms()
+// We therefore define them as global constants.
+// The natural would otherwise be to define them inside the createTile() and createPlatforms() functions.
+const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 const DIFFICULTY_STAGES = [
   {
@@ -57,7 +60,7 @@ const DIFFICULTY_STAGES = [
 ];
 
 /**
- * Global mutable variables
+ * Global Mutable Variables
  */
 let paused = false;
 let time = 0;
@@ -69,16 +72,25 @@ let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 
 /**
- *  Note!
+ *  Note, also global but defined in other files...
  *  - The player variable is defined in player.js file.
  *  - The title variable is defined in title.js file.
- *  Following the "object literal for one, factory for many" principle.
+ *  Why? Because of the "object literal for one, factory for many" principle.
  */
 
 /**
  * Global Factory Functions
  *
  * Create objects that appear as multiple instances (stars, platforms, etc.).
+ *
+ * Some words about the ideas used in our factory functions:
+ *
+ * The Parameter Object Pattern is used to make the functions more flexible and easier to read.
+ * This gives us:
+ * - Self-documenting call sites. The meaning of the parameters in function calls becomes obvious.
+ * - Optional parameters become trivial. No more null, null, undefined, undefined.
+ * - Stable APIs over time. You can add new options without breaking callers.
+ * - Named arguments (in languages that lack them). JavaScript doesn’t have named parameters — this pattern emulates them.
  */
 
 function createStar(options = {}) {
@@ -87,7 +99,7 @@ function createStar(options = {}) {
   const TOTAL_FRAMES = 6;
   const TICKS_PER_FRAME = 30;
   const BLINK_PROBABILITY = 0.6;
-  const SPAWN_WIDTH = SCREEN_WIDTH; // initial spawn area
+  const SPAWN_WIDTH = SCREEN_WIDTH;
   const SPAWN_HEIGHT = SCREEN_HEIGHT;
   const WRAP_MARGIN = 10; // allowed off-screen before wrap
   const RESET_X = SCREEN_WIDTH + 32; // where the star re-enters
@@ -97,13 +109,13 @@ function createStar(options = {}) {
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
 
-  // These are different for each star.
+  // Different values for each star to make a more dynamic and interesting appearance.
   const blinking = small ? false : Math.random() < BLINK_PROBABILITY;
   const dx = small
     ? Math.random() * (0.1 - 0.02) + 0.02
     : Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
 
-  // Mutables
+  // Mutable variables (closure)
   let animationTick = 0;
   let frame = small ? 7 : Math.floor(Math.random() * TOTAL_FRAMES);
   let x = Math.floor(Math.random() * SPAWN_WIDTH);
@@ -203,7 +215,9 @@ function createTile(options = {}) {
   };
 }
 
-function createPlatforms(amount) {
+function createPlatforms(options = {}) {
+  const { amount = 30 } = options;
+
   const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
 
   let tiles = [];
