@@ -91,6 +91,8 @@ let scrollSpeed = SCROLL_SPEED_SKATING;
  * - Optional parameters become trivial. No more null, null, undefined, undefined.
  * - Stable APIs over time. You can add new options without breaking callers.
  * - Named arguments (in languages that lack them). JavaScript doesn’t have named parameters — this pattern emulates them.
+ * Why? Our factory functions don't have optional fields which could be a reason to use it.
+ * Instead, we use it because we expect them to evolve over time and want it to be easy to call them.
  */
 
 function createStar(options = {}) {
