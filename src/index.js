@@ -101,8 +101,8 @@ function createStar(options = {}) {
   const BLINK_PROBABILITY = 0.6;
   const SPAWN_WIDTH = SCREEN_WIDTH;
   const SPAWN_HEIGHT = SCREEN_HEIGHT;
-  const WRAP_MARGIN = 10; // allowed off-screen before wrap
-  const RESET_X = SCREEN_WIDTH + 32; // where the star re-enters
+  const LAST_X = -10; // The last x value before the star is wrapped around to the left side of the screen.
+  const RESPAWN_X = SCREEN_WIDTH + 10; // The x value where the star re-enters the right side of the screen.
   const MIN_SPEED = 0.05;
   const MAX_SPEED = 0.1;
 
@@ -140,8 +140,8 @@ function createStar(options = {}) {
       x -= dx + scrollSpeed * 0.2;
 
       // 3) wrap when fully off-screen (with margin)
-      if (x < -WRAP_MARGIN) {
-        x = RESET_X;
+      if (x < LAST_X) {
+        x = RESPAWN_X;
       }
 
       // 4) advance frame on blink cadence
@@ -575,7 +575,7 @@ function createEnemy(x, y) {
  *
  * @param {*} a
  * @param {*} b
- * @returns true if collision has happened, false otherwise. Need to think about this.
+ * @returns true if collision has happened, false otherwise.
  *
  * This is AABB (Axis-Aligned Bounding Box) collision. Also known as Rectangle–rectangle overlap test.
  * Detection: compares the distance between centers to the combined half-widths and half-heights to detect overlap.
@@ -666,6 +666,8 @@ function update() {
   if (paused) {
     return;
   }
+
+  console.log("stars: ", stars.length);
 
   for (const star of stars) {
     star.update();
