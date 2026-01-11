@@ -98,24 +98,26 @@ let scrollSpeed = SCROLL_SPEED_SKATING;
 function createStar(options = {}) {
   const { small = false } = options;
 
+  const FRAME_W = 7;
+  const FRAME_H = 7;
   const TOTAL_FRAMES = 6;
   const TICKS_PER_FRAME = 30;
-  const BLINK_PROBABILITY = 0.6;
+  const BLINK_PROBABILITY = 0.8;
   const SPAWN_WIDTH = SCREEN_WIDTH;
   const SPAWN_HEIGHT = SCREEN_HEIGHT;
   const LAST_X = -10; // The last x value before the star is wrapped around to the left side of the screen.
   const RESPAWN_X = SCREEN_WIDTH + 10; // The x value where the star re-enters the right side of the screen.
-  const MIN_SPEED = 0.05;
-  const MAX_SPEED = 0.2;
-  const SCROLL_SPEED_FACTOR = 0.2; // Factor by which the scroll speed is multiplied to get the intrinsic speed.
 
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
-  // Different values for each star to make a more dynamic and interesting appearance.
+
+  // Different values for each star to make a more dynamic and interesting.
   const blinking = small ? false : Math.random() < BLINK_PROBABILITY;
-  const intrinsicSpeed = small
-    ? Math.random() * (0.02 - 0.01) + 0.01
-    : Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
+
+  // Small stars move slower than big stars to give more depth to the background.
+  const speedFactor = small
+    ? Math.random() * 0.02 + 0.01
+    : Math.random() * 0.2 + 0.1;
 
   // Mutable variables
   let animationTick = 0;
@@ -139,25 +141,25 @@ function createStar(options = {}) {
       // 1) advance animation tick
       animationTick = (animationTick + 1) % TICKS_PER_FRAME;
 
-      // 2) move left based on global scroll speed
-      x -= intrinsicSpeed + scrollSpeed * SCROLL_SPEED_FACTOR;
+      // 2) move left
+      x -= scrollSpeed
+        ? scrollSpeed * speedFactor
+        : SCROLL_SPEED_BREAKING * speedFactor;
 
       // 3) wrap when fully off-screen (with margin)
       if (x < LAST_X) {
         x = RESPAWN_X;
       }
 
-      // 4) advance frame on blink cadence
+      // 4) advance frame if it's a blinking star
       if (blinking && animationTick === 0) {
         frame = (frame + 1) % TOTAL_FRAMES;
       }
     },
 
     draw(screen) {
-      const FRAME_W = 7;
-      const FRAME_H = 7;
-      const spriteX = frame * FRAME_W; // sprite x
-      const spriteY = 0; // single row
+      const spriteX = frame * FRAME_W;
+      const spriteY = 0;
 
       // Round positions here to keep integer pixels
       const drawX = Math.round(x);
