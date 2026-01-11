@@ -106,14 +106,15 @@ function createStar(options = {}) {
   const LAST_X = -10; // The last x value before the star is wrapped around to the left side of the screen.
   const RESPAWN_X = SCREEN_WIDTH + 10; // The x value where the star re-enters the right side of the screen.
   const MIN_SPEED = 0.05;
-  const MAX_SPEED = 0.1;
+  const MAX_SPEED = 0.2;
+  const SCROLL_SPEED_FACTOR = 0.2; // Factor by which the scroll speed is multiplied to get the intrinsic speed.
 
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
   // Different values for each star to make a more dynamic and interesting appearance.
   const blinking = small ? false : Math.random() < BLINK_PROBABILITY;
   const intrinsicSpeed = small
-    ? Math.random() * (0.1 - 0.02) + 0.02
+    ? Math.random() * (0.02 - 0.01) + 0.01
     : Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
 
   // Mutable variables
@@ -139,7 +140,7 @@ function createStar(options = {}) {
       animationTick = (animationTick + 1) % TICKS_PER_FRAME;
 
       // 2) move left based on global scroll speed
-      x -= intrinsicSpeed + scrollSpeed * 0.2;
+      x -= intrinsicSpeed + scrollSpeed * SCROLL_SPEED_FACTOR;
 
       // 3) wrap when fully off-screen (with margin)
       if (x < LAST_X) {
@@ -155,21 +156,21 @@ function createStar(options = {}) {
     draw(screen) {
       const FRAME_W = 7;
       const FRAME_H = 7;
-      const sx = frame * FRAME_W; // sprite x
-      const sy = 0; // single row
+      const spriteX = frame * FRAME_W; // sprite x
+      const spriteY = 0; // single row
 
       // Round positions here to keep integer pixels
-      const dx = Math.round(x);
-      const dy = Math.round(y);
+      const drawX = Math.round(x);
+      const drawY = Math.round(y);
 
       screen.drawImage(
         image,
-        sx,
-        sy,
+        spriteX,
+        spriteY,
         FRAME_W,
         FRAME_H,
-        dx,
-        dy,
+        drawX,
+        drawY,
         FRAME_W,
         FRAME_H
       );
