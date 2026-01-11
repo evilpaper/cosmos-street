@@ -240,7 +240,6 @@ function createPlatforms(options = {}) {
   }
 
   function removeTilesOffscreen() {
-    // Iterate backwards to safely splice during iteration
     for (const tile of tiles) {
       const isOffscreenLeft = tile.x <= 0;
       if (isOffscreenLeft) {
