@@ -110,28 +110,28 @@ function createStar(options = {}) {
 
   const image = new Image();
   image.src = "./images/star-sprite-sheet.png";
-
   // Different values for each star to make a more dynamic and interesting appearance.
   const blinking = small ? false : Math.random() < BLINK_PROBABILITY;
   const dx = small
     ? Math.random() * (0.1 - 0.02) + 0.02
     : Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
 
-  // Mutable variables (closure)
+  // Mutable variables
   let animationTick = 0;
   let frame = small ? 7 : Math.floor(Math.random() * TOTAL_FRAMES);
   let x = Math.floor(Math.random() * SPAWN_WIDTH);
   let y = Math.floor(Math.random() * SPAWN_HEIGHT);
 
   return {
+    name: "star",
     image,
     frame,
     x,
     y,
 
     /**
-     * Since update only works on local variables we rely on closure to keep the state.
-     * No need for the this keyword.
+     * Since update only works on local variables we rely on closure.
+     * No need for the "this" keyword.
      */
 
     update() {
@@ -241,10 +241,10 @@ function createPlatforms(options = {}) {
 
   function removeTilesOffscreen() {
     // Iterate backwards to safely splice during iteration
-    for (let i = tiles.length - 1; i >= 0; i--) {
-      const isOffscreenLeft = tiles[i].x <= -TILE_WIDTH;
+    for (const tile of tiles) {
+      const isOffscreenLeft = tile.x <= 0;
       if (isOffscreenLeft) {
-        tiles.splice(i, 1);
+        tiles.splice(tiles.indexOf(tile), 1);
       }
     }
   }
@@ -668,8 +668,6 @@ function update() {
   if (paused) {
     return;
   }
-
-  console.log("stars: ", stars.length);
 
   for (const star of stars) {
     star.update();
