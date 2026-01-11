@@ -100,9 +100,6 @@ const player = {
       this.totalFrames = 6;
       this.ticksToNextFrame = 6;
       this.dy = 0;
-      if (this.isDead) {
-        this.reset();
-      }
     }
 
     // Store previous position BEFORE movement

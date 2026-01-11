@@ -745,9 +745,7 @@ function update() {
     }
 
     if (player.y > 500) {
-      // We could call init() here but that would restart the game.
-      // For now, we just reset the player to the start position.
-      player.reset();
+      init();
     }
   }
 }
