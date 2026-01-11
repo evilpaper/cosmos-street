@@ -112,7 +112,7 @@ function createStar(options = {}) {
   image.src = "./images/star-sprite-sheet.png";
   // Different values for each star to make a more dynamic and interesting appearance.
   const blinking = small ? false : Math.random() < BLINK_PROBABILITY;
-  const dx = small
+  const intrinsicSpeed = small
     ? Math.random() * (0.1 - 0.02) + 0.02
     : Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
 
@@ -139,7 +139,7 @@ function createStar(options = {}) {
       animationTick = (animationTick + 1) % TICKS_PER_FRAME;
 
       // 2) move left based on global scroll speed
-      x -= dx + scrollSpeed * 0.2;
+      x -= intrinsicSpeed + scrollSpeed * 0.2;
 
       // 3) wrap when fully off-screen (with margin)
       if (x < LAST_X) {
@@ -278,6 +278,7 @@ function createPlatforms(options = {}) {
     tiles: tiles,
 
     update() {
+      console.log("platforms", tiles.length);
       moveTiles();
       removeTilesOffscreen();
       addTilesIfNeeded();
