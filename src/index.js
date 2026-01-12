@@ -120,7 +120,9 @@ function createStar(options = {}) {
   // Mutable variables
   let animationTick = 0;
   // Small stars have a fixed frame, just a tiny 1 px square.
-  let frame = small ? 7 : Math.floor(Math.random() * TOTAL_FRAMES);
+  let animationFrameIndex = small
+    ? 7
+    : Math.floor(Math.random() * TOTAL_FRAMES);
   let x = Math.floor(Math.random() * SCREEN_WIDTH);
   let y = Math.floor(Math.random() * SCREEN_HEIGHT);
 
@@ -148,13 +150,13 @@ function createStar(options = {}) {
 
       // 4) advance frame if it's a blinking star
       if (blinking && animationTick === 0) {
-        frame = (frame + 1) % TOTAL_FRAMES;
+        animationFrameIndex = (animationFrameIndex + 1) % TOTAL_FRAMES;
       }
     },
 
     draw(screen) {
-      const spriteX = frame * FRAME_WIDTH;
-      const spriteY = 0;
+      const spriteFrameX = animationFrameIndex * FRAME_WIDTH;
+      const spriteFrameY = 0;
 
       // Round positions here to keep integer pixels
       const drawX = Math.round(x);
@@ -162,8 +164,8 @@ function createStar(options = {}) {
 
       screen.drawImage(
         starSpriteSheet,
-        spriteX,
-        spriteY,
+        spriteFrameX,
+        spriteFrameY,
         FRAME_WIDTH,
         FRAME_HEIGHT,
         drawX,
@@ -276,7 +278,6 @@ function createPlatforms(options = {}) {
     tiles: tiles,
 
     update() {
-      console.log("platforms", tiles.length);
       moveTiles();
       removeTilesOffscreen();
       addTilesIfNeeded();
