@@ -95,6 +95,9 @@ let scrollSpeed = SCROLL_SPEED_SKATING;
  * Instead, we use it because we expect them to evolve over time and want it to be easy to call them.
  */
 
+// No need to load the sprite sheet multiple times.
+const starSpriteSheet = loadOnce("./images/star-sprite-sheet.png");
+
 function createStar(options = {}) {
   const { small = false } = options;
 
@@ -103,13 +106,8 @@ function createStar(options = {}) {
   const TOTAL_FRAMES = 6;
   const TICKS_PER_FRAME = 30;
   const BLINK_PROBABILITY = 0.8;
-  const SPAWN_WIDTH = SCREEN_WIDTH;
-  const SPAWN_HEIGHT = SCREEN_HEIGHT;
   const LAST_X = -10; // The last x value before the star is wrapped around to the left side of the screen.
   const RESPAWN_X = SCREEN_WIDTH + 10; // The x value where the star re-enters the right side of the screen.
-
-  const image = new Image();
-  image.src = "./images/star-sprite-sheet.png";
 
   // Different values for each star to make a more dynamic and interesting.
   const blinking = small ? false : Math.random() < BLINK_PROBABILITY;
@@ -122,15 +120,11 @@ function createStar(options = {}) {
   // Mutable variables
   let animationTick = 0;
   let frame = small ? 7 : Math.floor(Math.random() * TOTAL_FRAMES);
-  let x = Math.floor(Math.random() * SPAWN_WIDTH);
-  let y = Math.floor(Math.random() * SPAWN_HEIGHT);
+  let x = Math.floor(Math.random() * SCREEN_WIDTH);
+  let y = Math.floor(Math.random() * SCREEN_HEIGHT);
 
   return {
     name: "star",
-    image,
-    frame,
-    x,
-    y,
 
     /**
      * Since update only works on local variables we rely on closure.
@@ -166,7 +160,7 @@ function createStar(options = {}) {
       const drawY = Math.round(y);
 
       screen.drawImage(
-        image,
+        starSpriteSheet,
         spriteX,
         spriteY,
         FRAME_W,
@@ -608,6 +602,12 @@ function isIdle() {
 
 function isPlaying() {
   return time > 0;
+}
+
+function loadOnce(src) {
+  const img = new Image();
+  img.src = src;
+  return img;
 }
 
 /**
