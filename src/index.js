@@ -101,8 +101,8 @@ const starSpriteSheet = loadOnce("./images/star-sprite-sheet.png");
 function createStar(options = {}) {
   const { small = false } = options;
 
-  const FRAME_W = 7;
-  const FRAME_H = 7;
+  const FRAME_WIDTH = 7;
+  const FRAME_HEIGHT = 7;
   const TOTAL_FRAMES = 6;
   const TICKS_PER_FRAME = 30;
   const BLINK_PROBABILITY = 0.8;
@@ -119,6 +119,7 @@ function createStar(options = {}) {
 
   // Mutable variables
   let animationTick = 0;
+  // Small stars have a fixed frame, just a tiny 1 px square.
   let frame = small ? 7 : Math.floor(Math.random() * TOTAL_FRAMES);
   let x = Math.floor(Math.random() * SCREEN_WIDTH);
   let y = Math.floor(Math.random() * SCREEN_HEIGHT);
@@ -152,7 +153,7 @@ function createStar(options = {}) {
     },
 
     draw(screen) {
-      const spriteX = frame * FRAME_W;
+      const spriteX = frame * FRAME_WIDTH;
       const spriteY = 0;
 
       // Round positions here to keep integer pixels
@@ -163,12 +164,12 @@ function createStar(options = {}) {
         starSpriteSheet,
         spriteX,
         spriteY,
-        FRAME_W,
-        FRAME_H,
+        FRAME_WIDTH,
+        FRAME_HEIGHT,
         drawX,
         drawY,
-        FRAME_W,
-        FRAME_H
+        FRAME_WIDTH,
+        FRAME_HEIGHT
       );
     },
   };
