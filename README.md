@@ -11,7 +11,7 @@ A nostalgic skate ride inspired by Wonder Boy’s legendary runs on the Sega Mas
 
 Cosmos Street is an old-school auto-runner. Inspired by the skateboard sequences in Wonder Boy on the Sega Master System, complete with borrowed sprites. It’s made for fun and as an experiment in pushing the creative limits within the restrictions of classic video game design.
 
-The game runs right in the browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy. Just simple, direct, classic game development.
+The game runs right in the browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy.
 
 ## How to play
 

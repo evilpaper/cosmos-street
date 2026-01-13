@@ -1,9 +1,13 @@
+## Project overview
+
+- This is a auto-runner platform game. The game runs right in the browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy.
+
 ## Plan Mode
 
 - Make the plan extremely concise. Sacrifice grammar for the sake of concision.
 - At the end of each plan, give me a list of unresolved questions to answer, if any.
 
-## General coding style
+## Code style guidelines
 
 - Always write modern, clean, and readable JavaScript (ES6+).
 - Only plain JavaScript (ES6+). No frameworks or external dependencies.
@@ -35,8 +39,3 @@
 - Explain the reasoning behind any complex code suggestions.
 - When providing new game features, ensure compatibility with existing HTML/CSS/JS structure.
 - Do not suggest unrelated frameworks or libraries unless explicitly requested.
-
-## Style
-
-- Follow consistent indentation (2 spaces).
-- Write comments for all non-trivial code blocks explaining what they do.
