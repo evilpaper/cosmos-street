@@ -191,15 +191,13 @@ function createStars(amount) {
   return result;
 }
 
+const tileSpriteSheet = loadOnce("./images/tiles-sheet.png");
+
 function createTile(options = {}) {
   const { x = 0, y = 0, width = TILE_WIDTH, height = TILE_HEIGHT } = options;
 
-  const image = new Image();
-  image.src = "./images/tiles-sheet.png";
-
   return {
     name: "tile",
-    image: image,
     x: x,
     y: y,
     width,
@@ -210,9 +208,21 @@ function createTile(options = {}) {
     },
 
     draw(screen) {
-      const dx = Math.round(this.x);
-      const dy = Math.round(this.y);
-      screen.drawImage(image, 0, 0, width, height, dx, dy, width, height);
+      // Round positions here to keep integer pixels
+      const drawX = Math.round(this.x);
+      const drawY = Math.round(this.y);
+
+      screen.drawImage(
+        tileSpriteSheet,
+        0,
+        0,
+        width,
+        height,
+        drawX,
+        drawY,
+        width,
+        height
+      );
     },
   };
 }
