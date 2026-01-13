@@ -310,7 +310,6 @@ function createSparkle(x, y) {
   const image = new Image();
   image.src = "./images/sparkle-sprite-sheet.png";
 
-  // Mutable state (closure)
   let animationTick = 0;
   let frame = 0;
   let posX = x;
@@ -356,27 +355,30 @@ function createSparkle(x, y) {
     draw(screen) {
       if (done) return;
 
-      // Sprite sheet is horizontal: frames side by side
-      const sx = frame * FRAME_WIDTH;
-      const sy = 0;
+      const spriteFrameX = frame * FRAME_WIDTH;
+      const spriteFrameY = 0;
 
-      const dx = Math.round(posX);
-      const dy = Math.round(posY);
+      const drawX = Math.round(posX);
+      const drawY = Math.round(posY);
 
       screen.drawImage(
         image,
-        sx,
-        sy,
+        spriteFrameX,
+        spriteFrameY,
         FRAME_WIDTH,
         FRAME_HEIGHT,
-        dx,
-        dy,
+        drawX,
+        drawY,
         FRAME_WIDTH,
         FRAME_HEIGHT
       );
     },
   };
 }
+
+const skateboardSparkleSpriteSheet = loadOnce(
+  "./images/skateboard-sparkle-sprite-sheet.png"
+);
 
 function createSkateboardSparkle(target) {
   const FRAME_WIDTH = 36;
@@ -386,9 +388,6 @@ function createSkateboardSparkle(target) {
   // Offset to center sparkle on skateboard (bottom of player)
   const OFFSET_X = (target.width - FRAME_WIDTH) / 2; // Center horizontally
   const OFFSET_Y = target.height - FRAME_HEIGHT; // Align to bottom
-
-  const image = new Image();
-  image.src = "./images/skateboard-sparkle-sprite-sheet.png";
 
   // Mutable state (closure)
   let animationTick = 0;
@@ -415,28 +414,28 @@ function createSkateboardSparkle(target) {
     },
 
     draw(screen) {
-      // Sprite sheet is horizontal: frames side by side
-      const sx = frame * FRAME_WIDTH;
-      const sy = 0;
+      const spriteFrameX = frame * FRAME_WIDTH;
+      const spriteFrameY = 0;
 
-      // Follow target position with offset
-      const dx = Math.round(target.x + OFFSET_X);
-      const dy = Math.round(target.y + OFFSET_Y);
+      const drawX = Math.round(target.x + OFFSET_X);
+      const drawY = Math.round(target.y + OFFSET_Y);
 
       screen.drawImage(
-        image,
-        sx,
-        sy,
+        skateboardSparkleSpriteSheet,
+        spriteFrameX,
+        spriteFrameY,
         FRAME_WIDTH,
         FRAME_HEIGHT,
-        dx,
-        dy,
+        drawX,
+        drawY,
         FRAME_WIDTH,
         FRAME_HEIGHT
       );
     },
   };
 }
+
+const angelSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png");
 
 function createAngel(tiles) {
   const WIDTH = 16;
@@ -446,9 +445,6 @@ function createAngel(tiles) {
   const OSCILLATION_AMPLITUDE = 2;
   const OSCILLATION_SPEED = 0.1;
   const FLOAT_HEIGHT = 10;
-
-  const image = new Image();
-  image.src = "./images/collectibles-sprite-sheet.png";
 
   // Mutable state (closure)
   let baseY = 120;
@@ -502,14 +498,20 @@ function createAngel(tiles) {
     },
 
     draw(screen) {
+      const spriteFrameX = 0;
+      const spriteFrameY = 0;
+
+      const drawX = Math.round(this.x);
+      const drawY = Math.round(this.y);
+
       screen.drawImage(
-        image,
-        0,
-        0,
+        angelSpriteSheet,
+        spriteFrameX,
+        spriteFrameY,
         WIDTH,
         HEIGHT,
-        Math.floor(this.x),
-        Math.floor(this.y),
+        drawX,
+        drawY,
         WIDTH,
         HEIGHT
       );
@@ -525,14 +527,13 @@ function createAngel(tiles) {
   };
 }
 
+const enemySpriteSheet = loadOnce("./images/enemy-sprite-sheet.png");
+
 function createEnemy(x, y) {
   const WIDTH = 16;
   const HEIGHT = 25;
   const TICKS_PER_FRAME = 8;
   const TOTAL_FRAMES = 10;
-
-  const image = new Image();
-  image.src = "./images/enemy-sprite-sheet.png";
 
   let animationTick = 0;
   let frame = 0;
@@ -562,18 +563,20 @@ function createEnemy(x, y) {
     },
 
     draw(screen) {
-      // Sprite sheet is horizontal: frames side by side
-      const sx = frame * WIDTH;
-      const sy = 0;
+      const spriteFrameX = frame * WIDTH;
+      const spriteFrameY = 0;
+
+      const drawX = Math.round(this.x);
+      const drawY = Math.round(this.y);
 
       screen.drawImage(
-        image,
-        sx,
-        sy,
+        enemySpriteSheet,
+        spriteFrameX,
+        spriteFrameY,
         WIDTH,
         HEIGHT,
-        Math.floor(this.x),
-        Math.floor(this.y),
+        drawX,
+        drawY,
         WIDTH,
         HEIGHT
       );
