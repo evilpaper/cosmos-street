@@ -732,10 +732,6 @@ function update() {
         player.state = "obliterating";
         scrollSpeed = 0;
         player.dy = 0;
-        // Restart the game
-        if (player.isDead) {
-          init();
-        }
       }
 
       if (enemy.x + enemy.width < 0) {
@@ -747,6 +743,10 @@ function update() {
           )
         );
       }
+    }
+
+    if (player.isDead) {
+      init();
     }
 
     // Update sparkles and remove finished ones
