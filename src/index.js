@@ -123,6 +123,8 @@ function createStar(options = {}) {
   let animationFrameIndex = small
     ? 7
     : Math.floor(Math.random() * TOTAL_FRAMES);
+
+  // Randomly position the star on the screen.
   let x = Math.floor(Math.random() * SCREEN_WIDTH);
   let y = Math.floor(Math.random() * SCREEN_HEIGHT);
 
@@ -301,14 +303,13 @@ function createPlatforms(options = {}) {
   };
 }
 
+const sparkleSpriteSheet = loadOnce("./images/sparkle-sprite-sheet.png");
+
 function createSparkle(x, y) {
   const FRAME_WIDTH = 20;
   const FRAME_HEIGHT = 20;
   const TOTAL_FRAMES = 8;
   const TICKS_PER_FRAME = 6;
-
-  const image = new Image();
-  image.src = "./images/sparkle-sprite-sheet.png";
 
   let animationTick = 0;
   let frame = 0;
@@ -362,7 +363,7 @@ function createSparkle(x, y) {
       const drawY = Math.round(posY);
 
       screen.drawImage(
-        image,
+        sparkleSpriteSheet,
         spriteFrameX,
         spriteFrameY,
         FRAME_WIDTH,
