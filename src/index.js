@@ -104,7 +104,7 @@ function createStar(options = {}) {
   const FRAME_WIDTH = 7;
   const FRAME_HEIGHT = 7;
   const TOTAL_FRAMES = 6;
-  const TICKS_PER_FRAME = 30;
+  const TICKS_PER_FRAME = 16;
   const BLINK_PROBABILITY = 0.8;
   const LAST_X = -10; // The last x value before the star is wrapped around to the left side of the screen.
   const RESPAWN_X = SCREEN_WIDTH + 10; // The x value where the star re-enters the right side of the screen.
@@ -137,22 +137,26 @@ function createStar(options = {}) {
      */
 
     update() {
-      // 1) advance animation tick
-      animationTick = (animationTick + 1) % TICKS_PER_FRAME;
+      // 1) animate blinking star
+      if (blinking) {
+        animationTick += 1;
+        if (animationTick >= TICKS_PER_FRAME) {
+          animationTick = 0;
+          animationFrameIndex += 1;
+          if (animationFrameIndex >= TOTAL_FRAMES) {
+            animationFrameIndex = 0;
+          }
+        }
+      }
 
       // 2) move left
       x -= scrollSpeed
         ? scrollSpeed * speedFactor
         : SCROLL_SPEED_BREAKING * speedFactor;
 
-      // 3) wrap when fully off-screen (with margin)
+      // 3) move to right side of the screen after it has scrolled off the left side
       if (x < LAST_X) {
         x = RESPAWN_X;
-      }
-
-      // 4) advance frame if it's a blinking star
-      if (blinking && animationTick === 0) {
-        animationFrameIndex = (animationFrameIndex + 1) % TOTAL_FRAMES;
       }
     },
 
