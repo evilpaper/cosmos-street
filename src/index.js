@@ -537,7 +537,7 @@ function createEnemy(x, y) {
   const TOTAL_FRAMES = 10;
 
   let animationTick = 0;
-  let frame = 0;
+  let animationFrameIndex = 0;
 
   return {
     x: x,
@@ -554,17 +554,17 @@ function createEnemy(x, y) {
       // Advance frame when tick threshold reached
       if (animationTick >= TICKS_PER_FRAME) {
         animationTick = 0;
-        frame += 1;
+        animationFrameIndex += 1;
 
         // Loop animation
-        if (frame >= TOTAL_FRAMES) {
-          frame = 0;
+        if (animationFrameIndex >= TOTAL_FRAMES) {
+          animationFrameIndex = 0;
         }
       }
     },
 
     draw(screen) {
-      const spriteFrameX = frame * WIDTH;
+      const spriteFrameX = animationFrameIndex * WIDTH;
       const spriteFrameY = 0;
 
       const drawX = Math.round(this.x);
