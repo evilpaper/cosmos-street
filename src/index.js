@@ -71,6 +71,13 @@ let sparkles;
 let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 
+const GAME_STATE = {
+  IDLE: "idle",
+  PLAYING: "playing",
+};
+
+let gameState = GAME_STATE.IDLE;
+
 /**
  *  Note, also global but defined in other files...
  *  - The player variable is defined in player.js file.
@@ -617,11 +624,11 @@ function checkCollision(a, b) {
  */
 
 function isIdle() {
-  return time === 0;
+  return gameState === GAME_STATE.IDLE;
 }
 
 function isPlaying() {
-  return time > 0;
+  return gameState === GAME_STATE.PLAYING;
 }
 
 function loadOnce(src) {
@@ -652,6 +659,25 @@ function getDifficulty() {
 }
 
 /**
+ * State transition functions
+ */
+function startGame() {
+  gameState = GAME_STATE.PLAYING;
+  time = 1; // Start at 1 to begin playing state
+  // Reset input flags to prevent bleed
+  input.left = false;
+  input.right = false;
+  input.up = false;
+}
+
+function endGame() {
+  gameState = GAME_STATE.IDLE;
+  time = 0;
+  title.y = 64; // Reset title position for next title screen
+  init(); // Reset all game objects
+}
+
+/**
  * Game functions
  *
  * init is called once when the game starts.
@@ -668,6 +694,8 @@ function getDifficulty() {
  * -----------------------------
  * Initialize global mutable variables, reset global objects
  * -----------------------------
+ * Note: This function resets game objects but does not modify game state.
+ * State transitions are handled by startGame() and endGame() functions.
  */
 function init() {
   stars = createStars(30);
@@ -697,23 +725,21 @@ function update() {
   }
 
   if (isIdle()) {
-    time = 0;
-
     if (input.left || input.right || input.up) {
-      // Reset the input flags to prevent any button clicked in the idle state
-      // too "bleed" into the playing state. Without this, the player would start
-      // moving cause the button state is still set to true.
-      input.left = false;
-      input.right = false;
-      input.up = false;
-      time += 1;
+      startGame();
     }
   }
 
   if (isPlaying()) {
+    // Check for death conditions first
+    if (player.isDead || player.y > 500) {
+      endGame();
+      return;
+    }
+
     time += 1;
-    player.update(platforms.tiles, time);
     title.update();
+    player.update(platforms.tiles, time);
     platforms.update();
 
     angel.update();
@@ -750,10 +776,6 @@ function update() {
       }
     }
 
-    if (player.isDead) {
-      init();
-    }
-
     // Update sparkles and remove finished ones
     for (const sparkle of sparkles) {
       sparkle.update();
@@ -763,10 +785,6 @@ function update() {
     // Update skateboard sparkle when player has air jumps
     if (player.airJumps > 0) {
       skateboardSparkle.update();
-    }
-
-    if (player.y > 500) {
-      init();
     }
   }
 }
