@@ -311,11 +311,8 @@ function createSparkle(x, y) {
   const TOTAL_FRAMES = 8;
   const TICKS_PER_FRAME = 6;
 
-  // let animationTick = 0;
-  // let animationFrameIndex = 0
-
   let animationTick = 0;
-  let frame = 0;
+  let animationFrameIndex = 0;
   let posX = x;
   let posY = y;
   let done = false;
@@ -343,10 +340,10 @@ function createSparkle(x, y) {
       // Advance frame when tick threshold reached
       if (animationTick >= TICKS_PER_FRAME) {
         animationTick = 0;
-        frame += 1;
+        animationFrameIndex += 1;
 
         // Signal done when animation completes
-        if (frame >= TOTAL_FRAMES) {
+        if (animationFrameIndex >= TOTAL_FRAMES) {
           done = true;
         }
       }
@@ -359,7 +356,7 @@ function createSparkle(x, y) {
     draw(screen) {
       if (done) return;
 
-      const spriteFrameX = frame * FRAME_WIDTH;
+      const spriteFrameX = animationFrameIndex * FRAME_WIDTH;
       const spriteFrameY = 0;
 
       const drawX = Math.round(posX);
