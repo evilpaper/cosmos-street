@@ -837,7 +837,7 @@ function draw(screen) {
       print("key to start", "center", 198);
     }
     if ((time > 24 && time < 36) || (time > 48 && time < 64)) {
-      print("Go for pro", "center", 112);
+      print("Go for pro →", "center", 112);
     }
   }
 }
