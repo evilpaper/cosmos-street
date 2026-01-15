@@ -311,6 +311,9 @@ function createSparkle(x, y) {
   const TOTAL_FRAMES = 8;
   const TICKS_PER_FRAME = 6;
 
+  // let animationTick = 0;
+  // let animationFrameIndex = 0
+
   let animationTick = 0;
   let frame = 0;
   let posX = x;
@@ -813,6 +816,9 @@ function draw(screen) {
     if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
       print("Press ←,→ or ↑", "center", 186);
       print("key to start", "center", 198);
+    }
+    if ((time > 24 && time < 36) || (time > 48 && time < 64)) {
+      print("Go for pro", "center", 112);
     }
   }
 }
