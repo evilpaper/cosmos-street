@@ -59,7 +59,7 @@ const CHARS_PER_ROW = 13;
  * A map of characters to their x and y coordinates on the font image
  */
 function createCharMap() {
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789.,←↑→↓";
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789.,←↑→↓!";
   const charMap = {};
 
   for (let i = 0; i < chars.length; i++) {
