@@ -832,7 +832,11 @@ function draw(screen) {
       skateboardSparkle.draw(screen);
     }
 
-    if ((time > 6 && time < 12) || (time > 18 && time < 24)) {
+    if (
+      (time > 6 && time < 12) ||
+      (time > 16 && time < 20) ||
+      (time > 24 && time < 30)
+    ) {
       print("Press ←,→ or ↑", "center", 186);
       print("key to start", "center", 198);
     }
