@@ -71,6 +71,7 @@ let sparkles;
 let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
+let deadTimer;
 
 const GAME_STATE = {
   IDLE: "idle",
@@ -671,7 +672,7 @@ function startGame() {
   input.up = false;
 }
 
-function endGame() {
+function resetGame() {
   gameState = GAME_STATE.IDLE;
   time = 0;
   title.y = 64; // Reset title position for next title screen
@@ -696,7 +697,7 @@ function endGame() {
  * Initialize global mutable variables, reset global objects
  * -----------------------------
  * Note: This function resets game objects but does not modify game state.
- * State transitions are handled by startGame() and endGame() functions.
+ * State transitions are handled by startGame() and resetGame() functions.
  */
 function init() {
   stars = createStars(30);
@@ -709,6 +710,7 @@ function init() {
   player.reset();
   enemies.push(createEnemy(SCREEN_WIDTH, 72));
   startMessage = getStartMessage();
+  deadTimer = 0;
 }
 
 /**
@@ -735,8 +737,11 @@ function update() {
   if (isPlaying()) {
     // Check for death conditions first
     if (player.isDead || player.y > 500) {
-      endGame();
-      return;
+      deadTimer += 1;
+      if (deadTimer >= 60) {
+        resetGame();
+        return;
+      }
     }
 
     time += 1;
@@ -842,8 +847,13 @@ function draw(screen) {
       print("Press ←,→ or ↑", "center", 186);
       print("key to start", "center", 198);
     }
+
     if ((time > 24 && time < 36) || (time > 48 && time < 64)) {
       print(startMessage, "center", 112);
+    }
+
+    if (deadTimer > 0) {
+      print("Game Over", "center", 112);
     }
   }
 }
