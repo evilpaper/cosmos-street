@@ -70,6 +70,7 @@ let angel;
 let sparkles;
 let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
+let startMessage;
 
 const GAME_STATE = {
   IDLE: "idle",
@@ -707,6 +708,7 @@ function init() {
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
   enemies.push(createEnemy(SCREEN_WIDTH, 72));
+  startMessage = getStartMessage();
 }
 
 /**
@@ -841,7 +843,35 @@ function draw(screen) {
       print("key to start", "center", 198);
     }
     if ((time > 24 && time < 36) || (time > 48 && time < 64)) {
-      print("Go for pro →", "center", 112);
+      print(startMessage, "center", 112);
     }
+  }
+}
+
+function getStartMessage() {
+  // Random number between 1 and 10
+  const randomNumber = Math.floor(Math.random() * 10) + 1;
+  // a switch statement would be better here
+  switch (randomNumber) {
+    case 1:
+      return "Go for pro →";
+    case 2:
+      return "Winner roll a lot!";
+    case 3:
+      return "You got this, pro!";
+    case 4:
+      return "Time to go pro!";
+    case 5:
+      return "Good luck, pro!";
+    case 6:
+      return "Ready, go!!";
+    case 7:
+      return "Fight bravely!";
+    case 8:
+      return "Lets start!";
+    case 9:
+      return "Try your best!";
+    case 10:
+      return "Lets go, hero!";
   }
 }
