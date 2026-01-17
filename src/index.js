@@ -864,24 +864,24 @@ function getStartMessage() {
   // a switch statement would be better here
   switch (randomNumber) {
     case 1:
-      return "Go for pro →";
+      return "Go for pro!";
     case 2:
-      return "Winner roll a lot!";
+      return "Happy rolling!";
     case 3:
-      return "You got this, pro!";
+      return "You got this!";
     case 4:
-      return "Time to go pro!";
+      return "Go!";
     case 5:
-      return "Good luck, pro!";
+      return "Good luck!";
     case 6:
-      return "Ready, go!!";
+      return "Ready, go!";
     case 7:
-      return "Fight bravely!";
+      return "Skate or die!";
     case 8:
-      return "Lets start!";
+      return "Start!";
     case 9:
-      return "Try your best!";
+      return "Oh yeah!";
     case 10:
-      return "Lets go, hero!";
+      return "Lets go!";
   }
 }
