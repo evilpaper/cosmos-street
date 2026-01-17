@@ -639,6 +639,10 @@ function loadOnce(src) {
   return img;
 }
 
+function firstTimeStarting() {
+  return title.y > 0;
+}
+
 /**
  * Returns a random integer between min and max (inclusive).
  */
@@ -832,7 +836,20 @@ function draw(screen) {
   }
 
   if (isPlaying()) {
-    title.draw(screen);
+
+    if (firstTimeStarting()) {
+      
+      title.draw(screen);
+
+      if (
+        (time > 6 && time < 12) ||
+        (time > 16 && time < 20) ||
+        (time > 24 && time < 30)
+      ) {
+        print("Press ←,→ or ↑", "center", 186);
+        print("key to start", "center", 198);
+      }
+    }
 
     for (const enemy of enemies) {
       enemy.draw(screen);
@@ -847,16 +864,6 @@ function draw(screen) {
 
     if (player.airJumps > 0) {
       skateboardSparkle.draw(screen);
-    }
-
-    if (
-      title.y > 0 &&
-      ((time > 6 && time < 12) ||
-        (time > 16 && time < 20) ||
-        (time > 24 && time < 30))
-    ) {
-      print("Press ←,→ or ↑", "center", 186);
-      print("key to start", "center", 198);
     }
 
     if ((time > 24 && time < 36) || (time > 48 && time < 64)) {
