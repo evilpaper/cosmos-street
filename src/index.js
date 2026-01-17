@@ -868,20 +868,20 @@ function getStartMessage() {
     case 2:
       return "Happy rolling!";
     case 3:
-      return "You got this!";
+      return "Cruise!";
     case 4:
       return "Go!";
     case 5:
       return "Good luck!";
     case 6:
-      return "Ready, go!";
+      return "Ride!";
     case 7:
-      return "Skate or die!";
+      return "Skate!";
     case 8:
-      return "Start!";
+      return "Cruise!!";
     case 9:
-      return "Oh yeah!";
+      return "Charge!";
     case 10:
-      return "Lets go!";
+      return "Action!";
   }
 }
