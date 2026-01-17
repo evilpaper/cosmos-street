@@ -74,11 +74,11 @@ let startMessage;
 let deadTimer;
 
 const GAME_STATE = {
-  IDLE: "idle",
+  START: "START",
   PLAYING: "playing",
 };
 
-let gameState = GAME_STATE.IDLE;
+let gameState = GAME_STATE.START;
 
 /**
  *  Note, also global but defined in other files...
@@ -625,8 +625,8 @@ function checkCollision(a, b) {
  * Helper functions
  */
 
-function isIdle() {
-  return gameState === GAME_STATE.IDLE;
+function isSTART() {
+  return gameState === GAME_STATE.START;
 }
 
 function isPlaying() {
@@ -673,7 +673,7 @@ function startGame() {
 }
 
 function resetGame() {
-  gameState = GAME_STATE.IDLE;
+  gameState = GAME_STATE.START;
   time = 0;
   title.y = 64; // Reset title position for next title screen
   init(); // Reset all game objects
@@ -728,7 +728,7 @@ function update() {
     star.update();
   }
 
-  if (isIdle()) {
+  if (isSTART()) {
     if (input.left || input.right || input.up) {
       startGame();
     }
@@ -738,7 +738,7 @@ function update() {
     // Check for death conditions first
     if (player.isDead || player.y > 500) {
       deadTimer += 1;
-      if (deadTimer >= 60) {
+      if (deadTimer >= 90) {
         resetGame();
         return;
       }
@@ -815,7 +815,7 @@ function draw(screen) {
 
   platforms.draw(screen);
 
-  if (isIdle()) {
+  if (isSTART()) {
     title.draw(screen);
     print("Press ←,→ or ↑", "center", 186);
     print("key to start", "center", 198);
