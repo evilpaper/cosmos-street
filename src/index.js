@@ -752,6 +752,7 @@ function update() {
     // Check for death conditions first
     if (player.isDead || player.y > 500) {
       deadTimer += 1;
+      scrollSpeed = 0;
       if (deadTimer >= 90) {
         restartGame();
         return;
