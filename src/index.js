@@ -679,6 +679,16 @@ function resetGame() {
   init(); // Reset all game objects
 }
 
+function restartGame() {
+  gameState = GAME_STATE.PLAYING;
+  time = 1; // Start at 1 to begin playing state
+  // Reset input flags to prevent bleed
+  input.left = false;
+  input.right = false;
+  input.up = false;
+  init(); // Reset all game objects
+}
+
 /**
  * Game functions
  *
@@ -739,7 +749,7 @@ function update() {
     if (player.isDead || player.y > 500) {
       deadTimer += 1;
       if (deadTimer >= 90) {
-        resetGame();
+        restartGame();
         return;
       }
     }
@@ -840,9 +850,10 @@ function draw(screen) {
     }
 
     if (
-      (time > 6 && time < 12) ||
-      (time > 16 && time < 20) ||
-      (time > 24 && time < 30)
+      title.y > 0 &&
+      ((time > 6 && time < 12) ||
+        (time > 16 && time < 20) ||
+        (time > 24 && time < 30))
     ) {
       print("Press ←,→ or ↑", "center", 186);
       print("key to start", "center", 198);
