@@ -527,7 +527,6 @@ function createAngel(tiles) {
       /**
       * Draw enemy hitbox. For debugging purposes.
       */
-
       // screen.fillStyle = "cyan";
       // screen.fillRect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
 
