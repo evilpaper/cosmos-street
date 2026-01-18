@@ -27,10 +27,11 @@ That's it! Good luck!
 
 - [x] Start screen
 - [x] Variation (platform distribution)
-- [x] Power ups (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
+- [x] Power up (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
 - [x] Enemy
 - [x] Death
 - [x] Restart
+- [ ] Fruits
 - [ ] Score
 - [ ] Session high score
 - [ ] Better start screen (more interesting, show player in the middle maybe, shine effect on title)
@@ -47,7 +48,7 @@ That's it! Good luck!
 - [ ] Optional - How to play - mobile
 - [x] favicon (sparkle)
 - [ ] itch.io game page. Maybe.
-- [ ] Replace .cursor/rules with AGENTS.md in the root (a simple and platform independent alternative)
+- [x] Replace .cursor/rules with AGENTS.md in the root (a simple and platform independent alternative)
 
 ## Known Issues
 
