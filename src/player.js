@@ -234,7 +234,7 @@ const player = {
     // screen.closePath();
 
     /**
-     * Draw a green hitbox around the player. For debugging purposes.
+     * Draw player hitbox. For debugging purposes.
      */
     // screen.lineWidth = 1;
     // screen.strokeStyle = "green";

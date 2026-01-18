@@ -501,8 +501,8 @@ function createAngel(tiles) {
 
     getHitbox() {
       return {
-        x: this.x + HITBOX_WIDTH / 2,
-        y: this.y + HITBOX_HEIGHT / 2,
+        x: this.x + (WIDTH- HITBOX_WIDTH) / 2,
+        y: this.y + (HEIGHT- HITBOX_HEIGHT) / 2,
         width: HITBOX_WIDTH,
         height: HITBOX_HEIGHT,
       };
@@ -523,6 +523,13 @@ function createAngel(tiles) {
 
       const drawX = Math.round(this.x);
       const drawY = Math.round(this.y);
+
+      /**
+      * Draw enemy hitbox. For debugging purposes.
+      */
+
+      // screen.fillStyle = "cyan";
+      // screen.fillRect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
 
       screen.drawImage(
         angelSpriteSheet,
@@ -554,6 +561,8 @@ function createEnemy(x, y) {
   const HEIGHT = 25;
   const TICKS_PER_FRAME = 8;
   const TOTAL_FRAMES = 10;
+  const HITBOX_WIDTH = 8;
+  const HITBOX_HEIGHT = 16;
 
   let animationTick = 0;
   let animationFrameIndex = 0;
@@ -563,6 +572,15 @@ function createEnemy(x, y) {
     y: y,
     width: WIDTH,
     height: HEIGHT,
+  
+    getHitbox() {
+      return {
+        x: this.x + (WIDTH- HITBOX_WIDTH) / 2,
+        y: this.y + (HEIGHT- HITBOX_HEIGHT) / 2,
+        width: HITBOX_WIDTH,
+        height: HITBOX_HEIGHT,
+      };
+    },
 
     update() {
       this.x -= scrollSpeed + 0.6;
@@ -588,6 +606,13 @@ function createEnemy(x, y) {
 
       const drawX = Math.round(this.x);
       const drawY = Math.round(this.y);
+
+      /**
+      * Draw enemy hitbox. For debugging purposes.
+      */
+      // screen.lineWidth = 1;
+      // screen.strokeStyle = "magenta";
+      // screen.strokeRect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
 
       screen.drawImage(
         enemySpriteSheet,
@@ -780,7 +805,7 @@ function update() {
 
     for (const enemy of enemies) {
       enemy.update();
-      if (checkCollision(player, enemy)) {
+      if (checkCollision(player, enemy.getHitbox())) {
         player.state = "obliterating";
         scrollSpeed = 0;
         player.dy = 0;
