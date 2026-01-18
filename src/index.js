@@ -75,7 +75,8 @@ let deadTimer;
 
 const GAME_STATE = {
   START: "START",
-  PLAYING: "playing",
+  PLAYING: "PLAYING",
+  GAME_OVER: "GAME_OVER",
 };
 
 let gameState = GAME_STATE.START;
@@ -395,6 +396,11 @@ const skateboardSparkleSpriteSheet = loadOnce(
 );
 
 function createSkateboardSparkle(target) {
+
+  if (!target) {
+    return;
+  }
+
   const FRAME_WIDTH = 36;
   const FRAME_HEIGHT = 16;
   const TOTAL_FRAMES = 10;
@@ -625,14 +631,6 @@ function checkCollision(a, b) {
  * Helper functions
  */
 
-function isSTART() {
-  return gameState === GAME_STATE.START;
-}
-
-function isPlaying() {
-  return gameState === GAME_STATE.PLAYING;
-}
-
 function loadOnce(src) {
   const img = new Image();
   img.src = src;
@@ -742,15 +740,16 @@ function update() {
     star.update();
   }
 
-  if (isSTART()) {
+  if (gameState === GAME_STATE.START) {
     if (input.left || input.right || input.up) {
       startGame();
     }
   }
 
-  if (isPlaying()) {
+  if (gameState === GAME_STATE.PLAYING) {
     // Check for death conditions first
     if (player.isDead || player.y > 500) {
+      gameState = GAME_STATE.GAME_OVER;
       deadTimer += 1;
       scrollSpeed = 0;
       if (deadTimer >= 90) {
@@ -809,6 +808,43 @@ function update() {
       skateboardSparkle.update();
     }
   }
+  
+  if (gameState === GAME_STATE.GAME_OVER) {
+    time += 1;
+    scrollSpeed = 0;
+    deadTimer += 1;
+
+    // ------------------------------------------------------------
+    // Restart game conditons
+    // ------------------------------------------------------------
+    // Restart game if user presses a key
+    if (input.left || input.right || input.up) {
+      restartGame();
+    }
+    // Restart game after 90 frames 
+    if (deadTimer >= 90) {
+      restartGame();
+    }
+
+
+    // ------------------------------------------------------------
+    // Update game objects
+    // ------------------------------------------------------------
+    player.update(platforms.tiles, time);
+    platforms.update();
+    angel.update();
+    for (const enemy of enemies) {
+      enemy.update();
+    }
+    for (const sparkle of sparkles) {
+      sparkle.update();
+    }
+    // Remove finished sparkles
+    sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
+    if (player.airJumps > 0) {
+      skateboardSparkle.update();
+    }
+  }
 }
 
 /**
@@ -830,13 +866,13 @@ function draw(screen) {
 
   platforms.draw(screen);
 
-  if (isSTART()) {
+  if (gameState === GAME_STATE.START) {
     title.draw(screen);
     print("Press ←,→ or ↑", "center", 186);
     print("key to start", "center", 198);
   }
 
-  if (isPlaying()) {
+  if (gameState === GAME_STATE.PLAYING) {
 
     if (firstTimeStarting()) {
       
@@ -875,6 +911,29 @@ function draw(screen) {
       print("Game Over", "center", 112);
     }
   }
+
+  if (gameState === GAME_STATE.GAME_OVER) {
+
+    for (const enemy of enemies) {
+      enemy.draw(screen);
+    }
+
+    for (const sparkle of sparkles) {
+      sparkle.draw(screen);
+    }
+
+    player.draw(screen);
+    angel.draw(screen);
+
+    if (player.airJumps > 0) {
+      skateboardSparkle.draw(screen);
+    }
+
+    if (deadTimer > 0) {
+      print("Game Over", "center", 112);
+    }
+  }
+
 }
 
 function getStartMessage() {
