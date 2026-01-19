@@ -553,6 +553,55 @@ function createAngel(tiles) {
   };
 }
 
+const bananaSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png");
+
+function createBanana(tiles) {
+  const WIDTH = 16;
+  const HEIGHT = 16;
+  
+  let x = 256 + 128 + 56;
+  let y = 142;
+
+  return {
+    x: x,
+    y: y,
+    width: WIDTH,
+    height: HEIGHT,
+
+    update() {
+      this.x -= scrollSpeed;
+    },
+
+    draw(screen) {
+      const spriteFrameX = 16;
+      const spriteFrameY = 0;
+      
+      const drawX = Math.round(this.x);
+      const drawY = Math.round(this.y);
+
+      screen.drawImage(
+        bananaSpriteSheet,
+        spriteFrameX,
+        spriteFrameY,
+        WIDTH,
+        HEIGHT,
+        drawX,
+        drawY,
+        WIDTH,
+        HEIGHT
+      );
+    },
+
+    respawn(tileList) {
+      const pos = findPositionOnTile(tileList);
+      this.x = pos.x;
+      baseY = pos.y;
+      this.y = baseY;
+      tick = 0;
+    },
+  };
+}
+
 const enemySpriteSheet = loadOnce("./images/enemy-sprite-sheet.png");
 
 function createEnemy(x, y) {
@@ -739,6 +788,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angel = createAngel(platforms.tiles);
+  banana = createBanana(platforms.tiles);
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   enemies = [];
@@ -788,6 +838,7 @@ function update() {
     platforms.update();
 
     angel.update();
+    banana.update();
 
     // Respawn angel if it scrolled off the left side of the screen
     if (angel.x + angel.width < 0) {
@@ -922,6 +973,7 @@ function draw(screen) {
 
     player.draw(screen);
     angel.draw(screen);
+    banana.draw(screen);
 
     if (player.airJumps > 0) {
       skateboardSparkle.draw(screen);
