@@ -471,8 +471,8 @@ function createAngel(tiles) {
   let tick = 0;
 
   // Find initial position on a tile
-  function findPositionOnTile(tileList) {
-    const eligibleTiles = tileList.filter((tile) => tile.x > SCREEN_WIDTH);
+  function findPositionOnTile(tiles) {
+    const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
 
     if (eligibleTiles.length > 0) {
       const tile =
@@ -543,8 +543,8 @@ function createAngel(tiles) {
       );
     },
 
-    respawn(tileList) {
-      const pos = findPositionOnTile(tileList);
+    respawn(tiles) {
+      const pos = findPositionOnTile(tiles);
       this.x = pos.x;
       baseY = pos.y;
       this.y = baseY;
@@ -592,8 +592,8 @@ function createBanana(tiles) {
       );
     },
 
-    respawn(tileList) {
-      const pos = findPositionOnTile(tileList);
+    respawn(tiles) {
+      const pos = findPositionOnTile(tiles);
       this.x = pos.x;
       baseY = pos.y;
       this.y = baseY;
