@@ -31,8 +31,8 @@ That's it! Good luck!
 - [x] Enemy
 - [x] Death
 - [x] Restart
-- [ ] Fruits
-- [ ] Score
+- [x] Fruits
+- [x] Score
 - [ ] Session high score
 - [ ] Better start screen (more interesting, show player in the middle maybe, shine effect on title)
 - [ ] SFX

@@ -72,6 +72,7 @@ let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
 let deadTimer;
+let score;
 
 const GAME_STATE = {
   START: "START",
@@ -817,6 +818,7 @@ function init() {
   enemies.push(createEnemy(SCREEN_WIDTH, 72));
   startMessage = getStartMessage();
   deadTimer = 0;
+  score = 0;
 }
 
 /**
@@ -875,6 +877,7 @@ function update() {
 
     if (checkCollision(player, banana)) {
       banana.respawn(platforms.tiles);
+      score += 1;
     }
 
     for (const enemy of enemies) {
@@ -1005,6 +1008,10 @@ function draw(screen) {
 
     if ((time > 24 && time < 36) || (time > 48 && time < 64)) {
       print(startMessage, "center", 112);
+    }
+
+    if (time > 60) {
+      print("Score " + score, 52, 44);
     }
 
     if (deadTimer > 0) {
