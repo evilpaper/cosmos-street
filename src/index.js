@@ -613,6 +613,12 @@ function createCollectible(tiles, frameNumber) {
       );
     },
 
+    respawn(tiles) {
+      const pos = findPositionOnTile(tiles);
+      this.x = pos.x;
+      this.y = pos.y;
+    },
+
   };
 }
 
@@ -865,6 +871,10 @@ function update() {
       sparkles.push(createSparkle(angel.x, angel.y - 8));
       player.airJumps += 1;
       angel.respawn(platforms.tiles);
+    }
+
+    if (checkCollision(player, banana)) {
+      banana.respawn(platforms.tiles);
     }
 
     for (const enemy of enemies) {
