@@ -558,13 +558,33 @@ const collectibleSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png"
 function createCollectible(tiles, frameNumber) {
   const WIDTH = 16;
   const HEIGHT = 16;
-  
-  let x = 256 + 128 + 56;
-  let y = 142;
+
+  // Find initial position on a tile
+  function findPositionOnTile(tiles) {
+    // Only spawn on tiles that are ahead of the screen
+    const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
+
+    if (eligibleTiles.length > 0) {
+      const tile =
+        eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
+      return {
+        x: tile.x + tile.width / 2 - WIDTH / 2,
+        y: tile.y - HEIGHT,
+      };
+    }
+
+    // Fallback: spawn ahead of screen at default height
+    return {
+      x: SCREEN_WIDTH + 64,
+      y: 120,
+    };
+  }
+
+  const position = findPositionOnTile(tiles);
 
   return {
-    x: x,
-    y: y,
+    x: position.x,
+    y: position.y,
     width: WIDTH,
     height: HEIGHT,
 
@@ -593,13 +613,6 @@ function createCollectible(tiles, frameNumber) {
       );
     },
 
-    respawn(tiles) {
-      const pos = findPositionOnTile(tiles);
-      this.x = pos.x;
-      baseY = pos.y;
-      this.y = baseY;
-      tick = 0;
-    },
   };
 }
 
