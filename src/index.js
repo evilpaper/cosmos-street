@@ -553,9 +553,9 @@ function createAngel(tiles) {
   };
 }
 
-const bananaSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png");
+const collectibleSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png");
 
-function createBanana(tiles) {
+function createCollectible(tiles, frameNumber) {
   const WIDTH = 16;
   const HEIGHT = 16;
   
@@ -573,14 +573,15 @@ function createBanana(tiles) {
     },
 
     draw(screen) {
-      const spriteFrameX = 16;
+      // first frame is 1, start at 0. Second frame is 2, start at 16. And so on. 
+      const spriteFrameX = (frameNumber - 1) * 16;
       const spriteFrameY = 0;
       
       const drawX = Math.round(this.x);
       const drawY = Math.round(this.y);
 
       screen.drawImage(
-        bananaSpriteSheet,
+        collectibleSpriteSheet,
         spriteFrameX,
         spriteFrameY,
         WIDTH,
@@ -788,7 +789,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angel = createAngel(platforms.tiles);
-  banana = createBanana(platforms.tiles);
+  banana = createCollectible(platforms.tiles, 2);
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   enemies = [];
