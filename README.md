@@ -34,12 +34,14 @@ That's it! Good luck!
 - [x] Fruits
 - [x] Score
 - [x] Session high score
+- [ ] Score visual feedback
 - [ ] Better start screen (more interesting, show player in the middle maybe, shine effect on title)
 - [ ] SFX
 - [ ] Music
 - [ ] Sound controls (on/off)
 - [ ] Increase difficulty over time (harder and harder)
 - [ ] Playtest, playtest, playtest and tweaks and tweak and tweak until it's fun, juicy and tight.
+- [ ] Optional - Double jump visual feedback, sparkling stars
 - [ ] Optional - Electric sparks around enemy.
 - [ ] Optional - Feedback particles. Break, landing, speeding.
 - [ ] Optional - Change player x position based on state (break,regular,speeding)
