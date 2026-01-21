@@ -810,7 +810,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angel = createAngel(platforms.tiles);
-  banana = createCollectible(platforms.tiles, 2);
+  // banana = createCollectible(platforms.tiles, 2);
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   enemies = [];
@@ -861,7 +861,7 @@ function update() {
     platforms.update();
 
     angel.update();
-    banana.update();
+    // banana.update();
 
     // Respawn angel if it scrolled off the left side of the screen
     if (angel.x + angel.width < 0) {
@@ -874,15 +874,19 @@ function update() {
       sparkles.push(createSparkle(angel.x, angel.y - 8));
       player.airJumps += 1;
       angel.respawn(platforms.tiles);
-    }
-
-    if (checkCollision(player, banana)) {
-      banana.respawn(platforms.tiles);
       score += 1;
       if (score > highScore) {
         highScore = score;
       }
     }
+
+    // if (checkCollision(player, banana)) {
+    //   banana.respawn(platforms.tiles);
+    //   score += 1;
+    //   if (score > highScore) {
+    //     highScore = score;
+    //   }
+    // }
 
     for (const enemy of enemies) {
       enemy.update();
@@ -1004,7 +1008,7 @@ function draw(screen) {
 
     player.draw(screen);
     angel.draw(screen);
-    banana.draw(screen);
+    // banana.draw(screen);
 
     if (player.airJumps > 0) {
       skateboardSparkle.draw(screen);
