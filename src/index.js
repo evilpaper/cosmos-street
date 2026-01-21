@@ -494,9 +494,9 @@ function createAngel(tiles) {
   }
   
   const initialPosition = findPositionOnTile(tiles);
+  initial = initialPosition
   x = initialPosition.x;
   y = initialPosition.y;
-  initial = initialPosition
 
   return {
     x: x,
@@ -1017,7 +1017,7 @@ function draw(screen) {
     }
 
     if ((time > 24 && time < 36) || (time > 48 && time < 64)) {
-      print(startMessage, "center", 112);
+      print(startMessage, "center", "middle");
     }
 
     if (time > 60) {
@@ -1026,7 +1026,7 @@ function draw(screen) {
     }
 
     if (deadTimer > 0) {
-      print("Game Over", "center", 112);
+      print("Game Over", "center", "middle");
     }
   }
 
@@ -1048,7 +1048,7 @@ function draw(screen) {
     }
 
     if (deadTimer > 0) {
-      print("Game Over", "center", 112);
+      print("Game Over", "center", "middle");
     }
   }
 
@@ -1070,11 +1070,11 @@ function getStartMessage() {
     case 5:
       return "Good luck!";
     case 6:
-      return "Ride!";
+      return "Ride on!";
     case 7:
       return "Skate!";
     case 8:
-      return "Cruise!!";
+      return "Cruise!";
     case 9:
       return "Charge!";
     case 10:

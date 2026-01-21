@@ -87,7 +87,7 @@ function getCharPosition(char) {
  */
 function print(str, x = 0, y = 0) {
   const startX = x === "center" ? center(str) : x;
-  const startY = y === "center" ? center(str) : y;
+  const startY = y === "middle" ? middle() : y;
 
   const allLowerCaseString = str.toLowerCase();
 
@@ -169,4 +169,11 @@ function center(s) {
   // string length times the
   // pixels in a char's width cut in half
   return 128 - (s.length * 8) / 2;
+}
+
+/**
+ * Center a string vertically on the screen
+ */
+function middle() {
+  return 128 - 8 / 2;
 }
