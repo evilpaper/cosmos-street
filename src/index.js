@@ -469,10 +469,11 @@ function createAngel(tiles) {
   const FLOAT_HEIGHT = 10;
 
   // Mutable state (closure)
-  let baseY = 120;
   let tick = 0;
+  let x;
+  let y;
+  let initial;
 
-  // Find initial position on a tile
   function findPositionOnTile(tiles) {
     const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
 
@@ -491,13 +492,15 @@ function createAngel(tiles) {
       y: 120,
     };
   }
-
-  const initialPos = findPositionOnTile(tiles);
-  baseY = initialPos.y;
+  
+  const initialPosition = findPositionOnTile(tiles);
+  x = initialPosition.x;
+  y = initialPosition.y;
+  initial = initialPosition
 
   return {
-    x: initialPos.x,
-    y: initialPos.y,
+    x: x,
+    y: y,
     width: WIDTH,
     height: HEIGHT,
 
@@ -513,9 +516,8 @@ function createAngel(tiles) {
     update() {
       this.x -= scrollSpeed;
       tick += 1;
-      // Compute oscillated y and store it
       this.y = Math.round(
-        baseY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
+        initial.y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
       );
     },
 
@@ -546,10 +548,10 @@ function createAngel(tiles) {
     },
 
     respawn(tiles) {
-      const pos = findPositionOnTile(tiles);
-      this.x = pos.x;
-      baseY = pos.y;
-      this.y = baseY;
+      const newPosition = findPositionOnTile(tiles);
+      this.x = newPosition.x;
+      this.y = newPosition.y;
+      initial = newPosition;
       tick = 0;
     },
   };
