@@ -73,6 +73,7 @@ let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
 let deadTimer;
 let score;
+let highScore = 0;
 
 const GAME_STATE = {
   START: "START",
@@ -878,6 +879,9 @@ function update() {
     if (checkCollision(player, banana)) {
       banana.respawn(platforms.tiles);
       score += 1;
+      if (score > highScore) {
+        highScore = score;
+      }
     }
 
     for (const enemy of enemies) {
@@ -1012,6 +1016,7 @@ function draw(screen) {
 
     if (time > 60) {
       print("Score " + score, 52, 44);
+      print("HI " + highScore, 168, 44);
     }
 
     if (deadTimer > 0) {

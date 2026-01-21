@@ -33,7 +33,7 @@ That's it! Good luck!
 - [x] Restart
 - [x] Fruits
 - [x] Score
-- [ ] Session high score
+- [x] Session high score
 - [ ] Better start screen (more interesting, show player in the middle maybe, shine effect on title)
 - [ ] SFX
 - [ ] Music
