@@ -35,7 +35,7 @@ That's it! Good luck!
 - [x] Score
 - [x] Session high score
 - [ ] Score visual feedback
-- [ ] Better start screen (more interesting, show player in the middle maybe, shine effect on title)
+- [\] Better start screen (more interesting, show player in the middle maybe, shine effect on title)
 - [ ] SFX
 - [ ] Music
 - [ ] Sound controls (on/off)

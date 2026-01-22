@@ -765,7 +765,7 @@ function getDifficulty() {
  */
 function startGame() {
   gameState = GAME_STATE.PLAYING;
-  time = 1; // Start at 1 to begin playing state
+  time = 0; // Start at 1 to begin playing state
   // Reset input flags to prevent bleed
   input.left = false;
   input.right = false;
@@ -842,6 +842,12 @@ function update() {
   }
 
   if (gameState === GAME_STATE.START) {
+    time += 1; 
+
+    if (time > 120){
+      title.flash();
+    }
+   
     if (input.left || input.right || input.up) {
       startGame();
     }
@@ -860,7 +866,7 @@ function update() {
     }
 
     time += 1;
-    title.update();
+    title.slideOut();
     player.update(platforms.tiles, time);
     platforms.update();
 
