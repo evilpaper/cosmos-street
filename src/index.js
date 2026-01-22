@@ -73,6 +73,7 @@ let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
 let deadTimer;
 let score;
+let scoreIncrement;
 let highScore = 0;
 
 const GAME_STATE = {
@@ -822,6 +823,7 @@ function init() {
   startMessage = getStartMessage();
   deadTimer = 0;
   score = 0;
+  scoreIncrement = 1;
 }
 
 /**
@@ -867,6 +869,7 @@ function update() {
 
     // Respawn angel if it scrolled off the left side of the screen
     if (angel.x + angel.width < 0) {
+      scoreIncrement = 1;
       angel.respawn(platforms.tiles);
     }
 
@@ -876,7 +879,8 @@ function update() {
       sparkles.push(createSparkle(angel.x, angel.y - 8));
       player.airJumps += 1;
       angel.respawn(platforms.tiles);
-      score += 1;
+      score += scoreIncrement;
+      scoreIncrement += 1;
       if (score > highScore) {
         highScore = score;
       }
