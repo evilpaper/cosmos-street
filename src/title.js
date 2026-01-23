@@ -6,20 +6,15 @@ const title = {
     return img;
   })(),
   y: 64,
-  frameWidth:128,
+  frameWidth: 128,
   frameHeight: 48,
   totalFrames: 9,
-  ticksPerFrame: 6,
+  ticksPerFrame: 200, // for first frame
   x: 64,
   animationTick: 0,
   animationFrameIndex: 0,
-  animationDone: false,
 
   flash() {
-    if (this.animationDone) {
-      return;
-    }
-
     // Advance animation tick
     this.animationTick += 1;
 
@@ -28,23 +23,38 @@ const title = {
       this.animationTick = 0;
       this.animationFrameIndex += 1;
 
-       // Loop animation
+      if (this.animationFrameIndex !== 0) {
+        this.ticksPerFrame = 6;
+      }
+
+      // Loop animation
       if (this.animationFrameIndex >= this.totalFrames) {
         this.animationFrameIndex = 0;
-        this.animationDone = true;
+        // Randomly set the ticks per frame between 200 and 500
+        this.ticksPerFrame = Math.floor(Math.random() * 300) + 200;
       }
     }
   },
 
   slideOut() {
-    this.y = lerp(this.y, -32, 0.08);    
+    this.y = lerp(this.y, -32, 0.08);
   },
 
   draw(screen) {
     const spriteFrameX = this.animationFrameIndex * this.frameWidth;
     const spriteFrameY = 0;
 
-    screen.drawImage(this.image, spriteFrameX, spriteFrameY, this.frameWidth, this.frameHeight, this.x, this.y, this.frameWidth, this.frameHeight);
+    screen.drawImage(
+      this.image,
+      spriteFrameX,
+      spriteFrameY,
+      this.frameWidth,
+      this.frameHeight,
+      this.x,
+      this.y,
+      this.frameWidth,
+      this.frameHeight,
+    );
   },
 };
 

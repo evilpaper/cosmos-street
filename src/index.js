@@ -887,9 +887,7 @@ function update() {
   if (gameState === GAME_STATE.START) {
     time += 1;
 
-    if (time > 120) {
-      title.flash();
-    }
+    title.flash();
 
     if (input.left || input.right || input.up) {
       startGame();
