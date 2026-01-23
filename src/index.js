@@ -1065,8 +1065,8 @@ function draw(screen) {
     }
 
     if (time > 60) {
-      print("Score " + score, 52, 44);
-      print("HI " + highScore, 168, 44);
+      print("" + score, 52, 44);
+      print("HIGH " + highScore, 160, 44);
     }
 
     if (deadTimer > 0) {
