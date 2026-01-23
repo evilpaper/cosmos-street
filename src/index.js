@@ -190,7 +190,7 @@ function createStar(options = {}) {
         drawX,
         drawY,
         FRAME_WIDTH,
-        FRAME_HEIGHT
+        FRAME_HEIGHT,
       );
     },
   };
@@ -240,7 +240,7 @@ function createTile(options = {}) {
         drawX,
         drawY,
         width,
-        height
+        height,
       );
     },
   };
@@ -258,7 +258,7 @@ function createPlatforms(options = {}) {
       createTile({
         x: i * TILE_WIDTH,
         y: 160,
-      })
+      }),
     );
   }
 
@@ -288,7 +288,7 @@ function createPlatforms(options = {}) {
     const diff = getDifficulty();
     const y = randomInRange(
       diff.platformYMin,
-      diff.platformYMin + diff.platformYRange
+      diff.platformYMin + diff.platformYRange,
     );
     const gap = randomInRange(diff.gapMin, diff.gapMax);
     const tileCount = randomInRange(diff.tilesMin, diff.tilesMax);
@@ -298,7 +298,7 @@ function createPlatforms(options = {}) {
         createTile({
           x: lastTileX + gap + i * TILE_WIDTH,
           y: y,
-        })
+        }),
       );
     }
   }
@@ -388,18 +388,17 @@ function createSparkle(x, y) {
         drawX,
         drawY,
         FRAME_WIDTH,
-        FRAME_HEIGHT
+        FRAME_HEIGHT,
       );
     },
   };
 }
 
 const skateboardSparkleSpriteSheet = loadOnce(
-  "./images/skateboard-sparkle-sprite-sheet.png"
+  "./images/skateboard-sparkle-sprite-sheet.png",
 );
 
 function createSkateboardSparkle(target) {
-
   if (!target) {
     return;
   }
@@ -452,7 +451,7 @@ function createSkateboardSparkle(target) {
         drawX,
         drawY,
         FRAME_WIDTH,
-        FRAME_HEIGHT
+        FRAME_HEIGHT,
       );
     },
   };
@@ -489,10 +488,10 @@ function createAngel(tiles) {
 
     return null;
   }
-  
+
   const initialPosition = findPositionOnTile(tiles);
   let active = initialPosition !== null;
-  
+
   if (active) {
     initial = initialPosition;
     x = initialPosition.x;
@@ -512,8 +511,8 @@ function createAngel(tiles) {
 
     getHitbox() {
       return {
-        x: this.x + (WIDTH- HITBOX_WIDTH) / 2,
-        y: this.y + (HEIGHT- HITBOX_HEIGHT) / 2,
+        x: this.x + (WIDTH - HITBOX_WIDTH) / 2,
+        y: this.y + (HEIGHT - HITBOX_HEIGHT) / 2,
         width: HITBOX_WIDTH,
         height: HITBOX_HEIGHT,
       };
@@ -532,7 +531,7 @@ function createAngel(tiles) {
       this.x -= scrollSpeed;
       tick += 1;
       this.y = Math.round(
-        initial.y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
+        initial.y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
       );
     },
 
@@ -548,8 +547,8 @@ function createAngel(tiles) {
       const drawY = Math.round(this.y);
 
       /**
-      * Draw enemy hitbox. For debugging purposes.
-      */
+       * Draw enemy hitbox. For debugging purposes.
+       */
       // screen.fillStyle = "cyan";
       // screen.fillRect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
 
@@ -562,7 +561,7 @@ function createAngel(tiles) {
         drawX,
         drawY,
         WIDTH,
-        HEIGHT
+        HEIGHT,
       );
     },
 
@@ -583,7 +582,9 @@ function createAngel(tiles) {
   };
 }
 
-const collectibleSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png");
+const collectibleSpriteSheet = loadOnce(
+  "./images/collectibles-sprite-sheet.png",
+);
 
 function createCollectible(tiles, frameNumber) {
   const WIDTH = 16;
@@ -634,10 +635,10 @@ function createCollectible(tiles, frameNumber) {
         return;
       }
 
-      // first frame is 1, start at 0. Second frame is 2, start at 16. And so on. 
+      // first frame is 1, start at 0. Second frame is 2, start at 16. And so on.
       const spriteFrameX = (frameNumber - 1) * 16;
       const spriteFrameY = 0;
-      
+
       const drawX = Math.round(this.x);
       const drawY = Math.round(this.y);
 
@@ -650,7 +651,7 @@ function createCollectible(tiles, frameNumber) {
         drawX,
         drawY,
         WIDTH,
-        HEIGHT
+        HEIGHT,
       );
     },
 
@@ -666,7 +667,6 @@ function createCollectible(tiles, frameNumber) {
         this.active = false;
       }
     },
-
   };
 }
 
@@ -688,11 +688,11 @@ function createEnemy(x, y) {
     y: y,
     width: WIDTH,
     height: HEIGHT,
-  
+
     getHitbox() {
       return {
-        x: this.x + (WIDTH- HITBOX_WIDTH) / 2,
-        y: this.y + (HEIGHT- HITBOX_HEIGHT) / 2,
+        x: this.x + (WIDTH - HITBOX_WIDTH) / 2,
+        y: this.y + (HEIGHT - HITBOX_HEIGHT) / 2,
         width: HITBOX_WIDTH,
         height: HITBOX_HEIGHT,
       };
@@ -724,8 +724,8 @@ function createEnemy(x, y) {
       const drawY = Math.round(this.y);
 
       /**
-      * Draw enemy hitbox. For debugging purposes.
-      */
+       * Draw enemy hitbox. For debugging purposes.
+       */
       // screen.lineWidth = 1;
       // screen.strokeStyle = "magenta";
       // screen.strokeRect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
@@ -739,7 +739,7 @@ function createEnemy(x, y) {
         drawX,
         drawY,
         WIDTH,
-        HEIGHT
+        HEIGHT,
       );
     },
   };
@@ -856,7 +856,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angel = createAngel(platforms.tiles);
-  egg = createCollectible(platforms.tiles, 3);
+  egg = createCollectible(platforms.tiles, 2);
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   enemies = [];
@@ -885,12 +885,12 @@ function update() {
   }
 
   if (gameState === GAME_STATE.START) {
-    time += 1; 
+    time += 1;
 
-    if (time > 120){
+    if (time > 120) {
       title.flash();
     }
-   
+
     if (input.left || input.right || input.up) {
       startGame();
     }
@@ -937,10 +937,6 @@ function update() {
 
     if (egg.active && checkCollision(player, egg)) {
       egg.respawn(platforms.tiles);
-      // score += 1;
-      // if (score > highScore) {
-      //   highScore = score;
-      // }
     }
 
     for (const enemy of enemies) {
@@ -956,8 +952,8 @@ function update() {
         enemies.push(
           createEnemy(
             SCREEN_WIDTH + 12,
-            Math.floor(Math.random() * (164 - 48 + 1)) + 48
-          )
+            Math.floor(Math.random() * (164 - 48 + 1)) + 48,
+          ),
         );
       }
     }
@@ -973,7 +969,7 @@ function update() {
       skateboardSparkle.update();
     }
   }
-  
+
   if (gameState === GAME_STATE.GAME_OVER) {
     time += 1;
     scrollSpeed = 0;
@@ -986,11 +982,10 @@ function update() {
     if (input.left || input.right || input.up) {
       restartGame();
     }
-    // Restart game after 90 frames 
+    // Restart game after 90 frames
     if (deadTimer >= 90) {
       restartGame();
     }
-
 
     // ------------------------------------------------------------
     // Update game objects
@@ -1038,9 +1033,7 @@ function draw(screen) {
   }
 
   if (gameState === GAME_STATE.PLAYING) {
-
     if (firstTimeStarting()) {
-      
       title.draw(screen);
 
       if (
@@ -1084,7 +1077,6 @@ function draw(screen) {
   }
 
   if (gameState === GAME_STATE.GAME_OVER) {
-
     for (const enemy of enemies) {
       enemy.draw(screen);
     }
@@ -1104,7 +1096,6 @@ function draw(screen) {
       print("Game Over", "center", "middle");
     }
   }
-
 }
 
 function getStartMessage() {
