@@ -487,23 +487,28 @@ function createAngel(tiles) {
       };
     }
 
-    // Fallback: spawn ahead of screen at default height
-    return {
-      x: SCREEN_WIDTH + 64,
-      y: 120,
-    };
+    return null;
   }
   
   const initialPosition = findPositionOnTile(tiles);
-  initial = initialPosition
-  x = initialPosition.x;
-  y = initialPosition.y;
+  let active = initialPosition !== null;
+  
+  if (active) {
+    initial = initialPosition;
+    x = initialPosition.x;
+    y = initialPosition.y;
+  } else {
+    initial = null;
+    x = 0;
+    y = 0;
+  }
 
   return {
     x: x,
     y: y,
     width: WIDTH,
     height: HEIGHT,
+    active: active,
 
     getHitbox() {
       return {
@@ -515,6 +520,15 @@ function createAngel(tiles) {
     },
 
     update() {
+      // Auto-respawn if inactive and tiles become available
+      if (!active) {
+        const newPosition = findPositionOnTile(tiles);
+        if (newPosition !== null) {
+          this.respawn(tiles);
+        }
+        return;
+      }
+
       this.x -= scrollSpeed;
       tick += 1;
       this.y = Math.round(
@@ -523,6 +537,10 @@ function createAngel(tiles) {
     },
 
     draw(screen) {
+      if (!active) {
+        return;
+      }
+
       const spriteFrameX = 0;
       const spriteFrameY = 0;
 
@@ -550,10 +568,17 @@ function createAngel(tiles) {
 
     respawn(tiles) {
       const newPosition = findPositionOnTile(tiles);
-      this.x = newPosition.x;
-      this.y = newPosition.y;
-      initial = newPosition;
-      tick = 0;
+      if (newPosition !== null) {
+        this.x = newPosition.x;
+        this.y = newPosition.y;
+        initial = newPosition;
+        tick = 0;
+        active = true;
+        this.active = true;
+      } else {
+        active = false;
+        this.active = false;
+      }
     },
   };
 }
@@ -874,13 +899,13 @@ function update() {
     egg.update();
 
     // Respawn angel if it scrolled off the left side of the screen
-    if (angel.x + angel.width < 0) {
+    if (angel.active && angel.x + angel.width < 0) {
       scoreIncrement = 1;
       angel.respawn(platforms.tiles);
     }
 
     // Power-up collection (uses centered 8x8 hitbox)
-    if (checkCollision(player, angel.getHitbox())) {
+    if (angel.active && checkCollision(player, angel.getHitbox())) {
       // Spawn sparkle at angel position before respawn
       sparkles.push(createSparkle(angel.x, angel.y - 8));
       player.airJumps += 1;
