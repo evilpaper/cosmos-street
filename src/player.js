@@ -8,10 +8,10 @@ const player = {
   states: ["skating", "airborne", "breaking", "speeding", "obliterating"],
   width: 26,
   height: 36,
-  totalFrames: 2,
-  ticksToNextFrame: 16,
-  tick: 0,
-  frame: 0,
+  totalFrames: 2, // For skating and speeding states
+  ticksPerFrame: 16,
+  animationTick: 0,
+  animationFrameIndex: 0, 
   x: 50,
   y: 125,
   dy: 0,
@@ -20,8 +20,10 @@ const player = {
   isDead: false,
 
   reset() {
-    this.tick = 0;
-    this.frame = 0;
+    this.totalFrames = 2;
+    this.ticksPerFrame = 16;
+    this.animationTick = 0;
+    this.animationFrameIndex = 0;
     this.x = 50;
     this.y = 0;
     this.dy = 0;
@@ -40,7 +42,7 @@ const player = {
   speedUp() {
     scrollSpeed = SCROLL_SPEED_SPEEDING;
     this.state = this.states[3];
-    this.ticksToNextFrame = 8;
+    this.ticksPerFrame  = 8;
   },
 
   update(tiles, time) {
@@ -51,7 +53,7 @@ const player = {
 
     if (this.state === "skating") {
       this.totalFrames = 2;
-      this.ticksToNextFrame = 16;
+      this.ticksPerFrame = 16;
       scrollSpeed = SCROLL_SPEED_SKATING;
 
       if (input.left) {
@@ -98,7 +100,7 @@ const player = {
 
     if (this.state === "obliterating") {
       this.totalFrames = 6;
-      this.ticksToNextFrame = 6;
+      this.ticksPerFrame = 6;
       this.dy = 0;
     }
 
@@ -153,34 +155,38 @@ const player = {
         this.x = tile.x - this.width;
       }
     }
+    
+    // Advance animation tick
+    this.animationTick += 1;
 
-    // Animation
-    this.tick = (this.tick + 1) % this.ticksToNextFrame; // 1, 0, 1, 0 etc...
+      // Advance frame when tick threshold reached
+      if (this.animationTick >= this.ticksPerFrame) {
+        this.animationTick = 0;
+        this.animationFrameIndex += 1;
 
-    if (this.tick === 0) {
-      this.frame = this.frame + 1;
-      if (this.frame >= this.totalFrames) {
-        if (this.state === "obliterating") {
-          this.isDead = true;
-        } else {
-          this.frame = 0;
+        // Loop animation
+        if (this.animationFrameIndex >= this.totalFrames) {
+          if (this.state === "obliterating") {
+            this.isDead = true;
+          } else {
+            this.animationFrameIndex = 0;
+          }
         }
-      }
-    }
+      } 
   },
 
   draw(screen) {
-    const sx = this.frame * 40;
+    const sx = this.animationFrameIndex * 40;
     const sy = 35;
 
     if (this.state === "skating" || this.state === "speeding") {
-      if (this.frame === 0) {
+      if (this.animationFrameIndex === 0) {
         screen.drawImage(
           this.image,
           0,
           0,
           26,
-          35,
+          35, 
           o(this.x),
           o(this.y),
           26,
