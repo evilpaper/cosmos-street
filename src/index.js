@@ -603,26 +603,37 @@ function createCollectible(tiles, frameNumber) {
       };
     }
 
-    // Fallback: spawn ahead of screen at default height
-    return {
-      x: SCREEN_WIDTH + 64,
-      y: 120,
-    };
+    return null;
   }
 
   const position = findPositionOnTile(tiles);
+  let active = position !== null;
 
   return {
-    x: position.x,
-    y: position.y,
+    x: active ? position.x : 0,
+    y: active ? position.y : 0,
     width: WIDTH,
     height: HEIGHT,
+    active: active,
 
     update() {
+      // Auto-respawn if inactive and tiles become available
+      if (!active) {
+        const newPosition = findPositionOnTile(tiles);
+        if (newPosition !== null) {
+          this.respawn(tiles);
+        }
+        return;
+      }
+
       this.x -= scrollSpeed;
     },
 
     draw(screen) {
+      if (!active) {
+        return;
+      }
+
       // first frame is 1, start at 0. Second frame is 2, start at 16. And so on. 
       const spriteFrameX = (frameNumber - 1) * 16;
       const spriteFrameY = 0;
@@ -645,8 +656,15 @@ function createCollectible(tiles, frameNumber) {
 
     respawn(tiles) {
       const pos = findPositionOnTile(tiles);
-      this.x = pos.x;
-      this.y = pos.y;
+      if (pos !== null) {
+        this.x = pos.x;
+        this.y = pos.y;
+        active = true;
+        this.active = true;
+      } else {
+        active = false;
+        this.active = false;
+      }
     },
 
   };
@@ -917,7 +935,7 @@ function update() {
       }
     }
 
-    if (checkCollision(player, egg)) {
+    if (egg.active && checkCollision(player, egg)) {
       egg.respawn(platforms.tiles);
       // score += 1;
       // if (score > highScore) {
