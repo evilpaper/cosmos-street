@@ -1060,7 +1060,7 @@ function draw(screen) {
       skateboardSparkle.draw(screen);
     }
 
-    if ((time > 24 && time < 36) || (time > 48 && time < 64)) {
+    if (time > 24 && time < 64) {
       print(startMessage, "center", "middle");
       print("High Score " + highScore, "center", 128 + 10);
     }
