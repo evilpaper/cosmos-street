@@ -1062,11 +1062,11 @@ function draw(screen) {
 
     if ((time > 24 && time < 36) || (time > 48 && time < 64)) {
       print(startMessage, "center", "middle");
+      print("High Score " + highScore, "center", 128 + 10);
     }
 
     if (time > 60) {
       print("" + score, 52, 44);
-      print("HIGH " + highScore, 160, 44);
     }
 
     if (deadTimer > 0) {
