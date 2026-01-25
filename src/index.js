@@ -819,6 +819,10 @@ function resetGame() {
   gameState = GAME_STATE.START;
   time = 0;
   title.y = 64; // Reset title position for next title screen
+  // Reset input flags to prevent bleed
+  input.left = false;
+  input.right = false;
+  input.up = false;
   init(); // Reset all game objects
 }
 
@@ -977,13 +981,17 @@ function update() {
     // Restart game conditons
     // ------------------------------------------------------------
     // Restart game if user presses a key
-    if (input.left || input.right || input.up) {
+    if (input.left || input.right) {
       restartGame();
+    }
+
+    if (input.up) {
+      resetGame();
     }
     // Restart game after 90 frames
-    if (deadTimer >= 90) {
-      restartGame();
-    }
+    // if (deadTimer >= 90) {
+    //   restartGame();
+    // }
 
     // ------------------------------------------------------------
     // Update game objects
@@ -1092,6 +1100,8 @@ function draw(screen) {
 
     if (deadTimer > 0) {
       print("Game Over", "center", "middle");
+      print("Press ← or → to restart", "center", 186);
+      print("Press ↑ to reset", "center", 198);
     }
   }
 }
