@@ -860,7 +860,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angel = createAngel(platforms.tiles);
-  egg = createCollectible(platforms.tiles, 2);
+  // egg = createCollectible(platforms.tiles, 2);
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   enemies = [];
@@ -916,7 +916,7 @@ function update() {
     platforms.update();
 
     angel.update();
-    egg.update();
+    // egg.update();
 
     // Respawn angel if it scrolled off the left side of the screen
     if (angel.active && angel.x + angel.width < 0) {
@@ -937,9 +937,9 @@ function update() {
       }
     }
 
-    if (egg.active && checkCollision(player, egg)) {
-      egg.respawn(platforms.tiles);
-    }
+    // if (egg.active && checkCollision(player, egg)) {
+    //   egg.respawn(platforms.tiles);
+    // }
 
     for (const enemy of enemies) {
       enemy.update();
@@ -1035,7 +1035,7 @@ function draw(screen) {
   if (gameState === GAME_STATE.START) {
     title.draw(screen);
     print("Press ←,→ or ↑", "center", 186);
-    print("key to start", "center", 198);
+    print("key to start", "center", 202);
   }
 
   if (gameState === GAME_STATE.PLAYING) {
@@ -1048,7 +1048,7 @@ function draw(screen) {
         (time > 24 && time < 30)
       ) {
         print("Press ←,→ or ↑", "center", 186);
-        print("key to start", "center", 198);
+        print("key to start", "center", 202);
       }
     }
 
@@ -1062,23 +1062,19 @@ function draw(screen) {
 
     player.draw(screen);
     angel.draw(screen);
-    egg.draw(screen);
+    // egg.draw(screen);
 
     if (player.airJumps > 0) {
       skateboardSparkle.draw(screen);
     }
 
     if (time > 24 && time < 64) {
-      print(startMessage, "center", "middle");
-      print("High Score " + highScore, "center", 128 + 10);
+      print(startMessage, "center", 128 - 4 - 8);
+      print("High Score " + highScore, "center", 128 + 4);
     }
 
     if (time > 60) {
       print("" + score, "center", 36);
-    }
-
-    if (deadTimer > 0) {
-      print("Game Over", "center", "middle");
     }
   }
 
@@ -1100,8 +1096,8 @@ function draw(screen) {
 
     if (deadTimer > 0) {
       print("Game Over", "center", "middle");
-      print("Press ← or → to restart", "center", 186);
-      print("Press ↑ to reset", "center", 198);
+      print("Restart ← or →", "center", 186);
+      print("Title screen ↑", "center", 202);
     }
   }
 }
