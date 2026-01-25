@@ -1074,7 +1074,7 @@ function draw(screen) {
     }
 
     if (time > 60) {
-      print("" + score, 52, 44);
+      print("" + score, "center", 36);
     }
 
     if (deadTimer > 0) {
