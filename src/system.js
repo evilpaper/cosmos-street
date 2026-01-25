@@ -38,6 +38,13 @@ function start() {
 window.onload = start;
 
 /**
+ * Play a sound effect
+ */
+function sfx(track) {
+  new Audio("sfx/" + track + ".wav").play();
+}
+
+/**
  * Load font image
  */
 function loadFontImage() {

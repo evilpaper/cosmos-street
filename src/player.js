@@ -11,7 +11,7 @@ const player = {
   totalFrames: 2, // For skating and speeding states
   ticksPerFrame: 16,
   animationTick: 0,
-  animationFrameIndex: 0, 
+  animationFrameIndex: 0,
   x: 50,
   y: 125,
   dy: 0,
@@ -37,12 +37,13 @@ const player = {
     this.state = this.states[1]; // airborne
     // Consume input to require fresh key press for next jump
     input.up = false;
+    sfx("jump");
   },
 
   speedUp() {
     scrollSpeed = SCROLL_SPEED_SPEEDING;
     this.state = this.states[3];
-    this.ticksPerFrame  = 8;
+    this.ticksPerFrame = 8;
   },
 
   update(tiles, time) {
@@ -155,24 +156,24 @@ const player = {
         this.x = tile.x - this.width;
       }
     }
-    
+
     // Advance animation tick
     this.animationTick += 1;
 
-      // Advance frame when tick threshold reached
-      if (this.animationTick >= this.ticksPerFrame) {
-        this.animationTick = 0;
-        this.animationFrameIndex += 1;
+    // Advance frame when tick threshold reached
+    if (this.animationTick >= this.ticksPerFrame) {
+      this.animationTick = 0;
+      this.animationFrameIndex += 1;
 
-        // Loop animation
-        if (this.animationFrameIndex >= this.totalFrames) {
-          if (this.state === "obliterating") {
-            this.isDead = true;
-          } else {
-            this.animationFrameIndex = 0;
-          }
+      // Loop animation
+      if (this.animationFrameIndex >= this.totalFrames) {
+        if (this.state === "obliterating") {
+          this.isDead = true;
+        } else {
+          this.animationFrameIndex = 0;
         }
-      } 
+      }
+    }
   },
 
   draw(screen) {
@@ -186,11 +187,11 @@ const player = {
           0,
           0,
           26,
-          35, 
+          35,
           o(this.x),
           o(this.y),
           26,
-          35
+          35,
         );
       } else {
         screen.drawImage(
@@ -202,7 +203,7 @@ const player = {
           o(this.x),
           o(this.y),
           26,
-          35
+          35,
         );
       }
     }
@@ -222,7 +223,7 @@ const player = {
           o(this.x),
           o(this.y),
           40,
-          40
+          40,
         );
       }
     }
