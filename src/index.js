@@ -75,6 +75,7 @@ let deadTimer;
 let score;
 let scoreIncrement;
 let highScore = 0;
+let highScoreUpdated = false;
 
 const GAME_STATE = {
   START: "START",
@@ -823,6 +824,7 @@ function resetGame() {
   input.left = false;
   input.right = false;
   input.up = false;
+  highScoreUpdated = false;
   init(); // Reset all game objects
 }
 
@@ -934,6 +936,7 @@ function update() {
       scoreIncrement += 1;
       if (score > highScore) {
         highScore = score;
+        highScoreUpdated = true;
       }
     }
 
@@ -1070,7 +1073,9 @@ function draw(screen) {
 
     if (time > 24 && time < 64) {
       print(startMessage, "center", 128 - 4 - 8);
-      print("High Score " + highScore, "center", 128 + 4);
+      if (highScore > 0) {
+        print("High Score " + highScore, "center", 128 + 4);
+      }
     }
 
     if (time > 60) {
@@ -1095,7 +1100,13 @@ function draw(screen) {
     }
 
     if (deadTimer > 0) {
-      print("Game Over", "center", "middle");
+      if (highScoreUpdated) {
+        print("Game Over", "center", 128 - 4 - 8);
+        print("New high " + highScore, "center", 128 + 4);
+      } else {
+        print("Game Over", "center", "middle");
+      }
+
       print("Restart ← or →", "center", 186);
       print("Title screen ↑", "center", 202);
     }
