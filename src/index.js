@@ -934,7 +934,7 @@ function update() {
       angel.respawn(platforms.tiles);
       score += scoreIncrement;
       scoreIncrement += 1;
-      sfx("angel_collect");
+      sfx.angelCollect.play();
       if (score > highScore) {
         highScore = score;
         highScoreUpdated = true;
@@ -949,7 +949,7 @@ function update() {
       enemy.update();
       if (checkCollision(player, enemy.getHitbox())) {
         if (player.state !== "obliterating") {
-          sfx("crash");
+          sfx.crash.play();
         }
         player.state = "obliterating";
         scrollSpeed = 0;
