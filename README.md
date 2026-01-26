@@ -70,7 +70,7 @@ That's it! Good luck!
 - The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
 - The enemy art for Blip Blip is sourced from the image Mega Man Custom Enemies by calegaea75432, discovered online. Full credit goes to calegaea75432.
 - Font used is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
-- Sounds Effects is taken from Wonder Boy III: The Dragon's Trap for Sega Master System from [The Sounds Resource](https://sounds.spriters-resource.com/). Couldn't find sound effects for orginal Wonder Boy.
+- Sounds Effects is taken from Wonder Boy III: The Dragon's Trap for Sega Master System from [The Sounds Resource](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/). Couldn't find sound effects for orginal Wonder Boy.
 
 ## Running Locally
 
