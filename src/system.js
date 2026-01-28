@@ -43,7 +43,8 @@ window.onload = start;
 const sfx = {
   jump: new Audio("sfx/jump.wav"),
   crash: new Audio("sfx/crash.wav"),
-  angelCollect: new Audio("sfx/angel_collect.wav"),
+  angelCollect: new Audio("sfx/angel.wav"),
+  start: new Audio("sfx/start.wav"),
 };
 
 /**
