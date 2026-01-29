@@ -936,7 +936,7 @@ function update() {
       angel.respawn(platforms.tiles);
       score += scoreIncrement;
       scoreIncrement += 1;
-      sfx.angelCollect.play();
+      sfx.angel.play();
       if (score > highScore) {
         highScore = score;
         highScoreUpdated = true;
