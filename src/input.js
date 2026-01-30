@@ -51,15 +51,23 @@ input.keyListener = function ({ code, type }) {
 // Listen for button events. Should have "hold" button behavior.
 
 // Keyboard events
-document.addEventListener("keydown", (event) => {
-  const code = event.code;
-  input.keyListener({ code, type: "keydown" });
-}, { passive: true });
+document.addEventListener(
+  "keydown",
+  (event) => {
+    const code = event.code;
+    input.keyListener({ code, type: "keydown" });
+  },
+  { passive: true },
+);
 
-document.addEventListener("keyup", (event) => {
-  const code = event.code;
-  input.keyListener({ code, type: "keyup" });
-}, { passive: true });
+document.addEventListener(
+  "keyup",
+  (event) => {
+    const code = event.code;
+    input.keyListener({ code, type: "keyup" });
+  },
+  { passive: true },
+);
 
 // Touch ev ents
 // preventDefault() prevents scrolling, zooming, and touch delays
@@ -67,20 +75,30 @@ document.addEventListener("keyup", (event) => {
 
 // Helper function to create touch event handlers for a button
 function createTouchHandlers(button, code) {
-  button.addEventListener("touchstart", (event) => {
-    event.preventDefault();
-    input.keyListener({ code, type: "keydown" });
-  }, { passive: true });
+  button.addEventListener(
+    "touchstart",
+    (event) => {
+      input.keyListener({ code, type: "keydown" });
+    },
+    { passive: true },
+  );
 
-  button.addEventListener("touchend", (event) => {
-    event.preventDefault();
-    input.keyListener({ code, type: "keyup" });
-  }, { passive: true });
+  button.addEventListener(
+    "touchend",
+    (event) => {
+      input.keyListener({ code, type: "keyup" });
+    },
+    { passive: true },
+  );
 
-  button.addEventListener("touchcancel", (event) => {
-    event.preventDefault();
-    input.keyListener({ code, type: "keyup" });
-  }, { passive: true });
+  button.addEventListener(
+    "touchcancel",
+    (event) => {
+      event.preventDefault();
+      input.keyListener({ code, type: "keyup" });
+    },
+    { passive: true },
+  );
 }
 
 // Apply touch handlers to all buttons

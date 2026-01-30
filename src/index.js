@@ -814,7 +814,6 @@ function startGame() {
   input.left = false;
   input.right = false;
   input.up = false;
-  sfx.start.play();
 }
 
 function resetGame() {
@@ -837,7 +836,6 @@ function restartGame() {
   input.right = false;
   input.up = false;
   init(); // Reset all game objects
-  sfx.start.play();
 }
 
 /**
