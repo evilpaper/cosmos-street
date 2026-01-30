@@ -883,6 +883,8 @@ function init() {
 
 function update() {
   if (input.soundToggle) {
+    // Consume input to require fresh key press for next toggle
+    input.soundToggle = false;
     console.log("soundToggle", input.soundToggle);
   }
 
