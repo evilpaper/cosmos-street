@@ -882,6 +882,10 @@ function init() {
  */
 
 function update() {
+  if (input.soundToggle) {
+    console.log("soundToggle", input.soundToggle);
+  }
+
   if (paused) {
     return;
   }

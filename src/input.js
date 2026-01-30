@@ -5,11 +5,13 @@ const KEY_CODES = {
   UP: "ArrowUp",
   RIGHT: "ArrowRight",
   LEFT: "ArrowLeft",
+  SOUND_TOGGLE: "KeyS",
 };
 
 const breakButton = document.getElementById("break");
 const speedUpButton = document.getElementById("speed-up");
 const jumpButton = document.getElementById("jump");
+const soundToggleButton = document.getElementById("sound-toggle");
 
 /**
  * code: string
@@ -45,6 +47,15 @@ input.keyListener = function ({ code, type }) {
         speedUpButton.classList.remove("pressed");
       }
       break;
+    case KEY_CODES.SOUND_TOGGLE:
+      input.soundToggle = eventType;
+      // Toggle pressed state for speed-up button
+      if (eventType) {
+        soundToggleButton.classList.add("pressed");
+      } else {
+        soundToggleButton.classList.remove("pressed");
+      }
+      break;
   }
 };
 
@@ -69,7 +80,7 @@ document.addEventListener(
   { passive: true },
 );
 
-// Touch ev ents
+// Touch events
 // preventDefault() prevents scrolling, zooming, and touch delays
 // ensuring responsive game controls
 
@@ -105,8 +116,4 @@ function createTouchHandlers(button, code) {
 createTouchHandlers(breakButton, KEY_CODES.LEFT); // Left arrow
 createTouchHandlers(jumpButton, KEY_CODES.UP); // Up arrow
 createTouchHandlers(speedUpButton, KEY_CODES.RIGHT); // Right arrow
-
-// breakButton.addEventListener("click", (event) => {
-//   event.preventDefault();
-//   input.keyListener({ code: KEY_CODES.LEFT, type: "keydown" });
-// });
+createTouchHandlers(soundToggleButton, KEY_CODES.SOUND_TOGGLE); // Right arrow
