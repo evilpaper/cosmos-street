@@ -41,7 +41,7 @@ window.onload = start;
  * Load sound effects
  */
 const sfx = {
-  jump: new Audio("sfx/Jump.wav"),
+  jump: new Audio("sfx/Player Jump.wav"),
   crash: new Audio("sfx/Fireball.wav"),
   angel: new Audio("sfx/Select Cursor.wav"),
 };
