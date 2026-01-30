@@ -49,7 +49,7 @@ input.keyListener = function ({ code, type }) {
       break;
     case KEY_CODES.SOUND_TOGGLE:
       input.soundToggle = eventType;
-      // Toggle pressed state for speed-up button
+      // Toggle pressed state for sound-toggle button
       if (eventType) {
         soundToggleButton.classList.add("pressed");
       } else {

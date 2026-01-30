@@ -873,6 +873,9 @@ function init() {
   deadTimer = 0;
   score = 0;
   scoreIncrement = 1;
+  document
+    .getElementById("sound-toggle")
+    .classList.toggle("muted", !getSoundEnabled());
 }
 
 /**
@@ -883,9 +886,11 @@ function init() {
 
 function update() {
   if (input.soundToggle) {
-    // Consume input to require fresh key press for next toggle
+    toggleSound();
+    document
+      .getElementById("sound-toggle")
+      .classList.toggle("muted", !getSoundEnabled());
     input.soundToggle = false;
-    console.log("soundToggle", input.soundToggle);
   }
 
   if (paused) {

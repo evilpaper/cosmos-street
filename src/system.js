@@ -46,6 +46,25 @@ const sfx = {
   angel: new Audio("sfx/Select Cursor.wav"),
 };
 
+const SOUND_STORAGE_KEY = "cosmos-street-sound";
+let soundEnabled = localStorage.getItem(SOUND_STORAGE_KEY) !== "0";
+
+function applySoundEnabled() {
+  sfx.jump.muted = sfx.crash.muted = sfx.angel.muted = !soundEnabled;
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  applySoundEnabled();
+  localStorage.setItem(SOUND_STORAGE_KEY, soundEnabled ? "1" : "0");
+}
+
+function getSoundEnabled() {
+  return soundEnabled;
+}
+
+applySoundEnabled();
+
 /**
  * Load font image
  */
