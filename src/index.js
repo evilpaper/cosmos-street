@@ -814,6 +814,10 @@ function startGame() {
   input.left = false;
   input.right = false;
   input.up = false;
+  music.retroPlatforming.play();
+  music.retroPlatforming.loop = true;
+  music.retroPlatforming.volume = 0.5;
+  music.retroPlatforming.muted = !soundEnabled;
 }
 
 function resetGame() {

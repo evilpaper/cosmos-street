@@ -31,11 +31,11 @@ That's it! Good luck!
 - [x] Enemy
 - [x] Death
 - [x] Restart
-- [x] Fruits
+- [x] Fruits (did angel instead)
 - [x] Score
 - [x] Session high score
 - [x] SFX
-- [ ] Music
+- [x] Music
 - [x] Sound controls (on/off)
 - [ ] Increase difficulty over time (harder and harder)
 - [ ] Playtest, playtest, playtest, tweak, tweak and tweak again until it's fun, juicy and tight. Add visual feedback, smooth transitions etc.
@@ -66,9 +66,13 @@ That's it! Good luck!
 
 - The CRT effect is created with CSS. More precise CSS Keyframes.
 - The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
+
+## Credits
+
 - The enemy art for Blip Blip is sourced from the image Mega Man Custom Enemies by calegaea75432, discovered online. Full credit goes to calegaea75432.
 - Font used is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
-- Sounds Effects are taken from Wonder Boy III: The Dragon's Trap for Sega Master System from [The Sounds Resource](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/). Couldn't find sound effects for orginal Wonder Boy.
+- The Sounds Effects are taken from Wonder Boy III: The Dragon's Trap. Source[The Sounds Resource](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/). All credits to the original creators and The Sounds Resource for provision. I couldn't find sound effects for orginal Wonder Boy. Picked the nearest I could find.
+- The music track is [Retro Platforming by David Fesliyan](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6). Credit: https://www.FesliyanStudios.com Background Music
 
 ## Running Locally
 

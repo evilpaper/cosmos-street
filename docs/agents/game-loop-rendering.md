@@ -1,7 +1,7 @@
 # Game loop & rendering
 
 - Use a fixed-step `update()` loop at 60 FPS.
-- The game is frame-count driven: prefer “number of frames” over `deltaTime`.
+- The game is frame-count driven: use “number of frames” instead of `deltaTime`.
 - Separate update logic from render logic.
 - Render via HTML canvas.
 
@@ -13,4 +13,3 @@
 ## Determinism
 
 - Keep update order obvious and consistent (e.g. tick → move → wrap → animate).
-

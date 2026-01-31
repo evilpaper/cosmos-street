@@ -46,11 +46,23 @@ const sfx = {
   angel: new Audio("sfx/Select Cursor.wav"),
 };
 
+/**
+ * Load music tracks
+ */
+const music = {
+  retroPlatforming: new Audio(
+    "music/SLOWER-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3",
+  ),
+};
+
 const SOUND_STORAGE_KEY = "cosmos-street-sound";
 let soundEnabled = localStorage.getItem(SOUND_STORAGE_KEY) !== "0";
 
 function applySoundEnabled() {
-  sfx.jump.muted = sfx.crash.muted = sfx.angel.muted = !soundEnabled;
+  sfx.jump.muted = !soundEnabled;
+  sfx.crash.muted = !soundEnabled;
+  sfx.angel.muted = !soundEnabled;
+  music.retroPlatforming.muted = !soundEnabled;
 }
 
 function toggleSound() {
