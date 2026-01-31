@@ -93,7 +93,10 @@ canvas {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  transition: background-color 0.2s, color 0.2s, transform 0.1s ease;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    transform 0.1s ease;
 }
 
 /* This add the round elevation on the button. Making it look crazy nice.*/
@@ -116,13 +119,10 @@ canvas {
 }
 
 /* Sound toggle: show speaker-on by default, speaker-off when muted */
-#sound-toggle .icon-sound-off {
+#sound-toggle.muted .muted {
   display: none;
 }
-#sound-toggle.muted .icon-sound-on {
-  display: none;
-}
-#sound-toggle.muted .icon-sound-off {
+#sound-toggle.muted .unmuted {
   display: block;
 }
 
@@ -181,7 +181,8 @@ canvas {
   left: 0;
   bottom: 0;
   right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+  background:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
     linear-gradient(
       90deg,
       rgba(255, 0, 0, 0.06),
@@ -189,7 +190,9 @@ canvas {
       rgba(0, 0, 255, 0.06)
     );
   z-index: 2;
-  background-size: 100% 3px, 4px 100%;
+  background-size:
+    100% 3px,
+    4px 100%;
   pointer-events: none;
 }
 
