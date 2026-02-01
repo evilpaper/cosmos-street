@@ -55,8 +55,7 @@ const music = {
   ),
 };
 
-const SOUND_STORAGE_KEY = "cosmos-street-sound";
-let soundEnabled = localStorage.getItem(SOUND_STORAGE_KEY) !== "0";
+let soundEnabled = true;
 
 function applySoundEnabled() {
   sfx.jump.muted = !soundEnabled;
@@ -68,7 +67,6 @@ function applySoundEnabled() {
 function toggleSound() {
   soundEnabled = !soundEnabled;
   applySoundEnabled();
-  localStorage.setItem(SOUND_STORAGE_KEY, soundEnabled ? "1" : "0");
 }
 
 function getSoundEnabled() {
