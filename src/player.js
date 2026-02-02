@@ -38,7 +38,7 @@ const player = {
     // Consume input to require fresh key press for next jump
     input.up = false;
     // sfx.jump.play();
-    playSound(sounds.jump);
+    playSound(sounds.jump, 0.8);
   },
 
   speedUp() {

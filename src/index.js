@@ -950,6 +950,7 @@ function update() {
       score += scoreIncrement;
       scoreIncrement += 1;
       // sfx.angel.play();
+      playSound(sounds.angel);
       if (score > highScore) {
         highScore = score;
         highScoreUpdated = true;
@@ -965,6 +966,7 @@ function update() {
       if (checkCollision(player, enemy.getHitbox())) {
         if (player.state !== "obliterating") {
           // sfx.crash.play();
+          playSound(sounds.crash);
         }
         player.state = "obliterating";
         scrollSpeed = 0;

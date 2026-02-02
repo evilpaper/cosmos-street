@@ -68,12 +68,20 @@ function initAudio() {
 
 function unlockAudio() {
   initAudio();
-  if (audioCtx.state === "suspended") {
-    audioCtx.resume();
-  }
+  // if (audioCtx.state === "suspended") {
+  //   audioCtx.resume();
+  // }
   loadSounds();
   window.removeEventListener("touchstart", unlockAudio);
   window.removeEventListener("mousedown", unlockAudio);
+  window.removeEventListener("keydown", unlockAudio);
+  window.removeEventListener("keyup", unlockAudio);
+  window.removeEventListener("mouseup", unlockAudio);
+  window.removeEventListener("mouseleave", unlockAudio);
+  window.removeEventListener("mouseenter", unlockAudio);
+  window.removeEventListener("mousemove", unlockAudio);
+  window.removeEventListener("mouseover", unlockAudio);
+  window.removeEventListener("mouseout", unlockAudio);
 }
 
 window.addEventListener("touchstart", unlockAudio);
@@ -97,6 +105,8 @@ const sounds = {};
 
 async function loadSounds() {
   sounds.jump = await loadSound("audio/jump.ogg");
+  sounds.crash = await loadSound("audio/fireball.ogg");
+  sounds.angel = await loadSound("audio/select-cursor.ogg");
 }
 
 function playSound(buffer, volume = 1) {
