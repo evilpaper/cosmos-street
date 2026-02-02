@@ -814,10 +814,10 @@ function startGame() {
   input.left = false;
   input.right = false;
   input.up = false;
-  music.retroPlatforming.play();
-  music.retroPlatforming.loop = true;
-  music.retroPlatforming.volume = 0.5;
-  music.retroPlatforming.muted = !soundEnabled;
+  // music.retroPlatforming.play();
+  // music.retroPlatforming.loop = true;
+  // music.retroPlatforming.volume = 0.5;
+  // music.retroPlatforming.muted = !soundEnabled;
 }
 
 function resetGame() {
@@ -949,7 +949,7 @@ function update() {
       angel.respawn(platforms.tiles);
       score += scoreIncrement;
       scoreIncrement += 1;
-      sfx.angel.play();
+      // sfx.angel.play();
       if (score > highScore) {
         highScore = score;
         highScoreUpdated = true;
@@ -964,7 +964,7 @@ function update() {
       enemy.update();
       if (checkCollision(player, enemy.getHitbox())) {
         if (player.state !== "obliterating") {
-          sfx.crash.play();
+          // sfx.crash.play();
         }
         player.state = "obliterating";
         scrollSpeed = 0;

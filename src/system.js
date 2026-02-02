@@ -55,6 +55,67 @@ const music = {
   ),
 };
 
+/**
+ * NEW - Audio context
+ */
+let audioCtx;
+
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+function unlockAudio() {
+  initAudio();
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+  loadSounds();
+  window.removeEventListener("touchstart", unlockAudio);
+  window.removeEventListener("mousedown", unlockAudio);
+}
+
+window.addEventListener("touchstart", unlockAudio);
+window.addEventListener("mousedown", unlockAudio);
+window.addEventListener("keydown", unlockAudio);
+window.addEventListener("keyup", unlockAudio);
+window.addEventListener("mouseup", unlockAudio);
+window.addEventListener("mouseleave", unlockAudio);
+window.addEventListener("mouseenter", unlockAudio);
+window.addEventListener("mousemove", unlockAudio);
+window.addEventListener("mouseover", unlockAudio);
+window.addEventListener("mouseout", unlockAudio);
+
+async function loadSound(url) {
+  const res = await fetch(url);
+  const arrayBuffer = await res.arrayBuffer();
+  return await audioCtx.decodeAudioData(arrayBuffer);
+}
+
+const sounds = {};
+
+async function loadSounds() {
+  sounds.jump = await loadSound("audio/jump.ogg");
+}
+
+function playSound(buffer, volume = 1) {
+  const source = audioCtx.createBufferSource();
+  const gain = audioCtx.createGain();
+
+  source.buffer = buffer;
+  gain.gain.value = volume;
+
+  source.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  source.start();
+}
+
+/**
+ * END OF NEW SECTION
+ */
+
 let soundEnabled = true;
 
 function applySoundEnabled() {
