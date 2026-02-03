@@ -38,15 +38,6 @@ function start() {
 window.onload = start;
 
 /**
- * Load sound effects
- */
-const sfx = {
-  jump: new Audio("sfx/Jump.wav"),
-  crash: new Audio("sfx/Fireball.wav"),
-  angel: new Audio("sfx/Select Cursor.wav"),
-};
-
-/**
  * Load music tracks
  */
 const music = {
@@ -56,7 +47,7 @@ const music = {
 };
 
 /**
- * NEW - Audio context
+ * Audio
  */
 let audioCtx;
 
@@ -122,10 +113,6 @@ function playSound(buffer, volume = 1) {
   source.start();
 }
 
-/**
- * END OF NEW SECTION
- */
-
 let soundEnabled = true;
 
 function applySoundEnabled() {
@@ -147,7 +134,7 @@ function getSoundEnabled() {
 applySoundEnabled();
 
 /**
- * Load font image
+ * Font
  */
 function loadFontImage() {
   const image = new Image();
