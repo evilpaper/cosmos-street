@@ -116,9 +116,9 @@ function playSound(buffer, volume = 1) {
 let soundEnabled = true;
 
 function applySoundEnabled() {
-  sfx.jump.muted = !soundEnabled;
-  sfx.crash.muted = !soundEnabled;
-  sfx.angel.muted = !soundEnabled;
+  // sfx.jump.muted = !soundEnabled;
+  // sfx.crash.muted = !soundEnabled;
+  // sfx.angel.muted = !soundEnabled;
   music.retroPlatforming.muted = !soundEnabled;
 }
 
