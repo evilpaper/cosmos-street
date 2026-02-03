@@ -126,6 +126,12 @@ canvas {
   color: var(--color-sound-on);
 }
 #sound-toggle:not(.muted) svg {
+  color: var(--color-sound-on);
+  text-shadow:
+    /* White glow */ 0 0 1px #fff, 0 0 2px #fff,
+    /* Green glow */ 0 0 3px var(--color-sound-on),
+    0 0 4px var(--color-sound-on), 0 0 5px var(--color-sound-on),
+    0 0 6px var(--color-sound-on);
 }
 
 /* Mobile portrait - check for portrait orientation with height constraint */
