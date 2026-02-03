@@ -71,8 +71,8 @@ That's it! Good luck!
 
 - The enemy art for Blip Blip is sourced from the image Mega Man Custom Enemies by calegaea75432, discovered online. Full credit goes to calegaea75432.
 - Font used is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
-- The Sounds Effects are taken from Wonder Boy III: The Dragon's Trap. Source[The Sounds Resource](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/). All credits to the original creators and The Sounds Resource for provision. I couldn't find sound effects for orginal Wonder Boy. Picked the nearest I could find.
-- The music track is [Retro Platforming by David Fesliyan](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6). Credit: https://www.FesliyanStudios.com Background Music
+- Sounds Effects are taken from Wonder Boy III: The Dragon's Trap. Source[The Sounds Resource](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/). All credits to the original creators and The Sounds Resource for provision. I couldn't find sound effects for orginal Wonder Boy. Picked the nearest I could find. Orignal format wav, converted to ogg to reduce size.
+- Music track is [Retro Platforming by David Fesliyan](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6). Credit: https://www.FesliyanStudios.com Background Music
 
 ## Running Locally
 
