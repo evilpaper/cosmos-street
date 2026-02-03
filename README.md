@@ -76,7 +76,24 @@ That's it! Good luck!
 
 ## Running Locally
 
-No need to install anything. Just open index.html in your web browser of choice and game along.
+No need to install anything. But...
+
+To get the sound working you need to run a local dev server.
+This is because the sound use the Web Audio API that fetch the audio files.
+Since it use `fetch` it must be served over `http://`. Otherwise you will get CORS error.
+You can run the lightest possible dev server from your terminal like this:
+
+```sh
+npx serve
+```
+
+or
+
+```sh
+python3 -m http.server
+```
+
+If you are ok to run it locally without sound you can just open the index.html in your web browser of choice and game along.
 
 If you have cloned the repo you can run it from your shell with the open command, like this:
 
