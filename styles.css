@@ -4,6 +4,7 @@
   --color-surface--100: #faf2e6;
   --color-surface--200: #e0d8cc;
   --color-on-surface: hsl(236, 18%, 30%);
+  --color-sound-on: hsl(325, 100%, 50%);
   --nominal-size: 3.33rem;
 }
 
@@ -117,12 +118,14 @@ canvas {
   background-color: var(--color-surface--200);
 }
 
-/* Sound toggle: show speaker-on by default, speaker-off when muted */
-#sound-toggle.muted .muted {
-  display: none;
+/* Sound toggle: one icon; muted = default color, unmuted = pink glow */
+#sound-toggle {
+  color: var(--color-on-surface);
 }
-#sound-toggle.muted .unmuted {
-  display: block;
+#sound-toggle:not(.muted) {
+  color: var(--color-sound-on);
+}
+#sound-toggle:not(.muted) svg {
 }
 
 /* Mobile portrait - check for portrait orientation with height constraint */
