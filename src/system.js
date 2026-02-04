@@ -119,7 +119,7 @@ function applySoundEnabled() {
   // sfx.jump.muted = !soundEnabled;
   // sfx.crash.muted = !soundEnabled;
   // sfx.angel.muted = !soundEnabled;
-  music.retroPlatforming.muted = !soundEnabled;
+  // music.retroPlatforming.muted = !soundEnabled;
 }
 
 function toggleSound() {
