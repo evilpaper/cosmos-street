@@ -191,7 +191,7 @@ function createStar(options = {}) {
         drawX,
         drawY,
         FRAME_WIDTH,
-        FRAME_HEIGHT,
+        FRAME_HEIGHT
       );
     },
   };
@@ -241,7 +241,7 @@ function createTile(options = {}) {
         drawX,
         drawY,
         width,
-        height,
+        height
       );
     },
   };
@@ -259,7 +259,7 @@ function createPlatforms(options = {}) {
       createTile({
         x: i * TILE_WIDTH,
         y: 160,
-      }),
+      })
     );
   }
 
@@ -289,7 +289,7 @@ function createPlatforms(options = {}) {
     const diff = getDifficulty();
     const y = randomInRange(
       diff.platformYMin,
-      diff.platformYMin + diff.platformYRange,
+      diff.platformYMin + diff.platformYRange
     );
     const gap = randomInRange(diff.gapMin, diff.gapMax);
     const tileCount = randomInRange(diff.tilesMin, diff.tilesMax);
@@ -299,7 +299,7 @@ function createPlatforms(options = {}) {
         createTile({
           x: lastTileX + gap + i * TILE_WIDTH,
           y: y,
-        }),
+        })
       );
     }
   }
@@ -389,14 +389,14 @@ function createSparkle(x, y) {
         drawX,
         drawY,
         FRAME_WIDTH,
-        FRAME_HEIGHT,
+        FRAME_HEIGHT
       );
     },
   };
 }
 
 const skateboardSparkleSpriteSheet = loadOnce(
-  "./images/skateboard-sparkle-sprite-sheet.png",
+  "./images/skateboard-sparkle-sprite-sheet.png"
 );
 
 function createSkateboardSparkle(target) {
@@ -452,7 +452,7 @@ function createSkateboardSparkle(target) {
         drawX,
         drawY,
         FRAME_WIDTH,
-        FRAME_HEIGHT,
+        FRAME_HEIGHT
       );
     },
   };
@@ -532,7 +532,7 @@ function createAngel(tiles) {
       this.x -= scrollSpeed;
       tick += 1;
       this.y = Math.round(
-        initial.y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
+        initial.y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
       );
     },
 
@@ -562,7 +562,7 @@ function createAngel(tiles) {
         drawX,
         drawY,
         WIDTH,
-        HEIGHT,
+        HEIGHT
       );
     },
 
@@ -584,7 +584,7 @@ function createAngel(tiles) {
 }
 
 const collectibleSpriteSheet = loadOnce(
-  "./images/collectibles-sprite-sheet.png",
+  "./images/collectibles-sprite-sheet.png"
 );
 
 function createCollectible(tiles, frameNumber) {
@@ -652,7 +652,7 @@ function createCollectible(tiles, frameNumber) {
         drawX,
         drawY,
         WIDTH,
-        HEIGHT,
+        HEIGHT
       );
     },
 
@@ -740,7 +740,7 @@ function createEnemy(x, y) {
         drawX,
         drawY,
         WIDTH,
-        HEIGHT,
+        HEIGHT
       );
     },
   };
@@ -976,8 +976,8 @@ function update() {
         enemies.push(
           createEnemy(
             SCREEN_WIDTH + 12,
-            Math.floor(Math.random() * (164 - 48 + 1)) + 48,
-          ),
+            Math.floor(Math.random() * (164 - 48 + 1)) + 48
+          )
         );
       }
     }
@@ -1056,8 +1056,8 @@ function draw(screen) {
 
   if (gameState === GAME_STATE.START) {
     title.draw(screen);
-    print("Press ←,→ or ↑", "center", 186);
-    print("key to start", "center", 202);
+    print("←,→,↑ to start", "center", 186);
+    print("S to toggle sound", "center", 202);
   }
 
   if (gameState === GAME_STATE.PLAYING) {
@@ -1069,8 +1069,8 @@ function draw(screen) {
         (time > 16 && time < 20) ||
         (time > 24 && time < 30)
       ) {
-        print("Press ←,→ or ↑", "center", 186);
-        print("key to start", "center", 202);
+        print("←,→,↑ to start", "center", 186);
+        print("S to toggle sound", "center", 202);
       }
     }
 
