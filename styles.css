@@ -4,7 +4,8 @@
   --color-surface--100: #faf2e6;
   --color-surface--200: #e0d8cc;
   --color-on-surface: hsl(236, 18%, 30%);
-  --color-sound-on: hsl(325, 100%, 50%);
+  --color-sound-on: hsl(150, 100%, 44%);
+  --color-sound-on-alpha: hsl(150, 100%, 45%, 0.6);
   --nominal-size: 3.33rem;
 }
 
@@ -127,11 +128,10 @@ canvas {
 }
 #sound-toggle:not(.muted) svg {
   color: var(--color-sound-on);
-  text-shadow:
-    /* White glow */ 0 0 1px #fff, 0 0 2px #fff,
-    /* Green glow */ 0 0 3px var(--color-sound-on),
-    0 0 4px var(--color-sound-on), 0 0 5px var(--color-sound-on),
-    0 0 6px var(--color-sound-on);
+  filter: drop-shadow(
+    0 0 1px var(--color-sound-on-alpha),
+    0 0 2px var(--color-sound-on-alpha)
+  );
 }
 
 /* Mobile portrait - check for portrait orientation with height constraint */
