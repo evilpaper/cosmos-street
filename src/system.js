@@ -101,6 +101,8 @@ async function loadSounds() {
 }
 
 function playSound(buffer, volume = 1) {
+  if (!getSoundEnabled()) return;
+
   const source = audioCtx.createBufferSource();
   const gain = audioCtx.createGain();
 
@@ -116,10 +118,7 @@ function playSound(buffer, volume = 1) {
 let soundEnabled = true;
 
 function applySoundEnabled() {
-  // sfx.jump.muted = !soundEnabled;
-  // sfx.crash.muted = !soundEnabled;
-  // sfx.angel.muted = !soundEnabled;
-  // music.retroPlatforming.muted = !soundEnabled;
+  // Reserved for future use (e.g. music.retroPlatforming.muted = !soundEnabled)
 }
 
 function toggleSound() {
