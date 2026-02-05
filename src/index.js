@@ -191,7 +191,7 @@ function createStar(options = {}) {
         drawX,
         drawY,
         FRAME_WIDTH,
-        FRAME_HEIGHT
+        FRAME_HEIGHT,
       );
     },
   };
@@ -241,7 +241,7 @@ function createTile(options = {}) {
         drawX,
         drawY,
         width,
-        height
+        height,
       );
     },
   };
@@ -259,7 +259,7 @@ function createPlatforms(options = {}) {
       createTile({
         x: i * TILE_WIDTH,
         y: 160,
-      })
+      }),
     );
   }
 
@@ -289,7 +289,7 @@ function createPlatforms(options = {}) {
     const diff = getDifficulty();
     const y = randomInRange(
       diff.platformYMin,
-      diff.platformYMin + diff.platformYRange
+      diff.platformYMin + diff.platformYRange,
     );
     const gap = randomInRange(diff.gapMin, diff.gapMax);
     const tileCount = randomInRange(diff.tilesMin, diff.tilesMax);
@@ -299,7 +299,7 @@ function createPlatforms(options = {}) {
         createTile({
           x: lastTileX + gap + i * TILE_WIDTH,
           y: y,
-        })
+        }),
       );
     }
   }
@@ -389,14 +389,14 @@ function createSparkle(x, y) {
         drawX,
         drawY,
         FRAME_WIDTH,
-        FRAME_HEIGHT
+        FRAME_HEIGHT,
       );
     },
   };
 }
 
 const skateboardSparkleSpriteSheet = loadOnce(
-  "./images/skateboard-sparkle-sprite-sheet.png"
+  "./images/skateboard-sparkle-sprite-sheet.png",
 );
 
 function createSkateboardSparkle(target) {
@@ -452,7 +452,7 @@ function createSkateboardSparkle(target) {
         drawX,
         drawY,
         FRAME_WIDTH,
-        FRAME_HEIGHT
+        FRAME_HEIGHT,
       );
     },
   };
@@ -532,7 +532,7 @@ function createAngel(tiles) {
       this.x -= scrollSpeed;
       tick += 1;
       this.y = Math.round(
-        initial.y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE
+        initial.y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
       );
     },
 
@@ -562,7 +562,7 @@ function createAngel(tiles) {
         drawX,
         drawY,
         WIDTH,
-        HEIGHT
+        HEIGHT,
       );
     },
 
@@ -584,7 +584,7 @@ function createAngel(tiles) {
 }
 
 const collectibleSpriteSheet = loadOnce(
-  "./images/collectibles-sprite-sheet.png"
+  "./images/collectibles-sprite-sheet.png",
 );
 
 function createCollectible(tiles, frameNumber) {
@@ -652,7 +652,7 @@ function createCollectible(tiles, frameNumber) {
         drawX,
         drawY,
         WIDTH,
-        HEIGHT
+        HEIGHT,
       );
     },
 
@@ -740,7 +740,7 @@ function createEnemy(x, y) {
         drawX,
         drawY,
         WIDTH,
-        HEIGHT
+        HEIGHT,
       );
     },
   };
@@ -891,6 +891,7 @@ function init() {
 function update() {
   if (input.soundToggle) {
     toggleSound();
+    // MOve this to the input.js file.
     document
       .getElementById("sound-toggle")
       .classList.toggle("muted", !getSoundEnabled());
@@ -917,14 +918,15 @@ function update() {
 
   if (gameState === GAME_STATE.PLAYING) {
     // Check for death conditions first
-    if (player.isDead || player.y > 500) {
+    if (player.y > 500) {
       gameState = GAME_STATE.GAME_OVER;
-      deadTimer += 1;
       scrollSpeed = 0;
-      if (deadTimer >= 90) {
-        restartGame();
-        return;
-      }
+      playSound(sounds.fall);
+    }
+
+    if (player.isDead) {
+      gameState = GAME_STATE.GAME_OVER;
+      scrollSpeed = 0;
     }
 
     time += 1;
@@ -976,8 +978,8 @@ function update() {
         enemies.push(
           createEnemy(
             SCREEN_WIDTH + 12,
-            Math.floor(Math.random() * (164 - 48 + 1)) + 48
-          )
+            Math.floor(Math.random() * (164 - 48 + 1)) + 48,
+          ),
         );
       }
     }
@@ -1010,10 +1012,6 @@ function update() {
     if (input.up) {
       resetGame();
     }
-    // Restart game after 90 frames
-    // if (deadTimer >= 90) {
-    //   restartGame();
-    // }
 
     // ------------------------------------------------------------
     // Update game objects

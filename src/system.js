@@ -98,6 +98,7 @@ async function loadSounds() {
   sounds.jump = await loadSound("audio/jump.ogg");
   sounds.crash = await loadSound("audio/fireball.ogg");
   sounds.angel = await loadSound("audio/select-cursor.ogg");
+  sounds.fall = await loadSound("audio/item-drop-hurt.ogg");
 }
 
 function playSound(buffer, volume = 1) {
