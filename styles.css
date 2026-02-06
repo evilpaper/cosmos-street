@@ -4,8 +4,7 @@
   --color-surface--100: #faf2e6;
   --color-surface--200: #e0d8cc;
   --color-on-surface: hsl(236, 18%, 30%);
-  --color-sound-on: hsl(99, 100%, 35%);
-  --color-sound-on-alpha: hsl(99, 99%, 34%, 0.4);
+  --color-sound-on: hsl(99, 97%, 45%);
   --nominal-size: 3.33rem;
 }
 
@@ -122,16 +121,30 @@ canvas {
   background-color: var(--color-surface--200);
 }
 
-/* Sound toggle: one icon; muted = default color, unmuted = pink glow */
+/* Sound toggle: S icon stays same; indicator line shows state */
+#sound-toggle .sound-toggle-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+}
 #sound-toggle {
   color: var(--color-on-surface);
 }
-#sound-toggle:not(.muted) {
-  color: var(--color-sound-on);
+#sound-toggle path {
+  fill: var(--color-on-surface);
 }
-#sound-toggle:not(.muted) svg {
+#sound-toggle .sound-indicator {
+  color: var(--color-on-surface);
+  transition: color 0.2s ease;
+}
+#sound-toggle .sound-indicator line {
+  stroke: currentColor;
+  filter: drop-shadow(0 0 1px var(--color-sound-on));
+}
+#sound-toggle:not(.muted) .sound-indicator {
   color: var(--color-sound-on);
-  filter: drop-shadow(0px 0px 1px var(--color-sound-on-alpha));
 }
 
 /* Mobile portrait - check for portrait orientation with height constraint */
