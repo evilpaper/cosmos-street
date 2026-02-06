@@ -141,10 +141,10 @@ canvas {
 }
 #sound-toggle .sound-indicator line {
   stroke: currentColor;
-  filter: drop-shadow(0 0 1px var(--color-sound-on));
 }
 #sound-toggle:not(.muted) .sound-indicator {
   color: var(--color-sound-on);
+  filter: drop-shadow(0 0 1px var(--color-sound-on));
 }
 
 /* Mobile portrait - check for portrait orientation with height constraint */
