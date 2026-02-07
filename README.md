@@ -18,8 +18,13 @@ The game runs right in the browser, built with just plain HTML, CSS, and JavaScr
 - Jump = Arrow Up
 - Slow down = Arrow Left
 - Speed up = Arrow Right
+- Sound on/off = S
 
 That's it! Good luck!
+
+### Music playback
+
+Background music starts when you begin playing and loops continuously. Use the S key (or the sound button) to mute or unmute both music and sound effects.
 
 ## Roadmap
 
@@ -36,7 +41,7 @@ That's it! Good luck!
 - [x] Music
 - [x] Sound controls (on/off)
 - [ ] Increase difficulty over time (harder and harder)
-- [ ] Playtest, playtest, playtest, tweak, tweak and tweak again until it's fun, juicy and tight. Add visual feedback, smooth transitions etc.
+- [ ] Playtest, playtest, playtest, tweak, tweak and tweak again until it's fun, juicy and tight.
 - [ ] Optional - Double jump visual feedback, sparkling stars
 - [ ] Optional - Electric sparks around enemy.
 - [ ] Optional - Feedback particles. Break, landing, speeding.
