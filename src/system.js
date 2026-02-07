@@ -47,7 +47,9 @@ function toggleAudio() {
   audioEnabled = !audioEnabled;
   if (!audioEnabled) {
     stopMusic();
-  } else {
+  } else if (musicWasPlaying) {
+    music(songs.theme, 0.5);
+    musicWasPlaying = false;
   }
   // Toggle the muted class on the sound-toggle button (mobile screens only)
   document
@@ -132,6 +134,7 @@ const songs = {};
 let songPlaying = false;
 let currentMusicSource = null;
 let currentMusicGain = null;
+let musicWasPlaying = false;
 
 // Load a song into the music object
 async function loadSong(url) {
@@ -177,6 +180,7 @@ function stopMusic() {
     currentMusicSource = null;
     currentMusicGain = null;
     songPlaying = false;
+    musicWasPlaying = true;
   }
 }
 
