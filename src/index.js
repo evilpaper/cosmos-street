@@ -906,6 +906,9 @@ function update() {
   }
 
   if (gameState === GAME_STATE.PLAYING) {
+    if (songs.theme && !songPlaying) {
+      music(songs.theme, 0.5);
+    }
     // Check for death conditions first
     if (player.y > 500) {
       sfx(sounds.fall);
