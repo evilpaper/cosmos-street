@@ -814,7 +814,6 @@ function startGame() {
   input.left = false;
   input.right = false;
   input.up = false;
-  startMusic();
 }
 
 function resetGame() {
@@ -874,9 +873,6 @@ function init() {
   deadTimer = 0;
   score = 0;
   scoreIncrement = 1;
-  document
-    .getElementById("sound-toggle")
-    .classList.toggle("muted", !getSoundEnabled());
 }
 
 /**
@@ -887,11 +883,7 @@ function init() {
 
 function update() {
   if (input.soundToggle) {
-    toggleSound();
-    // MOve this to the input.js file.
-    document
-      .getElementById("sound-toggle")
-      .classList.toggle("muted", !getSoundEnabled());
+    toggleAudio();
     input.soundToggle = false;
   }
 
@@ -916,7 +908,7 @@ function update() {
   if (gameState === GAME_STATE.PLAYING) {
     // Check for death conditions first
     if (player.y > 500) {
-      playSound(sounds.fall);
+      sfx(sounds.fall);
       gameState = GAME_STATE.GAME_OVER;
       scrollSpeed = 0;
     }
@@ -948,7 +940,7 @@ function update() {
       angel.respawn(platforms.tiles);
       score += scoreIncrement;
       scoreIncrement += 1;
-      playSound(sounds.angel);
+      sfx(sounds.angel);
       if (score > highScore) {
         highScore = score;
         highScoreUpdated = true;
@@ -963,7 +955,7 @@ function update() {
       enemy.update();
       if (checkCollision(player, enemy.getHitbox())) {
         if (player.state !== "obliterating") {
-          playSound(sounds.crash);
+          sfx(sounds.crash);
         }
         player.state = "obliterating";
         scrollSpeed = 0;

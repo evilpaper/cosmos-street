@@ -37,7 +37,7 @@ const player = {
     this.state = this.states[1]; // airborne
     // Consume input to require fresh key press for next jump
     input.up = false;
-    playSound(sounds.jump, 0.8);
+    sfx(sounds.jump, 0.8);
   },
 
   speedUp() {

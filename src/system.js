@@ -40,6 +40,21 @@ window.onload = start;
 /**
  * Audio
  */
+
+let audioEnabled = true;
+
+function toggleAudio() {
+  audioEnabled = !audioEnabled;
+  // Toggle the muted class on the sound-toggle button (mobile screens only)
+  document
+    .getElementById("sound-toggle")
+    .classList.toggle("muted", !audioEnabled);
+}
+
+function getaudioEnabled() {
+  return audioEnabled;
+}
+
 let audioCtx;
 
 function initAudio() {
@@ -50,10 +65,8 @@ function initAudio() {
 
 function unlockAudio() {
   initAudio();
-  // if (audioCtx.state === "suspended") {
-  //   audioCtx.resume();
-  // }
   loadSounds();
+
   window.removeEventListener("touchstart", unlockAudio);
   window.removeEventListener("mousedown", unlockAudio);
   window.removeEventListener("keydown", unlockAudio);
@@ -80,25 +93,20 @@ window.addEventListener("mouseout", unlockAudio);
 async function loadSound(url) {
   const res = await fetch(url);
   const arrayBuffer = await res.arrayBuffer();
-  return await audioCtx.decodeAudioData(arrayBuffer);
+  return audioCtx.decodeAudioData(arrayBuffer);
 }
 
 const sounds = {};
-
-let musicBuffer = null;
 
 async function loadSounds() {
   sounds.jump = await loadSound("audio/jump.ogg");
   sounds.crash = await loadSound("audio/fireball.ogg");
   sounds.angel = await loadSound("audio/select-cursor.ogg");
   sounds.fall = await loadSound("audio/item-drop-hurt.ogg");
-  musicBuffer = await loadSound(
-    "music/SLOWER-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3",
-  );
 }
 
-function playSound(buffer, volume = 1) {
-  if (!getSoundEnabled()) return;
+function sfx(buffer, volume = 1) {
+  if (!getaudioEnabled()) return;
 
   const source = audioCtx.createBufferSource();
   const gain = audioCtx.createGain();
@@ -111,44 +119,6 @@ function playSound(buffer, volume = 1) {
 
   source.start();
 }
-
-let soundEnabled = true;
-
-let musicGain = null;
-let musicStarted = false;
-
-function startMusic() {
-  if (!musicBuffer || musicStarted) return;
-
-  musicGain = audioCtx.createGain();
-  musicGain.gain.value = getSoundEnabled() ? 0.5 : 0;
-  musicGain.connect(audioCtx.destination);
-
-  const source = audioCtx.createBufferSource();
-  source.buffer = musicBuffer;
-  source.loop = true;
-  source.connect(musicGain);
-  source.start(0);
-
-  musicStarted = true;
-}
-
-function applySoundEnabled() {
-  if (musicGain) {
-    musicGain.gain.value = getSoundEnabled() ? 0.5 : 0;
-  }
-}
-
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-  applySoundEnabled();
-}
-
-function getSoundEnabled() {
-  return soundEnabled;
-}
-
-applySoundEnabled();
 
 /**
  * Font
