@@ -38,15 +38,6 @@ function start() {
 window.onload = start;
 
 /**
- * Load music tracks
- */
-const music = {
-  retroPlatforming: new Audio(
-    "music/SLOWER-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3",
-  ),
-};
-
-/**
  * Audio
  */
 let audioCtx;
@@ -94,11 +85,16 @@ async function loadSound(url) {
 
 const sounds = {};
 
+let musicBuffer = null;
+
 async function loadSounds() {
   sounds.jump = await loadSound("audio/jump.ogg");
   sounds.crash = await loadSound("audio/fireball.ogg");
   sounds.angel = await loadSound("audio/select-cursor.ogg");
   sounds.fall = await loadSound("audio/item-drop-hurt.ogg");
+  musicBuffer = await loadSound(
+    "music/SLOWER-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3",
+  );
 }
 
 function playSound(buffer, volume = 1) {
@@ -118,8 +114,29 @@ function playSound(buffer, volume = 1) {
 
 let soundEnabled = true;
 
+let musicGain = null;
+let musicStarted = false;
+
+function startMusic() {
+  if (!musicBuffer || musicStarted) return;
+
+  musicGain = audioCtx.createGain();
+  musicGain.gain.value = getSoundEnabled() ? 0.5 : 0;
+  musicGain.connect(audioCtx.destination);
+
+  const source = audioCtx.createBufferSource();
+  source.buffer = musicBuffer;
+  source.loop = true;
+  source.connect(musicGain);
+  source.start(0);
+
+  musicStarted = true;
+}
+
 function applySoundEnabled() {
-  // Reserved for future use (e.g. music.retroPlatforming.muted = !soundEnabled)
+  if (musicGain) {
+    musicGain.gain.value = getSoundEnabled() ? 0.5 : 0;
+  }
 }
 
 function toggleSound() {
