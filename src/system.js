@@ -45,6 +45,10 @@ let audioEnabled = true;
 
 function toggleAudio() {
   audioEnabled = !audioEnabled;
+  if (!audioEnabled) {
+    stopMusic();
+  } else {
+  }
   // Toggle the muted class on the sound-toggle button (mobile screens only)
   document
     .getElementById("sound-toggle")
@@ -126,6 +130,8 @@ function sfx(buffer, volume = 1) {
 
 const songs = {};
 let songPlaying = false;
+let currentMusicSource = null;
+let currentMusicGain = null;
 
 // Load a song into the music object
 async function loadSong(url) {
@@ -137,7 +143,7 @@ async function loadSong(url) {
 // Load all songs
 async function loadSongs() {
   songs.theme = await loadSong("audio/retro-platforming-david-fesliyan.mp3");
-  console.log("Songs loaded.", music);
+  console.log("Songs loaded.", songs);
 }
 
 // Play a song
@@ -154,9 +160,24 @@ function music(buffer, volume = 1) {
   source.connect(gain);
   gain.connect(audioCtx.destination);
 
+  currentMusicSource = source;
+  currentMusicGain = gain;
   source.start();
 
   songPlaying = true;
+}
+
+function stopMusic() {
+  if (currentMusicSource) {
+    try {
+      currentMusicSource.stop();
+    } catch (e) {
+      // Ignore if already stopped
+    }
+    currentMusicSource = null;
+    currentMusicGain = null;
+    songPlaying = false;
+  }
 }
 
 /**
