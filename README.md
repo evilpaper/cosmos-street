@@ -15,11 +15,9 @@ The game runs right in the browser, built with just plain HTML, CSS, and JavaScr
 
 ## How to play
 
-Jump = Arrow Up
-
-Slow down = Arrow Left
-
-Speed up = Arrow Right
+- Jump = Arrow Up
+- Slow down = Arrow Left
+- Speed up = Arrow Right
 
 That's it! Good luck!
 
@@ -50,10 +48,6 @@ That's it! Good luck!
 - [ ] itch.io game page. Maybe.
 - [x] Replace .cursor/rules with AGENTS.md in the root (a simple and platform independent alternative)
 
-## Known Issues
-
-- [ ] Player state handling can be better. For example, sometimes when speeding and jumping the speed halt to skating.
-
 ## Constraints and Requirements
 
 - Limited palette. Only allowed to use four colors palette. Inspired by the original Game Boy and tweaked for a distinct vintage futuristic look. Can't remember the inspiration source.
@@ -62,10 +56,14 @@ That's it! Good luck!
 - Should have Keyboard and Touch Controls.
 - Create as few original assets as possible; reuse existing ones where feasible. Producing art, sound effects, and music is time-consuming. One reason modified sprites from the original Wonder Boy (Sega Master System) are used.
 
-## Development notes
+## Architecture notes
 
 - The CRT effect is created with CSS. More precise CSS Keyframes.
 - The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
+
+## On decisions and mental notes
+
+-
 
 ## Credits
 
@@ -76,11 +74,8 @@ That's it! Good luck!
 
 ## Running Locally
 
-No need to install anything. But...
+No need to install anything, but, regardless how much I wan't the game to be a file a a canvas game is a web app, not a local file. Once accepted, a local dev server stops feeling like “extra tooling” and starts feeling like “The minimum environment the platform requires.”
 
-To get the sound working you need to run a local dev server.
-This is because the sound use the Web Audio API that fetch the audio files.
-Since it use `fetch` it must be served over `http://`. Otherwise you will get CORS error.
 You can run the lightest possible dev server from your terminal like this:
 
 ```sh
@@ -93,6 +88,10 @@ or
 python3 -m http.server
 ```
 
+That’s it. No build step. No framework. No lock-in.
+
+### Alternative approach without sound
+
 If you are ok to run it locally without sound you can just open the index.html in your web browser of choice and game along.
 
 If you have cloned the repo you can run it from your shell with the open command, like this:
@@ -100,6 +99,20 @@ If you have cloned the repo you can run it from your shell with the open command
 ```sh
 open -a "Google Chrome" index.html
 ```
+
+Sound will not work when opening this file directly (file://).
+The game uses the Web Audio API, which loads audio via `fetch`,
+and `fetch` must be served over http:// or https://. Otherwise,
+the browser blocks the request with a CORS error.
+
+Web Audio requires binary audio data (ArrayBuffer) that is either:
+
+- Same-origin, or
+- Explicitly allowed via CORS headers
+
+The file:// protocol has no origin, so browsers intentionally block
+access to prevent local files from being read silently. This is a
+core browser security boundary.
 
 ## License
 
