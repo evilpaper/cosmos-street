@@ -51,10 +51,6 @@ function toggleAudio() {
     .classList.toggle("muted", !audioEnabled);
 }
 
-function getaudioEnabled() {
-  return audioEnabled;
-}
-
 let audioCtx;
 
 function initAudio() {
@@ -63,9 +59,13 @@ function initAudio() {
   }
 }
 
+// Why do we need to unlock audio?
+// Because some browsers don't allow audio to play until the user interacts with the page
+// We need to unlock audio when the user interacts with the page
 function unlockAudio() {
   initAudio();
   loadSounds();
+  loadSongs();
 
   window.removeEventListener("touchstart", unlockAudio);
   window.removeEventListener("mousedown", unlockAudio);
@@ -90,23 +90,27 @@ window.addEventListener("mousemove", unlockAudio);
 window.addEventListener("mouseover", unlockAudio);
 window.addEventListener("mouseout", unlockAudio);
 
+const sounds = {};
+
+// Load a sound into the sounds object
 async function loadSound(url) {
   const res = await fetch(url);
   const arrayBuffer = await res.arrayBuffer();
   return audioCtx.decodeAudioData(arrayBuffer);
 }
 
-const sounds = {};
-
+// Load all sounds
 async function loadSounds() {
   sounds.jump = await loadSound("audio/jump.ogg");
   sounds.crash = await loadSound("audio/fireball.ogg");
   sounds.angel = await loadSound("audio/select-cursor.ogg");
   sounds.fall = await loadSound("audio/item-drop-hurt.ogg");
+  console.log("Sounds loaded.", sounds);
 }
 
+// Play a sound effect
 function sfx(buffer, volume = 1) {
-  if (!getaudioEnabled()) return;
+  if (!audioEnabled) return;
 
   const source = audioCtx.createBufferSource();
   const gain = audioCtx.createGain();
@@ -118,6 +122,41 @@ function sfx(buffer, volume = 1) {
   gain.connect(audioCtx.destination);
 
   source.start();
+}
+
+const songs = {};
+let songPlaying = false;
+
+// Load a song into the music object
+async function loadSong(url) {
+  const res = await fetch(url);
+  const arrayBuffer = await res.arrayBuffer();
+  return audioCtx.decodeAudioData(arrayBuffer);
+}
+
+// Load all songs
+async function loadSongs() {
+  songs.theme = await loadSong("audio/retro-platforming-david-fesliyan.mp3");
+  console.log("Songs loaded.", music);
+}
+
+// Play a song
+function music(buffer, volume = 1) {
+  if (!audioEnabled || songPlaying) return;
+
+  const source = audioCtx.createBufferSource();
+  const gain = audioCtx.createGain();
+
+  source.buffer = buffer;
+  gain.gain.value = volume;
+  source.loop = true;
+
+  source.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  source.start();
+
+  songPlaying = true;
 }
 
 /**
