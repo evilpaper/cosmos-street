@@ -35,13 +35,16 @@ function start() {
 /**
  * Start when the window have loaded
  */
-window.onload = start;
+window.onload = () => {
+  tryUnlockAudioOnLoad();
+  start();
+};
 
 /**
  * Audio
  */
 
-let audioEnabled = true;
+let audioEnabled = false;
 
 function toggleAudio() {
   audioEnabled = !audioEnabled;
@@ -65,36 +68,49 @@ function initAudio() {
   }
 }
 
+const UNLOCK_EVENTS = [
+  "touchstart",
+  "mousedown",
+  "keydown",
+  "keyup",
+  "mouseup",
+  "mouseleave",
+  "mouseenter",
+  "mousemove",
+  "mouseover",
+  "mouseout",
+];
+
+function removeUnlockListeners() {
+  UNLOCK_EVENTS.forEach((ev) => window.removeEventListener(ev, unlockAudio));
+}
+
 // Why do we need to unlock audio?
 // Because some browsers don't allow audio to play until the user interacts with the page
 // We need to unlock audio when the user interacts with the page
+let audioUnlocked = false;
+
 function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
   initAudio();
   loadSounds();
   loadSongs();
-
-  window.removeEventListener("touchstart", unlockAudio);
-  window.removeEventListener("mousedown", unlockAudio);
-  window.removeEventListener("keydown", unlockAudio);
-  window.removeEventListener("keyup", unlockAudio);
-  window.removeEventListener("mouseup", unlockAudio);
-  window.removeEventListener("mouseleave", unlockAudio);
-  window.removeEventListener("mouseenter", unlockAudio);
-  window.removeEventListener("mousemove", unlockAudio);
-  window.removeEventListener("mouseover", unlockAudio);
-  window.removeEventListener("mouseout", unlockAudio);
+  removeUnlockListeners();
 }
 
-window.addEventListener("touchstart", unlockAudio);
-window.addEventListener("mousedown", unlockAudio);
-window.addEventListener("keydown", unlockAudio);
-window.addEventListener("keyup", unlockAudio);
-window.addEventListener("mouseup", unlockAudio);
-window.addEventListener("mouseleave", unlockAudio);
-window.addEventListener("mouseenter", unlockAudio);
-window.addEventListener("mousemove", unlockAudio);
-window.addEventListener("mouseover", unlockAudio);
-window.addEventListener("mouseout", unlockAudio);
+async function tryUnlockAudioOnLoad() {
+  initAudio();
+  if (audioCtx.state === "suspended") {
+    await audioCtx.resume();
+  }
+  audioUnlocked = true;
+  loadSounds();
+  loadSongs();
+  removeUnlockListeners();
+}
+
+UNLOCK_EVENTS.forEach((ev) => window.addEventListener(ev, unlockAudio));
 
 const sounds = {};
 
