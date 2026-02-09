@@ -911,7 +911,7 @@ function update() {
     }
     // Check for death conditions first
     if (player.y > 500) {
-      sfx(sounds.fall);
+      sfx(sounds.drop);
       gameState = GAME_STATE.GAME_OVER;
       scrollSpeed = 0;
     }
