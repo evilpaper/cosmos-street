@@ -126,8 +126,8 @@ async function loadSounds() {
   sounds.jump = await loadSound("audio/jump.ogg");
   sounds.crash = await loadSound("audio/fireball.ogg");
   sounds.angel = await loadSound("audio/select-cursor.ogg");
-  sounds.fall = await loadSound("audio/item-drop-hurt.ogg");
-  console.log("Sounds loaded.", sounds);
+  sounds.fall = await loadSound("audio/item-drop.ogg");
+  // console.log("Sounds loaded.", sounds);
 }
 
 // Play a sound effect
@@ -162,7 +162,7 @@ async function loadSong(url) {
 // Load all songs
 async function loadSongs() {
   songs.theme = await loadSong("audio/retro-platforming-david-fesliyan.mp3");
-  console.log("Songs loaded.", songs);
+  // console.log("Songs loaded.", songs);
 }
 
 // Play a song
