@@ -44,7 +44,7 @@ window.onload = () => {
  * Audio
  */
 
-let audioEnabled = false;
+let audioEnabled = true;
 
 function toggleAudio() {
   audioEnabled = !audioEnabled;
@@ -127,7 +127,6 @@ async function loadSounds() {
   sounds.crash = await loadSound("audio/fireball.ogg");
   sounds.angel = await loadSound("audio/select-cursor.ogg");
   sounds.drop = await loadSound("audio/fireball.ogg");
-  // console.log("Sounds loaded.", sounds);
 }
 
 // Play a sound effect
@@ -162,7 +161,6 @@ async function loadSong(url) {
 // Load all songs
 async function loadSongs() {
   songs.theme = await loadSong("audio/retro-platforming-david-fesliyan.mp3");
-  // console.log("Songs loaded.", songs);
 }
 
 // Play a song

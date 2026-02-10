@@ -48,7 +48,7 @@ const player = {
 
   update(tiles, time) {
     // Just a short delay before we introduce the player.
-    if (time < 20) {
+    if (time < 40) {
       return;
     }
 
