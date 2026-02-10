@@ -1104,10 +1104,6 @@ function draw(screen) {
     player.draw(screen);
     angel.draw(screen);
 
-    // if (player.airJumps > 0) {
-    //   skateboardSparkle.draw(screen);
-    // }
-
     if (deadTimer > 0) {
       if (highScoreUpdated) {
         print("Game Over", "center", 128 - 4 - 8);
