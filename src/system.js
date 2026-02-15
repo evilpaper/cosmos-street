@@ -36,30 +36,12 @@ function start() {
  * Start when the window have loaded
  */
 window.onload = () => {
-  tryUnlockAudioOnLoad();
   start();
 };
 
 /**
  * Audio
  */
-
-let audioEnabled = true;
-
-function toggleAudio() {
-  audioEnabled = !audioEnabled;
-  if (!audioEnabled) {
-    stopMusic();
-  } else if (musicWasPlaying) {
-    music(songs.theme, 0.5);
-    musicWasPlaying = false;
-  }
-  // Toggle the muted class on the sound-toggle button (mobile screens only)
-  document
-    .getElementById("sound-toggle")
-    .classList.toggle("muted", !audioEnabled);
-}
-
 let audioCtx;
 
 function initAudio() {
@@ -68,49 +50,15 @@ function initAudio() {
   }
 }
 
-const UNLOCK_EVENTS = [
-  "touchstart",
-  "mousedown",
-  "keydown",
-  "keyup",
-  "mouseup",
-  "mouseleave",
-  "mouseenter",
-  "mousemove",
-  "mouseover",
-  "mouseout",
-];
-
-function removeUnlockListeners() {
-  UNLOCK_EVENTS.forEach((ev) => window.removeEventListener(ev, unlockAudio));
-}
-
-// Why do we need to unlock audio?
-// Because some browsers don't allow audio to play until the user interacts with the page
-// We need to unlock audio when the user interacts with the page
-let audioUnlocked = false;
-
+/**
+ * Some browsers don't allow audio to play until the user interacts with the page.
+ * So to be sure we start silent and unlock audio on first interaction.
+ */
 function unlockAudio() {
-  if (audioUnlocked) return;
-  audioUnlocked = true;
   initAudio();
   loadSounds();
   loadSongs();
-  removeUnlockListeners();
 }
-
-async function tryUnlockAudioOnLoad() {
-  initAudio();
-  if (audioCtx.state === "suspended") {
-    await audioCtx.resume();
-  }
-  audioUnlocked = true;
-  loadSounds();
-  loadSongs();
-  removeUnlockListeners();
-}
-
-UNLOCK_EVENTS.forEach((ev) => window.addEventListener(ev, unlockAudio));
 
 const sounds = {};
 
@@ -196,6 +144,26 @@ function stopMusic() {
     songPlaying = false;
     musicWasPlaying = true;
   }
+}
+
+/**
+ * Toggle audio on/off during gameplay
+ */
+
+let audioEnabled = true;
+
+function toggleAudio() {
+  audioEnabled = !audioEnabled;
+  if (!audioEnabled) {
+    stopMusic();
+  } else if (musicWasPlaying) {
+    music(songs.theme, 0.5);
+    musicWasPlaying = false;
+  }
+  // Toggle the muted class on the sound-toggle button (mobile screens only)
+  document
+    .getElementById("sound-toggle")
+    .classList.toggle("muted", !audioEnabled);
 }
 
 /**

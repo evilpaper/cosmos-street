@@ -84,7 +84,7 @@ const GAME_STATE = {
   GAME_OVER: "GAME_OVER",
 };
 
-let gameState = GAME_STATE.PRESS_START;
+let gameState = GAME_STATE.INSERT_COIN;
 
 /**
  *  Note, also global but defined in other files...
@@ -808,6 +808,18 @@ function getDifficulty() {
 /**
  * State transition functions
  */
+
+function insertCoin() {
+  gameState = GAME_STATE.PRESS_START;
+  time = 0;
+  title.y = 64; // Reset title position for next title screen
+  // Reset input flags to prevent bleed
+  input.left = false;
+  input.right = false;
+  input.up = false;
+  unlockAudio()
+}
+
 function startGame() {
   gameState = GAME_STATE.PLAYING;
   time = 0; // Start at 1 to begin playing state
@@ -894,6 +906,17 @@ function update() {
 
   for (const star of stars) {
     star.update();
+  }
+
+  if (gameState === GAME_STATE.INSERT_COIN) {
+    time += 1;
+
+    title.flash();
+
+    if (input.left || input.right || input.up) {
+     
+      insertCoin();
+    }
   }
 
   if (gameState === GAME_STATE.PRESS_START) {
@@ -1043,15 +1066,22 @@ function draw(screen) {
     star.draw(screen);
   }
 
-  platforms.draw(screen);
+  if (gameState === GAME_STATE.INSERT_COIN) {
+    title.draw(screen);
+    print("Press ←,→ or ↑", "center", 144);
+    // print("key", "center", 160);
+    print("key to play", "center", 160);
+  }
 
   if (gameState === GAME_STATE.PRESS_START) {
+    platforms.draw(screen);
     title.draw(screen);
     print("←,→,↑ to start", "center", 186);
     print("S to toggle sound", "center", 202);
   }
 
   if (gameState === GAME_STATE.PLAYING) {
+    platforms.draw(screen);
     if (firstTimeStarting()) {
       title.draw(screen);
 
@@ -1094,6 +1124,7 @@ function draw(screen) {
   }
 
   if (gameState === GAME_STATE.GAME_OVER) {
+    platforms.draw(screen);
     for (const enemy of enemies) {
       enemy.draw(screen);
     }
