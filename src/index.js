@@ -78,12 +78,13 @@ let highScore = 0;
 let highScoreUpdated = false;
 
 const GAME_STATE = {
-  START: "START",
+  INSERT_COIN: "INSERT_COIN", // Actually more like WAITING_FOR_INTERACTION. We use it to wait for user interaction to initialize audio but INSERT_COIN sounds more fun.
+  PRESS_START: "PRESS_START",
   PLAYING: "PLAYING",
   GAME_OVER: "GAME_OVER",
 };
 
-let gameState = GAME_STATE.START;
+let gameState = GAME_STATE.PRESS_START;
 
 /**
  *  Note, also global but defined in other files...
@@ -817,7 +818,7 @@ function startGame() {
 }
 
 function resetGame() {
-  gameState = GAME_STATE.START;
+  gameState = GAME_STATE.PRESS_START;
   time = 0;
   title.y = 64; // Reset title position for next title screen
   // Reset input flags to prevent bleed
@@ -895,7 +896,7 @@ function update() {
     star.update();
   }
 
-  if (gameState === GAME_STATE.START) {
+  if (gameState === GAME_STATE.PRESS_START) {
     time += 1;
 
     title.flash();
@@ -1044,7 +1045,7 @@ function draw(screen) {
 
   platforms.draw(screen);
 
-  if (gameState === GAME_STATE.START) {
+  if (gameState === GAME_STATE.PRESS_START) {
     title.draw(screen);
     print("←,→,↑ to start", "center", 186);
     print("S to toggle sound", "center", 202);
