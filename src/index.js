@@ -1069,7 +1069,6 @@ function draw(screen) {
   if (gameState === GAME_STATE.INSERT_COIN) {
     title.draw(screen);
     print("Press ←,→ or ↑", "center", 144);
-    // print("key", "center", 160);
     print("key to play", "center", 160);
   }
 
