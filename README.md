@@ -20,6 +20,8 @@ The game runs right in the browser, built with just plain HTML, CSS, and JavaScr
 - Speed up = Arrow Right
 - Sound on/off = S
 
+The game is primarily designed to be played using the left, up, and right arrow keys on a physical keyboard. The movement simply feels better this way. Virtual buttons have been added to make the game playable on touch devices, which is great, since many games aren’t, but the controls aren’t quite as tight as with physical keys.
+
 That's it! Good luck!
 
 ### Music playback
@@ -44,9 +46,10 @@ Background music starts when you begin playing and loops continuously. Use the S
 - [ ] Playtest, playtest, playtest, tweak, tweak and tweak again until it's fun, juicy and tight.
 - [ ] Optional - Double jump visual feedback, sparkling stars
 - [ ] Optional - Electric sparks around enemy.
-- [ ] Optional - Feedback particles. Break, landing, speeding.
+- [ ] Optional - Other feedback particles. Break, landing, speeding?
 - [ ] Optional - Change player x position based on state (break,regular,speeding)
-- [ ] Optional - Dynamic, vibrant space background, make it more interesting.
+- [ ] Optional - Make player "catch up" x position if the got behind due to collision
+- [ ] Optional - Dynamic, vibrant space background. Make it more interesting.
 - [ ] Optional - How to play - desktop (keyboard)
 - [ ] Optional - How to play - mobile
 - [x] favicon (sparkle)
