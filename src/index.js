@@ -914,7 +914,6 @@ function update() {
     title.flash();
 
     if (input.left || input.right || input.up) {
-     
       insertCoin();
     }
   }
@@ -936,11 +935,13 @@ function update() {
     // Check for death conditions first
     if (player.y > 500) {
       sfx(sounds.drop);
+      resetInput();
       gameState = GAME_STATE.GAME_OVER;
       scrollSpeed = 0;
     }
 
     if (player.isDead) {
+      resetInput();
       gameState = GAME_STATE.GAME_OVER;
       scrollSpeed = 0;
     }
