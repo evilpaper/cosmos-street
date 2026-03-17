@@ -76,6 +76,7 @@ let score;
 let scoreIncrement;
 let highScore = 0;
 let highScoreUpdated = false;
+let enemies;
 
 const GAME_STATE = {
   INSERT_COIN: "INSERT_COIN", // Actually more like WAITING_FOR_INTERACTION. We use it to wait for user interaction to initialize audio but INSERT_COIN sounds more fun.
@@ -83,8 +84,6 @@ const GAME_STATE = {
   PLAYING: "PLAYING",
   GAME_OVER: "GAME_OVER",
 };
-
-let gameState = GAME_STATE.INSERT_COIN;
 
 /**
  *  Note, also global but defined in other files...
@@ -806,50 +805,60 @@ function getDifficulty() {
 }
 
 /**
- * State transition functions
+ * Game state machine (State Pattern). ctx holds refs to globals; time etc. stay global.
  */
-
-function insertCoin() {
-  gameState = GAME_STATE.PRESS_START;
-  time = 0;
-  title.y = 64; // Reset title position for next title screen
-  // Reset input flags to prevent bleed
-  input.left = false;
-  input.right = false;
-  input.up = false;
-  unlockAudio();
+function buildGameContext() {
+  return {
+    get time() { return time; },
+    set time(v) { time = v; },
+    get scrollSpeed() { return scrollSpeed; },
+    set scrollSpeed(v) { scrollSpeed = v; },
+    get deadTimer() { return deadTimer; },
+    set deadTimer(v) { deadTimer = v; },
+    get score() { return score; },
+    set score(v) { score = v; },
+    get scoreIncrement() { return scoreIncrement; },
+    set scoreIncrement(v) { scoreIncrement = v; },
+    get highScore() { return highScore; },
+    set highScore(v) { highScore = v; },
+    get highScoreUpdated() { return highScoreUpdated; },
+    set highScoreUpdated(v) { highScoreUpdated = v; },
+    get startMessage() { return startMessage; },
+    get sparkles() { return sparkles; },
+    set sparkles(v) { sparkles = v; },
+    get enemies() { return enemies; },
+    input,
+    title,
+    player,
+    get platforms() { return platforms; },
+    get stars() { return stars; },
+    get angel() { return angel; },
+    get skateboardSparkle() { return skateboardSparkle; },
+    init,
+    unlockAudio,
+    resetInput,
+    checkCollision,
+    createSparkle,
+    createEnemy,
+    get SCREEN_WIDTH() { return SCREEN_WIDTH; },
+    sounds,
+    songs,
+    music,
+    sfx,
+    print,
+    firstTimeStarting,
+    getStartMessage,
+  };
 }
 
-function startGame() {
-  gameState = GAME_STATE.PLAYING;
-  time = 0; // Start at 1 to begin playing state
-  // Reset input flags to prevent bleed
-  input.left = false;
-  input.right = false;
-  input.up = false;
-}
-
-function resetGame() {
-  gameState = GAME_STATE.PRESS_START;
-  time = 0;
-  title.y = 64; // Reset title position for next title screen
-  // Reset input flags to prevent bleed
-  input.left = false;
-  input.right = false;
-  input.up = false;
-  highScoreUpdated = false;
-  init(); // Reset all game objects
-}
-
-function restartGame() {
-  gameState = GAME_STATE.PLAYING;
-  time = 1; // Start at 1 to begin playing state
-  // Reset input flags to prevent bleed
-  input.left = false;
-  input.right = false;
-  input.up = false;
-  init(); // Reset all game objects
-}
+const gameContext = buildGameContext();
+const gameStates = {
+  [GAME_STATE.INSERT_COIN]: createInsertCoinState(),
+  [GAME_STATE.PRESS_START]: createPressStartState(),
+  [GAME_STATE.PLAYING]: createPlayingState(),
+  [GAME_STATE.GAME_OVER]: createGameOverState(),
+};
+const gameStateMachine = createGameStateMachine(gameStates, GAME_STATE.INSERT_COIN, gameContext);
 
 /**
  * Game functions
@@ -869,7 +878,7 @@ function restartGame() {
  * Initialize global mutable variables, reset global objects
  * -----------------------------
  * Note: This function resets game objects but does not modify game state.
- * State transitions are handled by startGame() and resetGame() functions.
+ * State transitions are handled by the state machine (gameState.js).
  */
 function init() {
   stars = createStars(30);
@@ -908,146 +917,7 @@ function update() {
     star.update();
   }
 
-  if (gameState === GAME_STATE.INSERT_COIN) {
-    time += 1;
-
-    title.flash();
-
-    if (input.left || input.right || input.up) {
-      insertCoin();
-    }
-  }
-
-  if (gameState === GAME_STATE.PRESS_START) {
-    time += 1;
-
-    title.flash();
-
-    if (input.left || input.right || input.up) {
-      startGame();
-    }
-  }
-
-  if (gameState === GAME_STATE.PLAYING) {
-    if (songs.theme && !songPlaying) {
-      music(songs.theme, 0.5);
-    }
-    // Check for death conditions first
-    if (player.y > 500) {
-      sfx(sounds.drop);
-      resetInput();
-      gameState = GAME_STATE.GAME_OVER;
-      scrollSpeed = 0;
-    }
-
-    if (player.isDead) {
-      resetInput();
-      gameState = GAME_STATE.GAME_OVER;
-      scrollSpeed = 0;
-    }
-
-    time += 1;
-    title.slideOut();
-    player.update(platforms.tiles, time);
-    platforms.update();
-
-    angel.update();
-    // egg.update();
-
-    // Respawn angel if it scrolled off the left side of the screen
-    if (angel.active && angel.x + angel.width < 0) {
-      scoreIncrement = 1;
-      angel.respawn(platforms.tiles);
-    }
-
-    // Power-up collection (uses centered 8x8 hitbox)
-    if (angel.active && checkCollision(player, angel.getHitbox())) {
-      // Spawn sparkle at angel position before respawn
-      sparkles.push(createSparkle(angel.x, angel.y - 8));
-      player.airJumps += 1;
-      angel.respawn(platforms.tiles);
-      score += scoreIncrement;
-      scoreIncrement += 1;
-      sfx(sounds.angel);
-      if (score > highScore) {
-        highScore = score;
-        highScoreUpdated = true;
-      }
-    }
-
-    // if (egg.active && checkCollision(player, egg)) {
-    //   egg.respawn(platforms.tiles);
-    // }
-
-    for (const enemy of enemies) {
-      enemy.update();
-      if (checkCollision(player, enemy.getHitbox())) {
-        if (player.state !== "obliterating") {
-          sfx(sounds.crash);
-        }
-        player.state = "obliterating";
-        scrollSpeed = 0;
-        player.dy = 0;
-      }
-
-      if (enemy.x + enemy.width < 0) {
-        enemies.splice(enemies.indexOf(enemy), 1);
-        enemies.push(
-          createEnemy(
-            SCREEN_WIDTH + 12,
-            Math.floor(Math.random() * (164 - 48 + 1)) + 48,
-          ),
-        );
-      }
-    }
-
-    // Update sparkles and remove finished ones
-    for (const sparkle of sparkles) {
-      sparkle.update();
-    }
-    sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
-
-    // Update skateboard sparkle when player has air jumps
-    if (player.airJumps > 0) {
-      skateboardSparkle.update();
-    }
-  }
-
-  if (gameState === GAME_STATE.GAME_OVER) {
-    time += 1;
-    scrollSpeed = 0;
-    deadTimer += 1;
-
-    // ------------------------------------------------------------
-    // Restart game conditons
-    // ------------------------------------------------------------
-    // Restart game if user presses a key
-    if (input.left || input.right) {
-      restartGame();
-    }
-
-    if (input.up) {
-      resetGame();
-    }
-
-    // ------------------------------------------------------------
-    // Update game objects
-    // ------------------------------------------------------------
-    player.update(platforms.tiles, time);
-    platforms.update();
-    angel.update();
-    for (const enemy of enemies) {
-      enemy.update();
-    }
-    for (const sparkle of sparkles) {
-      sparkle.update();
-    }
-    // Remove finished sparkles
-    sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
-    if (player.airJumps > 0) {
-      skateboardSparkle.update();
-    }
-  }
+  gameStateMachine.update();
 }
 
 /**
@@ -1067,87 +937,7 @@ function draw(screen) {
     star.draw(screen);
   }
 
-  if (gameState === GAME_STATE.INSERT_COIN) {
-    title.draw(screen);
-    print("Press ←,→ or ↑", "center", 144);
-    print("key to play", "center", 160);
-  }
-
-  if (gameState === GAME_STATE.PRESS_START) {
-    platforms.draw(screen);
-    title.draw(screen);
-    print("←,→,↑ to start", "center", 186);
-    print("S to toggle sound", "center", 202);
-  }
-
-  if (gameState === GAME_STATE.PLAYING) {
-    platforms.draw(screen);
-    if (firstTimeStarting()) {
-      title.draw(screen);
-
-      if (
-        (time > 6 && time < 12) ||
-        (time > 16 && time < 20) ||
-        (time > 24 && time < 30)
-      ) {
-        print("←,→,↑ to start", "center", 186);
-        print("S to toggle sound", "center", 202);
-      }
-    }
-
-    for (const enemy of enemies) {
-      enemy.draw(screen);
-    }
-
-    for (const sparkle of sparkles) {
-      sparkle.draw(screen);
-    }
-
-    player.draw(screen);
-    angel.draw(screen);
-    // egg.draw(screen);
-
-    if (player.airJumps > 0) {
-      skateboardSparkle.draw(screen);
-    }
-
-    if (time > 24 && time < 64) {
-      print(startMessage, "center", 128 - 4 - 8);
-      if (highScore > 0) {
-        print("High Score " + highScore, "center", 128 + 4);
-      }
-    }
-
-    if (time > 60) {
-      print("" + score, "center", 36);
-    }
-  }
-
-  if (gameState === GAME_STATE.GAME_OVER) {
-    platforms.draw(screen);
-    for (const enemy of enemies) {
-      enemy.draw(screen);
-    }
-
-    for (const sparkle of sparkles) {
-      sparkle.draw(screen);
-    }
-
-    player.draw(screen);
-    angel.draw(screen);
-
-    if (deadTimer > 0) {
-      if (highScoreUpdated) {
-        print("Game Over", "center", 128 - 4 - 8);
-        print("New high " + highScore, "center", 128 + 4);
-      } else {
-        print("Game Over", "center", "middle");
-      }
-
-      print("Restart ← or →", "center", 186);
-      print("Title screen ↑", "center", 202);
-    }
-  }
+  gameStateMachine.draw(screen);
 }
 
 function getStartMessage() {
