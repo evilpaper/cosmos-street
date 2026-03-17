@@ -118,9 +118,9 @@ createTouchHandlers(jumpButton, KEY_CODES.UP); // Up arrow
 createTouchHandlers(speedUpButton, KEY_CODES.RIGHT); // Right arrow
 createTouchHandlers(soundToggleButton, KEY_CODES.SOUND_TOGGLE);
 
-// 
+//
 function resetInput() {
   input.left = false;
   input.right = false;
-  input.up = false
+  input.up = false;
 }

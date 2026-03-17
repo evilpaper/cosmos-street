@@ -817,7 +817,7 @@ function insertCoin() {
   input.left = false;
   input.right = false;
   input.up = false;
-  unlockAudio()
+  unlockAudio();
 }
 
 function startGame() {
