@@ -6,7 +6,7 @@
 ## Patterns
 
 - Prefer **factory functions** over classes.
-- “Literals for one, factories for many”: use simple object literals for singletons; factories when creating many similar entities.
+- “Literals for one, factories for many”: use simple object literals for single objects, use factories when creating many similar objects.
 
 ## Naming
 
@@ -23,4 +23,3 @@
 
 - Prefer plain fields over getters unless enforcing read-only or computing values.
 - Strive for a clear, minimal API surface.
-

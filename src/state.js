@@ -2,33 +2,26 @@ function createGame() {
   let state = null;
 
   return {
+    get state() {
+      return state;
+    },
+
     setState(newState) {
-      if (state?.exit) state.exit(this);
+      if (!newState) {
+        return;
+      }
+      const previousState = state;
+      state?.exit?.(this, newState);
       state = newState;
-      state.enter?.(this);
+      state.enter?.(this, previousState);
     },
 
     update() {
       state?.update?.(this);
     },
 
-    render(ctx) {
-      state?.render?.(this, ctx);
-    },
-
-    handleInput(event) {
-      state?.handleInput?.(this, event);
+    draw(screen) {
+      state?.draw?.(this, screen);
     },
   };
 }
-
-const game = createGame();
-console.log("Game is created");
-game.setState(GAME_STATE.INSERT_COIN);
-console.log("Game state is set to INSERT_COIN");
-game.update();
-console.log("Game is updated");
-game.render(screen);
-console.log("Game is rendered");
-game.handleInput(event);
-console.log("Game is handled");

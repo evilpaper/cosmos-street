@@ -83,8 +83,8 @@ const GAME_STATE = {
   PLAYING: "PLAYING",
   GAME_OVER: "GAME_OVER",
 };
-
-let gameState = GAME_STATE.INSERT_COIN;
+const game = createGame();
+const states = {};
 
 /**
  *  Note, also global but defined in other files...
@@ -809,141 +809,76 @@ function getDifficulty() {
  * State transition functions
  */
 
-function insertCoin() {
-  gameState = GAME_STATE.PRESS_START;
-  time = 0;
-  title.y = 64; // Reset title position for next title screen
-  // Reset input flags to prevent bleed
-  input.left = false;
-  input.right = false;
-  input.up = false;
-  unlockAudio();
-}
-
-function startGame() {
-  gameState = GAME_STATE.PLAYING;
-  time = 0; // Start at 1 to begin playing state
-  // Reset input flags to prevent bleed
+function resetStateInput() {
+  // Reset input flags to prevent bleed between states.
   input.left = false;
   input.right = false;
   input.up = false;
 }
 
-function resetGame() {
-  gameState = GAME_STATE.PRESS_START;
-  time = 0;
-  title.y = 64; // Reset title position for next title screen
-  // Reset input flags to prevent bleed
-  input.left = false;
-  input.right = false;
-  input.up = false;
-  highScoreUpdated = false;
-  init(); // Reset all game objects
-}
-
-function restartGame() {
-  gameState = GAME_STATE.PLAYING;
-  time = 1; // Start at 1 to begin playing state
-  // Reset input flags to prevent bleed
-  input.left = false;
-  input.right = false;
-  input.up = false;
-  init(); // Reset all game objects
-}
-
-/**
- * Game functions
- *
- * init is called once when the game starts.
- * update and draw are called once per frame.
- *
- * Default frame rate is 60 times per second.
- *
- * The time variable is used to control the state of the game.
- *
- * The paused flag simple cause an early return in the update function. Effectively freezing the game.
- */
-
-/**
- * -----------------------------
- * Initialize global mutable variables, reset global objects
- * -----------------------------
- * Note: This function resets game objects but does not modify game state.
- * State transitions are handled by startGame() and resetGame() functions.
- */
-function init() {
-  stars = createStars(30);
-  platforms = createPlatforms(30);
-  angel = createAngel(platforms.tiles);
-  // egg = createCollectible(platforms.tiles, 2);
-  skateboardSparkle = createSkateboardSparkle(player);
-  sparkles = [];
-  enemies = [];
-  scrollSpeed = SCROLL_SPEED_SKATING;
-  player.reset();
-  enemies.push(createEnemy(SCREEN_WIDTH, 72));
-  startMessage = getStartMessage();
-  deadTimer = 0;
-  score = 0;
-  scoreIncrement = 1;
-}
-
-/**
- * -----------------------------
- * Update the game state
- * -----------------------------
- */
-
-function update() {
-  if (input.soundToggle) {
-    toggleAudio();
-    input.soundToggle = false;
-  }
-
-  if (paused) {
-    return;
-  }
-
-  for (const star of stars) {
-    star.update();
-  }
-
-  if (gameState === GAME_STATE.INSERT_COIN) {
+states[GAME_STATE.INSERT_COIN] = {
+  name: GAME_STATE.INSERT_COIN,
+  update() {
     time += 1;
-
     title.update();
-
     if (input.left || input.right || input.up) {
       insertCoin();
     }
-  }
+  },
+  draw(_, screen) {
+    title.draw(screen);
+    print("Press ←,→ or ↑", "center", 144);
+    print("key to play", "center", 160);
+  },
+};
 
-  if (gameState === GAME_STATE.PRESS_START) {
+states[GAME_STATE.PRESS_START] = {
+  name: GAME_STATE.PRESS_START,
+  enter() {
+    time = 0;
+    title.y = 64; // Reset title position for next title screen.
+    resetStateInput();
+    unlockAudio();
+  },
+  update() {
     time += 1;
-
     title.update();
-
     if (input.left || input.right || input.up) {
       startGame();
     }
-  }
+  },
+  draw(_, screen) {
+    platforms.draw(screen);
+    title.draw(screen);
+    print("←,→,↑ to start", "center", 186);
+    print("S to toggle sound", "center", 202);
+  },
+};
 
-  if (gameState === GAME_STATE.PLAYING) {
+states[GAME_STATE.PLAYING] = {
+  name: GAME_STATE.PLAYING,
+  enter() {
+    time = 0;
+    resetStateInput();
+  },
+  update() {
     if (songs.theme && !songPlaying) {
       music(songs.theme, 0.5);
     }
-    // Check for death conditions first
+    // Check for death conditions first.
     if (player.y > 500) {
       sfx(sounds.drop);
       resetInput();
-      gameState = GAME_STATE.GAME_OVER;
       scrollSpeed = 0;
+      game.setState(states[GAME_STATE.GAME_OVER]);
+      return;
     }
 
     if (player.isDead) {
       resetInput();
-      gameState = GAME_STATE.GAME_OVER;
       scrollSpeed = 0;
+      game.setState(states[GAME_STATE.GAME_OVER]);
+      return;
     }
 
     time += 1;
@@ -954,15 +889,15 @@ function update() {
     angel.update();
     // egg.update();
 
-    // Respawn angel if it scrolled off the left side of the screen
+    // Respawn angel if it scrolled off the left side of the screen.
     if (angel.active && angel.x + angel.width < 0) {
       scoreIncrement = 1;
       angel.respawn(platforms.tiles);
     }
 
-    // Power-up collection (uses centered 8x8 hitbox)
+    // Power-up collection (uses centered 8x8 hitbox).
     if (angel.active && checkCollision(player, angel.getHitbox())) {
-      // Spawn sparkle at angel position before respawn
+      // Spawn sparkle at angel position before respawn.
       sparkles.push(createSparkle(angel.x, angel.y - 8));
       player.airJumps += 1;
       angel.respawn(platforms.tiles);
@@ -1001,86 +936,18 @@ function update() {
       }
     }
 
-    // Update sparkles and remove finished ones
+    // Update sparkles and remove finished ones.
     for (const sparkle of sparkles) {
       sparkle.update();
     }
     sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
 
-    // Update skateboard sparkle when player has air jumps
+    // Update skateboard sparkle when player has air jumps.
     if (player.airJumps > 0) {
       skateboardSparkle.update();
     }
-  }
-
-  if (gameState === GAME_STATE.GAME_OVER) {
-    time += 1;
-    scrollSpeed = 0;
-    deadTimer += 1;
-
-    // ------------------------------------------------------------
-    // Restart game conditons
-    // ------------------------------------------------------------
-    // Restart game if user presses a key
-    if (input.left || input.right) {
-      restartGame();
-    }
-
-    if (input.up) {
-      resetGame();
-    }
-
-    // ------------------------------------------------------------
-    // Update game objects
-    // ------------------------------------------------------------
-    player.update(platforms.tiles, time);
-    platforms.update();
-    angel.update();
-    for (const enemy of enemies) {
-      enemy.update();
-    }
-    for (const sparkle of sparkles) {
-      sparkle.update();
-    }
-    // Remove finished sparkles
-    sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
-    if (player.airJumps > 0) {
-      skateboardSparkle.update();
-    }
-  }
-}
-
-/**
- * -----------------------------
- * Draw the game state to the screen
- * -----------------------------
- *
- * Screen is 256x256 pixels. But it has a rounded mask applied to it.
- * So in essens the only visible area is about 36-212 pixels.
- */
-
-function draw(screen) {
-  // Clear the screen
-  screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-  for (const star of stars) {
-    star.draw(screen);
-  }
-
-  if (gameState === GAME_STATE.INSERT_COIN) {
-    title.draw(screen);
-    print("Press ←,→ or ↑", "center", 144);
-    print("key to play", "center", 160);
-  }
-
-  if (gameState === GAME_STATE.PRESS_START) {
-    platforms.draw(screen);
-    title.draw(screen);
-    print("←,→,↑ to start", "center", 186);
-    print("S to toggle sound", "center", 202);
-  }
-
-  if (gameState === GAME_STATE.PLAYING) {
+  },
+  draw(_, screen) {
     platforms.draw(screen);
     if (firstTimeStarting()) {
       title.draw(screen);
@@ -1121,9 +988,46 @@ function draw(screen) {
     if (time > 60) {
       print("" + score, "center", 36);
     }
-  }
+  },
+};
 
-  if (gameState === GAME_STATE.GAME_OVER) {
+states[GAME_STATE.GAME_OVER] = {
+  name: GAME_STATE.GAME_OVER,
+  enter() {
+    deadTimer = 0;
+  },
+  update() {
+    time += 1;
+    scrollSpeed = 0;
+    deadTimer += 1;
+
+    // Restart game if user presses a key.
+    if (input.left || input.right) {
+      restartGame();
+      return;
+    }
+
+    if (input.up) {
+      resetGame();
+      return;
+    }
+
+    player.update(platforms.tiles, time);
+    platforms.update();
+    angel.update();
+    for (const enemy of enemies) {
+      enemy.update();
+    }
+    for (const sparkle of sparkles) {
+      sparkle.update();
+    }
+    // Remove finished sparkles.
+    sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
+    if (player.airJumps > 0) {
+      skateboardSparkle.update();
+    }
+  },
+  draw(_, screen) {
     platforms.draw(screen);
     for (const enemy of enemies) {
       enemy.draw(screen);
@@ -1147,7 +1051,109 @@ function draw(screen) {
       print("Restart ← or →", "center", 186);
       print("Title screen ↑", "center", 202);
     }
+  },
+};
+
+function insertCoin() {
+  game.setState(states[GAME_STATE.PRESS_START]);
+}
+
+function startGame() {
+  game.setState(states[GAME_STATE.PLAYING]);
+}
+
+function resetGame() {
+  highScoreUpdated = false;
+  init(); // Reset all game objects
+  game.setState(states[GAME_STATE.PRESS_START]);
+}
+
+function restartGame() {
+  init(); // Reset all game objects
+  game.setState(states[GAME_STATE.PLAYING]);
+  time = 1; // Keep current behavior where restart begins at 1.
+}
+
+/**
+ * Game functions
+ *
+ * init is called once when the game starts.
+ * update and draw are called once per frame.
+ *
+ * Default frame rate is 60 times per second.
+ *
+ * The time variable is used to control the state of the game.
+ *
+ * The paused flag simple cause an early return in the update function. Effectively freezing the game.
+ */
+
+/**
+ * -----------------------------
+ * Initialize global mutable variables, reset global objects
+ * -----------------------------
+ * Note: This function resets game objects but does not modify game state.
+ * State transitions are handled by startGame() and resetGame() functions.
+ */
+function init() {
+  stars = createStars(30);
+  platforms = createPlatforms(30);
+  angel = createAngel(platforms.tiles);
+  // egg = createCollectible(platforms.tiles, 2);
+  skateboardSparkle = createSkateboardSparkle(player);
+  sparkles = [];
+  enemies = [];
+  scrollSpeed = SCROLL_SPEED_SKATING;
+  player.reset();
+  enemies.push(createEnemy(SCREEN_WIDTH, 72));
+  startMessage = getStartMessage();
+  deadTimer = 0;
+  score = 0;
+  scoreIncrement = 1;
+
+  if (!game.state) {
+    game.setState(states[GAME_STATE.INSERT_COIN]);
   }
+}
+
+/**
+ * -----------------------------
+ * Update the game state
+ * -----------------------------
+ */
+
+function update() {
+  if (input.soundToggle) {
+    toggleAudio();
+    input.soundToggle = false;
+  }
+
+  if (paused) {
+    return;
+  }
+
+  for (const star of stars) {
+    star.update();
+  }
+  game.update();
+}
+
+/**
+ * -----------------------------
+ * Draw the game state to the screen
+ * -----------------------------
+ *
+ * Screen is 256x256 pixels. But it has a rounded mask applied to it.
+ * So in essens the only visible area is about 36-212 pixels.
+ */
+
+function draw(screen) {
+  // Clear the screen
+  screen.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+  for (const star of stars) {
+    star.draw(screen);
+  }
+  game.draw(screen);
 }
 
 function getStartMessage() {
