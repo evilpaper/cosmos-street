@@ -911,7 +911,7 @@ function update() {
   if (gameState === GAME_STATE.INSERT_COIN) {
     time += 1;
 
-    title.flash();
+    title.update();
 
     if (input.left || input.right || input.up) {
       insertCoin();
@@ -921,7 +921,7 @@ function update() {
   if (gameState === GAME_STATE.PRESS_START) {
     time += 1;
 
-    title.flash();
+    title.update();
 
     if (input.left || input.right || input.up) {
       startGame();
