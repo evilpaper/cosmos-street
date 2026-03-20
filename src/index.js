@@ -816,8 +816,15 @@ function resetStateInput() {
   input.up = false;
 }
 
+/**
+ * States
+ */
+
 states[GAME_STATE.INSERT_COIN] = {
   name: GAME_STATE.INSERT_COIN,
+  exit() {
+    unlockAudio();
+  },
   update() {
     time += 1;
     title.update();
@@ -836,9 +843,8 @@ states[GAME_STATE.PRESS_START] = {
   name: GAME_STATE.PRESS_START,
   enter() {
     time = 0;
-    title.y = 64; // Reset title position for next title screen.
+    title.y = 64;
     resetStateInput();
-    unlockAudio();
   },
   update() {
     time += 1;
@@ -860,11 +866,9 @@ states[GAME_STATE.PLAYING] = {
   enter() {
     time = 0;
     resetStateInput();
+    music(songs.theme, 0.5);
   },
   update() {
-    if (songs.theme && !songPlaying) {
-      music(songs.theme, 0.5);
-    }
     // Check for death conditions first.
     if (player.y > 500) {
       sfx(sounds.drop);
