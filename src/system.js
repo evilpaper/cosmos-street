@@ -113,7 +113,6 @@ async function loadSongs() {
 
 // Play a song
 function music(buffer, volume = 1) {
-  console.log("Playing music", buffer, volume);
   if (!audioEnabled || songPlaying) return;
 
   const source = audioCtx.createBufferSource();
