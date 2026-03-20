@@ -14,7 +14,7 @@ const title = {
   animationTick: 0,
   animationFrameIndex: 0,
 
-  flash() {
+  update() {
     // Advance animation tick
     this.animationTick += 1;
 
