@@ -169,6 +169,7 @@ function toggleAudio() {
 /**
  * Font
  */
+
 function loadFontImage() {
   const image = new Image();
   image.src = "./images/font.png";
@@ -180,6 +181,7 @@ const characters = { image: loadFontImage() };
 /**
  * Font system constants
  */
+
 const FONT_WIDTH = 8;
 const FONT_HEIGHT = 8;
 const CHARS_PER_ROW = 13;
@@ -187,6 +189,7 @@ const CHARS_PER_ROW = 13;
 /**
  * A map of characters to their x and y coordinates on the font image
  */
+
 function createCharMap() {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789.,←↑→↓!+";
   const charMap = {};
@@ -206,6 +209,7 @@ const letters = createCharMap();
 /**
  * Get character position with validation
  */
+
 function getCharPosition(char) {
   const lowerChar = char.toLowerCase();
   return letters[lowerChar] || null;
@@ -214,6 +218,7 @@ function getCharPosition(char) {
 /**
  * Print a string to the screen with improved space handling
  */
+
 function print(str, x = 0, y = 0) {
   const startX = x === "center" ? center(str) : x;
   const startY = y === "middle" ? middle() : y;
@@ -260,6 +265,7 @@ function print(str, x = 0, y = 0) {
  * Mobile browsers often show/hide the address bar, so 100vh can be unreliable.
  * To get a truly fullscreen canvas, set its size with JS on resize:
  */
+
 function resizeCanvas() {
   const body = document.querySelector("body");
   body.width = window.innerWidth;
@@ -293,6 +299,7 @@ function o(value) {
 /**
  * Center a string horizontally on the screen
  */
+
 function center(s) {
   // screen center minus the
   // string length times the
@@ -303,6 +310,17 @@ function center(s) {
 /**
  * Center a string vertically on the screen
  */
+
 function middle() {
   return 128 - 8 / 2;
+}
+
+/**
+ * Load an image once
+ */
+
+function loadOnce(src) {
+  const img = new Image();
+  img.src = src;
+  return img;
 }
