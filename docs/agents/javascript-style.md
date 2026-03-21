@@ -7,6 +7,7 @@
 
 - Prefer **factory functions** over classes.
 - “Literals for one, factories for many”: use simple object literals for single objects, use factories when creating many similar objects.
+- Use the Parameter Object Pattern to make the functions more flexible and easier to read.
 
 ## Naming
 
