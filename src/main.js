@@ -197,10 +197,12 @@ states[GAME_STATE.PRESS_START] = {
     time = 0;
     title.y = 64;
     resetStateInput();
+    platforms.startIntroSlideIn();
   },
   update() {
     time += 1;
     title.update();
+    platforms.updateIntro();
     if (input.left || input.right || input.up) {
       startGame();
     }

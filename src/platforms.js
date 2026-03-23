@@ -7,6 +7,7 @@ function createTile(options = {}) {
     name: "tile",
     x: x,
     y: y,
+    targetY: y,
     width,
     height,
 
@@ -38,8 +39,11 @@ function createPlatforms(options = {}) {
   const { amount = 30 } = options;
 
   const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
+  const INTRO_SPEED_Y = 6;
+  const INTRO_START_Y = SCREEN_HEIGHT + TILE_HEIGHT;
 
   let tiles = [];
+  let introActive = false;
 
   for (let i = 0; i < amount; i++) {
     tiles.push(
@@ -91,6 +95,35 @@ function createPlatforms(options = {}) {
     }
   }
 
+  function startIntroSlideIn() {
+    introActive = true;
+    for (const tile of tiles) {
+      tile.targetY = tile.y;
+      tile.y = INTRO_START_Y;
+    }
+  }
+
+  function updateIntro() {
+    if (!introActive) {
+      return;
+    }
+
+    let allTilesAtTarget = true;
+
+    for (const tile of tiles) {
+      const nextY = tile.y - INTRO_SPEED_Y;
+      tile.y = Math.max(tile.targetY, nextY);
+
+      if (tile.y > tile.targetY) {
+        allTilesAtTarget = false;
+      }
+    }
+
+    if (allTilesAtTarget) {
+      introActive = false;
+    }
+  }
+
   return {
     tiles: tiles,
 
@@ -105,5 +138,8 @@ function createPlatforms(options = {}) {
         tile.draw(screen);
       }
     },
+
+    startIntroSlideIn,
+    updateIntro,
   };
 }
