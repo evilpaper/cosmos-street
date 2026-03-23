@@ -98,6 +98,7 @@ const GAME_STATE = {
   PLAYING: "PLAYING",
   GAME_OVER: "GAME_OVER",
 };
+
 const game = createGame();
 const states = {};
 
