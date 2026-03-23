@@ -43,6 +43,10 @@ window.onload = () => {
  * Audio
  */
 let audioCtx;
+let audioInitStarted = false;
+let audioInitReady = false;
+let audioInitError = null;
+let audioInitPromise = null;
 
 function initAudio() {
   if (!audioCtx) {
@@ -56,8 +60,33 @@ function initAudio() {
  */
 function unlockAudio() {
   initAudio();
-  loadSounds();
-  loadSongs();
+  if (audioInitPromise) {
+    return audioInitPromise;
+  }
+
+  audioInitStarted = true;
+  audioInitPromise = Promise.all([loadSounds(), loadSongs()])
+    .then(() => {
+      audioInitReady = true;
+    })
+    .catch((error) => {
+      audioInitError = error;
+      console.error("Audio init failed:", error);
+    });
+
+  return audioInitPromise;
+}
+
+function isAudioReady() {
+  return audioInitReady;
+}
+
+function isAudioInitializing() {
+  return audioInitStarted && !audioInitReady && !audioInitError;
+}
+
+function isAudioInitFailed() {
+  return audioInitError !== null;
 }
 
 const sounds = {};
@@ -79,7 +108,7 @@ async function loadSounds() {
 
 // Play a sound effect
 function sfx(buffer, volume = 1) {
-  if (!audioEnabled) return;
+  if (!audioEnabled || !buffer || !audioCtx) return;
 
   const source = audioCtx.createBufferSource();
   const gain = audioCtx.createGain();
@@ -113,7 +142,7 @@ async function loadSongs() {
 
 // Play a song
 function music(buffer, volume = 1) {
-  if (!audioEnabled || songPlaying) return;
+  if (!audioEnabled || songPlaying || !buffer || !audioCtx) return;
 
   const source = audioCtx.createBufferSource();
   const gain = audioCtx.createGain();

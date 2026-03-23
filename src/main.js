@@ -203,14 +203,19 @@ states[GAME_STATE.PRESS_START] = {
     time += 1;
     title.update();
     platforms.updateIntro();
-    if (input.left || input.right || input.up) {
+    const canStart = isAudioReady() || isAudioInitFailed();
+    if (canStart && (input.left || input.right || input.up)) {
       startGame();
     }
   },
   draw(_, screen) {
     platforms.draw(screen);
     title.draw(screen);
-    print("←,→,↑ to start", "center", 186);
+    if (isAudioInitializing()) {
+      print("Init audio", "center", 186);
+    } else {
+      print("←,→,↑ to start", "center", 186);
+    }
     print("S to toggle sound", "center", 202);
   },
 };
