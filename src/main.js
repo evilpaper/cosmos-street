@@ -279,6 +279,7 @@ states[GAME_STATE.PLAYING] = {
 
     for (const enemy of enemies) {
       enemy.update();
+
       if (checkCollision(player, enemy.getHitbox())) {
         if (player.state !== "obliterating") {
           sfx(sounds.crash);

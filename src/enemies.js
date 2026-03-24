@@ -1,5 +1,30 @@
 const enemySpriteSheet = loadOnce("./images/enemy-sprite-sheet.png");
 
+// Cooldowns must fit within typical on-screen lifetime (~130 frames at 60fps: enemy crosses the screen).
+const ELECTRICITY_COOLDOWN_TICKS_MIN = 16;
+const ELECTRICITY_COOLDOWN_TICKS_MAX = 72;
+const ELECTRICITY_BURST_TICKS_MIN = 36;
+const ELECTRICITY_BURST_TICKS_MAX = 72;
+const ELECTRICITY_BURST_CHANCE = 0.8;
+
+function randomElectricityCooldown() {
+  return (
+    Math.floor(
+      Math.random() *
+        (ELECTRICITY_COOLDOWN_TICKS_MAX - ELECTRICITY_COOLDOWN_TICKS_MIN + 1),
+    ) + ELECTRICITY_COOLDOWN_TICKS_MIN
+  );
+}
+
+function randomElectricityBurst() {
+  return (
+    Math.floor(
+      Math.random() *
+        (ELECTRICITY_BURST_TICKS_MAX - ELECTRICITY_BURST_TICKS_MIN + 1),
+    ) + ELECTRICITY_BURST_TICKS_MIN
+  );
+}
+
 function createEnemy(x, y) {
   const WIDTH = 16;
   const HEIGHT = 25;
@@ -11,7 +36,11 @@ function createEnemy(x, y) {
   let animationTick = 0;
   let animationFrameIndex = 0;
 
-  return {
+  let electricityCooldown = randomElectricityCooldown();
+  let electricityBurstRemaining = 0;
+  let electricityActive = false;
+
+  const enemy = {
     x: x,
     y: y,
     width: WIDTH,
@@ -42,6 +71,25 @@ function createEnemy(x, y) {
           animationFrameIndex = 0;
         }
       }
+
+      if (electricityActive) {
+        this.electricity.update();
+        electricityBurstRemaining -= 1;
+        if (electricityBurstRemaining <= 0) {
+          electricityActive = false;
+          electricityCooldown = randomElectricityCooldown();
+        }
+      } else {
+        electricityCooldown -= 1;
+        if (electricityCooldown <= 0) {
+          if (Math.random() < ELECTRICITY_BURST_CHANCE) {
+            electricityActive = true;
+            electricityBurstRemaining = randomElectricityBurst();
+          } else {
+            electricityCooldown = randomElectricityCooldown();
+          }
+        }
+      }
     },
 
     draw(screen) {
@@ -69,6 +117,14 @@ function createEnemy(x, y) {
         WIDTH,
         HEIGHT,
       );
+
+      if (electricityActive) {
+        this.electricity.draw(screen);
+      }
     },
   };
+
+  enemy.electricity = createEnemyElectricity(enemy);
+
+  return enemy;
 }

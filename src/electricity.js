@@ -12,6 +12,9 @@ function createEnemyElectricity(target) {
   const TOTAL_FRAMES = 4;
   const TICKS_PER_FRAME = 6;
 
+  const OFFSET_X = (target.width - FRAME_WIDTH) / 2;
+  const OFFSET_Y = (target.height - FRAME_HEIGHT) / 2;
+
   // Mutable state (closure)
   let animationTick = 0;
   let animationFrameIndex = 0;
