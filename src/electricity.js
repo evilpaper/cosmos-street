@@ -10,7 +10,7 @@ function createEnemyElectricity(target) {
   const FRAME_WIDTH = 32;
   const FRAME_HEIGHT = 25;
   const TOTAL_FRAMES = 4;
-  const TICKS_PER_FRAME = 6;
+  const TICKS_PER_FRAME = 4;
 
   const OFFSET_X = (target.width - FRAME_WIDTH) / 2;
   const OFFSET_Y = (target.height - FRAME_HEIGHT) / 2;
