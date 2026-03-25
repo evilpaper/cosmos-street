@@ -18,12 +18,23 @@ function createEnemyElectricity(target) {
   // Mutable state (closure)
   let animationTick = 0;
   let animationFrameIndex = 0;
+  let done = false;
+
+  function reset() {
+    animationTick = 0;
+    animationFrameIndex = 0;
+    done = false;
+  }
 
   return {
     width: FRAME_WIDTH,
     height: FRAME_HEIGHT,
 
     update() {
+      if (done) {
+        return;
+      }
+
       // Advance animation tick
       animationTick += 1;
 
@@ -32,12 +43,19 @@ function createEnemyElectricity(target) {
         animationTick = 0;
         animationFrameIndex += 1;
 
-        // Loop animation
-        if (animationFrameIndex >= TOTAL_FRAMES) {
-          animationFrameIndex = 0;
+        // Non-looping animation: stop after last frame.
+        if (animationFrameIndex >= TOTAL_FRAMES - 1) {
+          animationFrameIndex = TOTAL_FRAMES - 1;
+          done = true;
         }
       }
     },
+
+    isDone() {
+      return done;
+    },
+
+    reset,
 
     draw(screen) {
       const spriteFrameX = animationFrameIndex * FRAME_WIDTH;

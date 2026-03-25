@@ -1,29 +1,8 @@
 const enemySpriteSheet = loadOnce("./images/enemy-sprite-sheet.png");
 
-// Cooldowns must fit within typical on-screen lifetime (~130 frames at 60fps: enemy crosses the screen).
-const ELECTRICITY_COOLDOWN_TICKS_MIN = 16;
-const ELECTRICITY_COOLDOWN_TICKS_MAX = 72;
-const ELECTRICITY_BURST_TICKS_MIN = 36;
-const ELECTRICITY_BURST_TICKS_MAX = 72;
-const ELECTRICITY_BURST_CHANCE = 0.8;
-
-function randomElectricityCooldown() {
-  return (
-    Math.floor(
-      Math.random() *
-        (ELECTRICITY_COOLDOWN_TICKS_MAX - ELECTRICITY_COOLDOWN_TICKS_MIN + 1),
-    ) + ELECTRICITY_COOLDOWN_TICKS_MIN
-  );
-}
-
-function randomElectricityBurst() {
-  return (
-    Math.floor(
-      Math.random() *
-        (ELECTRICITY_BURST_TICKS_MAX - ELECTRICITY_BURST_TICKS_MIN + 1),
-    ) + ELECTRICITY_BURST_TICKS_MIN
-  );
-}
+// When electricity is inactive, we roll a dice each frame.
+// Tune this constant to control how often bursts happen.
+const ELECTRICITY_TRIGGER_CHANCE_PER_FRAME = 0.01;
 
 function createEnemy(x, y) {
   const WIDTH = 16;
@@ -36,8 +15,6 @@ function createEnemy(x, y) {
   let animationTick = 0;
   let animationFrameIndex = 0;
 
-  let electricityCooldown = randomElectricityCooldown();
-  let electricityBurstRemaining = 0;
   let electricityActive = false;
 
   const enemy = {
@@ -73,22 +50,15 @@ function createEnemy(x, y) {
       }
 
       if (electricityActive) {
-        this.electricity.update();
-        electricityBurstRemaining -= 1;
-        if (electricityBurstRemaining <= 0) {
+        // Stop after the electricity animation finishes.
+        if (this.electricity.isDone()) {
           electricityActive = false;
-          electricityCooldown = randomElectricityCooldown();
+        } else {
+          this.electricity.update();
         }
-      } else {
-        electricityCooldown -= 1;
-        if (electricityCooldown <= 0) {
-          if (Math.random() < ELECTRICITY_BURST_CHANCE) {
-            electricityActive = true;
-            electricityBurstRemaining = randomElectricityBurst();
-          } else {
-            electricityCooldown = randomElectricityCooldown();
-          }
-        }
+      } else if (Math.random() < ELECTRICITY_TRIGGER_CHANCE_PER_FRAME) {
+        electricityActive = true;
+        this.electricity.reset();
       }
     },
 
@@ -123,6 +93,13 @@ function createEnemy(x, y) {
       }
     },
   };
+
+  /**
+   * createEnemyElectricity(enemy) closes over that enemy object.
+   * On each frame, draw uses target.x / target.y (and width / height for offsets) so the
+   * lightning follows the enemy—same idea as createSkateboardSparkle(player) following the player.
+   * The factory has to receive the real enemy instance, not a copy of coordinates.
+   */
 
   enemy.electricity = createEnemyElectricity(enemy);
 
