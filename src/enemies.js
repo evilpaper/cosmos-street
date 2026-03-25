@@ -2,7 +2,7 @@ const enemySpriteSheet = loadOnce("./images/enemy-sprite-sheet.png");
 
 // When electricity is inactive, we roll a dice each frame.
 // Tune this constant to control how often bursts happen.
-const ELECTRICITY_TRIGGER_CHANCE_PER_FRAME = 0.01;
+const ELECTRICITY_TRIGGER_CHANCE_PER_FRAME = 0.02;
 
 function createEnemy(x, y) {
   const WIDTH = 16;
