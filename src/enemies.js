@@ -58,7 +58,7 @@ function createEnemy(x, y) {
         }
       } else if (Math.random() < ELECTRICITY_TRIGGER_CHANCE_PER_FRAME) {
         electricityActive = true;
-        sfx(sounds.electrified);
+        sfx(sounds.electrified, 0.6);
         this.electricity.reset();
       }
     },
