@@ -186,8 +186,8 @@ states[GAME_STATE.INSERT_COIN] = {
   },
   draw(_, screen) {
     title.draw(screen);
-    print("Press any of", "center", 144);
-    print("←,→,↑ keys to play", "center", 160);
+    print("Press any", "center", 132);
+    print("←,→,↑ keys to play", "center", 148);
   },
 };
 
@@ -212,11 +212,17 @@ states[GAME_STATE.PRESS_START] = {
     platforms.draw(screen);
     title.draw(screen);
     if (isAudioInitializing()) {
-      print("Init audio", "center", 186);
+      print("Initializing audio", "center", 132);
     } else {
-      print("←,→,↑ to start", "center", 186);
+      print("←,→,↑ to start", "center", 132);
+      if (audioEnabled) {
+        print("Audio ON", "center", 186);
+        print("Press S to toggle", "center", 202);
+      } else {
+        print("Audio OFF", "center", 186);
+        print("Press S to toggle", "center", 202);
+      }
     }
-    print("S to toggle sound", "center", 202);
   },
 };
 
