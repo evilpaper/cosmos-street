@@ -186,8 +186,8 @@ states[GAME_STATE.INSERT_COIN] = {
   },
   draw(_, screen) {
     title.draw(screen);
-    print("Press ←,→ or ↑", "center", 144);
-    print("key to play", "center", 160);
+    print("Press any of", "center", 144);
+    print("←,→,↑ keys to play", "center", 160);
   },
 };
 
