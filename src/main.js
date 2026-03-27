@@ -6,11 +6,11 @@
  * Constants
  */
 
-const GRAVITY = 0.08;
-const FRICTION = 0.4;
-const SCROLL_SPEED_SKATING = 1.4;
-const SCROLL_SPEED_BREAKING = 0.4;
-const SCROLL_SPEED_SPEEDING = 2.0;
+const GRAVITY = 0.04;
+const FRICTION = 0.4; // What does friction do?
+const SCROLL_SPEED_SKATING = 1.8;
+const SCROLL_SPEED_BREAKING = 0.2;
+const SCROLL_SPEED_SPEEDING = 2.4;
 
 /**
  * TILE_WIDTH AND TILE_HEIGHT are shared between the functions createTile() and createPlatforms()
@@ -485,7 +485,7 @@ function init() {
   enemies = [];
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
-  enemies.push(createEnemy(SCREEN_WIDTH, 72));
+  enemies.push(createEnemy(SCREEN_WIDTH * 2, 72));
   startMessage = getStartMessage();
   deadTimer = 0;
   score = 0;

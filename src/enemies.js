@@ -33,7 +33,7 @@ function createEnemy(x, y) {
     },
 
     update() {
-      this.x -= scrollSpeed + 0.6;
+      this.x -= scrollSpeed + 0.5;
 
       // Advance animation tick
       animationTick += 1;
