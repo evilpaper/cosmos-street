@@ -256,7 +256,7 @@ states[GAME_STATE.PLAYING] = {
     platforms.update();
 
     angel.update();
-    // egg.update();
+    egg.update();
 
     // Respawn angel if it scrolled off the left side of the screen.
     if (angel.active && angel.x + angel.width < 0) {
@@ -279,9 +279,9 @@ states[GAME_STATE.PLAYING] = {
       }
     }
 
-    // if (egg.active && checkCollision(player, egg)) {
-    //   egg.respawn(platforms.tiles);
-    // }
+    if (egg.active && checkCollision(player, egg)) {
+      egg.respawn(platforms.tiles);
+    }
 
     for (const enemy of enemies) {
       enemy.update();
@@ -342,7 +342,7 @@ states[GAME_STATE.PLAYING] = {
 
     player.draw(screen);
     angel.draw(screen);
-    // egg.draw(screen);
+    egg.draw(screen);
 
     if (player.airJumps > 0) {
       skateboardSparkle.draw(screen);
@@ -479,7 +479,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angel = createAngel(platforms.tiles);
-  // egg = createCollectible(platforms.tiles, 2);
+  egg = createCollectible(platforms.tiles, 2);
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   enemies = [];
