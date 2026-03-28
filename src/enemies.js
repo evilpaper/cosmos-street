@@ -58,7 +58,10 @@ function createEnemy(x, y) {
         }
       } else if (Math.random() < ELECTRICITY_TRIGGER_CHANCE_PER_FRAME) {
         electricityActive = true;
-        sfx(sounds.electrified, 0.3);
+        // Only play sound if enemy is on the screen.
+        if (this.x < 224) {
+          sfx(sounds.electrified, 0.3);
+        }
         this.electricity.reset();
       }
     },
