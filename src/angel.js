@@ -95,7 +95,7 @@ function createAngel(tiles) {
       const drawY = Math.round(this.y);
 
       /**
-       * Draw enemy hitbox. For debugging purposes.
+       * Draw hitbox. For debugging purposes.
        */
       // screen.fillStyle = "cyan";
       // screen.fillRect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
