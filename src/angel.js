@@ -72,10 +72,7 @@ function createAngel(tiles) {
     update() {
       // Auto-respawn if inactive and tiles become available
       if (!active) {
-        const newPosition = findAngelPositionOnTile(tiles, spawnOptions);
-        if (newPosition !== null) {
-          this.respawn(tiles);
-        }
+        this.respawn(tiles);
         return;
       }
 
