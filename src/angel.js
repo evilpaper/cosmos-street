@@ -1,5 +1,23 @@
 const angelSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png");
 
+function findAngelPositionOnTile(
+  tiles,
+  { screenWidth, spriteWidth, spriteHeight, floatHeight },
+) {
+  const eligibleTiles = tiles.filter((tile) => tile.x > screenWidth);
+
+  if (eligibleTiles.length > 0) {
+    const tile =
+      eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
+    return {
+      x: tile.x + tile.width / 2 - spriteWidth / 2,
+      y: tile.y - spriteHeight - floatHeight,
+    };
+  }
+
+  return null;
+}
+
 function createAngel(tiles) {
   const WIDTH = 16;
   const HEIGHT = 16;
@@ -9,28 +27,20 @@ function createAngel(tiles) {
   const OSCILLATION_SPEED = 0.1;
   const FLOAT_HEIGHT = 10;
 
+  const spawnOptions = {
+    screenWidth: SCREEN_WIDTH, // Use the global SCREEN_WIDTH constant.
+    spriteWidth: WIDTH,
+    spriteHeight: HEIGHT,
+    floatHeight: FLOAT_HEIGHT,
+  };
+
   // Mutable state (closure)
   let tick = 0;
   let x;
   let y;
   let initial;
 
-  function findPositionOnTile(tiles) {
-    const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
-
-    if (eligibleTiles.length > 0) {
-      const tile =
-        eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
-      return {
-        x: tile.x + tile.width / 2 - WIDTH / 2,
-        y: tile.y - HEIGHT - FLOAT_HEIGHT,
-      };
-    }
-
-    return null;
-  }
-
-  const initialPosition = findPositionOnTile(tiles);
+  const initialPosition = findAngelPositionOnTile(tiles, spawnOptions);
   let active = initialPosition !== null;
 
   if (active) {
@@ -62,7 +72,7 @@ function createAngel(tiles) {
     update() {
       // Auto-respawn if inactive and tiles become available
       if (!active) {
-        const newPosition = findPositionOnTile(tiles);
+        const newPosition = findAngelPositionOnTile(tiles, spawnOptions);
         if (newPosition !== null) {
           this.respawn(tiles);
         }
@@ -107,7 +117,7 @@ function createAngel(tiles) {
     },
 
     respawn(tiles) {
-      const newPosition = findPositionOnTile(tiles);
+      const newPosition = findAngelPositionOnTile(tiles, spawnOptions);
       if (newPosition !== null) {
         this.x = newPosition.x;
         this.y = newPosition.y;
