@@ -15,6 +15,7 @@ const player = {
   x: 50,
   y: 125,
   dy: 0,
+  jumpStrength: 9,
   state: "skating", // Initial state is "skating" (this.states[0])
   airJumps: 0, // Number of air jumps available (granted by collecting angels)
   isDead: false,
@@ -33,7 +34,7 @@ const player = {
   },
 
   jump() {
-    this.dy = -8;
+    this.dy = -this.jumpStrength;
     this.state = this.states[1]; // airborne
     // Consume input to require fresh key press for next jump
     input.up = false;

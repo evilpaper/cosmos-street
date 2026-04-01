@@ -6,7 +6,7 @@
  * Constants
  */
 
-const GRAVITY = 0.04;
+const GRAVITY = 0.03;
 const FRICTION = 0.4; // What does friction do?
 const SCROLL_SPEED_SKATING = 1.8;
 const SCROLL_SPEED_BREAKING = 0.2;
