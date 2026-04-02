@@ -75,6 +75,8 @@ const player = {
       if (input.up && this.airJumps > 0) {
         this.airJumps -= 1;
         this.jump();
+      } else if (input.right) {
+        this.speedUp();
       }
     }
 
