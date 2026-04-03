@@ -2,9 +2,9 @@
 
 A nostalgic skate ride inspired by Wonder Boy’s legendary runs on the Sega Master System.
 
-[> You can try it out here <](https://evilpaper.github.io/cosmos-street/)
+[--> Click here to play <--](https://evilpaper.github.io/cosmos-street/)
 
-> **Warning**
+> **NOTICE**
 > This game is a work in progress.
 
 ## About this project
@@ -62,21 +62,16 @@ Background music starts when you begin playing and loops continuously. Use the S
 - The CRT effect is created with CSS. More precise CSS Keyframes.
 - The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
 
-## On decisions and mental notes
-
--
-
 ## Credits
 
-- The enemy art for Blip Blip is sourced from the image Mega Man Custom Enemies by calegaea75432, discovered online. Full credit goes to calegaea75432.
-- Font used is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
-- Sounds Effects are taken from Wonder Boy III: The Dragon's Trap. Source[The Sounds Resource](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/) and ...
-  All credits to the original creators and The Sounds Resource for provision. I couldn't find sound effects for orginal Wonder Boy. Picked the nearest I could find. Orignal format wav, converted to ogg to reduce size.
-- Music track is [Retro Platforming by David Fesliyan](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6). Credit: https://www.FesliyanStudios.com Background Music
+- The art for the enemy, called [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207), is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery).
+- Font is modelled after [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980) by [Void](https://arcade.itch.io/). Redrawn in Aseprite.
+- Sounds Effects are taken from [Wonder Boy III: The Dragon's Trap](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/) and [Penguin Land](https://sounds.spriters-resource.com/master_system/penguinland/asset/404945/). Credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/). Couldn’t find the original Wonder Boy sound effects, so I used the closest available alternatives. They were downloaded as WAV files and converted to OGG to reduce file size.
+- Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6) by [David Fesliyan](https://www.fesliyanstudios.com/).
 
 ## Running Locally
 
-No need to install anything, but, regardless how much I wan't the game to be a file a a canvas game is a web app, not a local file. Once accepted, a local dev server stops feeling like “extra tooling” and starts feeling like “The minimum environment the platform requires.”
+No need to install anything, but being a web game you need to run a dev server.
 
 You can run the lightest possible dev server from your terminal like this:
 
@@ -91,6 +86,7 @@ python3 -m http.server
 ```
 
 That’s it. No build step. No framework. No lock-in.
+As much as I wanted the game to be “just a file,” it’s a canvas game, and canvas is a browser feature, not something that runs directly from a local file. Once you accept that, a local dev server stops feeling like extra tooling and starts feeling like the minimum environment the platform requires.
 
 ### Alternative approach without sound
 

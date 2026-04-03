@@ -104,7 +104,7 @@ async function loadSounds() {
   sounds.crash = await loadSound("audio/fireball.ogg");
   sounds.angel = await loadSound("audio/select-cursor.ogg");
   sounds.drop = await loadSound("audio/fireball.ogg");
-  sounds.electrified = await loadSound("audio/12.ogg");
+  sounds.electrified = await loadSound("audio/penguin-land-04.ogg");
 }
 
 // Play a sound effect
