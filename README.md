@@ -32,10 +32,7 @@ Background music starts when you begin playing and loops continuously. Use the S
 
 - [x] Start screen
 - [x] Variation (platform distribution)
-- [ ] Add Balancer Power Up. Slows breaking speed.
-- [ ] Add Glider Power Up. Allow user to descend slowly.
-- [ ] Add Flash McQueen Power Up. Increase speed.
-- [ ] Refactor Angel Power Up. Consider using it as it is in the original game.
+- [ ] Implement In Tow Game Play. One double jump for each angel. Score multiplier for each angel player up in a row.
 - [ ] Use the player head as favicon
 - [x] Enemy
 - [x] Death
