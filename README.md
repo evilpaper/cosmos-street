@@ -32,9 +32,11 @@ Background music starts when you begin playing and loops continuously. Use the S
 
 - [x] Start screen
 - [x] Variation (platform distribution)
-- [ ] 4 different power up's
-- [ ] Head as favicon
-- [ ] Better electric sparks, more frames, better sound.
+- [ ] Add Balancer Power Up. Slows breaking speed.
+- [ ] Add Glider Power Up. Allow user to descend slowly.
+- [ ] Add Flash McQueen Power Up. Increase speed.
+- [ ] Refactor Angel Power Up. Consider using it as it is in the original game.
+- [ ] Use the player head as favicon
 - [x] Enemy
 - [x] Death
 - [x] Restart
