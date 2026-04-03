@@ -32,11 +32,12 @@ Background music starts when you begin playing and loops continuously. Use the S
 
 - [x] Start screen
 - [x] Variation (platform distribution)
-- [x] Power up (air jump) - incl. spawn logic and visual pickup, possession and usage feedback
+- [ ] 4 different power up's
+- [ ] Head as favicon
+- [ ] Better electric sparks, more frames, better sound.
 - [x] Enemy
 - [x] Death
 - [x] Restart
-- [x] Fruits (did angel instead)
 - [x] Score
 - [x] Session high score
 - [x] SFX
@@ -69,7 +70,8 @@ Background music starts when you begin playing and loops continuously. Use the S
 
 - The enemy art for Blip Blip is sourced from the image Mega Man Custom Enemies by calegaea75432, discovered online. Full credit goes to calegaea75432.
 - Font used is [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980)
-- Sounds Effects are taken from Wonder Boy III: The Dragon's Trap. Source[The Sounds Resource](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/). All credits to the original creators and The Sounds Resource for provision. I couldn't find sound effects for orginal Wonder Boy. Picked the nearest I could find. Orignal format wav, converted to ogg to reduce size.
+- Sounds Effects are taken from Wonder Boy III: The Dragon's Trap. Source[The Sounds Resource](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/) and ...
+  All credits to the original creators and The Sounds Resource for provision. I couldn't find sound effects for orginal Wonder Boy. Picked the nearest I could find. Orignal format wav, converted to ogg to reduce size.
 - Music track is [Retro Platforming by David Fesliyan](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6). Credit: https://www.FesliyanStudios.com Background Music
 
 ## Running Locally
