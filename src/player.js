@@ -61,8 +61,7 @@ const player = {
       if (input.left) {
         this.state = this.states[2]; // skating -> breaking
       } else if (input.up) {
-        console.log("jump");
-        // this.jump();
+        this.jump();
       } else if (input.right) {
         this.speedUp();
       } else if (this.dy > 1) {
