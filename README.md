@@ -50,11 +50,14 @@ Background music starts when you begin playing and loops continuously. Use the S
 
 ## Constraints and Requirements
 
+The main premise of the project was to avoid creating new assets and instead focus on piecing together what I could find to make something fun. Producing art, sound effects, and music is time-consuming, so for the main character I chose the skateboard sprites from the original Wonder Boy on the Sega Master System. I find the art style very expressive. I’m impressed by how much feeling you can squeeze out of just a few frames.
+
+Other contraints and requirements:
+
 - Limited palette. Only allowed to use four colors palette. Inspired by the original Game Boy and tweaked for a distinct vintage futuristic look. Can't remember the inspiration source.
 - Small screen, 256 x 256 px. Wrapped in a CSS Clip Path to get a round-ish shape. No other reason than it's nice.
 - Only use standard HTML, CSS and JavaScript. No dependecies.
 - Should have Keyboard and Touch Controls.
-- Create as few original assets as possible; reuse existing ones where feasible. Producing art, sound effects, and music is time-consuming. One reason modified sprites from the original Wonder Boy (Sega Master System) are used.
 
 ## Architecture notes
 
