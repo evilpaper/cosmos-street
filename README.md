@@ -1,6 +1,7 @@
 # Cosmos Street
 
-A nostalgic skate ride inspired by Wonder Boy’s legendary runs on the Sega Master System.
+Your angel buddies are trapped in space. Bring them home as quickly as possible, but watch out for the nefarious alien machines.
+A nostalgic skate ride, freely inspired by Wonder Boy’s skateboard runs on the Sega Master System.
 
 [--> Click here to play <--](https://evilpaper.github.io/cosmos-street/)
 
