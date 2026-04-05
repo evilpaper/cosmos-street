@@ -134,29 +134,45 @@ function createAngel(tiles) {
   };
 }
 
-function createCompanionAngel({ initialTick = 0 } = {}) {
+function createCompanionAngel({
+  initialTick = 0,
+  startX: pickupX = 0,
+  startY: pickupY = 0,
+} = {}) {
   const WIDTH = 16;
   const HEIGHT = 16;
   const OSCILLATION_AMPLITUDE = 2;
   const OSCILLATION_SPEED = 0.1;
   const ANCHOR_OFFSET_X = -16;
   const ANCHOR_OFFSET_Y = -16;
+  const INTRO_DURATION_FRAMES = 30;
 
   let tick = initialTick;
+  let introProgress = 0;
 
   return {
-    x: 0,
-    y: 0,
+    x: pickupX,
+    y: pickupY,
     width: WIDTH,
     height: HEIGHT,
     active: true,
 
     update(player) {
+      const targetX = player.x + ANCHOR_OFFSET_X;
+      const targetY = player.y + ANCHOR_OFFSET_Y;
+
+      if (introProgress < 1) {
+        introProgress = Math.min(1, introProgress + 1 / INTRO_DURATION_FRAMES);
+        const eased = 1 - (1 - introProgress) ** 3;
+        this.x = Math.round(pickupX + (targetX - pickupX) * eased);
+        this.y = Math.round(pickupY + (targetY - pickupY) * eased);
+        return;
+      }
+
       tick += 1;
-      const baseY = player.y + ANCHOR_OFFSET_Y;
-      this.x = Math.round(player.x + ANCHOR_OFFSET_X);
+      this.x = Math.round(targetX);
       this.y = Math.round(
-        baseY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
+        targetY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
       );
     },
 

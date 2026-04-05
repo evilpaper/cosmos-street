@@ -279,7 +279,11 @@ states[GAME_STATE.PLAYING] = {
         const firstAngelPickup = player.angels === 0;
         angels.splice(i, 1);
         if (firstAngelPickup) {
-          companionAngel = createCompanionAngel({ initialTick: angel.getTick() });
+          companionAngel = createCompanionAngel({
+            initialTick: angel.getTick(),
+            startX: angel.x,
+            startY: angel.y,
+          });
         }
         player.angels += 1;
         angels.push(createAngel(platforms.tiles));
