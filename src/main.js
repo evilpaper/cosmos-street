@@ -314,17 +314,14 @@ states[GAME_STATE.PLAYING] = {
     for (const enemy of enemies) {
       enemy.update();
 
-      if (
-        enemyHitIFrames === 0 &&
-        checkCollision(player, enemy.getHitbox())
-      ) {
+      if (enemyHitIFrames === 0 && checkCollision(player, enemy.getHitbox())) {
         if (angelsAtFrameStart > 0 && !sacrificedAngelsThisFrame) {
           player.angels = 0;
           companionAngel = null;
           sacrificedAngelsThisFrame = true;
           enemyHitIFrames = ENEMY_HIT_IFRAMES;
           sparkles.push(createSparkle(player.x + player.width / 2, player.y));
-          sfx(sounds.crash);
+          sfx(sounds.enemyKill);
         } else if (angelsAtFrameStart === 0) {
           if (player.state !== "obliterating") {
             sfx(sounds.crash);
