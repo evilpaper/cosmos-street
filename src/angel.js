@@ -135,9 +135,9 @@ function createAngel(tiles) {
 }
 
 function createCompanionAngel({
-  initialTick = 0,
-  startX: pickupX = 0,
-  startY: pickupY = 0,
+  initialTick = 0, // The tick of the angel that was picked up. Tick is used to animate the angel's oscillation.
+  startX: pickupX = 0, // The x position of the angel that was picked up.
+  startY: pickupY = 0, // The y position of the angel that was picked up.
 } = {}) {
   const WIDTH = 16;
   const HEIGHT = 16;
@@ -161,12 +161,14 @@ function createCompanionAngel({
       const targetX = player.x + ANCHOR_OFFSET_X;
       const targetY = player.y + ANCHOR_OFFSET_Y;
 
+      // Intro phase: Ease in to the target position.
+      // Basically for INTRO_DURATION_FRAMES amount of frames, move the angel towards the the position.
       if (introProgress < 1) {
         introProgress = Math.min(1, introProgress + 1 / INTRO_DURATION_FRAMES);
         const eased = 1 - (1 - introProgress) ** 3;
         this.x = Math.round(pickupX + (targetX - pickupX) * eased);
         this.y = Math.round(pickupY + (targetY - pickupY) * eased);
-        return;
+        return; // Exit the function early if we are still in the intro phase.
       }
 
       tick += 1;
