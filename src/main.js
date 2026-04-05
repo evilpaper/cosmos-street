@@ -82,6 +82,7 @@ let time = 0;
 let stars;
 let platforms;
 let angels;
+let companionAngel;
 let sparkles;
 let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
@@ -253,6 +254,9 @@ states[GAME_STATE.PLAYING] = {
     time += 1;
     title.slideOut();
     player.update(platforms.tiles, time);
+    if (player.angels === 0) {
+      companionAngel = null;
+    }
     platforms.update();
 
     for (const angel of angels) {
@@ -272,8 +276,12 @@ states[GAME_STATE.PLAYING] = {
       const angel = angels[i];
       if (angel.active && checkCollision(player, angel.getHitbox())) {
         sparkles.push(createSparkle(angel.x, angel.y - 8));
-        player.angels += 1;
+        const firstAngelPickup = player.angels === 0;
         angels.splice(i, 1);
+        if (firstAngelPickup) {
+          companionAngel = createCompanionAngel({ initialTick: angel.getTick() });
+        }
+        player.angels += 1;
         angels.push(createAngel(platforms.tiles));
         score += scoreIncrement;
         scoreIncrement += 1;
@@ -283,6 +291,10 @@ states[GAME_STATE.PLAYING] = {
           highScoreUpdated = true;
         }
       }
+    }
+
+    if (companionAngel) {
+      companionAngel.update(player);
     }
 
     for (const enemy of enemies) {
@@ -343,6 +355,9 @@ states[GAME_STATE.PLAYING] = {
     }
 
     player.draw(screen);
+    if (companionAngel) {
+      companionAngel.draw(screen);
+    }
     for (const angel of angels) {
       angel.draw(screen);
     }
@@ -386,6 +401,9 @@ states[GAME_STATE.GAME_OVER] = {
     }
 
     player.update(platforms.tiles, time);
+    if (player.angels === 0) {
+      companionAngel = null;
+    }
     platforms.update();
     for (const angel of angels) {
       angel.update();
@@ -398,6 +416,9 @@ states[GAME_STATE.GAME_OVER] = {
     }
     // Remove finished sparkles.
     sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
+    if (companionAngel) {
+      companionAngel.update(player);
+    }
     if (player.angels > 0) {
       skateboardSparkle.update();
     }
@@ -413,6 +434,9 @@ states[GAME_STATE.GAME_OVER] = {
     }
 
     player.draw(screen);
+    if (companionAngel) {
+      companionAngel.draw(screen);
+    }
     for (const angel of angels) {
       angel.draw(screen);
     }
@@ -486,6 +510,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angels = [createAngel(platforms.tiles)];
+  companionAngel = null;
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   enemies = [];

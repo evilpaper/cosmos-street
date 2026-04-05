@@ -69,6 +69,10 @@ function createAngel(tiles) {
       };
     },
 
+    getTick() {
+      return tick;
+    },
+
     update() {
       // Try spawn when inactive and tiles become available
       if (!active) {
@@ -126,6 +130,53 @@ function createAngel(tiles) {
         active = false;
         this.active = false;
       }
+    },
+  };
+}
+
+function createCompanionAngel({ initialTick = 0 } = {}) {
+  const WIDTH = 16;
+  const HEIGHT = 16;
+  const OSCILLATION_AMPLITUDE = 2;
+  const OSCILLATION_SPEED = 0.1;
+  const ANCHOR_OFFSET_X = -16;
+  const ANCHOR_OFFSET_Y = -16;
+
+  let tick = initialTick;
+
+  return {
+    x: 0,
+    y: 0,
+    width: WIDTH,
+    height: HEIGHT,
+    active: true,
+
+    update(player) {
+      tick += 1;
+      const baseY = player.y + ANCHOR_OFFSET_Y;
+      this.x = Math.round(player.x + ANCHOR_OFFSET_X);
+      this.y = Math.round(
+        baseY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
+      );
+    },
+
+    draw(screen) {
+      const spriteFrameX = 0;
+      const spriteFrameY = 0;
+      const drawX = Math.round(this.x);
+      const drawY = Math.round(this.y);
+
+      screen.drawImage(
+        angelSpriteSheet,
+        spriteFrameX,
+        spriteFrameY,
+        WIDTH,
+        HEIGHT,
+        drawX,
+        drawY,
+        WIDTH,
+        HEIGHT,
+      );
     },
   };
 }

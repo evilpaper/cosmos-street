@@ -231,21 +231,6 @@ const player = {
       }
     }
 
-    // Trying out how it look with the angel sprite sheet.
-    if (this.angels > 0) {
-      screen.drawImage(
-        angelSpriteSheet,
-        0,
-        0,
-        16,
-        16,
-        o(this.x) - 16,
-        o(this.y - 16),
-        16,
-        16,
-      );
-    }
-
     /**
      *
      * Draw a green line from the player to the ground. For debugging purposes.
