@@ -321,6 +321,13 @@ states[GAME_STATE.PLAYING] = {
           sacrificedAngelsThisFrame = true;
           enemyHitIFrames = ENEMY_HIT_IFRAMES;
           sparkles.push(createSparkle(player.x + player.width / 2, player.y));
+          enemies.splice(enemies.indexOf(enemy), 1);
+          enemies.push(
+            createEnemy(
+              SCREEN_WIDTH + 12,
+              Math.floor(Math.random() * (164 - 48 + 1)) + 48,
+            ),
+          );
           sfx(sounds.enemyKill);
         } else if (angelsAtFrameStart === 0) {
           if (player.state !== "obliterating") {
