@@ -17,7 +17,7 @@ const player = {
   dy: 0,
   jumpStrength: 6.5,
   state: "skating", // Initial state is "skating" (this.states[0])
-  airJumps: 0, // Number of air jumps available (granted by collecting angels)
+  angels: 0, // Angel-granted air jumps (collected angels held by the player)
   isDead: false,
 
   reset() {
@@ -29,7 +29,7 @@ const player = {
     this.y = 0;
     this.dy = 0;
     this.state = this.states[0];
-    this.airJumps = 0;
+    this.angels = 0;
     this.isDead = false;
   },
 
@@ -72,8 +72,8 @@ const player = {
     if (this.state === "airborne") {
       this.totalFrames = 1;
       // Air jump: use a jump charge if available
-      if (input.up && this.airJumps > 0) {
-        this.airJumps -= 1;
+      if (input.up && this.angels > 0) {
+        this.angels -= 1;
         this.jump();
       } else if (input.right) {
         this.speedUp();
@@ -232,7 +232,7 @@ const player = {
     }
 
     // Trying out how it look with the angel sprite sheet.
-    if (this.airJumps > 0) {
+    if (this.angels > 0) {
       screen.drawImage(
         angelSpriteSheet,
         0,

@@ -33,7 +33,9 @@ Background music starts when you begin playing and loops continuously. Use the S
 
 - [x] Start screen
 - [x] Variation (platform distribution)
-- [ ] Implement In Tow Game Play. One double jump for each angel. Score multiplier for each angel player up in a row.
+- [ ] Implement In Tow Game Play - replace airJumps with angels
+- [ ] Implement In Tow Game Play - when first angel is picked up, make it animate up to the top/left corner behind the behind player
+- [ ] Implement In Tow Game Play - if player has at least one angel it survive collision with enemy but loose all angels
 - [ ] Use the player head as favicon
 - [x] Enemy
 - [x] Death

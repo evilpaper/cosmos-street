@@ -81,7 +81,7 @@ let paused = false;
 let time = 0;
 let stars;
 let platforms;
-let angel;
+let angels;
 let sparkles;
 let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
@@ -255,26 +255,33 @@ states[GAME_STATE.PLAYING] = {
     player.update(platforms.tiles, time);
     platforms.update();
 
-    angel.update();
+    for (const angel of angels) {
+      angel.update();
+    }
 
-    // Respawn angel if it scrolled off the left side of the screen.
-    if (angel.active && angel.x + angel.width < 0) {
-      scoreIncrement = 1;
-      angel.respawn(platforms.tiles);
+    // Spawn angel at new tile if it scrolled off the left side of the screen.
+    for (const angel of angels) {
+      if (angel.active && angel.x + angel.width < 0) {
+        scoreIncrement = 1;
+        angel.spawnAngel(platforms.tiles);
+      }
     }
 
     // Power-up collection (uses centered 8x8 hitbox).
-    if (angel.active && checkCollision(player, angel.getHitbox())) {
-      // Spawn sparkle at angel position before respawn.
-      sparkles.push(createSparkle(angel.x, angel.y - 8));
-      player.airJumps += 1;
-      angel.respawn(platforms.tiles);
-      score += scoreIncrement;
-      scoreIncrement += 1;
-      sfx(sounds.angel);
-      if (score > highScore) {
-        highScore = score;
-        highScoreUpdated = true;
+    for (let i = angels.length - 1; i >= 0; i--) {
+      const angel = angels[i];
+      if (angel.active && checkCollision(player, angel.getHitbox())) {
+        sparkles.push(createSparkle(angel.x, angel.y - 8));
+        player.angels += 1;
+        angels.splice(i, 1);
+        angels.push(createAngel(platforms.tiles));
+        score += scoreIncrement;
+        scoreIncrement += 1;
+        sfx(sounds.angel);
+        if (score > highScore) {
+          highScore = score;
+          highScoreUpdated = true;
+        }
       }
     }
 
@@ -308,7 +315,7 @@ states[GAME_STATE.PLAYING] = {
     sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
 
     // Update skateboard sparkle when player has air jumps.
-    if (player.airJumps > 0) {
+    if (player.angels > 0) {
       skateboardSparkle.update();
     }
   },
@@ -336,9 +343,11 @@ states[GAME_STATE.PLAYING] = {
     }
 
     player.draw(screen);
-    angel.draw(screen);
+    for (const angel of angels) {
+      angel.draw(screen);
+    }
 
-    if (player.airJumps > 0) {
+    if (player.angels > 0) {
       skateboardSparkle.draw(screen);
     }
 
@@ -378,7 +387,9 @@ states[GAME_STATE.GAME_OVER] = {
 
     player.update(platforms.tiles, time);
     platforms.update();
-    angel.update();
+    for (const angel of angels) {
+      angel.update();
+    }
     for (const enemy of enemies) {
       enemy.update();
     }
@@ -387,7 +398,7 @@ states[GAME_STATE.GAME_OVER] = {
     }
     // Remove finished sparkles.
     sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
-    if (player.airJumps > 0) {
+    if (player.angels > 0) {
       skateboardSparkle.update();
     }
   },
@@ -402,7 +413,9 @@ states[GAME_STATE.GAME_OVER] = {
     }
 
     player.draw(screen);
-    angel.draw(screen);
+    for (const angel of angels) {
+      angel.draw(screen);
+    }
 
     if (deadTimer > 0) {
       if (highScoreUpdated) {
@@ -472,7 +485,7 @@ function restartGame() {
 function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
-  angel = createAngel(platforms.tiles);
+  angels = [createAngel(platforms.tiles)];
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   enemies = [];
