@@ -5,7 +5,14 @@ const player = {
     img.src = "./images/player-sprite-sheet.png";
     return img;
   })(),
-  states: ["skating", "airborne", "breaking", "speeding", "obliterating"],
+  states: [
+    "skating",
+    "jumping",
+    "breaking",
+    "speeding",
+    "obliterating",
+    "diving",
+  ],
   width: 26,
   height: 36,
   totalFrames: 2, // For skating and speeding states
@@ -35,7 +42,7 @@ const player = {
 
   jump() {
     this.dy = -this.jumpStrength;
-    this.state = this.states[1]; // airborne
+    this.state = this.states[1]; // jumping
     // Consume input to require fresh key press for next jump
     input.up = false;
     sfx(sounds.jump, 0.8);
@@ -44,6 +51,12 @@ const player = {
   speedUp() {
     scrollSpeed = SCROLL_SPEED_SPEEDING;
     this.state = this.states[3];
+    this.ticksPerFrame = 8;
+  },
+
+  dive() {
+    scrollSpeed = SCROLL_SPEED_SPEEDING;
+    this.state = this.states[5];
     this.ticksPerFrame = 8;
   },
 
@@ -65,18 +78,29 @@ const player = {
       } else if (input.right) {
         this.speedUp();
       } else if (this.dy > 1) {
-        this.state = this.states[1]; // skating -> airborne. This happens when user fall of a platform.
+        this.state = this.states[1]; // skating -> jumping. This happens when user fall of a platform.
       }
     }
 
-    if (this.state === "airborne") {
+    if (this.state === "jumping") {
       this.totalFrames = 1;
-      // Air jump: use a jump charge if available
       if (input.up && this.angels > 0) {
         this.angels -= 1;
         this.jump();
       } else if (input.right) {
-        this.speedUp();
+        this.dive();
+      }
+    }
+
+    if (this.state === "diving") {
+      this.totalFrames = 2;
+      if (!input.right) {
+        this.state = this.states[0]; // -> Only stay in the state if right arrow is pressed
+      } else if (input.up && this.angels > 0) {
+        this.angels -= 1;
+        this.jump();
+      } else if (input.right) {
+        this.dive();
       }
     }
 
@@ -183,7 +207,11 @@ const player = {
     const sx = this.animationFrameIndex * 40;
     const sy = 35;
 
-    if (this.state === "skating" || this.state === "speeding") {
+    if (
+      this.state === "skating" ||
+      this.state === "speeding" ||
+      this.state === "diving"
+    ) {
       if (this.animationFrameIndex === 0) {
         screen.drawImage(
           this.image,
@@ -211,7 +239,7 @@ const player = {
       }
     }
 
-    if (this.state === "airborne" || this.state === "breaking") {
+    if (this.state === "jumping" || this.state === "breaking") {
       screen.drawImage(this.image, 52, 0, 26, 35, o(this.x), o(this.y), 26, 35);
     }
 
