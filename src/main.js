@@ -312,7 +312,12 @@ states[GAME_STATE.PLAYING] = {
           player.angels = 0;
           companionAngel = null;
           sacrificedAngelsThisFrame = true;
-          sparkles.push(createSparkle(player.x + player.width / 2, player.y));
+          sparkles.push(
+            createElectricExplosion(
+              enemy.x + (enemy.width - 35) / 2,
+              enemy.y + (enemy.height - 35) / 2,
+            ),
+          );
           enemies.splice(enemies.indexOf(enemy), 1);
           enemies.push(
             createEnemy(
