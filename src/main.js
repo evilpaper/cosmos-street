@@ -12,9 +12,6 @@ const SCROLL_SPEED_SKATING = 1.8;
 const SCROLL_SPEED_BREAKING = 0.2;
 const SCROLL_SPEED_SPEEDING = 2.4;
 
-/** Frames after angel sacrifice where enemy hits are ignored (avoids instant re-hit). */
-const ENEMY_HIT_IFRAMES = 45;
-
 /**
  * TILE_WIDTH AND TILE_HEIGHT are shared between the functions createTile() and createPlatforms()
  * Therefore defined as global constants.
@@ -95,7 +92,6 @@ let score;
 let scoreIncrement;
 let highScore = 0;
 let highScoreUpdated = false;
-let enemyHitIFrames = 0;
 
 const GAME_STATE = {
   INSERT_COIN: "INSERT_COIN", // Actually more like WAITING_FOR_INTERACTION. We use it to wait for user interaction to initialize audio but INSERT_COIN sounds more fun.
@@ -256,9 +252,6 @@ states[GAME_STATE.PLAYING] = {
     }
 
     time += 1;
-    if (enemyHitIFrames > 0) {
-      enemyHitIFrames -= 1;
-    }
     title.slideOut();
     player.update(platforms.tiles, time);
     if (player.angels === 0) {
@@ -314,12 +307,11 @@ states[GAME_STATE.PLAYING] = {
     for (const enemy of enemies) {
       enemy.update();
 
-      if (enemyHitIFrames === 0 && checkCollision(player, enemy.getHitbox())) {
+      if (checkCollision(player, enemy.getHitbox())) {
         if (angelsAtFrameStart > 0 && !sacrificedAngelsThisFrame) {
           player.angels = 0;
           companionAngel = null;
           sacrificedAngelsThisFrame = true;
-          enemyHitIFrames = ENEMY_HIT_IFRAMES;
           sparkles.push(createSparkle(player.x + player.width / 2, player.y));
           enemies.splice(enemies.indexOf(enemy), 1);
           enemies.push(
@@ -551,7 +543,6 @@ function init() {
   deadTimer = 0;
   score = 0;
   scoreIncrement = 1;
-  enemyHitIFrames = 0;
 
   if (!game.state) {
     game.setState(states[GAME_STATE.INSERT_COIN]);
