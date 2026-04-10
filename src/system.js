@@ -177,6 +177,17 @@ function stopMusic() {
   }
 }
 
+function syncAudioWithGamePaused(isPaused) {
+  if (!audioCtx || audioCtx.state === "closed") return;
+  if (isPaused) {
+    if (audioCtx.state === "running") {
+      audioCtx.suspend().catch(() => {});
+    }
+  } else if (audioCtx.state === "suspended") {
+    audioCtx.resume().catch(() => {});
+  }
+}
+
 /**
  * Toggle audio on/off during gameplay
  */

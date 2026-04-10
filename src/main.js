@@ -78,6 +78,7 @@ const DIFFICULTY_STAGES = [
  */
 
 let paused = false;
+let lastPausedForAudio = false;
 let time = 0;
 let stars;
 let platforms;
@@ -589,6 +590,11 @@ function update() {
   if (input.soundToggle) {
     toggleAudio();
     input.soundToggle = false;
+  }
+
+  if (paused !== lastPausedForAudio) {
+    syncAudioWithGamePaused(paused);
+    lastPausedForAudio = paused;
   }
 
   if (paused) {
