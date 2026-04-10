@@ -233,6 +233,7 @@ states[GAME_STATE.PLAYING] = {
   enter() {
     time = 0;
     resetStateInput();
+    stopMusic();
     music(songs.theme, 0.5);
   },
   update() {
