@@ -6,7 +6,7 @@ function createElectricExplosion(x, y) {
   const FRAME_WIDTH = 35;
   const FRAME_HEIGHT = 35;
   const TOTAL_FRAMES = 4;
-  const TICKS_PER_FRAME = 8;
+  const TICKS_PER_FRAME = 6;
 
   let animationTick = 0;
   let animationFrameIndex = 0;
