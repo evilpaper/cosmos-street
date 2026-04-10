@@ -33,10 +33,10 @@ Background music starts when you begin playing and loops continuously. Use the S
 
 - [x] Start screen
 - [x] Variation (platform distribution)
-- [ ] Implement In Tow Game Play - replace airJumps with angels
-- [ ] Implement In Tow Game Play - when first angel is picked up, make it animate up to the top/left corner behind the behind player
-- [ ] Implement In Tow Game Play - if player has at least one angel it survive collision with enemy but loose all angels
-- [ ] Use the player head as favicon
+- [x] Implement In Tow Game Play - replace airJumps with angels
+- [x] Implement In Tow Game Play - when first angel is picked up, make it animate up to the top/left corner behind the behind player
+- [x] Implement In Tow Game Play - if player has at least one angel it survive collision with enemy but loose all angels
+- [x] Use the player head as favicon
 - [x] Enemy
 - [x] Death
 - [x] Restart
@@ -46,7 +46,7 @@ Background music starts when you begin playing and loops continuously. Use the S
 - [x] Music
 - [x] Sound controls (on/off)
 - [ ] Increase difficulty over time (harder and harder)
-- [ ] Playtest, playtest, playtest, tweak, tweak and tweak again until it's fun, juicy and tight.
+- [x] Playtest, playtest, playtest, tweak, tweak and tweak again until it's fun, juicy and tight.
 - [x] favicon (sparkle)
 - [ ] itch.io game page. Maybe.
 - [x] Replace .cursor/rules with AGENTS.md in the root (a simple and platform independent alternative)
