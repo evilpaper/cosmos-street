@@ -84,6 +84,7 @@ let platforms;
 let angels;
 let companionAngel;
 let sparkles;
+let electricExplosions;
 let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
@@ -312,7 +313,7 @@ states[GAME_STATE.PLAYING] = {
           player.angels = 0;
           companionAngel = null;
           sacrificedAngelsThisFrame = true;
-          sparkles.push(
+          electricExplosions.push(
             createElectricExplosion(
               enemy.x + (enemy.width - 35) / 2,
               enemy.y + (enemy.height - 35) / 2,
@@ -353,6 +354,13 @@ states[GAME_STATE.PLAYING] = {
     }
     sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
 
+    for (const explosion of electricExplosions) {
+      explosion.update();
+    }
+    electricExplosions = electricExplosions.filter(
+      (explosion) => !explosion.isDone(),
+    );
+
     // Update skateboard sparkle when player has air jumps.
     if (player.angels > 0) {
       skateboardSparkle.update();
@@ -382,6 +390,7 @@ states[GAME_STATE.PLAYING] = {
     }
 
     player.draw(screen);
+
     if (companionAngel) {
       companionAngel.draw(screen);
     }
@@ -391,6 +400,10 @@ states[GAME_STATE.PLAYING] = {
 
     if (player.angels > 0) {
       skateboardSparkle.draw(screen);
+    }
+
+    for (const explosion of electricExplosions) {
+      explosion.draw(screen);
     }
 
     if (time > 24 && time < 64) {
@@ -443,6 +456,12 @@ states[GAME_STATE.GAME_OVER] = {
     }
     // Remove finished sparkles.
     sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
+    for (const explosion of electricExplosions) {
+      explosion.update();
+    }
+    electricExplosions = electricExplosions.filter(
+      (explosion) => !explosion.isDone(),
+    );
     if (companionAngel) {
       companionAngel.update(player);
     }
@@ -461,6 +480,10 @@ states[GAME_STATE.GAME_OVER] = {
     }
 
     player.draw(screen);
+
+    for (const explosion of electricExplosions) {
+      explosion.draw(screen);
+    }
     if (companionAngel) {
       companionAngel.draw(screen);
     }
@@ -540,6 +563,7 @@ function init() {
   companionAngel = null;
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
+  electricExplosions = [];
   enemies = [];
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
