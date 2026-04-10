@@ -146,6 +146,7 @@ function createCompanionAngel({
   const ANCHOR_OFFSET_X = -16;
   const ANCHOR_OFFSET_Y = -16;
   const INTRO_DURATION_FRAMES = 30;
+  const DEPART_SPEED = 3;
 
   let tick = initialTick;
   let introProgress = 0;
@@ -156,8 +157,22 @@ function createCompanionAngel({
     width: WIDTH,
     height: HEIGHT,
     active: true,
+    sacrificed: false,
+
+    beginSacrifice() {
+      this.sacrificed = true;
+    },
+
+    isGone() {
+      return this.y + HEIGHT <= 0;
+    },
 
     update(player) {
+      if (this.sacrificed) {
+        this.y = Math.round(this.y - DEPART_SPEED);
+        return;
+      }
+
       const targetX = player.x + ANCHOR_OFFSET_X;
       const targetY = player.y + ANCHOR_OFFSET_Y;
 

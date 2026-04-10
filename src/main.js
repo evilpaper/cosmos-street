@@ -83,7 +83,7 @@ let time = 0;
 let stars;
 let platforms;
 let angels;
-let companionAngel;
+let companionAngels;
 let sparkles;
 let electricExplosions;
 let skateboardSparkle;
@@ -257,9 +257,6 @@ states[GAME_STATE.PLAYING] = {
     time += 1;
     title.slideOut();
     player.update(platforms.tiles, time);
-    if (player.angels === 0) {
-      companionAngel = null;
-    }
     platforms.update();
 
     for (const angel of angels) {
@@ -282,11 +279,13 @@ states[GAME_STATE.PLAYING] = {
         const firstAngelPickup = player.angels === 0;
         angels.splice(i, 1);
         if (firstAngelPickup) {
-          companionAngel = createCompanionAngel({
-            initialTick: angel.getTick(),
-            startX: angel.x,
-            startY: angel.y,
-          });
+          companionAngels.push(
+            createCompanionAngel({
+              initialTick: angel.getTick(),
+              startX: angel.x,
+              startY: angel.y,
+            }),
+          );
         }
         player.angels += 1;
         angels.push(createAngel(platforms.tiles));
@@ -300,10 +299,6 @@ states[GAME_STATE.PLAYING] = {
       }
     }
 
-    if (companionAngel) {
-      companionAngel.update(player);
-    }
-
     const angelsAtFrameStart = player.angels;
     let sacrificedAngelsThisFrame = false;
 
@@ -313,7 +308,10 @@ states[GAME_STATE.PLAYING] = {
       if (checkCollision(player, enemy.getHitbox())) {
         if (angelsAtFrameStart > 0 && !sacrificedAngelsThisFrame) {
           player.angels = 0;
-          companionAngel = null;
+          const following = companionAngels.find((c) => !c.sacrificed);
+          if (following) {
+            following.beginSacrifice();
+          }
           sacrificedAngelsThisFrame = true;
           electricExplosions.push(
             createElectricExplosion(
@@ -363,6 +361,11 @@ states[GAME_STATE.PLAYING] = {
       (explosion) => !explosion.isDone(),
     );
 
+    for (const companion of companionAngels) {
+      companion.update(player);
+    }
+    companionAngels = companionAngels.filter((c) => !c.isGone());
+
     // Update skateboard sparkle when player has air jumps.
     if (player.angels > 0) {
       skateboardSparkle.update();
@@ -393,8 +396,8 @@ states[GAME_STATE.PLAYING] = {
 
     player.draw(screen);
 
-    if (companionAngel) {
-      companionAngel.draw(screen);
+    for (const companion of companionAngels) {
+      companion.draw(screen);
     }
     for (const angel of angels) {
       angel.draw(screen);
@@ -425,6 +428,7 @@ states[GAME_STATE.GAME_OVER] = {
   name: GAME_STATE.GAME_OVER,
   enter() {
     deadTimer = 0;
+    companionAngels = [];
   },
   update() {
     time += 1;
@@ -443,9 +447,6 @@ states[GAME_STATE.GAME_OVER] = {
     }
 
     player.update(platforms.tiles, time);
-    if (player.angels === 0) {
-      companionAngel = null;
-    }
     platforms.update();
     for (const angel of angels) {
       angel.update();
@@ -464,9 +465,6 @@ states[GAME_STATE.GAME_OVER] = {
     electricExplosions = electricExplosions.filter(
       (explosion) => !explosion.isDone(),
     );
-    if (companionAngel) {
-      companionAngel.update(player);
-    }
     if (player.angels > 0) {
       skateboardSparkle.update();
     }
@@ -486,8 +484,8 @@ states[GAME_STATE.GAME_OVER] = {
     for (const explosion of electricExplosions) {
       explosion.draw(screen);
     }
-    if (companionAngel) {
-      companionAngel.draw(screen);
+    for (const companion of companionAngels) {
+      companion.draw(screen);
     }
     for (const angel of angels) {
       angel.draw(screen);
@@ -562,7 +560,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angels = [createAngel(platforms.tiles)];
-  companionAngel = null;
+  companionAngels = [];
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   electricExplosions = [];
