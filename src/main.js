@@ -266,12 +266,12 @@ states[GAME_STATE.PLAYING] = {
     // Spawn angel at new tile if it scrolled off the left side of the screen.
     for (const angel of angels) {
       if (angel.active && angel.x + angel.width < 0) {
-        scoreIncrement = 1;
+        scoreIncrement = 1; // Reset score increment when a new angel is spawned.
         angel.spawnAngel(platforms.tiles);
       }
     }
 
-    // Power-up collection (uses centered 8x8 hitbox).
+    //
     for (let i = angels.length - 1; i >= 0; i--) {
       const angel = angels[i];
       if (angel.active && checkCollision(player, angel.getHitbox())) {
