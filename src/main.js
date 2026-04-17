@@ -172,6 +172,19 @@ function getDifficulty() {
 }
 
 /**
+ * Leave PLAYING for GAME_OVER (fall off screen or player death).
+ * @param {{ playDropSound?: boolean }} [options]
+ */
+function enterGameOverFromPlaying({ playDropSound = false } = {}) {
+  if (playDropSound) {
+    sfx(sounds.drop);
+  }
+  resetInput();
+  scrollSpeed = 0;
+  game.setState(states[GAME_STATE.GAME_OVER]);
+}
+
+/**
  * States
  */
 
@@ -240,17 +253,12 @@ states[GAME_STATE.PLAYING] = {
   update() {
     // Check for death conditions first.
     if (playerHasFallenOffScreen()) {
-      sfx(sounds.drop);
-      resetInput();
-      scrollSpeed = 0;
-      game.setState(states[GAME_STATE.GAME_OVER]);
+      enterGameOverFromPlaying({ playDropSound: true });
       return;
     }
 
     if (player.isDead) {
-      resetInput();
-      scrollSpeed = 0;
-      game.setState(states[GAME_STATE.GAME_OVER]);
+      enterGameOverFromPlaying();
       return;
     }
 
