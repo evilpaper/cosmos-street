@@ -239,7 +239,7 @@ states[GAME_STATE.PLAYING] = {
   },
   update() {
     // Check for death conditions first.
-    if (player.y > 500) {
+    if (playerHasFallenOffScreen()) {
       sfx(sounds.drop);
       resetInput();
       scrollSpeed = 0;
@@ -650,4 +650,8 @@ function getStartMessage() {
     case 10:
       return "Action!";
   }
+}
+
+function playerHasFallenOffScreen() {
+  return player.y > 500;
 }
