@@ -375,9 +375,9 @@ states[GAME_STATE.PLAYING] = {
     companionAngels = companionAngels.filter((c) => !c.isGone());
 
     // Update skateboard sparkle when player has air jumps.
-    if (player.angels > 0) {
-      skateboardSparkle.update();
-    }
+    // if (player.angels > 0) {
+    //   skateboardSparkle.update();
+    // }
   },
   draw(_, screen) {
     platforms.draw(screen);
