@@ -164,7 +164,7 @@ function createCompanionAngel({
     },
 
     isGone() {
-      return this.y + HEIGHT <= 0;
+      return this.y + HEIGHT <= -40;
     },
 
     update(player) {
