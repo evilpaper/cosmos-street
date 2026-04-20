@@ -284,9 +284,9 @@ states[GAME_STATE.PLAYING] = {
       const angel = angels[i];
       if (angel.active && checkCollision(player, angel.getHitbox())) {
         sparkles.push(createSparkle(angel.x, angel.y - 8));
-        const firstAngelPickup = player.angels === 0;
         angels.splice(i, 1);
-        if (firstAngelPickup) {
+        if (!player.hasCompanionAngel) {
+          player.hasCompanionAngel = true;
           companionAngels.push(
             createCompanionAngel({
               initialTick: angel.getTick(),
@@ -295,7 +295,6 @@ states[GAME_STATE.PLAYING] = {
             }),
           );
         }
-        player.angels += 1;
         angels.push(createAngel(platforms.tiles));
         score += scoreIncrement;
         scoreIncrement += 1;
@@ -307,20 +306,16 @@ states[GAME_STATE.PLAYING] = {
       }
     }
 
-    const angelsAtFrameStart = player.angels;
-    let sacrificedAngelsThisFrame = false;
-
     for (const enemy of enemies) {
       enemy.update();
 
       if (checkCollision(player, enemy.getHitbox())) {
-        if (angelsAtFrameStart > 0 && !sacrificedAngelsThisFrame) {
-          player.angels = 0;
+        if (player.hasCompanionAngel) {
+          player.hasCompanionAngel = false;
           const following = companionAngels.find((c) => !c.sacrificed);
           if (following) {
             following.beginSacrifice();
           }
-          sacrificedAngelsThisFrame = true;
           electricExplosions.push(
             createElectricExplosion(
               enemy.x + (enemy.width - 35) / 2,
@@ -373,11 +368,6 @@ states[GAME_STATE.PLAYING] = {
       companion.update(player);
     }
     companionAngels = companionAngels.filter((c) => !c.isGone());
-
-    // Update skateboard sparkle when player has air jumps.
-    // if (player.angels > 0) {
-    //   skateboardSparkle.update();
-    // }
   },
   draw(_, screen) {
     platforms.draw(screen);
@@ -409,10 +399,6 @@ states[GAME_STATE.PLAYING] = {
     }
     for (const angel of angels) {
       angel.draw(screen);
-    }
-
-    if (player.angels > 0) {
-      skateboardSparkle.draw(screen);
     }
 
     for (const explosion of electricExplosions) {
@@ -473,9 +459,6 @@ states[GAME_STATE.GAME_OVER] = {
     electricExplosions = electricExplosions.filter(
       (explosion) => !explosion.isDone(),
     );
-    if (player.angels > 0) {
-      skateboardSparkle.update();
-    }
   },
   draw(_, screen) {
     platforms.draw(screen);

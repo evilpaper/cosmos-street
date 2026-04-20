@@ -24,7 +24,7 @@ const player = {
   dy: 0,
   jumpStrength: 6.5,
   state: "skating", // Initial state is "skating" (this.states[0])
-  angels: 0, // Angel-granted air jumps (collected angels held by the player)
+  hasCompanionAngel: false,
   isDead: false,
 
   reset() {
@@ -36,7 +36,7 @@ const player = {
     this.y = 0;
     this.dy = 0;
     this.state = this.states[0];
-    this.angels = 0;
+    this.hasCompanionAngel = false;
     this.isDead = false;
   },
 
@@ -84,10 +84,7 @@ const player = {
 
     if (this.state === "jumping") {
       this.totalFrames = 1;
-      if (input.up && this.angels > 0) {
-        this.angels -= 1;
-        this.jump();
-      } else if (input.right) {
+      if (input.right) {
         this.dive();
       }
     }
@@ -96,9 +93,6 @@ const player = {
       this.totalFrames = 2;
       if (!input.right) {
         this.state = this.states[0]; // -> Only stay in the state if right arrow is pressed
-      } else if (input.up && this.angels > 0) {
-        this.angels -= 1;
-        this.jump();
       } else if (input.right) {
         this.dive();
       }
