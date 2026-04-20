@@ -284,7 +284,7 @@ states[GAME_STATE.PLAYING] = {
       const angel = angels[i];
       if (angel.active && checkCollision(player, angel.getHitbox())) {
         sparkles.push(createSparkle(angel.x, angel.y - 8));
-        angels.splice(i, 1);
+
         if (!player.hasCompanionAngel) {
           player.hasCompanionAngel = true;
           companionAngels.push(
@@ -295,7 +295,7 @@ states[GAME_STATE.PLAYING] = {
             }),
           );
         }
-        angels.push(createAngel(platforms.tiles));
+        // angels.push(createAngel(platforms.tiles));
         score += scoreIncrement;
         scoreIncrement += 1;
         sfx(sounds.angel);
@@ -330,6 +330,7 @@ states[GAME_STATE.PLAYING] = {
             ),
           );
           sfx(sounds.enemyKill);
+          angels.splice(i, 1);
         } else if (angelsAtFrameStart === 0) {
           if (player.state !== "obliterating") {
             sfx(sounds.crash);
