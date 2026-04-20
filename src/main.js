@@ -330,7 +330,7 @@ states[GAME_STATE.PLAYING] = {
             ),
           );
           sfx(sounds.enemyKill);
-        } else if (angelsAtFrameStart === 0) {
+        } else {
           if (player.state !== "obliterating") {
             sfx(sounds.crash);
           }
