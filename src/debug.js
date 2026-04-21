@@ -2,6 +2,46 @@
  * This file contains tools to help with debugging.
  */
 
+/** Set true to always show FPS; or use `?fps` / `?debug=1` in the URL. */
+const DEBUG_SHOW_FPS = true;
+
+function isDebugFpsEnabled() {
+  if (DEBUG_SHOW_FPS) {
+    return true;
+  }
+  const params = new URLSearchParams(location.search);
+  return params.has("fps") || params.get("debug") === "1";
+}
+
+let fpsOverlayLastSample = performance.now();
+let fpsOverlayFrames = 0;
+let fpsOverlayDisplayed = 0;
+let fpsOverlayHasSample = false;
+
+/**
+ * Draws callback-rate FPS at the bottom of the canvas (after game content).
+ * Uses global `print` and constants from system.js (SCREEN_HEIGHT, FONT_HEIGHT).
+ */
+function drawDebugFps() {
+  if (!isDebugFpsEnabled()) {
+    return;
+  }
+
+  fpsOverlayFrames += 1;
+  const now = performance.now();
+  const elapsed = now - fpsOverlayLastSample;
+
+  if (elapsed >= 1000) {
+    fpsOverlayDisplayed = Math.round((fpsOverlayFrames * 1000) / elapsed);
+    fpsOverlayFrames = 0;
+    fpsOverlayLastSample = now;
+    fpsOverlayHasSample = true;
+  }
+
+  const text = fpsOverlayHasSample ? `${fpsOverlayDisplayed} fps` : "... fps";
+  print(text, "center", 216);
+}
+
 /**
  * Pause and resume the game with the space bar.
  */

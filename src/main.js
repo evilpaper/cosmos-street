@@ -613,6 +613,10 @@ function draw(screen) {
     star.draw(screen);
   }
   game.draw(screen);
+
+  if (typeof drawDebugFps === "function") {
+    drawDebugFps();
+  }
 }
 
 function getStartMessage() {
