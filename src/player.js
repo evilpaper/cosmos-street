@@ -22,7 +22,7 @@ const player = {
   x: 50,
   y: 125,
   dy: 0,
-  jumpStrength: 6.5,
+  jumpStrength: 7.5,
   state: "skating", // Initial state is "skating" (this.states[0])
   hasCompanionAngel: false,
   isDead: false,
