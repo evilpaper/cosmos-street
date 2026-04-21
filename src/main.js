@@ -6,8 +6,8 @@
  * Constants
  */
 
-const GRAVITY = 0.03;
-const FRICTION = 0.36; // A value between 0 and 1 that determines how much friction slows down the player.
+const GRAVITY = 0.026;
+const FRICTION = 0.32; // A value between 0 and 1 that determines how much friction slows down the player.
 const SCROLL_SPEED_SKATING = 1.8;
 const SCROLL_SPEED_BREAKING = 0.2;
 const SCROLL_SPEED_SPEEDING = 2.4;
