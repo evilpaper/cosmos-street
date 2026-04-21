@@ -24,9 +24,6 @@ function start() {
     if (update) {
       update();
     }
-  }, FRAME_DURATION);
-
-  setInterval(() => {
     if (draw) {
       draw(screen);
     }
