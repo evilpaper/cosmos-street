@@ -156,7 +156,6 @@ function createCompanionAngel({
     y: pickupY,
     width: WIDTH,
     height: HEIGHT,
-    active: true,
     sacrificed: false,
 
     beginSacrifice() {
