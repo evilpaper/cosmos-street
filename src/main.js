@@ -273,7 +273,7 @@ states[GAME_STATE.PLAYING] = {
 
     // Spawn angel at new tile if it scrolled off the left side of the screen.
     for (const angel of angels) {
-      if (angel.active && angel.x + angel.width < 0) {
+      if (angel.isPlaced && angel.x + angel.width < 0) {
         scoreIncrement = 1; // Reset score increment when a new angel is spawned.
         angel.spawnAngel(platforms.tiles);
       }
@@ -282,7 +282,7 @@ states[GAME_STATE.PLAYING] = {
     //
     for (let i = angels.length - 1; i >= 0; i--) {
       const angel = angels[i];
-      if (angel.active && checkCollision(player, angel.getHitbox())) {
+      if (angel.isPlaced && checkCollision(player, angel.getHitbox())) {
         sparkles.push(createSparkle(angel.x, angel.y - 8));
         // Convert the angel to a companion angel.
         if (!player.hasCompanionAngel) {

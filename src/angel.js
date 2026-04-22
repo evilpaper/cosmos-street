@@ -41,9 +41,9 @@ function createAngel(tiles) {
   let initial;
 
   const initialPosition = findAngelPositionOnTile(tiles, spawnOptions);
-  let active = initialPosition !== null;
+  let isPlaced = initialPosition !== null;
 
-  if (active) {
+  if (isPlaced) {
     initial = initialPosition;
     x = initialPosition.x;
     y = initialPosition.y;
@@ -58,7 +58,7 @@ function createAngel(tiles) {
     y: y,
     width: WIDTH,
     height: HEIGHT,
-    active: active,
+    isPlaced: isPlaced,
 
     getHitbox() {
       return {
@@ -74,8 +74,8 @@ function createAngel(tiles) {
     },
 
     update() {
-      // Try spawn when inactive and tiles become available
-      if (!active) {
+      // Return early if the angel is not placed.
+      if (!isPlaced) {
         this.spawnAngel(tiles);
         return;
       }
@@ -88,7 +88,7 @@ function createAngel(tiles) {
     },
 
     draw(screen) {
-      if (!active) {
+      if (!isPlaced) {
         return;
       }
 
@@ -124,11 +124,11 @@ function createAngel(tiles) {
         this.y = newPosition.y;
         initial = newPosition;
         tick = 0;
-        active = true;
-        this.active = true;
+        isPlaced = true;
+        this.isPlaced = true;
       } else {
-        active = false;
-        this.active = false;
+        isPlaced = false;
+        this.isPlaced = false;
       }
     },
   };
