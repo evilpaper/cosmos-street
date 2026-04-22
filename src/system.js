@@ -20,17 +20,35 @@ function start() {
     init();
   }
 
-  setInterval(() => {
-    if (update) {
-      update();
+  let time_step = 1000 / 60;
+  let last_time = null;
+  let total_time = 0;
+  let accumulated_lag = 0;
+
+  function loop(current_time) {
+    if (last_time === null) last_time = current_time;
+    const delta_time = current_time - last_time;
+    total_time += delta_time;
+    accumulated_lag += delta_time;
+    last_time = current_time;
+
+    while (accumulated_lag >= time_step) {
+      accumulated_lag -= time_step;
+      if (update) {
+        update();
+      }
+      if (draw) {
+        draw(screen);
+      }
     }
-    if (draw) {
-      draw(screen);
-    }
-  }, FRAME_DURATION);
+
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
 }
+
 /**
- * Start when the window have loaded
+ * Wait for the window to load before we start the game loop
  */
 window.onload = () => {
   start();

@@ -6,11 +6,7 @@
 const DEBUG_SHOW_FPS = true;
 
 function isDebugFpsEnabled() {
-  if (DEBUG_SHOW_FPS) {
-    return true;
-  }
-  const params = new URLSearchParams(location.search);
-  return params.has("fps") || params.get("debug") === "1";
+  return DEBUG_SHOW_FPS;
 }
 
 let fpsOverlayLastSample = performance.now();
