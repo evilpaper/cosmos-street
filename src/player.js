@@ -22,7 +22,9 @@ const player = {
   x: 50,
   y: 125,
   dy: 0,
-  jumpStrength: 7.5,
+  jumpStrength: 7.2,
+  jumpStrengthBreaking: 6,
+  jumpStrengthSpeeding: 8,
   state: "skating", // Initial state is "skating" (this.states[0])
   hasCompanionAngel: false,
   isDead: false,
@@ -40,8 +42,8 @@ const player = {
     this.isDead = false;
   },
 
-  jump() {
-    this.dy = -this.jumpStrength;
+  jump(jumpStrength) {
+    this.dy = -jumpStrength;
     this.state = this.states[1]; // jumping
     // Consume input to require fresh key press for next jump
     input.up = false;
@@ -74,7 +76,7 @@ const player = {
       if (input.left) {
         this.state = this.states[2]; // skating -> breaking
       } else if (input.up) {
-        this.jump();
+        this.jump(this.jumpStrength);
       } else if (input.right) {
         this.speedUp();
       } else if (this.dy > 1) {
@@ -105,7 +107,7 @@ const player = {
       if (!input.left) {
         this.state = this.states[0]; // Only stay in breaking state if left arrow is pressed
       } else if (input.up) {
-        this.jump();
+        this.jump(this.jumpStrengthBreaking);
       }
     }
 
@@ -116,7 +118,7 @@ const player = {
       } else if (input.left) {
         this.state = this.states[2]; // -> breaking
       } else if (input.up) {
-        this.jump();
+        this.jump(this.jumpStrengthSpeeding);
       }
     }
 
