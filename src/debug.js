@@ -54,7 +54,7 @@ document.addEventListener("keydown", (event) => {
 
 /**
  * Step through each step with the enter key when debugging.
- * Remember to comment out setInterval inside the main loop before use.
+ * Remember to comment out the fixed frame rate loop inside the main loop before use.
  */
 
 // console.log("Debug mode enabled");

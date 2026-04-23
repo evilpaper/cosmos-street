@@ -7,33 +7,37 @@ const screen = canvas.getContext("2d");
 /**
  * Constants
  */
+
+// Fixed frame rate
 const FPS = 60;
-const FRAME_DURATION = 1000 / FPS;
+const FIXED_TIMESTEP_MS = 1000 / FPS;
+
+// Fixed screen size
 const SCREEN_WIDTH = 256;
 const SCREEN_HEIGHT = 256;
 
 /**
- * Start the game loop
+ * Game loop with fixed frame rate
  */
 function start() {
+  // Run init first, only one time.
   if (init) {
     init();
   }
 
-  let time_step = 1000 / 60;
-  let last_time = null;
-  let total_time = 0;
-  let accumulated_lag = 0;
+  let lastTime = null;
+  let totalTime = 0;
+  let accumulatedTime = 0;
 
-  function loop(current_time) {
-    if (last_time === null) last_time = current_time;
-    const delta_time = current_time - last_time;
-    total_time += delta_time;
-    accumulated_lag += delta_time;
-    last_time = current_time;
+  function loop(currentTime) {
+    if (lastTime === null) lastTime = currentTime;
+    const deltaTime = currentTime - lastTime;
+    totalTime += deltaTime;
+    accumulatedTime += deltaTime;
+    lastTime = currentTime;
 
-    while (accumulated_lag >= time_step) {
-      accumulated_lag -= time_step;
+    while (accumulatedTime >= FIXED_TIMESTEP_MS) {
+      accumulatedTime -= FIXED_TIMESTEP_MS;
       if (update) {
         update();
       }
