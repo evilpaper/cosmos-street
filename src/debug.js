@@ -2,12 +2,7 @@
  * This file contains tools to help with debugging.
  */
 
-/** Set true to always show FPS; or use `?fps` / `?debug=1` in the URL. */
-const DEBUG_SHOW_FPS = true;
-
-function isDebugFpsEnabled() {
-  return DEBUG_SHOW_FPS;
-}
+const SHOW_FPS = true;
 
 let fpsOverlayLastSample = performance.now();
 let fpsOverlayFrames = 0;
@@ -18,8 +13,8 @@ let fpsOverlayHasSample = false;
  * Draws callback-rate FPS at the bottom of the canvas (after game content).
  * Uses global `print` and constants from system.js (SCREEN_HEIGHT, FONT_HEIGHT).
  */
-function drawDebugFps() {
-  if (!isDebugFpsEnabled()) {
+function drawFps() {
+  if (!SHOW_FPS) {
     return;
   }
 

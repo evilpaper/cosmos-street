@@ -6,7 +6,7 @@
  * Constants
  */
 
-const GRAVITY = 0.046;
+const GRAVITY = 0.058;
 const FRICTION = 0.3; // A value between 0 and 1 that determines how much friction slows down the player.
 const SCROLL_SPEED_SKATING = 1.8;
 const SCROLL_SPEED_BREAKING = 0.2;
@@ -613,10 +613,6 @@ function draw(screen) {
     star.draw(screen);
   }
   game.draw(screen);
-
-  if (typeof drawDebugFps === "function") {
-    drawDebugFps();
-  }
 }
 
 function getStartMessage() {
