@@ -191,7 +191,9 @@ function enterGameOverFromPlaying({ playDropSound = false } = {}) {
 states[GAME_STATE.INSERT_COIN] = {
   name: GAME_STATE.INSERT_COIN,
   exit() {
-    unlockAudio();
+    unlockAudio().then(() => {
+      music(songs.theme, 0.5);
+    });
   },
   update() {
     time += 1;
