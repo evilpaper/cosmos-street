@@ -518,7 +518,6 @@ function startGame() {
 }
 
 function resetGame() {
-  highScoreUpdated = false;
   init(); // Reset all game objects
   game.setState(states[GAME_STATE.PRESS_START]);
 }
@@ -565,6 +564,7 @@ function init() {
   deadTimer = 0;
   score = 0;
   scoreIncrement = 1;
+  highScoreUpdated = false;
 
   if (!game.state) {
     game.setState(states[GAME_STATE.INSERT_COIN]);
