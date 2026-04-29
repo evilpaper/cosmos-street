@@ -162,7 +162,7 @@ function createCompanionAngel({
       this.sacrificed = true;
     },
 
-    isGone() {
+    hasLeftScreen() {
       return this.y + HEIGHT <= -40;
     },
 

@@ -369,7 +369,9 @@ states[GAME_STATE.PLAYING] = {
     for (const companion of companionAngels) {
       companion.update(player);
     }
-    companionAngels = companionAngels.filter((c) => !c.isGone());
+    companionAngels = companionAngels.filter(
+      (c) => !c.sacrificed && !c.hasLeftScreen(),
+    );
   },
   draw(_, screen) {
     platforms.draw(screen);
