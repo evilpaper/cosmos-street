@@ -147,8 +147,8 @@ canvas {
   filter: drop-shadow(0 0 1px var(--color-sound-on));
 }
 
-/* Mobile portrait - check for portrait orientation with height constraint */
-@media (max-width: 480px) and (max-height: 960px) {
+/* Mobile portrait - touch-first devices in portrait */
+@media (max-width: 480px) and (max-height: 960px) and (hover: none) and (pointer: coarse) {
   .game {
     flex-direction: column;
     justify-content: flex-start;
@@ -163,8 +163,8 @@ canvas {
   }
 }
 
-/* Mobile landscape - prioritize height over width */
-@media (max-height: 600px) {
+/* Mobile landscape - touch-first devices in landscape */
+@media (max-height: 600px) and (hover: none) and (pointer: coarse) {
   canvas {
     width: min(100vw, 100vh);
     height: min(100vw, 100vh);
