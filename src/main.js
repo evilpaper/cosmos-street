@@ -185,6 +185,145 @@ function enterGameOverFromPlaying({ playDropSound = false } = {}) {
 }
 
 /**
+ * World orchestration — shared between PLAYING and GAME_OVER.
+ */
+
+function updateWorld() {
+  platforms.update();
+
+  for (const angel of angels) {
+    angel.update();
+  }
+
+  for (const enemy of enemies) {
+    enemy.update();
+  }
+
+  for (const sparkle of sparkles) {
+    sparkle.update();
+  }
+  sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
+
+  for (const explosion of electricExplosions) {
+    explosion.update();
+  }
+  electricExplosions = electricExplosions.filter(
+    (explosion) => !explosion.isDone(),
+  );
+
+  for (const companion of companionAngels) {
+    companion.update(player);
+  }
+  companionAngels = companionAngels.filter(
+    (c) => !c.sacrificed && !c.hasLeftScreen(),
+  );
+}
+
+function drawWorld(screen) {
+  platforms.draw(screen);
+
+  for (const enemy of enemies) {
+    enemy.draw(screen);
+  }
+
+  for (const sparkle of sparkles) {
+    sparkle.draw(screen);
+  }
+
+  player.draw(screen);
+
+  for (const companion of companionAngels) {
+    companion.draw(screen);
+  }
+
+  for (const angel of angels) {
+    angel.draw(screen);
+  }
+
+  for (const explosion of electricExplosions) {
+    explosion.draw(screen);
+  }
+}
+
+/**
+ * PLAYING-only rules
+ */
+
+function respawnOffscreenAngels() {
+  for (const angel of angels) {
+    if (angel.isPlaced && angel.x + angel.width < 0) {
+      scoreIncrement = 1;
+      angel.spawnAngel(platforms.tiles);
+    }
+  }
+}
+
+function collectAngels() {
+  for (let i = angels.length - 1; i >= 0; i--) {
+    const angel = angels[i];
+    if (angel.isPlaced && checkCollision(player, angel.getHitbox())) {
+      sparkles.push(createSparkle(angel.x, angel.y - 8));
+      if (!player.hasCompanionAngel) {
+        player.hasCompanionAngel = true;
+        companionAngels.push(
+          createCompanionAngel({
+            initialTick: angel.getTick(),
+            startX: angel.x,
+            startY: angel.y,
+          }),
+        );
+        angels.splice(i, 1);
+      }
+      score += scoreIncrement;
+      scoreIncrement += 1;
+      sfx(sounds.angel);
+      if (score > highScore) {
+        highScore = score;
+        highScoreUpdated = true;
+      }
+    }
+  }
+}
+
+function respawnEnemy(enemy) {
+  enemies.splice(enemies.indexOf(enemy), 1);
+  enemies.push(createEnemy(SCREEN_WIDTH + 12, randomInRange(48, 164)));
+}
+
+function handleEnemyEncounters() {
+  for (const enemy of enemies) {
+    if (checkCollision(player, enemy.getHitbox())) {
+      if (player.hasCompanionAngel) {
+        player.hasCompanionAngel = false;
+        const following = companionAngels.find((c) => !c.sacrificed);
+        if (following) {
+          following.beginSacrifice();
+        }
+        electricExplosions.push(
+          createElectricExplosion(
+            enemy.x + (enemy.width - 35) / 2,
+            enemy.y + (enemy.height - 35) / 2,
+          ),
+        );
+        respawnEnemy(enemy);
+        sfx(sounds.enemyKill);
+      } else {
+        if (player.state !== "obliterating") {
+          sfx(sounds.crash);
+        }
+        player.state = "obliterating";
+        scrollSpeed = 0;
+        player.dy = 0;
+      }
+    }
+
+    if (enemy.x + enemy.width < 0) {
+      respawnEnemy(enemy);
+    }
+  }
+}
+
+/**
  * States
  */
 
@@ -253,7 +392,6 @@ states[GAME_STATE.PLAYING] = {
     music(songs.theme, 0.5);
   },
   update() {
-    // Check for death conditions first.
     if (playerHasFallenOffScreen()) {
       enterGameOverFromPlaying({ playDropSound: true });
       return;
@@ -267,114 +405,15 @@ states[GAME_STATE.PLAYING] = {
     time += 1;
     title.slideOut();
     player.update(platforms.tiles, time);
-    platforms.update();
+    updateWorld();
 
-    for (const angel of angels) {
-      angel.update();
-    }
-
-    // Spawn angel at new tile if it scrolled off the left side of the screen.
-    for (const angel of angels) {
-      if (angel.isPlaced && angel.x + angel.width < 0) {
-        scoreIncrement = 1; // Reset score increment when a new angel is spawned.
-        angel.spawnAngel(platforms.tiles);
-      }
-    }
-
-    //
-    for (let i = angels.length - 1; i >= 0; i--) {
-      const angel = angels[i];
-      if (angel.isPlaced && checkCollision(player, angel.getHitbox())) {
-        sparkles.push(createSparkle(angel.x, angel.y - 8));
-        // Convert the angel to a companion angel.
-        if (!player.hasCompanionAngel) {
-          player.hasCompanionAngel = true;
-          companionAngels.push(
-            createCompanionAngel({
-              initialTick: angel.getTick(),
-              startX: angel.x,
-              startY: angel.y,
-            }),
-          );
-          angels.splice(i, 1);
-        }
-        score += scoreIncrement;
-        scoreIncrement += 1;
-        sfx(sounds.angel);
-        if (score > highScore) {
-          highScore = score;
-          highScoreUpdated = true;
-        }
-      }
-    }
-
-    for (const enemy of enemies) {
-      enemy.update();
-
-      if (checkCollision(player, enemy.getHitbox())) {
-        if (player.hasCompanionAngel) {
-          player.hasCompanionAngel = false;
-          const following = companionAngels.find((c) => !c.sacrificed);
-          if (following) {
-            following.beginSacrifice();
-          }
-          electricExplosions.push(
-            createElectricExplosion(
-              enemy.x + (enemy.width - 35) / 2,
-              enemy.y + (enemy.height - 35) / 2,
-            ),
-          );
-          enemies.splice(enemies.indexOf(enemy), 1);
-          enemies.push(
-            createEnemy(
-              SCREEN_WIDTH + 12,
-              Math.floor(Math.random() * (164 - 48 + 1)) + 48,
-            ),
-          );
-          sfx(sounds.enemyKill);
-        } else {
-          if (player.state !== "obliterating") {
-            sfx(sounds.crash);
-          }
-          player.state = "obliterating";
-          scrollSpeed = 0;
-          player.dy = 0;
-        }
-      }
-
-      if (enemy.x + enemy.width < 0) {
-        enemies.splice(enemies.indexOf(enemy), 1);
-        enemies.push(
-          createEnemy(
-            SCREEN_WIDTH + 12,
-            Math.floor(Math.random() * (164 - 48 + 1)) + 48,
-          ),
-        );
-      }
-    }
-
-    // Update sparkles and remove finished ones.
-    for (const sparkle of sparkles) {
-      sparkle.update();
-    }
-    sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
-
-    for (const explosion of electricExplosions) {
-      explosion.update();
-    }
-    electricExplosions = electricExplosions.filter(
-      (explosion) => !explosion.isDone(),
-    );
-
-    for (const companion of companionAngels) {
-      companion.update(player);
-    }
-    companionAngels = companionAngels.filter(
-      (c) => !c.sacrificed && !c.hasLeftScreen(),
-    );
+    respawnOffscreenAngels();
+    collectAngels();
+    handleEnemyEncounters();
   },
   draw(_, screen) {
-    platforms.draw(screen);
+    drawWorld(screen);
+
     if (firstTimeStarting()) {
       title.draw(screen);
 
@@ -386,27 +425,6 @@ states[GAME_STATE.PLAYING] = {
         print("←,→,↑ to start", "center", 186);
         print("S to toggle sound", "center", 202);
       }
-    }
-
-    for (const enemy of enemies) {
-      enemy.draw(screen);
-    }
-
-    for (const sparkle of sparkles) {
-      sparkle.draw(screen);
-    }
-
-    player.draw(screen);
-
-    for (const companion of companionAngels) {
-      companion.draw(screen);
-    }
-    for (const angel of angels) {
-      angel.draw(screen);
-    }
-
-    for (const explosion of electricExplosions) {
-      explosion.draw(screen);
     }
 
     if (time > 24 && time < 64) {
@@ -433,7 +451,6 @@ states[GAME_STATE.GAME_OVER] = {
     scrollSpeed = 0;
     deadTimer += 1;
 
-    // Restart game if user presses a key.
     if (input.left || input.right) {
       restartGame();
       return;
@@ -445,46 +462,10 @@ states[GAME_STATE.GAME_OVER] = {
     }
 
     player.update(platforms.tiles, time);
-    platforms.update();
-    for (const angel of angels) {
-      angel.update();
-    }
-    for (const enemy of enemies) {
-      enemy.update();
-    }
-    for (const sparkle of sparkles) {
-      sparkle.update();
-    }
-    // Remove finished sparkles.
-    sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
-    for (const explosion of electricExplosions) {
-      explosion.update();
-    }
-    electricExplosions = electricExplosions.filter(
-      (explosion) => !explosion.isDone(),
-    );
+    updateWorld();
   },
   draw(_, screen) {
-    platforms.draw(screen);
-    for (const enemy of enemies) {
-      enemy.draw(screen);
-    }
-
-    for (const sparkle of sparkles) {
-      sparkle.draw(screen);
-    }
-
-    player.draw(screen);
-
-    for (const explosion of electricExplosions) {
-      explosion.draw(screen);
-    }
-    for (const companion of companionAngels) {
-      companion.draw(screen);
-    }
-    for (const angel of angels) {
-      angel.draw(screen);
-    }
+    drawWorld(screen);
 
     if (deadTimer > 0) {
       if (highScoreUpdated) {
