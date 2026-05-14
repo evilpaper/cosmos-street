@@ -214,9 +214,8 @@ function updateWorld() {
   for (const companion of companionAngels) {
     companion.update(player);
   }
-  companionAngels = companionAngels.filter(
-    (c) => !c.sacrificed && !c.hasLeftScreen(),
-  );
+
+  companionAngels = companionAngels.filter((c) => !c.hasLeftScreen());
 }
 
 function drawWorld(screen) {
