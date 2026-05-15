@@ -250,7 +250,7 @@ function drawWorld(screen) {
 
 function respawnOffscreenAngels() {
   for (const angel of angels) {
-    if (angel.isPlaced && angel.x + angel.width < 0) {
+    if (angel.x + angel.width < 0) {
       scoreIncrement = 1;
       angel.spawnAngel(platforms.tiles);
     }
@@ -260,7 +260,7 @@ function respawnOffscreenAngels() {
 function collectAngels() {
   for (let i = angels.length - 1; i >= 0; i--) {
     const angel = angels[i];
-    if (angel.isPlaced && checkCollision(player, angel.getHitbox())) {
+    if (checkCollision(player, angel.getHitbox())) {
       sparkles.push(createSparkle(angel.x, angel.y - 8));
       if (!player.hasCompanionAngel) {
         player.hasCompanionAngel = true;
@@ -404,6 +404,7 @@ states[GAME_STATE.PLAYING] = {
     time += 1;
     title.slideOut();
     player.update(platforms.tiles, time);
+
     updateWorld();
 
     respawnOffscreenAngels();
@@ -533,7 +534,7 @@ function restartGame() {
 function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
-  angels = [createAngel(platforms.tiles)];
+  angels = [];
   companionAngels = [];
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
@@ -577,6 +578,11 @@ function update() {
   for (const star of stars) {
     star.update();
   }
+
+  if (angels.length === 0 && companionAngels.length === 0) {
+    angels.push(createAngel(platforms.tiles));
+  }
+
   game.update();
 }
 

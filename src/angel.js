@@ -27,6 +27,8 @@ function createAngel(tiles) {
   const OSCILLATION_SPEED = 0.1;
   const FLOAT_HEIGHT = 10;
 
+  const STATES = ["idle", "approach", "follow", "leave"];
+
   const spawnOptions = {
     screenWidth: SCREEN_WIDTH, // Use the global SCREEN_WIDTH constant.
     spriteWidth: WIDTH,
@@ -38,27 +40,24 @@ function createAngel(tiles) {
   let tick = 0;
   let x;
   let y;
-  let initial;
+  // let initial;
 
   const initialPosition = findAngelPositionOnTile(tiles, spawnOptions);
-  let isPlaced = initialPosition !== null;
 
-  if (isPlaced) {
-    initial = initialPosition;
-    x = initialPosition.x;
-    y = initialPosition.y;
-  } else {
-    initial = null;
-    x = 0;
-    y = 0;
+  // If no position if found we return nothing. This means that whatever called createAngel need to handle retry.
+  if (initialPosition === null) {
+    return;
   }
+
+  x = initialPosition.x;
+  y = initialPosition.y;
 
   return {
     x: x,
     y: y,
     width: WIDTH,
     height: HEIGHT,
-    isPlaced: isPlaced,
+    state: STATES[0],
 
     getHitbox() {
       return {
@@ -74,35 +73,20 @@ function createAngel(tiles) {
     },
 
     update() {
-      // Return early if the angel is not placed.
-      if (!isPlaced) {
-        this.spawnAngel(tiles);
-        return;
-      }
-
       this.x -= scrollSpeed;
       tick += 1;
       this.y = Math.round(
-        initial.y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
+        initialPosition.y +
+          Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
       );
     },
 
     draw(screen) {
-      if (!isPlaced) {
-        return;
-      }
-
       const spriteFrameX = 0;
       const spriteFrameY = 0;
 
       const drawX = Math.round(this.x);
       const drawY = Math.round(this.y);
-
-      /**
-       * Draw hitbox. For debugging purposes.
-       */
-      // screen.fillStyle = "cyan";
-      // screen.fillRect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
 
       screen.drawImage(
         angelSpriteSheet,
@@ -115,21 +99,6 @@ function createAngel(tiles) {
         WIDTH,
         HEIGHT,
       );
-    },
-
-    spawnAngel(tiles) {
-      const newPosition = findAngelPositionOnTile(tiles, spawnOptions);
-      if (newPosition !== null) {
-        this.x = newPosition.x;
-        this.y = newPosition.y;
-        initial = newPosition;
-        tick = 0;
-        isPlaced = true;
-        this.isPlaced = true;
-      } else {
-        isPlaced = false;
-        this.isPlaced = false;
-      }
     },
   };
 }
