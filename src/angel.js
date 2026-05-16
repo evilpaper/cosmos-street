@@ -129,7 +129,6 @@ function createCompanionAngel({
     sacrificed: false,
 
     beginSacrifice() {
-      this.sacrificed = true;
       this.state = "leave";
     },
 
@@ -138,7 +137,7 @@ function createCompanionAngel({
     },
 
     update(player) {
-      if (this.sacrificed) {
+      if (this.state === "leave") {
         this.y = Math.round(this.y - DEPART_SPEED);
         this.x = Math.round(this.x + 1);
         return;
