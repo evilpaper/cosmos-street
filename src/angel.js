@@ -40,7 +40,6 @@ function createAngel(tiles) {
   let tick = 0;
   let x;
   let y;
-  // let initial;
 
   const initialPosition = findAngelPositionOnTile(tiles, spawnOptions);
 
@@ -57,7 +56,7 @@ function createAngel(tiles) {
     y: y,
     width: WIDTH,
     height: HEIGHT,
-    state: STATES[0],
+    state: STATES.idle,
 
     getHitbox() {
       return {
@@ -116,6 +115,7 @@ function createCompanionAngel({
   const ANCHOR_OFFSET_Y = -16;
   const INTRO_DURATION_FRAMES = 30;
   const DEPART_SPEED = 2;
+  const STATES = ["approach", "follow", "leave"];
 
   let tick = initialTick;
   let introProgress = 0;
@@ -125,10 +125,12 @@ function createCompanionAngel({
     y: pickupY,
     width: WIDTH,
     height: HEIGHT,
+    state: STATES[0],
     sacrificed: false,
 
     beginSacrifice() {
       this.sacrificed = true;
+      this.state = "leave";
     },
 
     hasLeftScreen() {
@@ -152,7 +154,14 @@ function createCompanionAngel({
         const eased = 1 - (1 - introProgress) ** 3;
         this.x = Math.round(pickupX + (targetX - pickupX) * eased);
         this.y = Math.round(pickupY + (targetY - pickupY) * eased);
+        if (introProgress >= 1 && this.state === "approach") {
+          this.state = "follow";
+        }
         return; // Exit the function early if we are still in the intro phase.
+      }
+
+      if (this.state === "approach") {
+        this.state = "follow";
       }
 
       tick += 1;

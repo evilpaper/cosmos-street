@@ -250,9 +250,10 @@ function drawWorld(screen) {
 
 function respawnOffscreenAngels() {
   for (const angel of angels) {
-    if (angel.x + angel.width < 0) {
+    if (angel.x + angel.width < -25) {
       scoreIncrement = 1;
-      angel.spawnAngel(platforms.tiles);
+      // angel.spawnAngel(platforms.tiles)
+      angels.splice(angels.indexOf(angel), 1);
     }
   }
 }
