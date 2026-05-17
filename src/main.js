@@ -295,7 +295,7 @@ function handleEnemyEncounters() {
     if (checkCollision(player, enemy.getHitbox())) {
       if (player.hasCompanionAngel) {
         player.hasCompanionAngel = false;
-        const following = companionAngels.find((c) => !c.sacrificed);
+        const following = companionAngels.find((c) => c.state !== "leave");
         if (following) {
           following.beginSacrifice();
         }

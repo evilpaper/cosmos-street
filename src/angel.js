@@ -126,7 +126,6 @@ function createCompanionAngel({
     width: WIDTH,
     height: HEIGHT,
     state: STATES[0],
-    sacrificed: false,
 
     beginSacrifice() {
       this.state = "leave";
@@ -158,6 +157,8 @@ function createCompanionAngel({
         }
         return; // Exit the function early if we are still in the intro phase.
       }
+
+      if (this.state !== "follow") return;
 
       tick += 1;
       this.x = Math.round(targetX);
