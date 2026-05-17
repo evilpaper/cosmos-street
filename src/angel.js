@@ -148,19 +148,15 @@ function createCompanionAngel({
 
       // Intro phase: Ease in to the target position.
       // Basically for INTRO_DURATION_FRAMES amount of frames, move the angel towards the the position.
-      if (introProgress < 1) {
+      if (this.state === "approach") {
         introProgress = Math.min(1, introProgress + 1 / INTRO_DURATION_FRAMES);
         const eased = 1 - (1 - introProgress) ** 3;
         this.x = Math.round(pickupX + (targetX - pickupX) * eased);
         this.y = Math.round(pickupY + (targetY - pickupY) * eased);
-        if (introProgress >= 1 && this.state === "approach") {
+        if (introProgress >= 1) {
           this.state = "follow";
         }
         return; // Exit the function early if we are still in the intro phase.
-      }
-
-      if (this.state === "approach") {
-        this.state = "follow";
       }
 
       tick += 1;
