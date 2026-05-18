@@ -103,7 +103,6 @@ function createAngel(tiles) {
 }
 
 
-
 function createCompanionAngel({
   initialTick = 0, // The tick of the angel that was picked up. Tick is used to animate the angel's oscillation.
   startX: pickupX = 0, // The x position of the angel that was picked up.
@@ -156,6 +155,12 @@ function createCompanionAngel({
     );
   }
 
+  const updateByState = {
+    leave: updateLeave,
+    approach: updateApproach,
+    follow: updateFollow,
+  };
+
   return {
     x: pickupX,
     y: pickupY,
@@ -172,9 +177,7 @@ function createCompanionAngel({
     },
 
     update(player) {
-      if (this.state === "leave") return updateLeave(this);
-      if (this.state === "approach") return updateApproach(this, player);
-      if (this.state === "follow") return updateFollow(this, player);
+      updateByState[this.state]?.(this, player);
     },
 
     draw(screen) {
