@@ -102,6 +102,8 @@ function createAngel(tiles) {
   };
 }
 
+
+
 function createCompanionAngel({
   initialTick = 0, // The tick of the angel that was picked up. Tick is used to animate the angel's oscillation.
   startX: pickupX = 0, // The x position of the angel that was picked up.
@@ -120,6 +122,40 @@ function createCompanionAngel({
   let tick = initialTick;
   let introProgress = 0;
 
+  function anchorFor(player) {
+    return {
+      x: player.x + ANCHOR_OFFSET_X,
+      y: player.y + ANCHOR_OFFSET_Y,
+    };
+  }
+
+  function updateLeave(angel) {
+    angel.y = Math.round(angel.y - DEPART_SPEED);
+    angel.x = Math.round(angel.x + 1);
+  }
+
+  function updateApproach(angel, player) {
+    const { x: targetX, y: targetY } = anchorFor(player);
+
+    introProgress = Math.min(1, introProgress + 1 / INTRO_DURATION_FRAMES);
+    const eased = 1 - (1 - introProgress) ** 3;
+    angel.x = Math.round(pickupX + (targetX - pickupX) * eased);
+    angel.y = Math.round(pickupY + (targetY - pickupY) * eased);
+    if (introProgress >= 1) {
+      angel.state = "follow";
+    }
+  }
+
+  function updateFollow(angel, player) {
+    const { x: targetX, y: targetY } = anchorFor(player);
+
+    tick += 1;
+    angel.x = Math.round(targetX);
+    angel.y = Math.round(
+      targetY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
+    );
+  }
+
   return {
     x: pickupX,
     y: pickupY,
@@ -136,35 +172,9 @@ function createCompanionAngel({
     },
 
     update(player) {
-      if (this.state === "leave") {
-        this.y = Math.round(this.y - DEPART_SPEED);
-        this.x = Math.round(this.x + 1);
-        return;
-      }
-
-      const targetX = player.x + ANCHOR_OFFSET_X;
-      const targetY = player.y + ANCHOR_OFFSET_Y;
-
-      // Intro phase: Ease in to the target position.
-      // Basically for INTRO_DURATION_FRAMES amount of frames, move the angel towards the the position.
-      if (this.state === "approach") {
-        introProgress = Math.min(1, introProgress + 1 / INTRO_DURATION_FRAMES);
-        const eased = 1 - (1 - introProgress) ** 3;
-        this.x = Math.round(pickupX + (targetX - pickupX) * eased);
-        this.y = Math.round(pickupY + (targetY - pickupY) * eased);
-        if (introProgress >= 1) {
-          this.state = "follow";
-        }
-        return; // Exit the function early if we are still in the intro phase.
-      }
-
-      if (this.state !== "follow") return;
-
-      tick += 1;
-      this.x = Math.round(targetX);
-      this.y = Math.round(
-        targetY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
-      );
+      if (this.state === "leave") return updateLeave(this);
+      if (this.state === "approach") return updateApproach(this, player);
+      if (this.state === "follow") return updateFollow(this, player);
     },
 
     draw(screen) {
