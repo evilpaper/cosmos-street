@@ -51,12 +51,28 @@ function createAngel(tiles) {
   x = initialPosition.x;
   y = initialPosition.y;
 
+  function updateIdle(angel) {
+    angel.x -= scrollSpeed;
+    tick += 1;
+    angel.y = Math.round(
+      initialPosition.y +
+        Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
+    );
+  }
+
+  const updateByState = {
+    idle: updateIdle,
+    // approach: updateApproach,
+    // follow: updateFollow,
+    // leave: updateLeave,
+  };
+
   return {
     x: x,
     y: y,
     width: WIDTH,
     height: HEIGHT,
-    state: STATES.idle,
+    state: STATES[0],
 
     getHitbox() {
       return {
@@ -72,12 +88,7 @@ function createAngel(tiles) {
     },
 
     update() {
-      this.x -= scrollSpeed;
-      tick += 1;
-      this.y = Math.round(
-        initialPosition.y +
-          Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
-      );
+      updateByState[this.state]?.(this);
     },
 
     draw(screen) {
@@ -101,7 +112,6 @@ function createAngel(tiles) {
     },
   };
 }
-
 
 function createCompanionAngel({
   initialTick = 0, // The tick of the angel that was picked up. Tick is used to animate the angel's oscillation.
