@@ -196,7 +196,7 @@ function updateWorld() {
 
   // Remove angels that has left the screen. Either to the left edge or the top edge.
   angels = angels.filter(
-    (angel) => !(angel.x + angel.width <= -16 || angel.y + angel.height <= -16),
+    (angel) => !(angel.x + angel.width <= -36 || angel.y + angel.height <= -36),
   );
 
   for (const enemy of enemies) {
