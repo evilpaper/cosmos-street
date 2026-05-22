@@ -194,6 +194,7 @@ function updateWorld() {
     angel.update(player);
   }
 
+  // Remove angels that has left the screen. Either to the left edge or the top edge.
   angels = angels.filter(
     (angel) => !(angel.x + angel.width <= -16 || angel.y + angel.height <= -16),
   );
