@@ -83,7 +83,6 @@ let time = 0;
 let stars;
 let platforms;
 let angels;
-let companionAngels;
 let sparkles;
 let electricExplosions;
 let skateboardSparkle;
@@ -192,7 +191,7 @@ function updateWorld() {
   platforms.update();
 
   for (const angel of angels) {
-    angel.update();
+    angel.update(player);
   }
 
   for (const enemy of enemies) {
@@ -210,12 +209,6 @@ function updateWorld() {
   electricExplosions = electricExplosions.filter(
     (explosion) => !explosion.isDone(),
   );
-
-  for (const companion of companionAngels) {
-    companion.update(player);
-  }
-
-  companionAngels = companionAngels.filter((c) => !c.hasLeftScreen());
 }
 
 function drawWorld(screen) {
@@ -230,10 +223,6 @@ function drawWorld(screen) {
   }
 
   player.draw(screen);
-
-  for (const companion of companionAngels) {
-    companion.draw(screen);
-  }
 
   for (const angel of angels) {
     angel.draw(screen);
@@ -252,7 +241,6 @@ function respawnOffscreenAngels() {
   for (const angel of angels) {
     if (angel.x + angel.width < -25) {
       scoreIncrement = 1;
-      // angel.spawnAngel(platforms.tiles)
       angels.splice(angels.indexOf(angel), 1);
     }
   }
@@ -261,18 +249,16 @@ function respawnOffscreenAngels() {
 function collectAngels() {
   for (let i = angels.length - 1; i >= 0; i--) {
     const angel = angels[i];
+    if (angel.state !== "idle") {
+      return;
+    }
     if (checkCollision(player, angel.getHitbox())) {
       sparkles.push(createSparkle(angel.x, angel.y - 8));
       if (!player.hasCompanionAngel) {
         player.hasCompanionAngel = true;
-        companionAngels.push(
-          createCompanionAngel({
-            initialTick: angel.getTick(),
-            startX: angel.x,
-            startY: angel.y,
-          }),
-        );
-        angels.splice(i, 1);
+        angel.pickedUpX = angel.x;
+        angel.pickedUpY = angel.y;
+        angel.state = "approach";
       }
       score += scoreIncrement;
       scoreIncrement += 1;
@@ -295,9 +281,9 @@ function handleEnemyEncounters() {
     if (checkCollision(player, enemy.getHitbox())) {
       if (player.hasCompanionAngel) {
         player.hasCompanionAngel = false;
-        const following = companionAngels.find((c) => c.state !== "leave");
+        const following = angels.find((c) => c.state === "follow");
         if (following) {
-          following.beginSacrifice();
+          following.state = "leave";
         }
         electricExplosions.push(
           createElectricExplosion(
@@ -445,7 +431,6 @@ states[GAME_STATE.GAME_OVER] = {
   name: GAME_STATE.GAME_OVER,
   enter() {
     deadTimer = 0;
-    companionAngels = [];
   },
   update() {
     time += 1;
@@ -536,7 +521,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angels = [];
-  companionAngels = [];
+  // companionAngels = [];
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   electricExplosions = [];
@@ -580,7 +565,7 @@ function update() {
     star.update();
   }
 
-  if (angels.length === 0 && companionAngels.length === 0) {
+  if (angels.length === 0) {
     angels.push(createAngel(platforms.tiles));
   }
 
@@ -609,7 +594,6 @@ function draw(screen) {
 function getStartMessage() {
   // Random number between 1 and 10
   const randomNumber = Math.floor(Math.random() * 10) + 1;
-  // a switch statement would be better here
   switch (randomNumber) {
     case 1:
       return "Go for pro!";
