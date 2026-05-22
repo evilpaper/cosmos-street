@@ -194,6 +194,10 @@ function updateWorld() {
     angel.update(player);
   }
 
+  angels = angels.filter(
+    (angel) => !(angel.x + angel.width <= -16 || angel.y + angel.height <= -16),
+  );
+
   for (const enemy of enemies) {
     enemy.update();
   }
@@ -201,11 +205,13 @@ function updateWorld() {
   for (const sparkle of sparkles) {
     sparkle.update();
   }
+
   sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
 
   for (const explosion of electricExplosions) {
     explosion.update();
   }
+
   electricExplosions = electricExplosions.filter(
     (explosion) => !explosion.isDone(),
   );
@@ -236,15 +242,6 @@ function drawWorld(screen) {
 /**
  * PLAYING-only rules
  */
-
-function respawnOffscreenAngels() {
-  for (const angel of angels) {
-    if (angel.x + angel.width < -25) {
-      scoreIncrement = 1;
-      angels.splice(angels.indexOf(angel), 1);
-    }
-  }
-}
 
 function collectAngels() {
   for (let i = angels.length - 1; i >= 0; i--) {
@@ -393,8 +390,6 @@ states[GAME_STATE.PLAYING] = {
     player.update(platforms.tiles, time);
 
     updateWorld();
-
-    respawnOffscreenAngels();
     collectAngels();
     handleEnemyEncounters();
   },
