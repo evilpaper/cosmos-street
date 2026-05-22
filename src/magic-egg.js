@@ -2,7 +2,7 @@ const collectibleSpriteSheet = loadOnce(
   "./images/collectibles-sprite-sheet.png",
 );
 
-function createCollectible(tiles, frameNumber) {
+function createMagicEgg(tiles, frameNumber) {
   const WIDTH = 16;
   const HEIGHT = 16;
 
@@ -52,7 +52,7 @@ function createCollectible(tiles, frameNumber) {
       }
 
       // first frame is 1, start at 0. Second frame is 2, start at 16. And so on.
-      const spriteFrameX = (frameNumber - 1) * 16;
+      const spriteFrameX = 1 * 16;
       const spriteFrameY = 0;
 
       const drawX = Math.round(this.x);

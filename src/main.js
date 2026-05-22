@@ -83,6 +83,7 @@ let time = 0;
 let stars;
 let platforms;
 let angels;
+let magicEggs;
 let sparkles;
 let electricExplosions;
 let skateboardSparkle;
@@ -197,6 +198,14 @@ function updateWorld() {
   // Remove angels that has left the screen. Either to the left edge or the top edge.
   angels = angels.filter((angel) => !(angel.x <= -36 || angel.y <= -56));
 
+  for (const magicEgg of magicEggs) {
+    magicEgg.update();
+  }
+
+  magicEggs = magicEggs.filter(
+    (magicEgg) => !(magicEgg.x <= -36 || magicEgg.y <= -56),
+  );
+
   for (const enemy of enemies) {
     enemy.update();
   }
@@ -231,6 +240,10 @@ function drawWorld(screen) {
 
   for (const angel of angels) {
     angel.draw(screen);
+  }
+
+  for (const magicEgg of magicEggs) {
+    magicEgg.draw(screen);
   }
 
   for (const explosion of electricExplosions) {
@@ -390,6 +403,7 @@ states[GAME_STATE.PLAYING] = {
 
     updateWorld();
     collectAngels();
+    // collectMagicEggs();
     handleEnemyEncounters();
   },
   draw(_, screen) {
@@ -515,7 +529,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angels = [];
-  // companionAngels = [];
+  magicEggs = [];
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   electricExplosions = [];
@@ -561,6 +575,10 @@ function update() {
 
   if (angels.length === 0) {
     angels.push(createAngel(platforms.tiles));
+  }
+
+  if (magicEggs.length === 0) {
+    magicEggs.push(createMagicEgg(platforms.tiles, 1));
   }
 
   game.update();

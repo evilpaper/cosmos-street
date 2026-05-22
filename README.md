@@ -1,7 +1,6 @@
 # Cosmos Street
 
-Your angel buddies are trapped in space. Bring them home as quickly as possible, but watch out for the nefarious alien machines.
-A nostalgic skate ride, freely inspired by Wonder Boy’s skateboard runs on the Sega Master System.
+Surrounded by waves of sinister alien machines, your only hope is to skate your way through the stars! Collect Angel Buddies, crack open Magic Eggs, and survive the cosmic chaos!
 
 [--> Click here to play <--](https://evilpaper.github.io/cosmos-street/)
 
