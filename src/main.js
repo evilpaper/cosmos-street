@@ -184,6 +184,22 @@ function enterGameOverFromPlaying({ playDropSound = false } = {}) {
   game.setState(states[GAME_STATE.GAME_OVER]);
 }
 
+function hasPassedLeftEdge(entity) {
+  const MIN_DISTANCE_AFTER_EDGE = -100;
+  if (entity.x + entity.width < MIN_DISTANCE_AFTER_EDGE) {
+    return true;
+  }
+  return false;
+}
+
+function hasPassedTopEdge(entity) {
+  const MIN_DISTANCE_AFTER_EDGE = -100;
+  if (entity.y + entity.height < MIN_DISTANCE_AFTER_EDGE) {
+    return true;
+  }
+  return false;
+}
+
 /**
  * World orchestration — shared between PLAYING and GAME_OVER.
  */
@@ -196,7 +212,9 @@ function updateWorld() {
   }
 
   // Remove angels that has left the screen. Either to the left edge or the top edge.
-  angels = angels.filter((angel) => !(angel.x <= -36 || angel.y <= -56));
+  angels = angels.filter(
+    (angel) => !(hasPassedLeftEdge(angel) || hasPassedTopEdge(angel)),
+  );
 
   for (const magicEgg of magicEggs) {
     magicEgg.update();
