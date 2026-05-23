@@ -298,6 +298,21 @@ function collectAngels() {
   }
 }
 
+function collectMagicEggs() {
+  for (let i = magicEggs.length - 1; i >= 0; i--) {
+    const magicEgg = magicEggs[i];
+    if (checkCollision(player, magicEgg.getHitbox())) {
+      sparkles.push(createSparkle(magicEgg.x, magicEgg.y - 8));
+      magicEggs.splice(i, 1);
+      magicEggs.push(createMagicEgg(platforms.tiles, 1));
+    }
+    if (magicEgg.x + magicEgg.width < 0) {
+      magicEggs.splice(i, 1);
+      magicEggs.push(createMagicEgg(platforms.tiles, 1));
+    }
+  }
+}
+
 function respawnEnemy(enemy) {
   enemies.splice(enemies.indexOf(enemy), 1);
   enemies.push(createEnemy(SCREEN_WIDTH + 12, randomInRange(48, 164)));
@@ -421,7 +436,7 @@ states[GAME_STATE.PLAYING] = {
 
     updateWorld();
     collectAngels();
-    // collectMagicEggs();
+    collectMagicEggs();
     handleEnemyEncounters();
   },
   draw(_, screen) {

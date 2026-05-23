@@ -5,6 +5,8 @@ const collectibleSpriteSheet = loadOnce(
 function createMagicEgg(tiles, frameNumber) {
   const WIDTH = 16;
   const HEIGHT = 16;
+  const HITBOX_WIDTH = 8;
+  const HITBOX_HEIGHT = 8;
 
   // Find initial position on a tile
   function findPositionOnTile(tiles) {
@@ -32,6 +34,15 @@ function createMagicEgg(tiles, frameNumber) {
     width: WIDTH,
     height: HEIGHT,
     active: active,
+
+    getHitbox() {
+      return {
+        x: this.x + (WIDTH - HITBOX_WIDTH) / 2,
+        y: this.y + (HEIGHT - HITBOX_HEIGHT) / 2,
+        width: HITBOX_WIDTH,
+        height: HITBOX_HEIGHT,
+      };
+    },
 
     update() {
       // Auto-respawn if inactive and tiles become available
