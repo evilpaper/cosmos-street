@@ -241,6 +241,10 @@ function updateWorld() {
   electricExplosions = electricExplosions.filter(
     (explosion) => !explosion.isDone(),
   );
+
+  if (skateboardSparkle) {
+    skateboardSparkle.update();
+  }
 }
 
 function drawWorld(screen) {
@@ -266,6 +270,10 @@ function drawWorld(screen) {
 
   for (const explosion of electricExplosions) {
     explosion.draw(screen);
+  }
+
+  if (skateboardSparkle) {
+    skateboardSparkle.draw(screen);
   }
 }
 
