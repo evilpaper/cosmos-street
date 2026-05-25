@@ -122,8 +122,9 @@ async function loadSounds() {
   sounds.jump = await loadSound("audio/jump.ogg");
   sounds.crash = await loadSound("audio/fireball.ogg");
   sounds.angel = await loadSound("audio/select-cursor.ogg");
+  sounds.magicEgg = await loadSound("audio/box-get.ogg");
   sounds.drop = await loadSound("audio/fireball.ogg");
-  sounds.electrified = await loadSound("audio/penguin-land-04.ogg");
+  sounds.electrified = await loadSound("audio/spring.ogg");
   sounds.enemyKill = await loadSound("audio/dragon-breath.ogg");
 }
 

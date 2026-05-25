@@ -313,6 +313,7 @@ function collectMagicEggs() {
       sparkles.push(createSparkle(magicEgg.x, magicEgg.y - 8));
       magicEggs.splice(i, 1);
       magicEggs.push(createMagicEgg(platforms.tiles, 1));
+      sfx(sounds.magicEgg);
     }
     if (magicEgg.x + magicEgg.width < 0) {
       magicEggs.splice(i, 1);
