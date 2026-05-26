@@ -317,6 +317,13 @@ function collectMagicEggs() {
       if (!player.hasMagicEgg) {
         player.hasMagicEgg = true;
       }
+      if (player.hasCompanionAngel) {
+        player.hasCompanionAngel = false;
+        const following = angels.find((c) => c.state === "follow");
+        if (following) {
+          following.state = "leave";
+        }
+      }
     }
     if (magicEgg.x + magicEgg.width < 0) {
       magicEggs.splice(i, 1);
