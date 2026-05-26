@@ -272,7 +272,7 @@ function drawWorld(screen) {
     explosion.draw(screen);
   }
 
-  if (skateboardSparkle) {
+  if (player.hasMagicEgg) {
     skateboardSparkle.draw(screen);
   }
 }
@@ -293,6 +293,15 @@ function dismissCompanionAngel(player, angels) {
   return true;
 }
 
+function consumeMagicEgg(player) {
+  if (!player.hasMagicEgg) {
+    return;
+  }
+
+  player.hasMagicEgg = false;
+  return true;
+}
+
 function collectAngels() {
   for (let i = angels.length - 1; i >= 0; i--) {
     const angel = angels[i];
@@ -306,6 +315,7 @@ function collectAngels() {
         angel.pickedUpX = angel.x;
         angel.pickedUpY = angel.y;
         angel.state = "approach";
+        consumeMagicEgg(player);
       }
       score += scoreIncrement;
       scoreIncrement += 1;
