@@ -281,6 +281,18 @@ function drawWorld(screen) {
  * PLAYING-only rules
  */
 
+function dismissCompanionAngel(player, angels) {
+  if (!player.hasCompanionAngel) return false;
+
+  player.hasCompanionAngel = false;
+  const following = angels.find((c) => c.state === "follow");
+  if (following) {
+    following.state = "leave";
+  }
+
+  return true;
+}
+
 function collectAngels() {
   for (let i = angels.length - 1; i >= 0; i--) {
     const angel = angels[i];
@@ -317,13 +329,7 @@ function collectMagicEggs() {
       if (!player.hasMagicEgg) {
         player.hasMagicEgg = true;
       }
-      if (player.hasCompanionAngel) {
-        player.hasCompanionAngel = false;
-        const following = angels.find((c) => c.state === "follow");
-        if (following) {
-          following.state = "leave";
-        }
-      }
+      dismissCompanionAngel(player, angels);
     }
     if (magicEgg.x + magicEgg.width < 0) {
       magicEggs.splice(i, 1);
@@ -340,12 +346,7 @@ function respawnEnemy(enemy) {
 function handleEnemyEncounters() {
   for (const enemy of enemies) {
     if (checkCollision(player, enemy.getHitbox())) {
-      if (player.hasCompanionAngel) {
-        player.hasCompanionAngel = false;
-        const following = angels.find((c) => c.state === "follow");
-        if (following) {
-          following.state = "leave";
-        }
+      if (dismissCompanionAngel(player, angels)) {
         electricExplosions.push(
           createElectricExplosion(
             enemy.x + (enemy.width - 35) / 2,
