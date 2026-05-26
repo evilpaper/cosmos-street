@@ -242,7 +242,7 @@ function updateWorld() {
     (explosion) => !explosion.isDone(),
   );
 
-  if (skateboardSparkle) {
+  if (player.hasMagicEgg) {
     skateboardSparkle.update();
   }
 }
@@ -314,6 +314,9 @@ function collectMagicEggs() {
       magicEggs.splice(i, 1);
       magicEggs.push(createMagicEgg(platforms.tiles, 1));
       sfx(sounds.magicEgg);
+      if (!player.hasMagicEgg) {
+        player.hasMagicEgg = true;
+      }
     }
     if (magicEgg.x + magicEgg.width < 0) {
       magicEggs.splice(i, 1);

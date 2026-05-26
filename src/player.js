@@ -27,6 +27,7 @@ const player = {
   jumpStrengthSpeeding: 8,
   state: "skating", // Initial state is "skating" (this.states[0])
   hasCompanionAngel: false,
+  hasMagicEgg: false,
   isDead: false,
 
   reset() {
@@ -39,6 +40,7 @@ const player = {
     this.dy = 0;
     this.state = this.states[0];
     this.hasCompanionAngel = false;
+    this.hasMagicEgg = false;
     this.isDead = false;
   },
 
