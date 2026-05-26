@@ -285,6 +285,7 @@ function dismissCompanionAngel(player, angels) {
   if (!player.hasCompanionAngel) return false;
 
   player.hasCompanionAngel = false;
+
   const following = angels.find((c) => c.state === "follow");
   if (following) {
     following.state = "leave";
@@ -299,6 +300,7 @@ function consumeMagicEgg(player) {
   }
 
   player.hasMagicEgg = false;
+
   return true;
 }
 
@@ -315,8 +317,8 @@ function collectAngels() {
         angel.pickedUpX = angel.x;
         angel.pickedUpY = angel.y;
         angel.state = "approach";
-        consumeMagicEgg(player);
       }
+      consumeMagicEgg(player);
       score += scoreIncrement;
       scoreIncrement += 1;
       sfx(sounds.angel);
