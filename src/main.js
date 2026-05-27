@@ -221,7 +221,7 @@ function updateWorld() {
   }
 
   magicEggs = magicEggs.filter(
-    (magicEgg) => !(magicEgg.x <= -36 || magicEgg.y <= -56),
+    (magicEgg) => !(hasPassedLeftEdge(magicEgg) || hasPassedTopEdge(magicEgg)),
   );
 
   for (const enemy of enemies) {
@@ -310,6 +310,7 @@ function collectAngels() {
     if (angel.state !== "idle") {
       return;
     }
+
     if (checkCollision(player, angel.getHitbox())) {
       sparkles.push(createSparkle(angel.x, angel.y - 8));
       if (!player.hasCompanionAngel) {
@@ -322,6 +323,7 @@ function collectAngels() {
       score += scoreIncrement;
       scoreIncrement += 1;
       sfx(sounds.angel);
+
       if (score > highScore) {
         highScore = score;
         highScoreUpdated = true;
@@ -336,16 +338,11 @@ function collectMagicEggs() {
     if (checkCollision(player, magicEgg.getHitbox())) {
       sparkles.push(createSparkle(magicEgg.x, magicEgg.y - 8));
       magicEggs.splice(i, 1);
-      magicEggs.push(createMagicEgg(platforms.tiles, 1));
       sfx(sounds.magicEgg);
       if (!player.hasMagicEgg) {
         player.hasMagicEgg = true;
       }
       dismissCompanionAngel(player, angels);
-    }
-    if (magicEgg.x + magicEgg.width < 0) {
-      magicEggs.splice(i, 1);
-      magicEggs.push(createMagicEgg(platforms.tiles, 1));
     }
   }
 }

@@ -2,7 +2,7 @@ const collectibleSpriteSheet = loadOnce(
   "./images/collectibles-sprite-sheet.png",
 );
 
-function createMagicEgg(tiles, frameNumber) {
+function createMagicEgg(tiles) {
   const WIDTH = 16;
   const HEIGHT = 16;
   const HITBOX_WIDTH = 8;
