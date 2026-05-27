@@ -25,6 +25,7 @@ const player = {
   jumpStrength: 7.2,
   jumpStrengthBreaking: 6,
   jumpStrengthSpeeding: 8,
+  doubleJumpStrength: 6,
   state: "skating", // Initial state is "skating" (this.states[0])
   hasCompanionAngel: false,
   hasMagicEgg: false,
@@ -88,7 +89,10 @@ const player = {
 
     if (this.state === "jumping") {
       this.totalFrames = 1;
-      if (input.right) {
+      if (input.up && this.hasMagicEgg) {
+        consumeMagicEgg(this);
+        this.jump(this.doubleJumpStrength);
+      } else if (input.right) {
         this.dive();
       }
     }
