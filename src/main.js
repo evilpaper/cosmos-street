@@ -8,7 +8,7 @@
 
 const GRAVITY = 0.058;
 const FRICTION = 0.32; // A value between 0 and 1 that determines how much friction slows down the player.
-const SCROLL_SPEED_BREAKING = 0.1;
+const SCROLL_SPEED_BREAKING = 0.3;
 const SCROLL_SPEED_SKATING = 1.6;
 const SCROLL_SPEED_SPEEDING = 2.4;
 
@@ -312,7 +312,7 @@ function collectAngels() {
     }
 
     if (checkCollision(player, angel.getHitbox())) {
-      sparkles.push(createSparkle(angel.x, angel.y - 8));
+      // sparkles.push(createSparkle(angel.x, angel.y - 8));
       if (!player.hasCompanionAngel) {
         player.hasCompanionAngel = true;
         angel.pickedUpX = angel.x;
