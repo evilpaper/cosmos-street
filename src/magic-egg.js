@@ -7,6 +7,8 @@ function createMagicEgg(tiles) {
   const HEIGHT = 16;
   const HITBOX_WIDTH = 8;
   const HITBOX_HEIGHT = 8;
+  const SPRITE_SHEET_FRAME_X = 32;
+  const SPRITE_SHEET_FRAME_Y = 0;
 
   // Find initial position on a tile
   function findPositionOnTile(tiles) {
@@ -62,9 +64,9 @@ function createMagicEgg(tiles) {
         return;
       }
 
-      // first frame is 1, start at 0. Second frame is 2, start at 16. And so on.
-      const spriteFrameX = 1 * 16;
-      const spriteFrameY = 0;
+      // No animation here, just the one frame.
+      const spriteFrameX = SPRITE_SHEET_FRAME_X;
+      const spriteFrameY = SPRITE_SHEET_FRAME_Y;
 
       const drawX = Math.round(this.x);
       const drawY = Math.round(this.y);
