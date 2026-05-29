@@ -272,7 +272,7 @@ function drawWorld(screen) {
     explosion.draw(screen);
   }
 
-  if (player.hasMagicEgg) {
+  if (player.state !== "obliterating" && player.hasMagicEgg) {
     skateboardSparkle.draw(screen);
   }
 }
