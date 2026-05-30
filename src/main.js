@@ -242,7 +242,7 @@ function updateWorld() {
     (explosion) => !explosion.isDone(),
   );
 
-  if (player.hasMagicEgg) {
+  if (player.pickup === "egg") {
     skateboardSparkle.update();
   }
 }
@@ -272,7 +272,7 @@ function drawWorld(screen) {
     explosion.draw(screen);
   }
 
-  if (player.state !== "obliterating" && player.hasMagicEgg) {
+  if (player.state !== "obliterating" && player.pickup === "egg") {
     skateboardSparkle.draw(screen);
   }
 }
@@ -282,9 +282,9 @@ function drawWorld(screen) {
  */
 
 function dismissCompanionAngel(player, angels) {
-  if (!player.hasCompanionAngel) return false;
+  if (player.pickup !== "angel") return false;
 
-  player.hasCompanionAngel = false;
+  player.pickup = null;
 
   const following = angels.find((c) => c.state === "follow");
   if (following) {
@@ -295,11 +295,11 @@ function dismissCompanionAngel(player, angels) {
 }
 
 function consumeMagicEgg(player) {
-  if (!player.hasMagicEgg) {
+  if (player.pickup !== "egg") {
     return;
   }
 
-  player.hasMagicEgg = false;
+  player.pickup = null;
 
   return true;
 }
@@ -313,13 +313,12 @@ function collectAngels() {
 
     if (checkCollision(player, angel.getHitbox())) {
       // sparkles.push(createSparkle(angel.x, angel.y - 8));
-      if (!player.hasCompanionAngel) {
-        player.hasCompanionAngel = true;
+      if (player.pickup !== "angel") {
+        player.pickup = "angel";
         angel.pickedUpX = angel.x;
         angel.pickedUpY = angel.y;
         angel.state = "approach";
       }
-      consumeMagicEgg(player);
       score += scoreIncrement;
       scoreIncrement += 1;
       sfx(sounds.angel);
@@ -339,10 +338,8 @@ function collectMagicEggs() {
       sparkles.push(createSparkle(magicEgg.x, magicEgg.y - 8));
       magicEggs.splice(i, 1);
       sfx(sounds.magicEgg);
-      if (!player.hasMagicEgg) {
-        player.hasMagicEgg = true;
-      }
       dismissCompanionAngel(player, angels);
+      player.pickup = "egg";
     }
   }
 }

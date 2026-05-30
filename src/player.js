@@ -27,8 +27,7 @@ const player = {
   jumpStrengthSpeeding: 8,
   doubleJumpStrength: 6,
   state: "skating", // Initial state is "skating" (this.states[0])
-  hasCompanionAngel: false,
-  hasMagicEgg: false,
+  pickup: null, // null | "angel" | "egg"
   isDead: false,
 
   reset() {
@@ -40,8 +39,7 @@ const player = {
     this.y = 0;
     this.dy = 0;
     this.state = this.states[0];
-    this.hasCompanionAngel = false;
-    this.hasMagicEgg = false;
+    this.pickup = null;
     this.isDead = false;
   },
 
@@ -89,7 +87,7 @@ const player = {
 
     if (this.state === "jumping") {
       this.totalFrames = 1;
-      if (input.up && this.hasMagicEgg) {
+      if (input.up && this.pickup === "egg") {
         consumeMagicEgg(this);
         this.jump(this.doubleJumpStrength);
       } else if (input.right) {
