@@ -1,6 +1,6 @@
 # Cosmos Street
 
-Surrounded by waves of sinister alien machines, your only hope is to skate your way through the stars! Collect Angel Buddies, crack open Magic Eggs, and survive the cosmic chaos!
+Trapped in swarms of nefarious alien machines, you must skate your way to safety! Luckily, Astro Angels and Cosmic Eggs are scattered throughout the asteroid belt to aid your escape from the galatic chaos!
 
 [--> Click here to play <--](https://evilpaper.github.io/cosmos-street/)
 
