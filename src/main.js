@@ -83,7 +83,7 @@ let time = 0;
 let stars;
 let platforms;
 let angels;
-let magicEggs;
+let eggs;
 let sparkles;
 let electricExplosions;
 let skateboardSparkle;
@@ -216,12 +216,12 @@ function updateWorld() {
     (angel) => !(hasPassedLeftEdge(angel) || hasPassedTopEdge(angel)),
   );
 
-  for (const magicEgg of magicEggs) {
-    magicEgg.update();
+  for (const egg of eggs) {
+    egg.update();
   }
 
-  magicEggs = magicEggs.filter(
-    (magicEgg) => !(hasPassedLeftEdge(magicEgg) || hasPassedTopEdge(magicEgg)),
+  eggs = eggs.filter(
+    (egg) => !(hasPassedLeftEdge(egg) || hasPassedTopEdge(egg)),
   );
 
   for (const enemy of enemies) {
@@ -264,8 +264,8 @@ function drawWorld(screen) {
     angel.draw(screen);
   }
 
-  for (const magicEgg of magicEggs) {
-    magicEgg.draw(screen);
+  for (const egg of eggs) {
+    egg.draw(screen);
   }
 
   for (const explosion of electricExplosions) {
@@ -294,7 +294,7 @@ function dismissCompanionAngel(player, angels) {
   return true;
 }
 
-function consumeMagicEgg(player) {
+function consumeEgg(player) {
   if (player.pickup !== "egg") {
     return;
   }
@@ -331,13 +331,13 @@ function collectAngels() {
   }
 }
 
-function collectMagicEggs() {
-  for (let i = magicEggs.length - 1; i >= 0; i--) {
-    const magicEgg = magicEggs[i];
-    if (checkCollision(player, magicEgg.getHitbox())) {
-      sparkles.push(createSparkle(magicEgg.x, magicEgg.y - 8));
-      magicEggs.splice(i, 1);
-      sfx(sounds.magicEgg);
+function collectEggs() {
+  for (let i = eggs.length - 1; i >= 0; i--) {
+    const egg = eggs[i];
+    if (checkCollision(player, egg.getHitbox())) {
+      sparkles.push(createSparkle(egg.x, egg.y - 8));
+      eggs.splice(i, 1);
+      sfx(sounds.egg);
       dismissCompanionAngel(player, angels);
       player.pickup = "egg";
     }
@@ -462,7 +462,7 @@ states[GAME_STATE.PLAYING] = {
 
     updateWorld();
     collectAngels();
-    collectMagicEggs();
+    collectEggs();
     handleEnemyEncounters();
   },
   draw(_, screen) {
@@ -588,7 +588,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(30);
   angels = [];
-  magicEggs = [];
+  eggs = [];
   skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   electricExplosions = [];
@@ -636,8 +636,8 @@ function update() {
     angels.push(createAngel(platforms.tiles));
   }
 
-  if (magicEggs.length === 0) {
-    magicEggs.push(createMagicEgg(platforms.tiles, 1));
+  if (eggs.length === 0) {
+    eggs.push(createEgg(platforms.tiles, 1));
   }
 
   game.update();
