@@ -286,7 +286,10 @@ function dismissCompanionAngel(player, angels) {
 
   player.pickup = null;
 
-  const following = angels.find((c) => c.state === "follow");
+  const following = angels.find(
+    (c) => c.state === "follow" || c.state === "approach",
+  );
+
   if (following) {
     following.state = "leave";
   }
