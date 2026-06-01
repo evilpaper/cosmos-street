@@ -88,7 +88,7 @@ const player = {
     if (this.state === "jumping") {
       this.totalFrames = 1;
       if (input.up && this.pickup === "egg") {
-        consumeMagicEgg(this);
+        consumeEgg(this);
         this.jump(this.doubleJumpStrength);
       } else if (input.right) {
         this.dive();
