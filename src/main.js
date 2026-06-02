@@ -449,6 +449,21 @@ states[GAME_STATE.PLAYING] = {
     music(songs.theme, 0.5);
   },
   update() {
+    time += 1;
+
+    // UI
+    title.slideOut();
+
+    // Phase 1: Update all entities
+    player.update(platforms.tiles, time);
+    updateWorld();
+
+    // Phase 2: Resolve interactions between entities
+    handleEnemyEncounters();
+    collectAngels();
+    collectEggs();
+
+    // Phase 3: Check game-ending conditions (always last)
     if (playerHasFallenOffScreen()) {
       enterGameOverFromPlaying({ playDropSound: true });
       return;
@@ -458,15 +473,6 @@ states[GAME_STATE.PLAYING] = {
       enterGameOverFromPlaying();
       return;
     }
-
-    time += 1;
-    title.slideOut();
-    player.update(platforms.tiles, time);
-
-    updateWorld();
-    collectAngels();
-    collectEggs();
-    handleEnemyEncounters();
   },
   draw(_, screen) {
     drawWorld(screen);
