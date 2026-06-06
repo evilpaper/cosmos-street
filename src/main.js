@@ -201,13 +201,17 @@ function hasPassedTopEdge(entity) {
 }
 
 /**
- * World orchestration — shared between PLAYING and GAME_OVER.
- * Does pure entity ticking and housekeeping
+ * Tick everything, housekeeping, etc.
  */
 
-function updateWorld() {
+function updateEntities() {
   platforms.update();
 
+  player.update(platforms.tiles, time);
+
+  for (const angel of angels) {
+    angel.update(player);
+  }
   angels = angels.filter(
     (angel) => !(hasPassedLeftEdge(angel) || hasPassedTopEdge(angel)),
   );
@@ -215,7 +219,6 @@ function updateWorld() {
   for (const egg of eggs) {
     egg.update();
   }
-
   eggs = eggs.filter(
     (egg) => !(hasPassedLeftEdge(egg) || hasPassedTopEdge(egg)),
   );
@@ -227,7 +230,6 @@ function updateWorld() {
   for (const sparkle of sparkles) {
     sparkle.update();
   }
-
   sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
 
   for (const explosion of electricExplosions) {
@@ -348,12 +350,6 @@ function respawnEnemy(enemy) {
   enemies.push(createEnemy(SCREEN_WIDTH + 12, randomInRange(48, 164)));
 }
 
-function updateAngelBehavior() {
-  for (const angel of angels) {
-    angel.update(player);
-  }
-}
-
 function handleEnemyEncounters() {
   for (const enemy of enemies) {
     if (checkCollision(player, enemy.getHitbox())) {
@@ -462,15 +458,15 @@ states[GAME_STATE.PLAYING] = {
     // UI
     title.slideOut();
 
-    // Phase 1: Update all entities
-    player.update(platforms.tiles, time);
-    updateWorld();
+    // Phase 1: tick everything
+    updateEntities();
 
-    // Phase 2: Resolve interactions between entities
-    updateAngelBehavior();
+    // Phase 2: resolve between entities
     handleEnemyEncounters();
     collectAngels();
     collectEggs();
+
+    // Phase 2b: visual effects driven by state
 
     // Phase 3: Check game-ending conditions (always last)
     if (playerHasFallenOffScreen()) {
@@ -532,10 +528,7 @@ states[GAME_STATE.GAME_OVER] = {
       return;
     }
 
-    player.update(platforms.tiles, time);
-    updateWorld();
-
-    updateAngelBehavior();
+    updateEntities();
   },
   draw(_, screen) {
     drawWorld(screen);
