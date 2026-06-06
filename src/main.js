@@ -202,16 +202,12 @@ function hasPassedTopEdge(entity) {
 
 /**
  * World orchestration — shared between PLAYING and GAME_OVER.
+ * Does pure entity ticking and housekeeping
  */
 
 function updateWorld() {
   platforms.update();
 
-  for (const angel of angels) {
-    angel.update(player);
-  }
-
-  // Remove angels that has left the screen. Either to the left edge or the top edge.
   angels = angels.filter(
     (angel) => !(hasPassedLeftEdge(angel) || hasPassedTopEdge(angel)),
   );
@@ -352,6 +348,12 @@ function respawnEnemy(enemy) {
   enemies.push(createEnemy(SCREEN_WIDTH + 12, randomInRange(48, 164)));
 }
 
+function updateAngelBehavior() {
+  for (const angel of angels) {
+    angel.update(player);
+  }
+}
+
 function handleEnemyEncounters() {
   for (const enemy of enemies) {
     if (checkCollision(player, enemy.getHitbox())) {
@@ -415,8 +417,14 @@ states[GAME_STATE.PRESS_START] = {
   },
   update() {
     time += 1;
+
+    // UI
     title.update();
+
+    // Phase 1: Update all entities
     platforms.updateIntro();
+
+    // What should I call this?
     const canStart = isAudioReady() || isAudioInitFailed();
     if (canStart && (input.left || input.right || input.up)) {
       startGame();
@@ -459,6 +467,7 @@ states[GAME_STATE.PLAYING] = {
     updateWorld();
 
     // Phase 2: Resolve interactions between entities
+    updateAngelBehavior();
     handleEnemyEncounters();
     collectAngels();
     collectEggs();
@@ -525,6 +534,8 @@ states[GAME_STATE.GAME_OVER] = {
 
     player.update(platforms.tiles, time);
     updateWorld();
+
+    updateAngelBehavior();
   },
   draw(_, screen) {
     drawWorld(screen);
