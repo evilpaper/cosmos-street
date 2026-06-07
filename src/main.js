@@ -200,10 +200,6 @@ function hasPassedTopEdge(entity) {
   return false;
 }
 
-/**
- * Tick everything, housekeeping, etc.
- */
-
 function updateEntities() {
   platforms.update();
 
@@ -463,19 +459,22 @@ states[GAME_STATE.PLAYING] = {
   update() {
     time += 1;
 
-    // UI
+    // UI: tell the title to do its thing — it decides internally whether to move
     title.slideOut();
 
-    // Phase 1: tick everything
+    // Phase 1: tell every entity to tick — each owns its own logic
     updateEntities();
 
-    // Phase 2: resolve between entities
+    // Phase 2: tell interaction handlers to run — each owns its own conditions
+    // (e.g. updateSkateboardSparkle checks player.pickup === "egg" internally)
     updateInteractions();
 
-    // Phase 2b: visual effects driven by state
+    // Phase 2b: tell visual effects to update — same principle, they own their conditions
     updateVisualEffects();
 
-    // Phase 3: Check game-ending conditions (always last)
+    // Phase 3: the game state's own responsibility — asking whether to exit.
+    // This is NOT tell-don't-ask territory: control flow (return) must stay visible
+    // here so it's obvious what can end this state and when.
     if (playerHasFallenOffScreen()) {
       enterGameOverFromPlaying({ playDropSound: true });
       return;
