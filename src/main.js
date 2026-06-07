@@ -226,7 +226,15 @@ function updateEntities() {
   for (const enemy of enemies) {
     enemy.update();
   }
+}
 
+function updateInteractions() {
+  handleEnemyEncounters();
+  collectAngels();
+  collectEggs();
+}
+
+function updateVisualEffects() {
   for (const sparkle of sparkles) {
     sparkle.update();
   }
@@ -239,15 +247,7 @@ function updateEntities() {
   electricExplosions = electricExplosions.filter(
     (explosion) => !explosion.isDone(),
   );
-}
 
-function updateInteractions() {
-  handleEnemyEncounters();
-  collectAngels();
-  collectEggs();
-}
-
-function updateVisualEffects() {
   if (player.pickup === "egg") {
     skateboardSparkle.update();
   }
