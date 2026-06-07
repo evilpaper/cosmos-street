@@ -200,6 +200,10 @@ function hasPassedTopEdge(entity) {
   return false;
 }
 
+function updateUI() {
+  title.slideOut();
+}
+
 function updateEntities() {
   platforms.update();
 
@@ -468,7 +472,7 @@ states[GAME_STATE.PLAYING] = {
     time += 1;
 
     // UI: tell the title to do its thing — it decides internally whether to move
-    title.slideOut();
+    updateUI();
 
     // Phase 1: tell every entity to tick — each owns its own logic
     updateEntities();
