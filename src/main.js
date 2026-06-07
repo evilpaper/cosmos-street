@@ -382,6 +382,14 @@ function handleEnemyEncounters() {
   }
 }
 
+function isGameOver() {
+  return playerHasFallenOffScreen() || player.isDead;
+}
+
+function gameOverOptions() {
+  return playerHasFallenOffScreen() ? { playDropSound: true } : {};
+}
+
 /**
  * States
  */
@@ -475,13 +483,8 @@ states[GAME_STATE.PLAYING] = {
     // Phase 3: the game state's own responsibility — asking whether to exit.
     // This is NOT tell-don't-ask territory: control flow (return) must stay visible
     // here so it's obvious what can end this state and when.
-    if (playerHasFallenOffScreen()) {
-      enterGameOverFromPlaying({ playDropSound: true });
-      return;
-    }
-
-    if (player.isDead) {
-      enterGameOverFromPlaying();
+    if (isGameOver()) {
+      enterGameOverFromPlaying(gameOverOptions());
       return;
     }
   },
