@@ -239,7 +239,15 @@ function updateEntities() {
   electricExplosions = electricExplosions.filter(
     (explosion) => !explosion.isDone(),
   );
+}
 
+function updateInteractions() {
+  handleEnemyEncounters();
+  collectAngels();
+  collectEggs();
+}
+
+function updateVisualEffects() {
   if (player.pickup === "egg") {
     skateboardSparkle.update();
   }
@@ -462,11 +470,10 @@ states[GAME_STATE.PLAYING] = {
     updateEntities();
 
     // Phase 2: resolve between entities
-    handleEnemyEncounters();
-    collectAngels();
-    collectEggs();
+    updateInteractions();
 
     // Phase 2b: visual effects driven by state
+    updateVisualEffects();
 
     // Phase 3: Check game-ending conditions (always last)
     if (playerHasFallenOffScreen()) {
