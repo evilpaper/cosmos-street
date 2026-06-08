@@ -243,7 +243,6 @@ function updateVisualEffects() {
   for (const explosion of electricExplosions) {
     explosion.update();
   }
-
   electricExplosions = electricExplosions.filter(
     (explosion) => !explosion.isDone(),
   );
@@ -286,6 +285,16 @@ function drawWorld(screen) {
 /**
  * PLAYING-only rules
  */
+
+function ensureCollectibles() {
+  if (angels.length === 0) {
+    angels.push(createAngel(platforms.tiles));
+  }
+
+  if (eggs.length === 0) {
+    eggs.push(createEgg(platforms.tiles, 1));
+  }
+}
 
 function dismissCompanionAngel(player, angels) {
   if (player.pickup !== "angel") return false;
@@ -471,6 +480,8 @@ states[GAME_STATE.PLAYING] = {
   update() {
     time += 1;
 
+    ensureCollectibles();
+
     // UI: tell the title to do its thing — it decides internally whether to move
     updateUI();
 
@@ -487,6 +498,7 @@ states[GAME_STATE.PLAYING] = {
     // Phase 3: the game state's own responsibility — asking whether to exit.
     // This is NOT tell-don't-ask territory: control flow (return) must stay visible
     // here so it's obvious what can end this state and when.
+    // State transitions stay in the state (not buried in helpers).
     if (isGameOver()) {
       enterGameOverFromPlaying(gameOverOptions());
       return;
@@ -656,14 +668,6 @@ function update() {
 
   for (const star of stars) {
     star.update();
-  }
-
-  if (angels.length === 0) {
-    angels.push(createAngel(platforms.tiles));
-  }
-
-  if (eggs.length === 0) {
-    eggs.push(createEgg(platforms.tiles, 1));
   }
 
   game.update();
