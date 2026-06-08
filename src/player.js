@@ -63,6 +63,14 @@ const player = {
     this.ticksPerFrame = 8;
   },
 
+  consumeEgg() {
+    if (this.pickup !== "egg") {
+      return;
+    }
+
+    this.pickup = null;
+  },
+
   update(tiles, time) {
     // Just a short delay before we introduce the player.
     if (time < 40) {
@@ -88,7 +96,7 @@ const player = {
     if (this.state === "jumping") {
       this.totalFrames = 1;
       if (input.up && this.pickup === "egg") {
-        consumeEgg(this);
+        this.consumeEgg();
         this.jump(this.doubleJumpStrength);
       } else if (input.right) {
         this.dive();

@@ -332,16 +332,6 @@ function dismissCompanionAngel(player, angels) {
   return true;
 }
 
-function consumeEgg(player) {
-  if (player.pickup !== "egg") {
-    return;
-  }
-
-  player.pickup = null;
-
-  return true;
-}
-
 function collectAngels() {
   for (let i = angels.length - 1; i >= 0; i--) {
     const angel = angels[i];
