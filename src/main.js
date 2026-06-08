@@ -105,6 +105,10 @@ const GAME_STATE = {
 const game = createGame();
 const states = {};
 
+/**
+ * General utilities
+ */
+
 function createStars(amount) {
   const result = [];
 
@@ -143,14 +147,6 @@ function checkCollision(a, b) {
 }
 
 /**
- * Use y position of the title to determine if it is the first time starting the game.
- */
-
-function firstTimeStarting() {
-  return title.y > 0;
-}
-
-/**
  * Returns a random integer between min and max (inclusive).
  */
 function randomInRange(min, max) {
@@ -171,18 +167,36 @@ function getDifficulty() {
   return current;
 }
 
-/**
- * Leave PLAYING for GAME_OVER (fall off screen or player death).
- * @param {{ playDropSound?: boolean }} [options]
- */
-function enterGameOverFromPlaying({ playDropSound = false } = {}) {
-  if (playDropSound) {
-    sfx(sounds.drop);
+function getStartMessage() {
+  // Random number between 1 and 10
+  const randomNumber = Math.floor(Math.random() * 10) + 1;
+  switch (randomNumber) {
+    case 1:
+      return "Go for pro!";
+    case 2:
+      return "Happy rolling!";
+    case 3:
+      return "Cruise!";
+    case 4:
+      return "Go!";
+    case 5:
+      return "Good luck!";
+    case 6:
+      return "Ride on!";
+    case 7:
+      return "Skate!";
+    case 8:
+      return "Cruise!";
+    case 9:
+      return "Charge!";
+    case 10:
+      return "Action!";
   }
-  resetInput();
-  scrollSpeed = 0;
-  game.setState(states[GAME_STATE.GAME_OVER]);
 }
+
+/**
+ * Shared world (PLAYING + GAME_OVER)
+ */
 
 function hasPassedLeftEdge(entity) {
   const MIN_DISTANCE_AFTER_EDGE = -100;
@@ -198,10 +212,6 @@ function hasPassedTopEdge(entity) {
     return true;
   }
   return false;
-}
-
-function updateUI() {
-  title.slideOut();
 }
 
 function updateEntities() {
@@ -225,30 +235,6 @@ function updateEntities() {
 
   for (const enemy of enemies) {
     enemy.update();
-  }
-}
-
-function updateInteractions() {
-  handleEnemyEncounters();
-  collectAngels();
-  collectEggs();
-}
-
-function updateVisualEffects() {
-  for (const sparkle of sparkles) {
-    sparkle.update();
-  }
-  sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
-
-  for (const explosion of electricExplosions) {
-    explosion.update();
-  }
-  electricExplosions = electricExplosions.filter(
-    (explosion) => !explosion.isDone(),
-  );
-
-  if (player.pickup === "egg") {
-    skateboardSparkle.update();
   }
 }
 
@@ -283,8 +269,10 @@ function drawWorld(screen) {
 }
 
 /**
- * PLAYING-only rules
+ * PLAYING-only
  */
+
+// Spawning
 
 function ensureCollectibles() {
   if (angels.length === 0) {
@@ -295,6 +283,38 @@ function ensureCollectibles() {
     eggs.push(createEgg(platforms.tiles, 1));
   }
 }
+
+// Orchestration
+
+function updateUI() {
+  title.slideOut();
+}
+
+function updateInteractions() {
+  handleEnemyEncounters();
+  collectAngels();
+  collectEggs();
+}
+
+function updateVisualEffects() {
+  for (const sparkle of sparkles) {
+    sparkle.update();
+  }
+  sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
+
+  for (const explosion of electricExplosions) {
+    explosion.update();
+  }
+  electricExplosions = electricExplosions.filter(
+    (explosion) => !explosion.isDone(),
+  );
+
+  if (player.pickup === "egg") {
+    skateboardSparkle.update();
+  }
+}
+
+// Rules
 
 function dismissCompanionAngel(player, angels) {
   if (player.pickup !== "angel") return false;
@@ -395,12 +415,40 @@ function handleEnemyEncounters() {
   }
 }
 
+// Exit
+
+function playerHasFallenOffScreen() {
+  return player.y > 500;
+}
+
 function isGameOver() {
   return playerHasFallenOffScreen() || player.isDead;
 }
 
 function gameOverOptions() {
   return playerHasFallenOffScreen() ? { playDropSound: true } : {};
+}
+
+/**
+ * Leave PLAYING for GAME_OVER (fall off screen or player death).
+ * @param {{ playDropSound?: boolean }} [options]
+ */
+function enterGameOverFromPlaying({ playDropSound = false } = {}) {
+  if (playDropSound) {
+    sfx(sounds.drop);
+  }
+  resetInput();
+  scrollSpeed = 0;
+  game.setState(states[GAME_STATE.GAME_OVER]);
+}
+
+// Draw helper
+
+/**
+ * Use y position of the title to determine if it is the first time starting the game.
+ */
+function firstTimeStarting() {
+  return title.y > 0;
 }
 
 /**
@@ -481,23 +529,11 @@ states[GAME_STATE.PLAYING] = {
     time += 1;
 
     ensureCollectibles();
-
-    // UI: tell the title to do its thing — it decides internally whether to move
     updateUI();
-
-    // Phase 1: tell every entity to tick — each owns its own logic
     updateEntities();
-
-    // Phase 2: tell interaction handlers to run — each owns its own conditions
-    // (e.g. updateSkateboardSparkle checks player.pickup === "egg" internally)
     updateInteractions();
-
-    // Phase 2b: tell visual effects to update — same principle, they own their conditions
     updateVisualEffects();
 
-    // Phase 3: the game state's own responsibility — asking whether to exit.
-    // This is NOT tell-don't-ask territory: control flow (return) must stay visible
-    // here so it's obvious what can end this state and when.
     // State transitions stay in the state (not buried in helpers).
     if (isGameOver()) {
       enterGameOverFromPlaying(gameOverOptions());
@@ -553,6 +589,7 @@ states[GAME_STATE.GAME_OVER] = {
       return;
     }
 
+    // Reuses shared world tick only — no spawning, interactions, effects, or exit checks.
     updateEntities();
   },
   draw(_, screen) {
@@ -603,7 +640,7 @@ function restartGame() {
 }
 
 /**
- * Game functions
+ * Game loop
  *
  * init is called once when the game starts.
  * update and draw are called once per frame.
@@ -690,35 +727,4 @@ function draw(screen) {
     star.draw(screen);
   }
   game.draw(screen);
-}
-
-function getStartMessage() {
-  // Random number between 1 and 10
-  const randomNumber = Math.floor(Math.random() * 10) + 1;
-  switch (randomNumber) {
-    case 1:
-      return "Go for pro!";
-    case 2:
-      return "Happy rolling!";
-    case 3:
-      return "Cruise!";
-    case 4:
-      return "Go!";
-    case 5:
-      return "Good luck!";
-    case 6:
-      return "Ride on!";
-    case 7:
-      return "Skate!";
-    case 8:
-      return "Cruise!";
-    case 9:
-      return "Charge!";
-    case 10:
-      return "Action!";
-  }
-}
-
-function playerHasFallenOffScreen() {
-  return player.y > 500;
 }
