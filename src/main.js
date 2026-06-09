@@ -693,6 +693,9 @@ function update() {
     return;
   }
 
+  // The stars are ever-present in the background.
+  // A more fitting place would maybe be to update them in the updateEntities() function.
+  // But leave them here for now.
   for (const star of stars) {
     star.update();
   }
