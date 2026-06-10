@@ -1,8 +1,4 @@
 /**
- * Globals
- */
-
-/**
  * Constants
  */
 
@@ -198,20 +194,14 @@ function getStartMessage() {
  * Shared world (PLAYING + GAME_OVER)
  */
 
+const MIN_DISTANCE_AFTER_EDGE = -100;
+
 function hasPassedLeftEdge(entity) {
-  const MIN_DISTANCE_AFTER_EDGE = -100;
-  if (entity.x + entity.width < MIN_DISTANCE_AFTER_EDGE) {
-    return true;
-  }
-  return false;
+  return entity.x + entity.width < MIN_DISTANCE_AFTER_EDGE;
 }
 
 function hasPassedTopEdge(entity) {
-  const MIN_DISTANCE_AFTER_EDGE = -100;
-  if (entity.y + entity.height < MIN_DISTANCE_AFTER_EDGE) {
-    return true;
-  }
-  return false;
+  return entity.y + entity.height < MIN_DISTANCE_AFTER_EDGE;
 }
 
 function updateEntities() {
@@ -483,7 +473,6 @@ states[GAME_STATE.PRESS_START] = {
     // Phase 1: Update all entities
     platforms.updateIntro();
 
-    // What should I call this?
     const canStart = isAudioReady() || isAudioInitFailed();
     if (canStart && hasAnyDirectionInput()) {
       startGame();
