@@ -316,7 +316,7 @@ function updateVisualEffects() {
 
 // Rules
 
-function dismissCompanionAngel(player, angels) {
+function dismissCompanionAngel() {
   if (player.pickup !== "angel") return false;
 
   player.pickup = null;
@@ -366,7 +366,7 @@ function collectEggs() {
       sparkles.push(createSparkle(egg.x, egg.y - 8));
       eggs.splice(i, 1);
       sfx(sounds.egg);
-      dismissCompanionAngel(player, angels);
+      dismissCompanionAngel();
       player.pickup = "egg";
     }
   }
@@ -380,7 +380,7 @@ function respawnEnemy(enemy) {
 function handleEnemyEncounters() {
   for (const enemy of enemies) {
     if (checkCollision(player, enemy.getHitbox())) {
-      if (dismissCompanionAngel(player, angels)) {
+      if (dismissCompanionAngel()) {
         electricExplosions.push(
           createElectricExplosion(
             enemy.x + (enemy.width - 35) / 2,
@@ -455,7 +455,7 @@ states[GAME_STATE.INSERT_COIN] = {
   update() {
     time += 1;
     title.update();
-    if (input.left || input.right || input.up) {
+    if (hasAnyDirectionInput()) {
       insertCoin();
     }
   },
@@ -471,7 +471,7 @@ states[GAME_STATE.PRESS_START] = {
   enter() {
     time = 0;
     title.y = 64;
-    resetStateInput();
+    resetInput();
     platforms.startIntroSlideIn();
   },
   update() {
@@ -485,7 +485,7 @@ states[GAME_STATE.PRESS_START] = {
 
     // What should I call this?
     const canStart = isAudioReady() || isAudioInitFailed();
-    if (canStart && (input.left || input.right || input.up)) {
+    if (canStart && hasAnyDirectionInput()) {
       startGame();
     }
   },
@@ -511,7 +511,7 @@ states[GAME_STATE.PLAYING] = {
   name: GAME_STATE.PLAYING,
   enter() {
     time = 0;
-    resetStateInput();
+    resetInput();
     stopMusic();
     music(songs.theme, 0.5);
   },
@@ -602,13 +602,6 @@ states[GAME_STATE.GAME_OVER] = {
 /**
  * State transition functions
  */
-
-function resetStateInput() {
-  // Reset input flags to prevent bleed between states.
-  input.left = false;
-  input.right = false;
-  input.up = false;
-}
 
 function insertCoin() {
   game.setState(states[GAME_STATE.PRESS_START]);
