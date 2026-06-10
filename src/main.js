@@ -326,6 +326,7 @@ function collectAngels() {
   for (let i = angels.length - 1; i >= 0; i--) {
     const angel = angels[i];
     if (angel.state !== "idle") {
+      // Companion active — only one angel allowed.
       return;
     }
 
