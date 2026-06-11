@@ -38,7 +38,7 @@ function createTile(options = {}) {
 function createPlatforms(options = {}) {
   const { amount = 30 } = options;
 
-  const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
+  const MIN_RUNWAY_RIGHT_EDGE_X = SCREEN_WIDTH + TILE_WIDTH * 4;
   const INTRO_SPEED_Y = 6;
   const INTRO_START_Y = SCREEN_HEIGHT + TILE_HEIGHT;
 
@@ -54,13 +54,13 @@ function createPlatforms(options = {}) {
     );
   }
 
-  function moveTiles() {
+  function scrollTiles() {
     for (const tile of tiles) {
       tile.update();
     }
   }
 
-  function removeTilesOffscreen() {
+  function removeOffscreenTiles() {
     for (const tile of tiles) {
       const isOffscreenLeft = tile.x <= 0;
       if (isOffscreenLeft) {
@@ -84,30 +84,37 @@ function createPlatforms(options = {}) {
     return allTilesAtTarget;
   }
 
-  function addTilesIfNeeded() {
-    const lastTileX = Math.floor(tiles[tiles.length - 1].x);
-    const shouldSpawn = lastTileX < SPAWN_THRESHOLD_X;
+  function needsMorePlatformsAhead() {
+    const rightmostTileX = Math.floor(tiles[tiles.length - 1].x);
+    return rightmostTileX < MIN_RUNWAY_RIGHT_EDGE_X;
+  }
 
-    if (!shouldSpawn) {
-      return;
-    }
-
+  function spawnRandomPlatformSegment() {
+    const rightmostTileX = Math.floor(tiles[tiles.length - 1].x);
     const diff = getDifficulty();
-    const y = randomInRange(
+    const segmentY = randomInRange(
       diff.platformYMin,
       diff.platformYMin + diff.platformYRange,
     );
-    const gap = randomInRange(diff.gapMin, diff.gapMax);
-    const tileCount = randomInRange(diff.tilesMin, diff.tilesMax);
+    const segmentLength = randomInRange(diff.tilesMin, diff.tilesMax);
+    const rightEdgeX = rightmostTileX + randomInRange(diff.gapMin, diff.gapMax);
 
-    for (let i = 0; i < tileCount; i++) {
+    for (let i = 0; i < segmentLength; i++) {
       tiles.push(
         createTile({
-          x: lastTileX + gap + i * TILE_WIDTH,
-          y: y,
+          x: rightEdgeX + i * TILE_WIDTH,
+          y: segmentY,
         }),
       );
     }
+  }
+
+  function ensureRunwayAhead() {
+    if (!needsMorePlatformsAhead()) {
+      return;
+    }
+
+    spawnRandomPlatformSegment();
   }
 
   function setMode(nextMode) {
@@ -119,12 +126,9 @@ function createPlatforms(options = {}) {
         tile.y = INTRO_START_Y;
       }
     }
-    if (mode === "ending") {
-      // for (const tile of tiles) {
-      //   tile.targetY = endingY; // when you add flatten setup
-      // }
-    }
+
     // "playing" — no setup
+    // "ending" — no setup
   }
 
   function updateIntro() {
@@ -132,15 +136,15 @@ function createPlatforms(options = {}) {
   }
 
   function updatePlaying() {
-    moveTiles();
-    removeTilesOffscreen();
-    addTilesIfNeeded();
+    scrollTiles();
+    removeOffscreenTiles();
+    ensureRunwayAhead();
   }
 
   function updateEnding() {
-    moveTiles();
-    removeTilesOffscreen();
-    addTilesIfNeeded();
+    scrollTiles();
+    removeOffscreenTiles();
+    ensureRunwayAhead();
   }
 
   return {
