@@ -96,6 +96,7 @@ const GAME_STATE = {
   PRESS_START: "PRESS_START",
   PLAYING: "PLAYING",
   GAME_OVER: "GAME_OVER",
+  GAME_WON: "GAME_WON",
 };
 
 const game = createGame();
@@ -519,6 +520,12 @@ states[GAME_STATE.PLAYING] = {
       enterGameOverFromPlaying(gameOverOptions());
       return;
     }
+
+    // if (time > 200) {
+    //   game.setState(states[GAME_STATE.GAME_WON]);
+    //   console.log("Game won");
+    //   return;
+    // }
   },
   draw(_, screen) {
     drawWorld(screen);
@@ -586,6 +593,27 @@ states[GAME_STATE.GAME_OVER] = {
       print("Restart ← or →", "center", 186);
       print("Title screen ↑", "center", 202);
     }
+  },
+};
+
+states[GAME_STATE.GAME_WON] = {
+  name: GAME_STATE.GAME_WON,
+  enter() {
+    // time = 0; // Not needed, continue from where we left off.
+    resetInput();
+    platforms.setMode("ending");
+  },
+  update() {
+    time += 1;
+
+    ensureCollectibles();
+    updateUI();
+    updateEntities();
+    updateInteractions();
+    updateVisualEffects();
+  },
+  draw(_, screen) {
+    drawWorld(screen);
   },
 };
 

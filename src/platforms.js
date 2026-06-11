@@ -41,12 +41,10 @@ function createPlatforms(options = {}) {
   const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
   const INTRO_SPEED_Y = 6;
   const INTRO_START_Y = SCREEN_HEIGHT + TILE_HEIGHT;
-  const DEFAULT_ENDING_Y = 160;
 
   let tiles = [];
   let mode = "playing";
   let introComplete = false;
-  let endingY = DEFAULT_ENDING_Y;
 
   for (let i = 0; i < amount; i++) {
     tiles.push(
@@ -113,27 +111,8 @@ function createPlatforms(options = {}) {
     }
   }
 
-  function addFlatTiles(lastTileX, y, count) {
-    for (let i = 0; i < count; i++) {
-      tiles.push(
-        createTile({
-          x: lastTileX + i * TILE_WIDTH,
-          y: y,
-        }),
-      );
-    }
-  }
-
-  function addFlatTilesIfNeeded() {
-    const lastTileX = Math.floor(tiles[tiles.length - 1].x);
-    const shouldSpawn = lastTileX < SPAWN_THRESHOLD_X;
-
-    if (!shouldSpawn) {
-      return;
-    }
-
-    const tileCount = Math.ceil((SPAWN_THRESHOLD_X - lastTileX) / TILE_WIDTH);
-    addFlatTiles(lastTileX, endingY, tileCount);
+  function setMode(nextMode) {
+    mode = nextMode;
   }
 
   function startIntroSlideIn() {
@@ -142,19 +121,6 @@ function createPlatforms(options = {}) {
     for (const tile of tiles) {
       tile.targetY = tile.y;
       tile.y = INTRO_START_Y;
-    }
-  }
-
-  function setMode(nextMode) {
-    mode = nextMode;
-  }
-
-  function enterEnding(options = {}) {
-    const { y = DEFAULT_ENDING_Y } = options;
-    endingY = y;
-    mode = "ending";
-    for (const tile of tiles) {
-      tile.targetY = endingY;
     }
   }
 
@@ -177,8 +143,7 @@ function createPlatforms(options = {}) {
   function updateEnding() {
     moveTiles();
     removeTilesOffscreen();
-    lerpTilesTowardTargetY(INTRO_SPEED_Y);
-    addFlatTilesIfNeeded();
+    addTilesIfNeeded();
   }
 
   return {
@@ -197,6 +162,7 @@ function createPlatforms(options = {}) {
 
       if (mode === "ending") {
         updateEnding();
+        return;
       }
     },
 
@@ -208,6 +174,5 @@ function createPlatforms(options = {}) {
 
     startIntroSlideIn,
     setMode,
-    enterEnding,
   };
 }
