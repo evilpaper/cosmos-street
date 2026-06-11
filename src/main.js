@@ -464,7 +464,7 @@ states[GAME_STATE.PRESS_START] = {
     time = 0;
     title.y = 64;
     resetInput();
-    platforms.startIntroSlideIn();
+    platforms.setMode("intro");
   },
   update() {
     time += 1;

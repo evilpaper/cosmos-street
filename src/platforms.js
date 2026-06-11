@@ -113,15 +113,19 @@ function createPlatforms(options = {}) {
 
   function setMode(nextMode) {
     mode = nextMode;
-  }
 
-  function startIntroSlideIn() {
-    mode = "intro";
-    introComplete = false;
-    for (const tile of tiles) {
-      tile.targetY = tile.y;
-      tile.y = INTRO_START_Y;
+    if (mode === "intro") {
+      for (const tile of tiles) {
+        tile.targetY = tile.y;
+        tile.y = INTRO_START_Y;
+      }
     }
+    if (mode === "ending") {
+      // for (const tile of tiles) {
+      //   tile.targetY = endingY; // when you add flatten setup
+      // }
+    }
+    // "playing" — no setup
   }
 
   function updateIntro() {
@@ -172,7 +176,6 @@ function createPlatforms(options = {}) {
       }
     },
 
-    startIntroSlideIn,
     setMode,
   };
 }
