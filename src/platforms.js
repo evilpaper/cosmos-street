@@ -41,9 +41,12 @@ function createPlatforms(options = {}) {
   const SPAWN_THRESHOLD_X = SCREEN_WIDTH + TILE_WIDTH * 4; // When to spawn new platforms
   const INTRO_SPEED_Y = 6;
   const INTRO_START_Y = SCREEN_HEIGHT + TILE_HEIGHT;
+  const DEFAULT_ENDING_Y = 160;
 
   let tiles = [];
-  let introActive = false;
+  let mode = "playing";
+  let introComplete = false;
+  let endingY = DEFAULT_ENDING_Y;
 
   for (let i = 0; i < amount; i++) {
     tiles.push(
@@ -67,6 +70,21 @@ function createPlatforms(options = {}) {
         tiles.splice(tiles.indexOf(tile), 1);
       }
     }
+  }
+
+  function lerpTilesTowardTargetY(speed) {
+    let allTilesAtTarget = true;
+
+    for (const tile of tiles) {
+      const nextY = tile.y - speed;
+      tile.y = Math.max(tile.targetY, nextY);
+
+      if (tile.y > tile.targetY) {
+        allTilesAtTarget = false;
+      }
+    }
+
+    return allTilesAtTarget;
   }
 
   function addTilesIfNeeded() {
@@ -95,42 +113,91 @@ function createPlatforms(options = {}) {
     }
   }
 
+  function addFlatTiles(lastTileX, y, count) {
+    for (let i = 0; i < count; i++) {
+      tiles.push(
+        createTile({
+          x: lastTileX + i * TILE_WIDTH,
+          y: y,
+        }),
+      );
+    }
+  }
+
+  function addFlatTilesIfNeeded() {
+    const lastTileX = Math.floor(tiles[tiles.length - 1].x);
+    const shouldSpawn = lastTileX < SPAWN_THRESHOLD_X;
+
+    if (!shouldSpawn) {
+      return;
+    }
+
+    const tileCount = Math.ceil((SPAWN_THRESHOLD_X - lastTileX) / TILE_WIDTH);
+    addFlatTiles(lastTileX, endingY, tileCount);
+  }
+
   function startIntroSlideIn() {
-    introActive = true;
+    mode = "intro";
+    introComplete = false;
     for (const tile of tiles) {
       tile.targetY = tile.y;
       tile.y = INTRO_START_Y;
     }
   }
 
+  function setMode(nextMode) {
+    mode = nextMode;
+  }
+
+  function enterEnding(options = {}) {
+    const { y = DEFAULT_ENDING_Y } = options;
+    endingY = y;
+    mode = "ending";
+    for (const tile of tiles) {
+      tile.targetY = endingY;
+    }
+  }
+
   function updateIntro() {
-    if (!introActive) {
+    if (introComplete) {
       return;
     }
 
-    let allTilesAtTarget = true;
-
-    for (const tile of tiles) {
-      const nextY = tile.y - INTRO_SPEED_Y;
-      tile.y = Math.max(tile.targetY, nextY);
-
-      if (tile.y > tile.targetY) {
-        allTilesAtTarget = false;
-      }
+    if (lerpTilesTowardTargetY(INTRO_SPEED_Y)) {
+      introComplete = true;
     }
+  }
 
-    if (allTilesAtTarget) {
-      introActive = false;
-    }
+  function updatePlaying() {
+    moveTiles();
+    removeTilesOffscreen();
+    addTilesIfNeeded();
+  }
+
+  function updateEnding() {
+    moveTiles();
+    removeTilesOffscreen();
+    lerpTilesTowardTargetY(INTRO_SPEED_Y);
+    addFlatTilesIfNeeded();
   }
 
   return {
     tiles: tiles,
 
     update() {
-      moveTiles();
-      removeTilesOffscreen();
-      addTilesIfNeeded();
+      if (mode === "intro") {
+        updateIntro();
+        return;
+      }
+
+      if (mode === "playing") {
+        updatePlaying();
+        return;
+      }
+
+      if (mode === "ending") {
+        updateEnding();
+      }
     },
 
     draw(screen) {
@@ -140,6 +207,7 @@ function createPlatforms(options = {}) {
     },
 
     startIntroSlideIn,
-    updateIntro,
+    setMode,
+    enterEnding,
   };
 }

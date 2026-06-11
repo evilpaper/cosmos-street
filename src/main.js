@@ -471,8 +471,7 @@ states[GAME_STATE.PRESS_START] = {
     // UI
     title.update();
 
-    // Phase 1: Update all entities
-    platforms.updateIntro();
+    platforms.update();
 
     const canStart = isAudioReady() || isAudioInitFailed();
     if (canStart && hasAnyDirectionInput()) {
@@ -502,6 +501,7 @@ states[GAME_STATE.PLAYING] = {
   enter() {
     time = 0;
     resetInput();
+    platforms.setMode("playing");
     stopMusic();
     music(songs.theme, 0.5);
   },
