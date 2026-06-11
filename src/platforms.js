@@ -44,7 +44,6 @@ function createPlatforms(options = {}) {
 
   let tiles = [];
   let mode = "playing";
-  let introComplete = false;
 
   for (let i = 0; i < amount; i++) {
     tiles.push(
@@ -70,7 +69,7 @@ function createPlatforms(options = {}) {
     }
   }
 
-  function lerpTilesTowardTargetY(speed) {
+  function slideTilesUpIntoViewport(speed) {
     let allTilesAtTarget = true;
 
     for (const tile of tiles) {
@@ -129,13 +128,7 @@ function createPlatforms(options = {}) {
   }
 
   function updateIntro() {
-    if (introComplete) {
-      return;
-    }
-
-    if (lerpTilesTowardTargetY(INTRO_SPEED_Y)) {
-      introComplete = true;
-    }
+    slideTilesUpIntoViewport(INTRO_SPEED_Y);
   }
 
   function updatePlaying() {
