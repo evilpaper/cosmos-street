@@ -113,7 +113,7 @@ function createPlatforms(options = {}) {
     const rightmostTileX = Math.floor(tiles[tiles.length - 1].x);
     const gap = TILE_WIDTH * 4;
 
-    const segementLength = 32;
+    const segementLength = 64;
     const startX = rightmostTileX + gap;
 
     for (let i = 0; i < segementLength; i++) {

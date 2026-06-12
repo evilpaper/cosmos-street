@@ -367,6 +367,11 @@ function collectEggs() {
 
 function respawnEnemy(enemy) {
   enemies.splice(enemies.indexOf(enemy), 1);
+
+  if (game.state?.name === GAME_STATE.ENDING) {
+    return; // remove only — no new enemy
+  }
+
   enemies.push(createEnemy(SCREEN_WIDTH + 12, randomInRange(48, 164)));
 }
 
@@ -522,11 +527,11 @@ states[GAME_STATE.PLAYING] = {
       return;
     }
 
-    // if (time > 200) {
-    //   game.setState(states[GAME_STATE.ENDING]);
-    //   console.log("Game won");
-    //   return;
-    // }
+    if (time > 200) {
+      game.setState(states[GAME_STATE.ENDING]);
+      console.log("Game won");
+      return;
+    }
   },
   draw(_, screen) {
     drawWorld(screen);
@@ -611,11 +616,14 @@ states[GAME_STATE.ENDING] = {
     // scrollSpeed = 0; // stop scrolling
     // player.dx = 10; // Player move on into the sunset (right edge of the screen)
 
-    ensureCollectibles();
+    // ensureCollectibles(); // No need to spawn collectibles in the ending state
     updateUI();
     updateEntities();
     updateInteractions();
     updateVisualEffects();
+    // if (enemies.length === 0 && angels.length === 0 && eggs.length === 0) {
+    //   scrollSpeed = 0;
+    // }
   },
   draw(_, screen) {
     drawWorld(screen);
