@@ -86,6 +86,7 @@ let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
 let deadTimer;
+let winTimer;
 let score;
 let scoreIncrement;
 let highScore = 0;
@@ -600,11 +601,13 @@ states[GAME_STATE.GAME_WON] = {
   name: GAME_STATE.GAME_WON,
   enter() {
     // time = 0; // Not needed, continue from where we left off.
+    winTimer = 0;
     resetInput();
     platforms.setMode("ending");
   },
   update() {
     time += 1;
+    winTimer += 1;
     // scrollSpeed = 0; // stop scrolling
     // player.dx = 10; // Player move on into the sunset (right edge of the screen)
 
@@ -676,6 +679,7 @@ function init() {
   enemies.push(createEnemy(SCREEN_WIDTH * 2, 72));
   startMessage = getStartMessage();
   deadTimer = 0;
+  winTimer = 0;
   score = 0;
   scoreIncrement = 1;
   highScoreUpdated = false;
