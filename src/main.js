@@ -515,8 +515,8 @@ states[GAME_STATE.PLAYING] = {
   update() {
     time += 1;
 
-    ensureCollectibles();
     updateUI();
+    ensureCollectibles();
     updateEntities();
     updateInteractions();
     updateVisualEffects();
@@ -556,7 +556,7 @@ states[GAME_STATE.PLAYING] = {
       }
     }
 
-    if (time > 60) {
+    if (time > 10) {
       print("" + score, "center", 36);
     }
   },
@@ -613,21 +613,32 @@ states[GAME_STATE.ENDING] = {
   update() {
     time += 1;
     winTimer += 1;
-    // scrollSpeed = 0; // stop scrolling
-    // player.dx = 10; // Player move on into the sunset (right edge of the screen)
 
-    // ensureCollectibles(); // No need to spawn collectibles in the ending state
     updateUI();
     updateEntities();
     updateInteractions();
     updateVisualEffects();
+
     if (winTimer > 300) {
       scrollSpeed = 0;
       player.dx = 1.8;
+
+      if (winTimer > 600) {
+        if (input.left || input.right) {
+          restartGame();
+          return;
+        }
+
+        if (input.up) {
+          resetGame();
+          return;
+        }
+      }
     }
   },
   draw(_, screen) {
     drawWorld(screen);
+
     if (winTimer > 300) {
       if (highScoreUpdated) {
         print("You made it!", "center", 128 - 4 - 8);
@@ -639,6 +650,8 @@ states[GAME_STATE.ENDING] = {
       print("Play again ← or →", "center", 186);
       print("Back to title ↑", "center", 202);
     }
+
+    print("" + score, "center", 36);
   },
 };
 
@@ -756,5 +769,6 @@ function draw(screen) {
   for (const star of stars) {
     star.draw(screen);
   }
+
   game.draw(screen);
 }
