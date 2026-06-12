@@ -97,7 +97,7 @@ const GAME_STATE = {
   PRESS_START: "PRESS_START",
   PLAYING: "PLAYING",
   GAME_OVER: "GAME_OVER",
-  GAME_WON: "GAME_WON",
+  ENDING: "ENDING",
 };
 
 const game = createGame();
@@ -523,7 +523,7 @@ states[GAME_STATE.PLAYING] = {
     }
 
     // if (time > 200) {
-    //   game.setState(states[GAME_STATE.GAME_WON]);
+    //   game.setState(states[GAME_STATE.ENDING]);
     //   console.log("Game won");
     //   return;
     // }
@@ -597,8 +597,8 @@ states[GAME_STATE.GAME_OVER] = {
   },
 };
 
-states[GAME_STATE.GAME_WON] = {
-  name: GAME_STATE.GAME_WON,
+states[GAME_STATE.ENDING] = {
+  name: GAME_STATE.ENDING,
   enter() {
     // time = 0; // Not needed, continue from where we left off.
     winTimer = 0;
