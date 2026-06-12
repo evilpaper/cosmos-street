@@ -17,8 +17,8 @@ function createTile(options = {}) {
 
     draw(screen) {
       // Round positions here to keep integer pixels
-      const drawX = Math.round(this.x);
-      const drawY = Math.round(this.y);
+      const drawX = Math.floor(this.x);
+      const drawY = Math.floor(this.y);
 
       screen.drawImage(
         tileSpriteSheet,
@@ -109,8 +109,30 @@ function createPlatforms(options = {}) {
     }
   }
 
+  function spawnFlatPlatformSegment() {
+    const rightmostTileX = Math.floor(tiles[tiles.length - 1].x);
+    const gap = TILE_WIDTH * 4;
+
+    const segementLength = 32;
+    const startX = rightmostTileX + gap;
+
+    for (let i = 0; i < segementLength; i++) {
+      tiles.push(
+        createTile({
+          x: startX + i * TILE_WIDTH,
+          y: 160,
+        }),
+      );
+    }
+  }
+
   function ensureRunwayAhead() {
     if (!needsMorePlatformsAhead()) {
+      return;
+    }
+
+    if (mode === "ending") {
+      spawnFlatPlatformSegment();
       return;
     }
 
@@ -126,7 +148,6 @@ function createPlatforms(options = {}) {
         tile.y = INTRO_START_Y;
       }
     }
-
     // "playing" — no setup
     // "ending" — no setup
   }

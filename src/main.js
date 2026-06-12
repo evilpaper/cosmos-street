@@ -605,6 +605,8 @@ states[GAME_STATE.GAME_WON] = {
   },
   update() {
     time += 1;
+    // scrollSpeed = 0; // stop scrolling
+    // player.dx = 10; // Player move on into the sunset (right edge of the screen)
 
     ensureCollectibles();
     updateUI();
