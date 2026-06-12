@@ -621,12 +621,24 @@ states[GAME_STATE.ENDING] = {
     updateEntities();
     updateInteractions();
     updateVisualEffects();
-    // if (enemies.length === 0 && angels.length === 0 && eggs.length === 0) {
-    //   scrollSpeed = 0;
-    // }
+    if (winTimer > 300) {
+      scrollSpeed = 0;
+      player.dx = 1.8;
+    }
   },
   draw(_, screen) {
     drawWorld(screen);
+    if (winTimer > 300) {
+      if (highScoreUpdated) {
+        print("You made it!", "center", 128 - 4 - 8);
+        print("New high " + highScore, "center", 128 + 4);
+      } else {
+        print("You made it!", "center", "middle");
+      }
+
+      print("Play again ← or →", "center", 186);
+      print("Back to title ↑", "center", 202);
+    }
   },
 };
 

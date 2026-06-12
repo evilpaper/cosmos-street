@@ -22,6 +22,8 @@ const player = {
   x: 50,
   y: 125,
   dy: 0,
+  dx: 0,
+
   jumpStrength: 7.2,
   jumpStrengthBreaking: 6,
   jumpStrengthSpeeding: 8,
@@ -38,6 +40,7 @@ const player = {
     this.x = 50;
     this.y = 0;
     this.dy = 0;
+    this.dx = 0;
     this.state = this.states[0];
     this.pickup = null;
     this.isDead = false;
@@ -149,7 +152,7 @@ const player = {
 
     // Apply movement (ensure integer coordinates)
     this.y = Math.floor(this.y + this.dy);
-    this.x = Math.floor(this.x);
+    this.x = Math.floor(this.x) + this.dx;
 
     // Platform collision detection
     const overlappingTiles = [];
