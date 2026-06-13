@@ -7,6 +7,7 @@ const FRICTION = 0.32; // A value between 0 and 1 that determines how much frict
 const SCROLL_SPEED_BREAKING = 0.3;
 const SCROLL_SPEED_SKATING = 1.6;
 const SCROLL_SPEED_SPEEDING = 2.4;
+const PLAYING_TIME = 60 * 10; // 10 seconds. First number is ticks. Remember, we do 60 times per second
 
 /**
  * TILE_WIDTH AND TILE_HEIGHT are shared between the functions createTile() and createPlatforms()
@@ -417,6 +418,18 @@ function gameOverOptions() {
   return playerHasFallenOffScreen() ? { playDropSound: true } : {};
 }
 
+// Winning
+
+// Once the player has entered "ending" state we start to check for these conditions to orchestrate the game ending.
+
+function playerHasReachedFlatTileSegement() {
+  return platforms.tiles.some((tile) => tile.type === "flat" && tile.x < 24);
+}
+
+function playerHasSkatedOffInTheSunset() {
+  return player.x > 256;
+}
+
 /**
  * Leave PLAYING for GAME_OVER (fall off screen or player death).
  * @param {{ playDropSound?: boolean }} [options]
@@ -527,9 +540,8 @@ states[GAME_STATE.PLAYING] = {
       return;
     }
 
-    if (time > 200) {
+    if (time > PLAYING_TIME) {
       game.setState(states[GAME_STATE.ENDING]);
-      console.log("Game won");
       return;
     }
   },
@@ -582,8 +594,8 @@ states[GAME_STATE.GAME_OVER] = {
       return;
     }
 
-    // Reuses shared world tick only — no spawning, interactions, effects, or exit checks.
     updateEntities();
+    updateVisualEffects();
   },
   draw(_, screen) {
     drawWorld(screen);
@@ -615,15 +627,17 @@ states[GAME_STATE.ENDING] = {
     winTimer += 1;
 
     updateUI();
-    updateEntities();
-    updateInteractions();
-    updateVisualEffects();
 
-    if (winTimer > 300) {
+    if (isGameOver()) {
+      enterGameOverFromPlaying(gameOverOptions());
+      return;
+    }
+
+    if (playerHasReachedFlatTileSegement()) {
       scrollSpeed = 0;
       player.dx = 1.8;
 
-      if (winTimer > 600) {
+      if (playerHasSkatedOffInTheSunset()) {
         if (input.left || input.right) {
           restartGame();
           return;
@@ -635,11 +649,18 @@ states[GAME_STATE.ENDING] = {
         }
       }
     }
+
+    if (!playerHasSkatedOffInTheSunset()) {
+      updateEntities();
+      updateInteractions();
+    }
+
+    updateVisualEffects();
   },
   draw(_, screen) {
     drawWorld(screen);
 
-    if (winTimer > 300) {
+    if (playerHasReachedFlatTileSegement()) {
       if (highScoreUpdated) {
         print("You made it!", "center", 128 - 4 - 8);
         print("New high " + highScore, "center", 128 + 4);
@@ -647,8 +668,10 @@ states[GAME_STATE.ENDING] = {
         print("You made it!", "center", "middle");
       }
 
-      print("Play again ← or →", "center", 186);
-      print("Back to title ↑", "center", 202);
+      if (playerHasSkatedOffInTheSunset()) {
+        print("Play again ← or →", "center", 186);
+        print("Back to title ↑", "center", 202);
+      }
     }
 
     print("" + score, "center", 36);

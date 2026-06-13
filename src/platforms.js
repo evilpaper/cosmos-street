@@ -1,24 +1,30 @@
 const tileSpriteSheet = loadOnce("./images/tiles-sheet.png");
 
 function createTile(options = {}) {
-  const { x = 0, y = 0, width = TILE_WIDTH, height = TILE_HEIGHT } = options;
+  const {
+    x = 0,
+    y = 0,
+    width = TILE_WIDTH,
+    height = TILE_HEIGHT,
+    type = "normal",
+  } = options;
 
   return {
     name: "tile",
     x: x,
     y: y,
-    targetY: y,
     width,
     height,
+    type: type,
 
     update() {
       this.x = this.x - scrollSpeed;
     },
 
-    draw(screen) {
+    draw(screen, yOffset = 0) {
       // Round positions here to keep integer pixels
       const drawX = Math.floor(this.x);
-      const drawY = Math.floor(this.y);
+      const drawY = Math.floor(this.y + yOffset);
 
       screen.drawImage(
         tileSpriteSheet,
@@ -44,6 +50,7 @@ function createPlatforms(options = {}) {
 
   let tiles = [];
   let mode = "playing";
+  let introOffsetY = 0;
 
   for (let i = 0; i < amount; i++) {
     tiles.push(
@@ -67,21 +74,6 @@ function createPlatforms(options = {}) {
         tiles.splice(tiles.indexOf(tile), 1);
       }
     }
-  }
-
-  function slideTilesUpIntoViewport(speed) {
-    let allTilesAtTarget = true;
-
-    for (const tile of tiles) {
-      const nextY = tile.y - speed;
-      tile.y = Math.max(tile.targetY, nextY);
-
-      if (tile.y > tile.targetY) {
-        allTilesAtTarget = false;
-      }
-    }
-
-    return allTilesAtTarget;
   }
 
   function needsMorePlatformsAhead() {
@@ -121,6 +113,7 @@ function createPlatforms(options = {}) {
         createTile({
           x: startX + i * TILE_WIDTH,
           y: 160,
+          type: "flat",
         }),
       );
     }
@@ -143,17 +136,16 @@ function createPlatforms(options = {}) {
     mode = nextMode;
 
     if (mode === "intro") {
-      for (const tile of tiles) {
-        tile.targetY = tile.y;
-        tile.y = INTRO_START_Y;
-      }
+      // Push the tiles down so they start outside the bottom of the screen during intro
+      // so they can scroll up into viewport when during the intro
+      introOffsetY = INTRO_START_Y;
     }
     // "playing" — no setup
     // "ending" — no setup
   }
 
   function updateIntro() {
-    slideTilesUpIntoViewport(INTRO_SPEED_Y);
+    introOffsetY = Math.max(0, introOffsetY - INTRO_SPEED_Y);
   }
 
   function updatePlaying() {
@@ -189,8 +181,9 @@ function createPlatforms(options = {}) {
     },
 
     draw(screen) {
+      const yOffset = mode === "intro" ? introOffsetY : 0;
       for (const tile of tiles) {
-        tile.draw(screen);
+        tile.draw(screen, yOffset);
       }
     },
 
