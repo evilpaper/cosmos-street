@@ -60,6 +60,14 @@ function testScoring() {
   });
   assertEqual(squared.award("egg"), 1, "custom curve: first pickup");
   assertEqual(squared.award("egg"), 4, "custom curve: second pickup");
+
+  const consumed = createScoring();
+  assertEqual(consumed.award("egg"), 1, "consume: first egg");
+  assertEqual(consumed.award("egg"), 2, "consume: second egg");
+  consumed.reset();
+  assertEqual(consumed.streakType, null, "consume: reset clears streak type");
+  assertEqual(consumed.streakCount, 0, "consume: reset clears streak count");
+  assertEqual(consumed.award("egg"), 1, "consume: next egg after reset is 1");
 }
 
 function run() {

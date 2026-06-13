@@ -72,6 +72,7 @@ const player = {
     }
 
     this.pickup = null;
+    scoring?.reset();
   },
 
   update(tiles, time) {
