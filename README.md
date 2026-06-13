@@ -13,6 +13,8 @@ Cosmos Street is an old-school auto-runner. Inspired by the skateboard sequences
 
 The game runs right in the browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy.
 
+Couldn’t find the original Wonder Boy sound effects, so I used the closest available alternatives. They were downloaded as WAV files and converted to OGG to reduce file size.
+
 ## How to play
 
 - Jump = Arrow Up
@@ -46,9 +48,13 @@ Other contraints and requirements:
 
 ## Credits
 
-- The art for the enemy, called [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207), is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery).
+- The art for the enemy, called [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207), is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery). Slightly modifed.
 - Font is modelled after [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980) by [Void](https://arcade.itch.io/). Redrawn in Aseprite.
-- Sounds Effects are taken from [Wonder Boy III: The Dragon's Trap](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/) and [Penguin Land](https://sounds.spriters-resource.com/master_system/penguinland/asset/404945/). Credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/). Couldn’t find the original Wonder Boy sound effects, so I used the closest available alternatives. They were downloaded as WAV files and converted to OGG to reduce file size.
+- Sounds Effects, all credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/) for providing. The following sound effects are used:
+  - [Wonder Boy III: The Dragon's Trap](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/)
+    - dragon-breath.wav
+  - [Mega Man](https://sounds.spriters-resource.com/nes/mm/asset/401483/)
+    - PiPiPi.wav
 - Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6) by [David Fesliyan](https://www.fesliyanstudios.com/).
 
 ## Running Locally
