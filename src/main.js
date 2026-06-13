@@ -7,7 +7,8 @@ const FRICTION = 0.32; // A value between 0 and 1 that determines how much frict
 const SCROLL_SPEED_BREAKING = 0.3;
 const SCROLL_SPEED_SKATING = 1.6;
 const SCROLL_SPEED_SPEEDING = 2.4;
-const PLAYING_TIME = 60 * 10; // 10 seconds. First number is ticks. Remember, we do 60 times per second
+const PLAYTIME_IN_SECONDS = 30;
+const PLAYING_TIME = 60 * PLAYTIME_IN_SECONDS; // First number is ticks. Remember, we do 60 times per second
 
 /**
  * TILE_WIDTH AND TILE_HEIGHT are shared between the functions createTile() and createPlatforms()
@@ -89,7 +90,7 @@ let startMessage;
 let deadTimer;
 let winTimer;
 let score;
-let scoreIncrement;
+let scoring;
 let highScore = 0;
 let highScoreUpdated = false;
 
@@ -272,7 +273,7 @@ function ensureCollectibles() {
     angels.push(createAngel(platforms.tiles));
   }
 
-  if (eggs.length === 0) {
+  if (eggs.length < 2) {
     eggs.push(createEgg(platforms.tiles, 1));
   }
 }
@@ -325,9 +326,18 @@ function dismissCompanionAngel() {
   return true;
 }
 
+function addScore(points) {
+  score += points;
+  if (score > highScore) {
+    highScore = score;
+    highScoreUpdated = true;
+  }
+}
+
 function collectAngels() {
   for (let i = angels.length - 1; i >= 0; i--) {
     const angel = angels[i];
+
     if (angel.state !== "idle") {
       // Companion active — only one angel allowed.
       return;
@@ -341,14 +351,8 @@ function collectAngels() {
         angel.pickedUpY = angel.y;
         angel.state = "approach";
       }
-      score += scoreIncrement;
-      scoreIncrement += 1;
+      addScore(scoring.award("angel"));
       sfx(sounds.angel);
-
-      if (score > highScore) {
-        highScore = score;
-        highScoreUpdated = true;
-      }
     }
   }
 }
@@ -360,6 +364,7 @@ function collectEggs() {
       sparkles.push(createSparkle(egg.x, egg.y - 8));
       eggs.splice(i, 1);
       sfx(sounds.egg);
+      addScore(scoring.award("egg"));
       dismissCompanionAngel();
       player.pickup = "egg";
     }
@@ -737,7 +742,7 @@ function init() {
   deadTimer = 0;
   winTimer = 0;
   score = 0;
-  scoreIncrement = 1;
+  scoring = createScoring();
   highScoreUpdated = false;
 
   if (!game.state) {
