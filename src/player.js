@@ -109,8 +109,11 @@ const player = {
 
     if (this.state === "diving") {
       this.totalFrames = 2;
-      if (!input.right) {
-        this.state = this.states[0]; // -> Only stay in the state if right arrow is pressed
+      if (input.up && this.pickup === "egg") {
+        this.consumeEgg();
+        this.jump(this.doubleJumpStrength);
+      } else if (!input.right) {
+        this.state = this.states[0];
       } else if (input.right) {
         this.dive();
       }
