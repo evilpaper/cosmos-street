@@ -359,6 +359,18 @@ function o(value) {
 }
 
 /**
+ * Returns true if two axis-aligned boxes are closer than gap pixels apart.
+ */
+function boxesTooClose(a, b, gap) {
+  return !(
+    a.x + a.width + gap <= b.x ||
+    b.x + b.width + gap <= a.x ||
+    a.y + a.height + gap <= b.y ||
+    b.y + b.height + gap <= a.y
+  );
+}
+
+/**
  * Center a string horizontally on the screen
  */
 

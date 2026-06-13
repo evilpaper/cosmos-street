@@ -7,7 +7,7 @@ const FRICTION = 0.32; // A value between 0 and 1 that determines how much frict
 const SCROLL_SPEED_BREAKING = 0.3;
 const SCROLL_SPEED_SKATING = 1.6;
 const SCROLL_SPEED_SPEEDING = 2.4;
-const PLAYTIME_IN_SECONDS = 30;
+const PLAYTIME_IN_SECONDS = 60;
 const PLAYING_TIME = 60 * PLAYTIME_IN_SECONDS; // First number is ticks. Remember, we do 60 times per second
 
 /**
@@ -269,8 +269,12 @@ function drawWorld(screen) {
 // Spawning
 
 function ensureCollectibles() {
-  if (angels.length === 0) {
-    angels.push(createAngel(platforms.tiles));
+  if (angels.length < 2) {
+    const idleAngels = angels.filter((angel) => angel.state === "idle");
+    const angel = createAngel(platforms.tiles, idleAngels);
+    if (angel) {
+      angels.push(angel);
+    }
   }
 
   if (eggs.length < 2) {
@@ -335,24 +339,21 @@ function addScore(points) {
 }
 
 function collectAngels() {
-  for (let i = angels.length - 1; i >= 0; i--) {
-    const angel = angels[i];
-
-    if (angel.state !== "idle") {
-      // Companion active — only one angel allowed.
-      return;
-    }
-
-    if (checkCollision(player, angel.getHitbox())) {
-      // sparkles.push(createSparkle(angel.x, angel.y - 8));
+  for (const angel of angels) {
+    if (!checkCollision(player, angel.getHitbox())) continue;
+    if (angel.state === "idle") {
       if (player.pickup !== "angel") {
         player.pickup = "angel";
         angel.pickedUpX = angel.x;
         angel.pickedUpY = angel.y;
         angel.state = "approach";
+        addScore(scoring.award("angel"));
+        sfx(sounds.angel);
+      } else {
+        angel.state = "leave"; // optional: shoo idle angels while carrying
+        addScore(scoring.award("angel"));
+        sfx(sounds.angel);
       }
-      addScore(scoring.award("angel"));
-      sfx(sounds.angel);
     }
   }
 }
