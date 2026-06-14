@@ -32,6 +32,8 @@ const DIFFICULTY_STAGES = [
     tilesMax: 14,
     platformYMin: 80,
     platformYRange: 120,
+    angelsMin: 2,
+    eggsMin: 2,
   },
   {
     time: 5 * 60,
@@ -41,6 +43,8 @@ const DIFFICULTY_STAGES = [
     tilesMax: 16,
     platformYMin: 80,
     platformYRange: 120,
+    angelsMin: 2,
+    eggsMin: 2,
   },
   {
     time: 10 * 60,
@@ -50,6 +54,8 @@ const DIFFICULTY_STAGES = [
     tilesMax: 12,
     platformYMin: 80,
     platformYRange: 120,
+    angelsMin: 2,
+    eggsMin: 2,
   },
   {
     time: 15 * 60,
@@ -59,6 +65,8 @@ const DIFFICULTY_STAGES = [
     tilesMax: 16,
     platformYMin: 80,
     platformYRange: 120,
+    angelsMin: 2,
+    eggsMin: 2,
   },
   {
     time: 20 * 60,
@@ -68,6 +76,8 @@ const DIFFICULTY_STAGES = [
     tilesMax: 10,
     platformYMin: 80,
     platformYRange: 120,
+    angelsMin: 2,
+    eggsMin: 2,
   },
 ];
 
@@ -269,7 +279,7 @@ function drawWorld(screen) {
 // Spawning
 
 function ensureCollectibles() {
-  if (angels.length < 2) {
+  if (angels.length < getDifficulty().angelsMin) {
     const idleAngels = angels.filter((angel) => angel.state === "idle");
     const angel = createAngel(platforms.tiles, idleAngels);
     if (angel) {
@@ -277,7 +287,7 @@ function ensureCollectibles() {
     }
   }
 
-  if (eggs.length < 2) {
+  if (eggs.length < getDifficulty().eggsMin) {
     eggs.push(createEgg(platforms.tiles, 1));
   }
 }
@@ -729,7 +739,7 @@ function restartGame() {
  */
 function init() {
   stars = createStars(30);
-  platforms = createPlatforms(30);
+  platforms = createPlatforms(60);
   angels = [];
   eggs = [];
   skateboardSparkle = createSkateboardSparkle(player);
