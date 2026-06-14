@@ -1,58 +1,11 @@
 const angelSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png");
 
-const ANGEL_SPAWN_GAP = 8;
-const ANGEL_OSCILLATION_AMPLITUDE = 2;
-
-function angelSpawnBox(x, y, width, height) {
-  return {
-    x,
-    y: y - ANGEL_OSCILLATION_AMPLITUDE,
-    width,
-    height: height + ANGEL_OSCILLATION_AMPLITUDE * 2,
-  };
-}
-
-function findAngelPositionOnTile(
-  tiles,
-  { screenWidth, spriteWidth, spriteHeight, floatHeight },
-  existingAngels = [],
-) {
-  const eligibleTiles = tiles.filter((tile) => tile.x > screenWidth);
-  const candidates = [];
-
-  for (const tile of eligibleTiles) {
-    const pos = {
-      x: tile.x + tile.width / 2 - spriteWidth / 2,
-      y: tile.y - spriteHeight - floatHeight,
-    };
-
-    const box = angelSpawnBox(pos.x, pos.y, spriteWidth, spriteHeight);
-    const conflicts = existingAngels.some((angel) =>
-      boxesTooClose(
-        box,
-        angelSpawnBox(angel.x, angel.y, angel.width, angel.height),
-        ANGEL_SPAWN_GAP,
-      ),
-    );
-
-    if (!conflicts) {
-      candidates.push(pos);
-    }
-  }
-
-  if (candidates.length === 0) {
-    return null;
-  }
-
-  return candidates[Math.floor(Math.random() * candidates.length)];
-}
-
-function createAngel(tiles, existingAngels = []) {
+function createAngel(tiles, existingBoxes = []) {
   const WIDTH = 16;
   const HEIGHT = 16;
   const HITBOX_WIDTH = 8;
   const HITBOX_HEIGHT = 8;
-  const OSCILLATION_AMPLITUDE = ANGEL_OSCILLATION_AMPLITUDE;
+  const OSCILLATION_AMPLITUDE = 2;
   const OSCILLATION_SPEED = 0.1;
   const ANCHOR_OFFSET_X = -16;
   const ANCHOR_OFFSET_Y = -16;
@@ -62,32 +15,20 @@ function createAngel(tiles, existingAngels = []) {
 
   const STATES = ["idle", "approach", "follow", "leave"];
 
-  const spawnOptions = {
-    screenWidth: SCREEN_WIDTH, // Use the global SCREEN_WIDTH constant.
+  const initialPosition = findSpreadCollectiblePosition(tiles, existingBoxes, {
     spriteWidth: WIDTH,
     spriteHeight: HEIGHT,
     floatHeight: FLOAT_HEIGHT,
-  };
+  });
 
-  // Mutable state (closure)
-  let tick = 0;
-  let x;
-  let y;
-  let introProgress = 0;
-
-  const initialPosition = findAngelPositionOnTile(
-    tiles,
-    spawnOptions,
-    existingAngels,
-  );
-
-  // If no position if found we return nothing. This means that whatever called createAngel need to handle retry.
   if (initialPosition === null) {
     return;
   }
 
-  x = initialPosition.x;
-  y = initialPosition.y;
+  let tick = 0;
+  let x = initialPosition.x;
+  let y = initialPosition.y;
+  let introProgress = 0;
 
   function updateIdle(angel) {
     angel.x -= scrollSpeed;

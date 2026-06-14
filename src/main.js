@@ -19,6 +19,8 @@ const PLAYING_TIME = 60 * PLAYTIME_IN_SECONDS; // First number is ticks. Remembe
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 
+const COLLECTIBLE_SPAWN_COOLDOWN = 3 * 60;
+
 /**
  * Difficulty stages
  */
@@ -32,8 +34,10 @@ const DIFFICULTY_STAGES = [
     tilesMax: 14,
     platformYMin: 80,
     platformYRange: 120,
-    angelsMin: 3,
-    eggsMin: 2,
+    eggsMaxPerStage: 3,
+    eggsMaxActive: 2,
+    angelsMaxPerStage: 3,
+    angelsMaxActive: 2,
     enemiesMin: 1,
     enemySpeedBonus: 0,
     electricityChance: 0.015,
@@ -46,8 +50,10 @@ const DIFFICULTY_STAGES = [
     tilesMax: 12,
     platformYMin: 80,
     platformYRange: 120,
-    angelsMin: 2,
-    eggsMin: 2,
+    eggsMaxPerStage: 3,
+    eggsMaxActive: 2,
+    angelsMaxPerStage: 3,
+    angelsMaxActive: 2,
     enemiesMin: 1,
     enemySpeedBonus: 0.15,
     electricityChance: 0.02,
@@ -60,8 +66,10 @@ const DIFFICULTY_STAGES = [
     tilesMax: 10,
     platformYMin: 80,
     platformYRange: 120,
-    angelsMin: 2,
-    eggsMin: 1,
+    eggsMaxPerStage: 4,
+    eggsMaxActive: 3,
+    angelsMaxPerStage: 4,
+    angelsMaxActive: 3,
     enemiesMin: 2,
     enemySpeedBonus: 0.3,
     electricityChance: 0.025,
@@ -74,9 +82,11 @@ const DIFFICULTY_STAGES = [
     tilesMax: 8,
     platformYMin: 80,
     platformYRange: 120,
-    angelsMin: 1,
-    eggsMin: 1,
-    enemiesMin: 2,
+    eggsMaxPerStage: 4,
+    eggsMaxActive: 3,
+    angelsMaxPerStage: 4,
+    angelsMaxActive: 3,
+    enemiesMin: 3,
     enemySpeedBonus: 0.5,
     electricityChance: 0.03,
   },
@@ -88,9 +98,11 @@ const DIFFICULTY_STAGES = [
     tilesMax: 6,
     platformYMin: 80,
     platformYRange: 120,
-    angelsMin: 1,
-    eggsMin: 1,
-    enemiesMin: 3,
+    eggsMaxPerStage: 1,
+    eggsMaxActive: 1,
+    angelsMaxPerStage: 1,
+    angelsMaxActive: 1,
+    enemiesMin: 4,
     enemySpeedBonus: 0.75,
     electricityChance: 0.035,
   },
@@ -118,6 +130,11 @@ let score;
 let scoring;
 let highScore = 0;
 let highScoreUpdated = false;
+let collectibleStageIndex = 0;
+let eggsSpawnedInStage = 0;
+let angelsSpawnedInStage = 0;
+let lastEggSpawnTime = 0;
+let lastAngelSpawnTime = 0;
 
 const GAME_STATE = {
   INSERT_COIN: "INSERT_COIN", // Actually more like WAITING_FOR_INTERACTION. We use it to wait for user interaction to initialize audio but INSERT_COIN sounds more fun.
@@ -293,17 +310,76 @@ function drawWorld(screen) {
 
 // Spawning
 
+function getCollectibleStageIndex() {
+  let idx = 0;
+  for (let i = 0; i < DIFFICULTY_STAGES.length; i++) {
+    if (time >= DIFFICULTY_STAGES[i].time) {
+      idx = i;
+    }
+  }
+  return idx;
+}
+
+function syncCollectibleStage() {
+  const idx = getCollectibleStageIndex();
+  if (idx !== collectibleStageIndex) {
+    collectibleStageIndex = idx;
+    eggsSpawnedInStage = 0;
+    angelsSpawnedInStage = 0;
+    lastEggSpawnTime = time - COLLECTIBLE_SPAWN_COOLDOWN;
+    lastAngelSpawnTime = time - COLLECTIBLE_SPAWN_COOLDOWN;
+  }
+}
+
+function collectiblesSpawnBoxes() {
+  const boxes = [];
+  for (const egg of eggs) {
+    boxes.push({ x: egg.x, y: egg.y, width: egg.width, height: egg.height });
+  }
+  for (const angel of angels) {
+    if (angel.state !== "idle") continue;
+    boxes.push({
+      x: angel.x,
+      y: angel.y,
+      width: angel.width,
+      height: angel.height,
+    });
+  }
+  return boxes;
+}
+
 function ensureCollectibles() {
-  if (angels.length < getDifficulty().angelsMin) {
-    const idleAngels = angels.filter((angel) => angel.state === "idle");
-    const angel = createAngel(platforms.tiles, idleAngels);
+  syncCollectibleStage();
+  const diff = getDifficulty();
+  const existingBoxes = collectiblesSpawnBoxes();
+
+  const idleAngels = angels.filter((angel) => angel.state === "idle");
+  const activeEggs = eggs.filter((egg) => egg.active);
+
+  if (
+    idleAngels.length < diff.angelsMaxActive &&
+    angelsSpawnedInStage < diff.angelsMaxPerStage &&
+    time - lastAngelSpawnTime >= COLLECTIBLE_SPAWN_COOLDOWN
+  ) {
+    const angel = createAngel(platforms.tiles, existingBoxes);
     if (angel) {
       angels.push(angel);
+      angelsSpawnedInStage += 1;
+      lastAngelSpawnTime = time;
     }
   }
 
-  if (eggs.length < getDifficulty().eggsMin) {
-    eggs.push(createEgg(platforms.tiles, 1));
+  if (
+    activeEggs.length < diff.eggsMaxActive &&
+    eggsSpawnedInStage < diff.eggsMaxPerStage &&
+    time - lastEggSpawnTime >= COLLECTIBLE_SPAWN_COOLDOWN
+  ) {
+    const egg = createEgg(platforms.tiles, existingBoxes);
+    if (egg) {
+      eggs.push(egg);
+      eggsSpawnedInStage += 1;
+      lastEggSpawnTime = time;
+    }
   }
 }
 
@@ -777,6 +853,11 @@ function init() {
   score = 0;
   scoring = createScoring();
   highScoreUpdated = false;
+  collectibleStageIndex = 0;
+  eggsSpawnedInStage = 0;
+  angelsSpawnedInStage = 0;
+  lastEggSpawnTime = -COLLECTIBLE_SPAWN_COOLDOWN;
+  lastAngelSpawnTime = -COLLECTIBLE_SPAWN_COOLDOWN;
 
   if (!game.state) {
     game.setState(states[GAME_STATE.INSERT_COIN]);

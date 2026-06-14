@@ -2,7 +2,7 @@ const collectibleSpriteSheet = loadOnce(
   "./images/collectibles-sprite-sheet.png",
 );
 
-function createEgg(tiles) {
+function createEgg(tiles, existingBoxes = []) {
   const WIDTH = 16;
   const HEIGHT = 16;
   const HITBOX_WIDTH = 8;
@@ -10,32 +10,21 @@ function createEgg(tiles) {
   const SPRITE_SHEET_FRAME_X = 32;
   const SPRITE_SHEET_FRAME_Y = 0;
 
-  // Find initial position on a tile
-  function findPositionOnTile(tiles) {
-    // Only spawn on tiles that are ahead of the screen
-    const eligibleTiles = tiles.filter((tile) => tile.x > SCREEN_WIDTH);
+  const position = findSpreadCollectiblePosition(tiles, existingBoxes, {
+    spriteWidth: WIDTH,
+    spriteHeight: HEIGHT,
+  });
 
-    if (eligibleTiles.length > 0) {
-      const tile =
-        eligibleTiles[Math.floor(Math.random() * eligibleTiles.length)];
-      return {
-        x: tile.x + tile.width / 2 - WIDTH / 2,
-        y: tile.y - HEIGHT,
-      };
-    }
-
+  if (position === null) {
     return null;
   }
 
-  const position = findPositionOnTile(tiles);
-  let active = position !== null;
-
   return {
-    x: active ? position.x : 0,
-    y: active ? position.y : 0,
+    x: position.x,
+    y: position.y,
     width: WIDTH,
     height: HEIGHT,
-    active: active,
+    active: true,
 
     getHitbox() {
       return {
@@ -47,24 +36,10 @@ function createEgg(tiles) {
     },
 
     update() {
-      // Auto-respawn if inactive and tiles become available
-      if (!active) {
-        const newPosition = findPositionOnTile(tiles);
-        if (newPosition !== null) {
-          this.respawn(tiles);
-        }
-        return;
-      }
-
       this.x -= scrollSpeed;
     },
 
     draw(screen) {
-      if (!active) {
-        return;
-      }
-
-      // No animation here, just the one frame.
       const spriteFrameX = SPRITE_SHEET_FRAME_X;
       const spriteFrameY = SPRITE_SHEET_FRAME_Y;
 
@@ -82,19 +57,6 @@ function createEgg(tiles) {
         WIDTH,
         HEIGHT,
       );
-    },
-
-    respawn(tiles) {
-      const pos = findPositionOnTile(tiles);
-      if (pos !== null) {
-        this.x = pos.x;
-        this.y = pos.y;
-        active = true;
-        this.active = true;
-      } else {
-        active = false;
-        this.active = false;
-      }
     },
   };
 }

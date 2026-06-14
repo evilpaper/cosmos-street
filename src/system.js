@@ -370,6 +370,40 @@ function boxesTooClose(a, b, gap) {
   );
 }
 
+const COLLECTIBLE_SPAWN_GAP = 96;
+
+function findSpreadCollectiblePosition(tiles, existingBoxes, options = {}) {
+  const {
+    minGap = COLLECTIBLE_SPAWN_GAP,
+    minX = SCREEN_WIDTH + 32,
+    spriteWidth,
+    spriteHeight,
+    floatHeight = 0,
+  } = options;
+
+  const candidates = [];
+  for (const tile of tiles) {
+    if (tile.x < minX) continue;
+    const box = {
+      x: tile.x + tile.width / 2 - spriteWidth / 2,
+      y: tile.y - spriteHeight - floatHeight,
+      width: spriteWidth,
+      height: spriteHeight,
+    };
+    const tooClose = existingBoxes.some((b) => boxesTooClose(box, b, minGap));
+    if (!tooClose) candidates.push({ x: box.x, y: box.y, tileX: tile.x });
+  }
+
+  if (candidates.length === 0) return null;
+
+  candidates.sort((a, b) => b.tileX - a.tileX);
+  const farPool = candidates.slice(
+    0,
+    Math.max(1, Math.ceil(candidates.length / 3)),
+  );
+  return farPool[Math.floor(Math.random() * farPool.length)];
+}
+
 /**
  * Center a string horizontally on the screen
  */

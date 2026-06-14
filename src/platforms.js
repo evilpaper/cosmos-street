@@ -44,7 +44,7 @@ function createTile(options = {}) {
 function createPlatforms(options = {}) {
   const { amount = 30 } = options;
 
-  const MIN_RUNWAY_RIGHT_EDGE_X = SCREEN_WIDTH + TILE_WIDTH * 4;
+  const MIN_RUNWAY_RIGHT_EDGE_X = SCREEN_WIDTH + SCREEN_WIDTH / 2;
   const INTRO_SPEED_Y = 6;
   const INTRO_START_Y = SCREEN_HEIGHT + TILE_HEIGHT;
 
