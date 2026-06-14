@@ -26,58 +26,73 @@ const TILE_HEIGHT = 16;
 const DIFFICULTY_STAGES = [
   {
     time: 0,
-    gapMin: 32,
-    gapMax: 48,
-    tilesMin: 2,
+    gapMin: 24,
+    gapMax: 40,
+    tilesMin: 4,
     tilesMax: 14,
     platformYMin: 80,
     platformYRange: 120,
-    angelsMin: 2,
+    angelsMin: 3,
     eggsMin: 2,
+    enemiesMin: 1,
+    enemySpeedBonus: 0,
+    electricityChance: 0.015,
   },
   {
-    time: 5 * 60,
-    gapMin: 40,
-    gapMax: 64,
+    time: 12 * 60,
+    gapMin: 32,
+    gapMax: 56,
     tilesMin: 3,
-    tilesMax: 16,
-    platformYMin: 80,
-    platformYRange: 120,
-    angelsMin: 2,
-    eggsMin: 2,
-  },
-  {
-    time: 10 * 60,
-    gapMin: 48,
-    gapMax: 80,
-    tilesMin: 2,
     tilesMax: 12,
     platformYMin: 80,
     platformYRange: 120,
     angelsMin: 2,
     eggsMin: 2,
+    enemiesMin: 1,
+    enemySpeedBonus: 0.15,
+    electricityChance: 0.02,
   },
   {
-    time: 15 * 60,
-    gapMin: 56,
-    gapMax: 64,
+    time: 24 * 60,
+    gapMin: 40,
+    gapMax: 72,
     tilesMin: 2,
-    tilesMax: 16,
-    platformYMin: 80,
-    platformYRange: 120,
-    angelsMin: 2,
-    eggsMin: 2,
-  },
-  {
-    time: 20 * 60,
-    gapMin: 64,
-    gapMax: 96,
-    tilesMin: 1,
     tilesMax: 10,
     platformYMin: 80,
     platformYRange: 120,
     angelsMin: 2,
-    eggsMin: 2,
+    eggsMin: 1,
+    enemiesMin: 2,
+    enemySpeedBonus: 0.3,
+    electricityChance: 0.025,
+  },
+  {
+    time: 36 * 60,
+    gapMin: 48,
+    gapMax: 80,
+    tilesMin: 2,
+    tilesMax: 8,
+    platformYMin: 80,
+    platformYRange: 120,
+    angelsMin: 1,
+    eggsMin: 1,
+    enemiesMin: 2,
+    enemySpeedBonus: 0.5,
+    electricityChance: 0.03,
+  },
+  {
+    time: 48 * 60,
+    gapMin: 56,
+    gapMax: 96,
+    tilesMin: 1,
+    tilesMax: 6,
+    platformYMin: 80,
+    platformYRange: 120,
+    angelsMin: 1,
+    eggsMin: 1,
+    enemiesMin: 3,
+    enemySpeedBonus: 0.75,
+    electricityChance: 0.035,
   },
 ];
 
@@ -289,6 +304,12 @@ function ensureCollectibles() {
 
   if (eggs.length < getDifficulty().eggsMin) {
     eggs.push(createEgg(platforms.tiles, 1));
+  }
+}
+
+function ensureEnemies() {
+  if (enemies.length < getDifficulty().enemiesMin) {
+    enemies.push(createEnemy(SCREEN_WIDTH + 12, randomInRange(48, 164)));
   }
 }
 
@@ -546,6 +567,7 @@ states[GAME_STATE.PLAYING] = {
 
     updateUI();
     ensureCollectibles();
+    ensureEnemies();
     updateEntities();
     updateInteractions();
     updateVisualEffects();
