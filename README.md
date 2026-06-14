@@ -9,11 +9,9 @@ Trapped in swarms of nefarious alien machines, you must skate your way to safety
 
 ## About this project
 
-Cosmos Street is an old-school auto-runner. Inspired by the skateboard sequences in Wonder Boy on the Sega Master System, complete with borrowed sprites. It’s made for fun and as an experiment in pushing the creative limits within the restrictions of classic video game design.
+Cosmos Street is an old-school auto-runner inspired by the skateboard sequences in Wonder Boy, complete with borrowed sprites and reused sound effects. Made purely for fun and as an experiment in pushing creative limits within the constraints of classic video game design.
 
 The game runs right in the browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy.
-
-Couldn’t find the original Wonder Boy sound effects, so I used the closest available alternatives. They were downloaded as WAV files and converted to OGG to reduce file size.
 
 ## How to play
 
@@ -32,7 +30,11 @@ Background music starts when you begin playing and loops continuously. Use the S
 
 ## Constraints and Requirements
 
-The main premise of the project was to avoid creating new assets and instead focus on piecing together what I could find to make something fun. Producing art, sound effects, and music is time-consuming, so for the main character I chose the skateboard sprites from the original Wonder Boy on the Sega Master System. I find the art style very expressive. I’m impressed by how much feeling you can squeeze out of just a few frames.
+This game was made with the following idea in mind:
+
+Avoid creating new assets and instead focus on piecing together what already exists to make something fun. Producing art, sound effects, and music is time-consuming, so for the main character I chose the skateboard sprites from the original Wonder Boy. I find the art style expressive and am impressed by how much personality can be squeezed out of just a few frames of animation.
+
+To capture the right feeling, I borrowed sound effects from games of the same era as well.
 
 Other contraints and requirements:
 
@@ -49,13 +51,18 @@ Other contraints and requirements:
 ## Credits
 
 - The art for the enemy, called [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207), is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery). Slightly modifed.
+- Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6) by [David Fesliyan](https://www.fesliyanstudios.com/). Lovley tune.
 - Font is modelled after [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980) by [Void](https://arcade.itch.io/). Redrawn in Aseprite.
-- Sounds Effects, all credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/) for providing. The following sound effects are used:
+- Sounds Effects, all credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/) for providing. The following sound effects are used.
   - [Wonder Boy III: The Dragon's Trap](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/)
     - dragon-breath.wav
+    - box-get.wav
+    - enemy-hurt.wav
+    - fireball.wav
+    - jump.wav
+    - select-cursor.wav
   - [Mega Man](https://sounds.spriters-resource.com/nes/mm/asset/401483/)
     - PiPiPi.wav
-- Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6) by [David Fesliyan](https://www.fesliyanstudios.com/).
 
 ## Running Locally
 

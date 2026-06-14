@@ -170,6 +170,7 @@ const player = {
     // Collision resolution using previous position
     // This determines collision type based on WHERE the player came from, not overlap geometry
     let landed = false;
+    let wallBlocked = false;
 
     for (const tile of overlappingTiles) {
       // Was the player's bottom edge above the tile's top edge BEFORE this frame?
@@ -195,7 +196,31 @@ const player = {
       } else if (!landed) {
         // Player came from the side → wall collision
         // Push player backward (to the left of the tile)
+        wallBlocked = true;
         this.x = tile.x - this.width;
+      }
+    }
+
+    if (!wallBlocked && this.x < 50) {
+      const nextX = Math.min(50, this.x + scrollSpeed);
+      let wouldHitWall = false;
+      for (const tile of tiles) {
+        if (
+          !checkCollision(
+            { x: nextX, y: this.y, width: this.width, height: this.height },
+            tile,
+          )
+        ) {
+          continue;
+        }
+        const wasAboveTile = prevY + this.height <= tile.y + 1;
+        if (!(wasAboveTile && this.dy >= 0)) {
+          wouldHitWall = true;
+          break;
+        }
+      }
+      if (!wouldHitWall) {
+        this.x = nextX;
       }
     }
 
