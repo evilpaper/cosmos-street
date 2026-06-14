@@ -320,7 +320,7 @@ function getCollectibleStageIndex() {
   return idx;
 }
 
-function syncCollectibleStage() {
+function resetCollectibleBudgetOnStageChange() {
   const idx = getCollectibleStageIndex();
   if (idx !== collectibleStageIndex) {
     collectibleStageIndex = idx;
@@ -349,9 +349,9 @@ function collectiblesSpawnBoxes() {
 }
 
 function ensureCollectibles() {
-  syncCollectibleStage();
+  resetCollectibleBudgetOnStageChange();
   const diff = getDifficulty();
-  const existingBoxes = collectiblesSpawnBoxes();
+  let existingBoxes = collectiblesSpawnBoxes();
 
   const idleAngels = angels.filter((angel) => angel.state === "idle");
   const activeEggs = eggs.filter((egg) => egg.active);
@@ -364,6 +364,12 @@ function ensureCollectibles() {
     const angel = createAngel(platforms.tiles, existingBoxes);
     if (angel) {
       angels.push(angel);
+      existingBoxes.push({
+        x: angel.x,
+        y: angel.y,
+        width: angel.width,
+        height: angel.height,
+      });
       angelsSpawnedInStage += 1;
       lastAngelSpawnTime = time;
     }
