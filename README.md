@@ -27,9 +27,9 @@ Background music starts when you begin playing and loops continuously. Use the S
 
 ## Constraints and Requirements
 
-This game was made with the following idea in mind:
+This game was made with the following ideas in mind:
 
-Avoid creating new assets and instead focus on piecing together what already exists to make something fun. Producing art, sound effects, and music is time-consuming, so for the main character I chose the skateboard sprites from the original Wonder Boy. I find the art style expressive and am impressed by how much personality can be squeezed out of just a few frames of animation.
+Avoid creating new assets. Instead focus on piecing together what already exists to make something fun. Producing art, sound effects, and music is time-consuming, so for the main character I chose the skateboard sprites from the original Wonder Boy. I find the art style expressive and am impressed by how much personality can be squeezed out of just a few frames of animation.
 
 To capture the right feeling, I borrowed sound effects from games of the same era as well.
 
@@ -48,7 +48,7 @@ Other contraints and requirements:
 ## Credits
 
 - The art for the enemy, called [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207), is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery). Slightly modifed.
-- Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6) by [David Fesliyan](https://www.fesliyanstudios.com/). Lovley tune.
+- Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6) by [David Fesliyan](https://www.fesliyanstudios.com/). Lovely tune.
 - Font is modelled after [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980) by [Void](https://arcade.itch.io/). Redrawn in Aseprite.
 - Sounds Effects, all credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/) for providing. The following sound effects are used.
   - [Wonder Boy III: The Dragon's Trap](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/)
