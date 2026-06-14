@@ -4,9 +4,6 @@ Trapped in swarms of nefarious alien machines, you must skate your way to safety
 
 [--> Click here to play <--](https://evilpaper.github.io/cosmos-street/)
 
-> **NOTICE**
-> This game is a work in progress.
-
 ## About this project
 
 Cosmos Street is an old-school auto-runner inspired by the skateboard sequences in Wonder Boy, complete with borrowed sprites and reused sound effects. Made purely for fun and as an experiment in pushing creative limits within the constraints of classic video game design.
