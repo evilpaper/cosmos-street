@@ -58,8 +58,7 @@ Other contraints and requirements:
     - fireball.wav
     - jump.wav
     - select-cursor.wav
-  - [Mega Man](https://sounds.spriters-resource.com/nes/mm/asset/401483/)
-    - PiPiPi.wav
+    - select-wrong.wav
 
 ## Running Locally
 

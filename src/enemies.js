@@ -57,7 +57,7 @@ function createEnemy(x, y) {
         electricityActive = true;
         // Only play sound if enemy is on the screen.
         if (this.x > 20 && this.x < 236) {
-          sfx(sounds.electrified, 2);
+          sfx(sounds.electrified, 1);
         }
         this.electricity.reset();
       }
