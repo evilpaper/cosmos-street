@@ -222,10 +222,6 @@ function toggleAudio() {
     music(songs.theme, 0.5);
     musicWasPlaying = false;
   }
-  // Toggle the muted class on the sound-toggle button (mobile screens only)
-  document
-    .getElementById("sound-toggle")
-    .classList.toggle("muted", !audioEnabled);
 }
 
 /**
