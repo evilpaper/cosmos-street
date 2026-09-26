@@ -103,6 +103,13 @@ The file:// protocol has no origin, so browsers intentionally block
 access to prevent local files from being read silently. This is a
 core browser security boundary.
 
+## Future Plans
+
+- Fix broken visuals after visible part of screen got larger with the replacement of svg clipPath.
+- Refactor touch control logic. Something is broken there. Become unresponsive and behave weird.
+- Redesign touch control UI. Doesn't feel completed now. Maybe go full out neumorphism like descibed in this article: https://www.setproduct.com/blog/neumorphism-design-guide
+- Refactor game play. Does not feel or challanging enough today. Maybe go full out clone of In Tow. Kind of make sense.
+
 ## License
 
 Licensed under the MIT license.
