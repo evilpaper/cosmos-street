@@ -135,8 +135,8 @@ canvas {
   border-color: transparent;
   color: var(--color-on-surface);
 
-  font-size: 0.7rem;
-  letter-spacing: 0.01em;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
 
   text-align: center;
   text-decoration: none;
@@ -160,10 +160,13 @@ canvas {
     flex-direction: column;
     justify-content: flex-start;
   }
-  canvas {
+  .crt-container {
+    margin-top: 1rem;
+  }
+  /* canvas {
     width: min(104vw, 104vh);
     height: min(104vw, 104vh);
-  }
+  } */
   .controls {
     display: block;
     padding: 0 1rem;
@@ -172,10 +175,10 @@ canvas {
 
 /* Mobile landscape - touch-first devices in landscape */
 @media (max-height: 600px) and (hover: none) and (pointer: coarse) {
-  canvas {
+  /* canvas {
     width: min(100vw, 100vh);
     height: min(100vw, 100vh);
-  }
+  } */
   .controls {
     display: flex;
     justify-content: center;
@@ -197,9 +200,9 @@ canvas {
   display: flex;
 }
 
-.crt {
+/* .crt {
   clip-path: url(#path);
-}
+} */
 
 .crt::before {
   content: " ";
@@ -303,4 +306,32 @@ canvas {
   z-index: 2;
   pointer-events: none;
   animation: flicker 0.15s infinite;
+}
+
+.squircle {
+  --r: 50%; /* between 0% [square] and 50% [squircle] (you can use pixel as well) */
+
+  --_r: clamp(0%, var(--r)/2, 25%);
+  --_v: calc(var(--_r) * (1 - sqrt(2) / 4));
+  --_p: calc(var(--_v) - var(--_r)/2);
+  clip-path: shape(
+    from var(--_v) var(--_p),
+    curve to 50% 0 with var(--_r) 0,
+    curve to calc(100% - var(--_v)) var(--_p) with calc(100% - var(--_r)) 0,
+    curve to calc(100% - var(--_p)) var(--_v) with calc(100% - 2 * var(--_p))
+      calc(2 * var(--_p)),
+    curve to 100% 50% with 100% var(--_r),
+    curve to calc(100% - var(--_p)) calc(100% - var(--_v)) with 100%
+      calc(100% - var(--_r)),
+    curve to calc(100% - var(--_v)) calc(100% - var(--_p)) with
+      calc(100% - 2 * var(--_p)) calc(100% - 2 * var(--_p)),
+    curve to 50% 100% with calc(100% - var(--_r)) 100%,
+    curve to var(--_v) calc(100% - var(--_p)) with var(--_r) 100%,
+    curve to var(--_p) calc(100% - var(--_v)) with calc(2 * var(--_p))
+      calc(100% - 2 * var(--_p)),
+    curve to 0 50% with 0 calc(100% - var(--_r)),
+    curve to var(--_p) var(--_v) with 0 var(--_r),
+    curve to var(--_v) var(--_p) with calc(2 * var(--_p)) calc(2 * var(--_p))
+  );
+  aspect-ratio: 1;
 }
