@@ -195,6 +195,21 @@ function randomInRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function hasAnyDirectionInput() {
+  return (
+    input.isActive(INPUT_ACTIONS.LEFT) ||
+    input.isActive(INPUT_ACTIONS.RIGHT) ||
+    input.isActive(INPUT_ACTIONS.JUMP)
+  );
+}
+
+function hasHorizontalInput() {
+  return (
+    input.isActive(INPUT_ACTIONS.LEFT) ||
+    input.isActive(INPUT_ACTIONS.RIGHT)
+  );
+}
+
 /**
  * Returns the current difficulty parameters based on game time.
  * Finds the highest stage the player has reached.
@@ -704,12 +719,12 @@ states[GAME_STATE.GAME_OVER] = {
     scrollSpeed = 0;
     deadTimer += 1;
 
-    if (input.left || input.right) {
+    if (hasHorizontalInput()) {
       restartGame();
       return;
     }
 
-    if (input.up) {
+    if (input.wasPressed(INPUT_ACTIONS.JUMP)) {
       resetGame();
       return;
     }
@@ -758,12 +773,12 @@ states[GAME_STATE.ENDING] = {
       player.dx = 1.8;
 
       if (playerHasSkatedOffInTheSunset()) {
-        if (input.left || input.right) {
+        if (hasHorizontalInput()) {
           restartGame();
           return;
         }
 
-        if (input.up) {
+        if (input.wasPressed(INPUT_ACTIONS.JUMP)) {
           resetGame();
           return;
         }
@@ -876,10 +891,9 @@ function init() {
  * -----------------------------
  */
 
-function update() {
-  if (input.soundToggle) {
+function updateFrame() {
+  if (input.wasPressed(INPUT_ACTIONS.SOUND_TOGGLE)) {
     toggleAudio();
-    input.soundToggle = false;
   }
 
   if (paused !== lastPausedForAudio) {
@@ -899,6 +913,15 @@ function update() {
   }
 
   game.update();
+}
+
+function update() {
+  input.beginFrame();
+  try {
+    updateFrame();
+  } finally {
+    input.endFrame();
+  }
 }
 
 /**

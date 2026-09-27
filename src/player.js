@@ -49,8 +49,7 @@ const player = {
   jump(jumpStrength) {
     this.dy = -jumpStrength;
     this.state = this.states[1]; // jumping
-    // Consume input to require fresh key press for next jump
-    input.up = false;
+    input.consumePress(INPUT_ACTIONS.JUMP);
     sfx(sounds.jump, 0.8);
   },
 
@@ -86,11 +85,11 @@ const player = {
       this.ticksPerFrame = 16;
       scrollSpeed = SCROLL_SPEED_SKATING;
 
-      if (input.left) {
+      if (input.isActive(INPUT_ACTIONS.LEFT)) {
         this.state = this.states[2]; // skating -> breaking
-      } else if (input.up) {
+      } else if (input.wasPressed(INPUT_ACTIONS.JUMP)) {
         this.jump(this.jumpStrength);
-      } else if (input.right) {
+      } else if (input.isActive(INPUT_ACTIONS.RIGHT)) {
         this.speedUp();
       } else if (this.dy > 1) {
         this.state = this.states[1]; // skating -> jumping. This happens when user fall of a platform.
@@ -99,22 +98,22 @@ const player = {
 
     if (this.state === "jumping") {
       this.totalFrames = 1;
-      if (input.up && this.pickup === "egg") {
+      if (input.wasPressed(INPUT_ACTIONS.JUMP) && this.pickup === "egg") {
         this.consumeEgg();
         this.jump(this.doubleJumpStrength);
-      } else if (input.right) {
+      } else if (input.isActive(INPUT_ACTIONS.RIGHT)) {
         this.dive();
       }
     }
 
     if (this.state === "diving") {
       this.totalFrames = 2;
-      if (input.up && this.pickup === "egg") {
+      if (input.wasPressed(INPUT_ACTIONS.JUMP) && this.pickup === "egg") {
         this.consumeEgg();
         this.jump(this.doubleJumpStrength);
-      } else if (!input.right) {
+      } else if (!input.isActive(INPUT_ACTIONS.RIGHT)) {
         this.state = this.states[0];
-      } else if (input.right) {
+      } else if (input.isActive(INPUT_ACTIONS.RIGHT)) {
         this.dive();
       }
     }
@@ -123,20 +122,20 @@ const player = {
       this.totalFrames = 1;
       scrollSpeed = SCROLL_SPEED_BREAKING;
 
-      if (!input.left) {
+      if (!input.isActive(INPUT_ACTIONS.LEFT)) {
         this.state = this.states[0]; // Only stay in breaking state if left arrow is pressed
-      } else if (input.up) {
+      } else if (input.wasPressed(INPUT_ACTIONS.JUMP)) {
         this.jump(this.jumpStrengthBreaking);
       }
     }
 
     if (this.state === "speeding") {
       this.totalFrames = 2;
-      if (!input.right) {
+      if (!input.isActive(INPUT_ACTIONS.RIGHT)) {
         this.state = this.states[0]; // -> Only stay in speeding state if right arrow is pressed
-      } else if (input.left) {
+      } else if (input.isActive(INPUT_ACTIONS.LEFT)) {
         this.state = this.states[2]; // -> breaking
-      } else if (input.up) {
+      } else if (input.wasPressed(INPUT_ACTIONS.JUMP)) {
         this.jump(this.jumpStrengthSpeeding);
       }
     }
