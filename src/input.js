@@ -146,10 +146,6 @@ function handleTouchEvent(event) {
   reconcileTouchCodes(nextActiveCodes);
 }
 
-for (const control of TOUCH_CONTROLS) {
-  createTouchHandlers(control.button);
-}
-
 function createTouchHandlers(button) {
   button.addEventListener("touchstart", handleTouchEvent, {
     passive: false,
@@ -157,9 +153,16 @@ function createTouchHandlers(button) {
   button.addEventListener("touchend", handleTouchEvent, {
     passive: false,
   });
+  button.addEventListener("touchmove", handleTouchEvent, {
+    passive: false,
+  });
   button.addEventListener("touchcancel", handleTouchEvent, {
     passive: false,
   });
+}
+
+for (const control of TOUCH_CONTROLS) {
+  createTouchHandlers(control.button);
 }
 
 function hasAnyDirectionInput() {
