@@ -128,6 +128,17 @@ const TOUCH_CONTROLS = [
   { button: soundToggleButton, code: KEY_CODES.SOUND_TOGGLE },
 ];
 
+function touchHitsButton(touch, button) {
+  const rect = button.getBoundingClientRect();
+
+  return (
+    touch.clientX >= rect.left &&
+    touch.clientX < rect.right &&
+    touch.clientY >= rect.top &&
+    touch.clientY < rect.bottom
+  );
+}
+
 for (const control of TOUCH_CONTROLS) {
   createTouchHandlers(control.button, control.code);
 }
