@@ -139,6 +139,20 @@ function touchHitsButton(touch, button) {
   );
 }
 
+function getActiveTouchCodes(touches) {
+  const activeCodes = new Set();
+
+  for (const touch of Array.from(touches)) {
+    for (const control of TOUCH_CONTROLS) {
+      if (touchHitsButton(touch, control.button)) {
+        activeCodes.add(control.code);
+      }
+    }
+  }
+
+  return activeCodes;
+}
+
 for (const control of TOUCH_CONTROLS) {
   createTouchHandlers(control.button, control.code);
 }
