@@ -128,6 +128,8 @@ const TOUCH_CONTROLS = [
   { button: soundToggleButton, code: KEY_CODES.SOUND_TOGGLE },
 ];
 
+let activeTouchCodes = new Set();
+
 function touchHitsButton(touch, button) {
   const rect = button.getBoundingClientRect();
 
@@ -151,6 +153,21 @@ function getActiveTouchCodes(touches) {
   }
 
   return activeCodes;
+}
+
+function reconcileTouchCodes(nextActiveCodes) {
+  for (const control of TOUCH_CONTROLS) {
+    const wasActive = activeTouchCodes.has(control.code);
+    const isActive = nextActiveCodes.has(control.code);
+
+    if (wasActive === isActive) {
+      continue;
+    }
+
+    setTouchAction(control.code, isActive);
+  }
+
+  activeTouchCodes = nextActiveCodes;
 }
 
 for (const control of TOUCH_CONTROLS) {
