@@ -84,12 +84,19 @@ document.addEventListener(
 // preventDefault() prevents scrolling, zooming, and touch delays
 // ensuring responsive game controls
 
+function setTouchAction(code, isActive) {
+  input.keyListener({
+    code,
+    type: isActive ? "keydown" : "keyup",
+  });
+}
+
 // Helper function to create touch event handlers for a button
 function createTouchHandlers(button, code) {
   button.addEventListener(
     "touchstart",
     (event) => {
-      input.keyListener({ code, type: "keydown" });
+      setTouchAction(code, true);
     },
     { passive: true },
   );
