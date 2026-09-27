@@ -59,9 +59,8 @@ input.keyListener = function ({ code, type }) {
   }
 };
 
-// Listen for button events. Should have "hold" button behavior.
-
 // Keyboard events
+
 document.addEventListener(
   "keydown",
   (event) => {
@@ -81,8 +80,9 @@ document.addEventListener(
 );
 
 // Touch events
-// preventDefault() prevents scrolling, zooming, and touch delays
-// ensuring responsive game controls
+
+// Recalculate control state from every currently active touch.
+// Browser gestures are disabled so touches remain dedicated to the game.
 
 function setTouchAction(code, isActive) {
   input.keyListener({
@@ -152,11 +152,14 @@ const TOUCH_EVENT_TYPES = [
   "touchend",
   "touchcancel",
 ];
+
 for (const eventType of TOUCH_EVENT_TYPES) {
   window.addEventListener(eventType, handleTouchEvent, {
     passive: false,
   });
 }
+
+// Helper functions
 
 function hasAnyDirectionInput() {
   return input.left || input.right || input.up;

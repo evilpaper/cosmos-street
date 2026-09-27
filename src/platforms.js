@@ -69,7 +69,7 @@ function createPlatforms(options = {}) {
 
   function removeOffscreenTiles() {
     for (const tile of tiles) {
-      const isOffscreenLeft = tile.x <= 0;
+      const isOffscreenLeft = tile.x <= -TILE_WIDTH;
       if (isOffscreenLeft) {
         tiles.splice(tiles.indexOf(tile), 1);
       }
