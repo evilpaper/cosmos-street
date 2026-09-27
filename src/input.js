@@ -96,17 +96,19 @@ function createTouchHandlers(button, code) {
   button.addEventListener(
     "touchstart",
     (event) => {
+      event.preventDefault();
       setTouchAction(code, true);
     },
-    { passive: true },
+    { passive: false },
   );
 
   button.addEventListener(
     "touchend",
     (event) => {
+      event.preventDefault();
       setTouchAction(code, false);
     },
-    { passive: true },
+    { passive: false },
   );
 
   button.addEventListener(
@@ -115,7 +117,7 @@ function createTouchHandlers(button, code) {
       event.preventDefault();
       setTouchAction(code, false);
     },
-    { passive: true },
+    { passive: false },
   );
 }
 
