@@ -91,36 +91,6 @@ function setTouchAction(code, isActive) {
   });
 }
 
-// Helper function to create touch event handlers for a button
-function createTouchHandlers(button, code) {
-  button.addEventListener(
-    "touchstart",
-    (event) => {
-      event.preventDefault();
-      setTouchAction(code, true);
-    },
-    { passive: false },
-  );
-
-  button.addEventListener(
-    "touchend",
-    (event) => {
-      event.preventDefault();
-      setTouchAction(code, false);
-    },
-    { passive: false },
-  );
-
-  button.addEventListener(
-    "touchcancel",
-    (event) => {
-      event.preventDefault();
-      setTouchAction(code, false);
-    },
-    { passive: false },
-  );
-}
-
 const TOUCH_CONTROLS = [
   { button: breakButton, code: KEY_CODES.LEFT },
   { button: jumpButton, code: KEY_CODES.UP },
@@ -170,8 +140,26 @@ function reconcileTouchCodes(nextActiveCodes) {
   activeTouchCodes = nextActiveCodes;
 }
 
+function handleTouchEvent(event) {
+  event.preventDefault();
+  const nextActiveCodes = getActiveTouchCodes(event.touches);
+  reconcileTouchCodes(nextActiveCodes);
+}
+
 for (const control of TOUCH_CONTROLS) {
-  createTouchHandlers(control.button, control.code);
+  createTouchHandlers(control.button);
+}
+
+function createTouchHandlers(button) {
+  button.addEventListener("touchstart", handleTouchEvent, {
+    passive: false,
+  });
+  button.addEventListener("touchend", handleTouchEvent, {
+    passive: false,
+  });
+  button.addEventListener("touchcancel", handleTouchEvent, {
+    passive: false,
+  });
 }
 
 function hasAnyDirectionInput() {
