@@ -112,11 +112,16 @@ function createTouchHandlers(button, code) {
   );
 }
 
-// Apply touch handlers to all buttons
-createTouchHandlers(breakButton, KEY_CODES.LEFT); // Left arrow
-createTouchHandlers(jumpButton, KEY_CODES.UP); // Up arrow
-createTouchHandlers(speedUpButton, KEY_CODES.RIGHT); // Right arrow
-createTouchHandlers(soundToggleButton, KEY_CODES.SOUND_TOGGLE);
+const TOUCH_CONTROLS = [
+  { button: breakButton, code: KEY_CODES.LEFT },
+  { button: jumpButton, code: KEY_CODES.UP },
+  { button: speedUpButton, code: KEY_CODES.RIGHT },
+  { button: soundToggleButton, code: KEY_CODES.SOUND_TOGGLE },
+];
+
+for (const control of TOUCH_CONTROLS) {
+  createTouchHandlers(control.button, control.code);
+}
 
 function hasAnyDirectionInput() {
   return input.left || input.right || input.up;
