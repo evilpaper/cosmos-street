@@ -121,7 +121,6 @@ let angels;
 let eggs;
 let sparkles;
 let electricExplosions;
-let skateboardSparkle;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
 let deadTimer;
@@ -298,10 +297,6 @@ function drawWorld(screen) {
   for (const explosion of electricExplosions) {
     explosion.draw(screen);
   }
-
-  if (player.state !== "obliterating" && player.pickup === "egg") {
-    skateboardSparkle.draw(screen);
-  }
 }
 
 /**
@@ -419,10 +414,6 @@ function updateVisualEffects() {
   electricExplosions = electricExplosions.filter(
     (explosion) => !explosion.isDone(),
   );
-
-  if (player.pickup === "egg") {
-    skateboardSparkle.update();
-  }
 }
 
 // Rules
@@ -463,7 +454,7 @@ function collectAngels() {
         addScore(scoring.award("angel"));
         sfx(sounds.angel);
       } else {
-        angel.state = "leave"; // optional: shoo idle angels while carrying
+        angel.state = "leave"; // optional: show idle angels while carrying
         addScore(scoring.award("angel"));
         sfx(sounds.angel);
       }
@@ -846,7 +837,6 @@ function init() {
   platforms = createPlatforms(60);
   angels = [];
   eggs = [];
-  skateboardSparkle = createSkateboardSparkle(player);
   sparkles = [];
   electricExplosions = [];
   enemies = [];

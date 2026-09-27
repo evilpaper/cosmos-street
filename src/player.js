@@ -29,7 +29,7 @@ const player = {
   jumpStrengthSpeeding: 8,
   doubleJumpStrength: 6,
   state: "skating", // Initial state is "skating" (this.states[0])
-  pickup: null, // null | "angel" | "egg"
+  pickup: null, // null | "angel"
   isDead: false,
 
   reset() {
@@ -67,12 +67,11 @@ const player = {
   },
 
   consumeEgg() {
-    if (this.pickup !== "egg") {
-      return;
-    }
-
-    this.pickup = null;
-    scoring?.reset();
+    // if (this.pickup !== "egg") {
+    //   return;
+    // }
+    // this.pickup = null;
+    // scoring?.reset();
   },
 
   update(tiles, time) {
@@ -99,9 +98,9 @@ const player = {
 
     if (this.state === "jumping") {
       this.totalFrames = 1;
-      if (input.up && this.pickup === "egg") {
-        this.consumeEgg();
-        this.jump(this.doubleJumpStrength);
+      if (input.up) {
+        // this.consumeEgg();
+        // this.jump(this.doubleJumpStrength);
       } else if (input.right) {
         this.dive();
       }
@@ -109,9 +108,9 @@ const player = {
 
     if (this.state === "diving") {
       this.totalFrames = 2;
-      if (input.up && this.pickup === "egg") {
-        this.consumeEgg();
-        this.jump(this.doubleJumpStrength);
+      if (input.up) {
+        // this.consumeEgg();
+        // this.jump(this.doubleJumpStrength);
       } else if (!input.right) {
         this.state = this.states[0];
       } else if (input.right) {
