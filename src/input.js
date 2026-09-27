@@ -104,7 +104,7 @@ function createTouchHandlers(button, code) {
   button.addEventListener(
     "touchend",
     (event) => {
-      input.keyListener({ code, type: "keyup" });
+      setTouchAction(code, false);
     },
     { passive: true },
   );
@@ -113,7 +113,7 @@ function createTouchHandlers(button, code) {
     "touchcancel",
     (event) => {
       event.preventDefault();
-      input.keyListener({ code, type: "keyup" });
+      setTouchAction(code, false);
     },
     { passive: true },
   );
