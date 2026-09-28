@@ -20,6 +20,9 @@ const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 
 const COLLECTIBLE_SPAWN_COOLDOWN = 3 * 60;
+const ANGEL_STEP = 16;
+const ANGEL_LINE_EASE = 0.2;
+const ANGEL_PATH_LENGTH = ANGEL_STEP * 40;
 
 /**
  * Difficulty stages
@@ -118,6 +121,9 @@ let time = 0;
 let stars;
 let platforms;
 let angels;
+let angelLine;
+let playerPath;
+let frameScroll = 0;
 let eggs;
 let sparkles;
 let electricExplosions;
@@ -250,9 +256,15 @@ function hasPassedTopEdge(entity) {
 }
 
 function updateEntities() {
+  frameScroll = scrollSpeed;
   platforms.update();
 
   player.update(platforms.tiles, time);
+
+  if (time >= 40) {
+    playerPath.record(player.x, player.y, frameScroll);
+    placeAngelLine();
+  }
 
   for (const angel of angels) {
     angel.update(player);
@@ -260,6 +272,7 @@ function updateEntities() {
   angels = angels.filter(
     (angel) => !(hasPassedLeftEdge(angel) || hasPassedTopEdge(angel)),
   );
+  angelLine = angelLine.filter((angel) => angels.includes(angel));
 
   for (const egg of eggs) {
     egg.update();
@@ -284,11 +297,11 @@ function drawWorld(screen) {
     sparkle.draw(screen);
   }
 
-  player.draw(screen);
-
   for (const angel of angels) {
     angel.draw(screen);
   }
+
+  player.draw(screen);
 
   for (const egg of eggs) {
     egg.draw(screen);
@@ -418,20 +431,38 @@ function updateVisualEffects() {
 
 // Rules
 
-function dismissCompanionAngel() {
-  if (player.pickup !== "angel") return false;
-
-  player.pickup = null;
-
-  const following = angels.find(
-    (c) => c.state === "follow" || c.state === "approach",
-  );
-
-  if (following) {
-    following.state = "leave";
+function placeAngelLine() {
+  for (let index = 0; index < angelLine.length; index++) {
+    const angel = angelLine[index];
+    const target = (index + 1) * ANGEL_STEP;
+    if (angel.trailDistance == null) {
+      angel.trailDistance = target;
+    } else {
+      angel.trailDistance += (target - angel.trailDistance) * ANGEL_LINE_EASE;
+    }
+    const slot = playerPath.pointAt(angel.trailDistance);
+    if (!slot) continue;
+    angel.slotX = slot.x;
+    angel.slotY = slot.y;
   }
+}
 
+function spendAngelForAirJump() {
+  const angel = angelLine.shift();
+  if (!angel) {
+    return false;
+  }
+  angel.state = "dispatch";
   return true;
+}
+
+function collectAngel(angel) {
+  angel.pickedUpX = angel.x;
+  angel.pickedUpY = angel.y;
+  angel.state = "approach";
+  angelLine.push(angel);
+  addScore(scoring.award("angel"));
+  sfx(sounds.angel);
 }
 
 function addScore(points) {
@@ -444,34 +475,24 @@ function addScore(points) {
 
 function collectAngels() {
   for (const angel of angels) {
+    if (angel.state !== "idle") continue;
     if (!checkCollision(player, angel.getHitbox())) continue;
-    if (angel.state === "idle") {
-      if (player.pickup !== "angel") {
-        player.pickup = "angel";
-        angel.pickedUpX = angel.x;
-        angel.pickedUpY = angel.y;
-        angel.state = "approach";
-        addScore(scoring.award("angel"));
-        sfx(sounds.angel);
-      } else {
-        angel.state = "leave"; // optional: show idle angels while carrying
-        addScore(scoring.award("angel"));
-        sfx(sounds.angel);
-      }
-    }
+    collectAngel(angel);
   }
+}
+
+function collectEgg(index) {
+  const egg = eggs[index];
+  sparkles.push(createSparkle(egg.x, egg.y - 8));
+  eggs.splice(index, 1);
+  sfx(sounds.egg);
+  addScore(scoring.award("egg"));
 }
 
 function collectEggs() {
   for (let i = eggs.length - 1; i >= 0; i--) {
-    const egg = eggs[i];
-    if (checkCollision(player, egg.getHitbox())) {
-      sparkles.push(createSparkle(egg.x, egg.y - 8));
-      eggs.splice(i, 1);
-      sfx(sounds.egg);
-      addScore(scoring.award("egg"));
-      dismissCompanionAngel();
-      player.pickup = "egg";
+    if (checkCollision(player, eggs[i].getHitbox())) {
+      collectEgg(i);
     }
   }
 }
@@ -489,23 +510,12 @@ function respawnEnemy(enemy) {
 function handleEnemyEncounters() {
   for (const enemy of enemies) {
     if (checkCollision(player, enemy.getHitbox())) {
-      if (dismissCompanionAngel()) {
-        electricExplosions.push(
-          createElectricExplosion(
-            enemy.x + (enemy.width - 35) / 2,
-            enemy.y + (enemy.height - 35) / 2,
-          ),
-        );
-        respawnEnemy(enemy);
-        sfx(sounds.enemyKill);
-      } else {
-        if (player.state !== "obliterating") {
-          sfx(sounds.crash);
-        }
-        player.state = "obliterating";
-        scrollSpeed = 0;
-        player.dy = 0;
+      if (player.state !== "obliterating") {
+        sfx(sounds.crash);
       }
+      player.state = "obliterating";
+      scrollSpeed = 0;
+      player.dy = 0;
     }
 
     if (enemy.x + enemy.width < 0) {
@@ -836,6 +846,8 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(60);
   angels = [];
+  angelLine = [];
+  playerPath = createPlayerPath(ANGEL_PATH_LENGTH);
   eggs = [];
   sparkles = [];
   electricExplosions = [];

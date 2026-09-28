@@ -1,4 +1,8 @@
-const input = {};
+const input = {
+  upJustPressed: false,
+};
+
+let upHeld = false;
 
 // Key code constants for better readability
 const KEY_CODES = {
@@ -30,7 +34,17 @@ input.keyListener = function ({ code, type }) {
       }
       break;
     case KEY_CODES.UP:
-      input.up = eventType;
+      if (eventType) {
+        if (!upHeld) {
+          input.upJustPressed = true;
+        }
+        upHeld = true;
+        input.up = true;
+      } else {
+        upHeld = false;
+        input.up = false;
+        input.upJustPressed = false;
+      }
       // Toggle pressed state for jump button
       if (eventType) {
         jumpButton.classList.add("pressed");
@@ -169,4 +183,6 @@ function resetInput() {
   input.left = false;
   input.right = false;
   input.up = false;
+  input.upJustPressed = false;
+  upHeld = false;
 }

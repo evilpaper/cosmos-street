@@ -7,13 +7,11 @@ function createAngel(tiles, existingBoxes = []) {
   const HITBOX_HEIGHT = 8;
   const OSCILLATION_AMPLITUDE = 2;
   const OSCILLATION_SPEED = 0.1;
-  const ANCHOR_OFFSET_X = -16;
-  const ANCHOR_OFFSET_Y = -16;
   const INTRO_DURATION_FRAMES = 30;
   const FLOAT_HEIGHT = 10;
   const DEPART_SPEED = 2;
 
-  const STATES = ["idle", "approach", "follow", "leave"];
+  const STATES = ["idle", "approach", "follow", "dispatch"];
 
   const initialPosition = findSpreadCollectiblePosition(tiles, existingBoxes, {
     spriteWidth: WIDTH,
@@ -39,44 +37,39 @@ function createAngel(tiles, existingBoxes = []) {
     );
   }
 
-  function updateApproach(angel, player) {
-    const { x: targetX, y: targetY } = anchorFor(player);
+  function updateApproach(angel) {
+    angel.pickedUpX -= frameScroll;
     introProgress = Math.min(1, introProgress + 1 / INTRO_DURATION_FRAMES);
     const eased = 1 - (1 - introProgress) ** 3;
-    angel.x = Math.round(angel.pickedUpX + (targetX - angel.pickedUpX) * eased);
-    angel.y = Math.round(angel.pickedUpY + (targetY - angel.pickedUpY) * eased);
+    angel.x = Math.round(
+      angel.pickedUpX + (angel.slotX - angel.pickedUpX) * eased,
+    );
+    angel.y = Math.round(
+      angel.pickedUpY + (angel.slotY - angel.pickedUpY) * eased,
+    );
     if (introProgress >= 1) {
       angel.state = "follow";
     }
   }
 
-  function updateFollow(angel, player) {
-    const { x: targetX, y: targetY } = anchorFor(player);
-
+  function updateFollow(angel) {
     tick += 1;
-    angel.x = Math.round(targetX);
+    angel.x = Math.round(angel.slotX);
     angel.y = Math.round(
-      targetY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
+      angel.slotY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
     );
   }
 
-  function updateLeave(angel) {
+  function updateDispatch(angel) {
     angel.y = Math.round(angel.y - DEPART_SPEED);
     angel.x = Math.round(angel.x + 1);
-  }
-
-  function anchorFor(player) {
-    return {
-      x: player.x + ANCHOR_OFFSET_X,
-      y: player.y + ANCHOR_OFFSET_Y,
-    };
   }
 
   const updateByState = {
     idle: updateIdle,
     approach: updateApproach,
     follow: updateFollow,
-    leave: updateLeave,
+    dispatch: updateDispatch,
   };
 
   return {
@@ -85,6 +78,9 @@ function createAngel(tiles, existingBoxes = []) {
     width: WIDTH,
     height: HEIGHT,
     state: STATES[0],
+    slotX: x,
+    slotY: y,
+    trailDistance: null,
 
     getHitbox() {
       return {

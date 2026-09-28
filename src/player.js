@@ -27,9 +27,7 @@ const player = {
   jumpStrength: 7.2,
   jumpStrengthBreaking: 6,
   jumpStrengthSpeeding: 8,
-  doubleJumpStrength: 6,
   state: "skating", // Initial state is "skating" (this.states[0])
-  pickup: null, // null | "angel"
   isDead: false,
 
   reset() {
@@ -42,7 +40,6 @@ const player = {
     this.dy = 0;
     this.dx = 0;
     this.state = this.states[0];
-    this.pickup = null;
     this.isDead = false;
   },
 
@@ -51,6 +48,7 @@ const player = {
     this.state = this.states[1]; // jumping
     // Consume input to require fresh key press for next jump
     input.up = false;
+    input.upJustPressed = false;
     sfx(sounds.jump, 0.8);
   },
 
@@ -66,12 +64,14 @@ const player = {
     this.ticksPerFrame = 8;
   },
 
-  consumeEgg() {
-    // if (this.pickup !== "egg") {
-    //   return;
-    // }
-    // this.pickup = null;
-    // scoring?.reset();
+  tryAirJump() {
+    if (!input.upJustPressed) {
+      return;
+    }
+    input.upJustPressed = false;
+    if (spendAngelForAirJump()) {
+      this.jump(this.jumpStrength);
+    }
   },
 
   update(tiles, time) {
@@ -98,9 +98,8 @@ const player = {
 
     if (this.state === "jumping") {
       this.totalFrames = 1;
-      if (input.up) {
-        // this.consumeEgg();
-        // this.jump(this.doubleJumpStrength);
+      if (input.upJustPressed) {
+        this.tryAirJump();
       } else if (input.right) {
         this.dive();
       }
@@ -108,9 +107,8 @@ const player = {
 
     if (this.state === "diving") {
       this.totalFrames = 2;
-      if (input.up) {
-        // this.consumeEgg();
-        // this.jump(this.doubleJumpStrength);
+      if (input.upJustPressed) {
+        this.tryAirJump();
       } else if (!input.right) {
         this.state = this.states[0];
       } else if (input.right) {
