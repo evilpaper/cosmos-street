@@ -623,6 +623,9 @@ states[GAME_STATE.PRESS_START] = {
   },
   draw(_, screen) {
     platforms.draw(screen);
+    if (highScore > 0) {
+      print("High Score " + highScore, "center", 44);
+    }
     title.draw(screen);
     print("press any ←,→,↑ to start", "center", 132);
     if (isSoundUnavailable()) {
