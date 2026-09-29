@@ -11,7 +11,6 @@ const player = {
     "breaking",
     "speeding",
     "obliterating",
-    "diving",
   ],
   width: 26,
   height: 36,
@@ -58,12 +57,6 @@ const player = {
     this.ticksPerFrame = 8;
   },
 
-  dive() {
-    scrollSpeed = SCROLL_SPEED_SPEEDING;
-    this.state = this.states[5];
-    this.ticksPerFrame = 8;
-  },
-
   tryAirJump() {
     if (!input.upJustPressed) {
       return;
@@ -100,19 +93,6 @@ const player = {
       this.totalFrames = 1;
       if (input.upJustPressed) {
         this.tryAirJump();
-      } else if (input.right) {
-        this.dive();
-      }
-    }
-
-    if (this.state === "diving") {
-      this.totalFrames = 2;
-      if (input.upJustPressed) {
-        this.tryAirJump();
-      } else if (!input.right) {
-        this.state = this.states[0];
-      } else if (input.right) {
-        this.dive();
       }
     }
 
@@ -219,11 +199,7 @@ const player = {
     const sx = this.animationFrameIndex * 40;
     const sy = 35;
 
-    if (
-      this.state === "skating" ||
-      this.state === "speeding" ||
-      this.state === "diving"
-    ) {
+    if (this.state === "skating" || this.state === "speeding") {
       if (this.animationFrameIndex === 0) {
         screen.drawImage(
           this.image,

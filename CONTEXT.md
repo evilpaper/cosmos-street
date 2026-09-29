@@ -9,7 +9,7 @@ A companion the player carries in a line. Each angel is one air jump.
 _Avoid_: shield, Astro Angel
 
 **Air jump**:
-A jump the player makes while already airborne, including during a dive, on a new press. Each one spends the closest angel still in line.
+A jump the player makes while already airborne, on a new press. Each one spends the closest angel still in line.
 _Avoid_: double jump
 
 **Line**:
