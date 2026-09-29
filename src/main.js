@@ -686,7 +686,7 @@ states[GAME_STATE.PLAYING] = {
     }
 
     if (time > 10) {
-      print("" + score, "center", 36);
+      print("" + score, "center", 12);
     }
   },
 };

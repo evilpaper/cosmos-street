@@ -1,5 +1,7 @@
 const tileSpriteSheet = loadOnce("./images/tiles-sheet.png");
 
+const PLATFORM_START_Y = 156;
+
 function createTile(options = {}) {
   const {
     x = 0,
@@ -56,7 +58,7 @@ function createPlatforms(options = {}) {
     tiles.push(
       createTile({
         x: i * TILE_WIDTH,
-        y: 160,
+        y: PLATFORM_START_Y,
       }),
     );
   }
