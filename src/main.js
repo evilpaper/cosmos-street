@@ -121,6 +121,7 @@ const DIFFICULTY_STAGES = [
  */
 
 let paused = false;
+let titleShown = false;
 let time = 0;
 let stars;
 let platforms;
@@ -604,7 +605,9 @@ states[GAME_STATE.PRESS_START] = {
     time = 0;
     title.y = 64;
     resetInput();
-    platforms.setMode("intro");
+    // Platforms only slide in on first load, not when returning to the title.
+    platforms.setMode("intro", { slideIn: !titleShown });
+    titleShown = true;
   },
   update() {
     time += 1;

@@ -134,13 +134,13 @@ function createPlatforms(options = {}) {
     spawnRandomPlatformSegment();
   }
 
-  function setMode(nextMode) {
+  function setMode(nextMode, { slideIn = true } = {}) {
     mode = nextMode;
 
     if (mode === "intro") {
       // Push the tiles down so they start outside the bottom of the screen during intro
       // so they can scroll up into viewport when during the intro
-      introOffsetY = INTRO_START_Y;
+      introOffsetY = slideIn ? INTRO_START_Y : 0;
     }
     // "playing" — no setup
     // "ending" — no setup
