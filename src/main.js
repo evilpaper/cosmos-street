@@ -116,7 +116,6 @@ const DIFFICULTY_STAGES = [
  */
 
 let paused = false;
-let lastPausedForAudio = false;
 let time = 0;
 let stars;
 let platforms;
@@ -142,7 +141,6 @@ let lastEggSpawnTime = 0;
 let lastAngelSpawnTime = 0;
 
 const GAME_STATE = {
-  INSERT_COIN: "INSERT_COIN", // Actually more like WAITING_FOR_INTERACTION. We use it to wait for user interaction to initialize audio but INSERT_COIN sounds more fun.
   PRESS_START: "PRESS_START",
   PLAYING: "PLAYING",
   GAME_OVER: "GAME_OVER",
@@ -573,29 +571,15 @@ function firstTimeStarting() {
 }
 
 /**
+ * The theme follows the run's clock. Outside a run it starts from the beginning.
+ */
+function themePosition() {
+  return game.state.name === GAME_STATE.PLAYING ? time / FPS : 0;
+}
+
+/**
  * States
  */
-
-states[GAME_STATE.INSERT_COIN] = {
-  name: GAME_STATE.INSERT_COIN,
-  exit() {
-    unlockAudio().then(() => {
-      music(songs.theme, 0.5);
-    });
-  },
-  update() {
-    time += 1;
-    title.update();
-    if (hasAnyDirectionInput()) {
-      insertCoin();
-    }
-  },
-  draw(_, screen) {
-    title.draw(screen);
-    print("Press any", "center", 132);
-    print("←,→,↑ keys to play", "center", 148);
-  },
-};
 
 states[GAME_STATE.PRESS_START] = {
   name: GAME_STATE.PRESS_START,
@@ -613,26 +597,22 @@ states[GAME_STATE.PRESS_START] = {
 
     platforms.update();
 
-    const canStart = isAudioReady() || isAudioInitFailed();
-    if (canStart && hasAnyDirectionInput()) {
+    if (hasAnyDirectionInput()) {
       startGame();
     }
   },
   draw(_, screen) {
     platforms.draw(screen);
     title.draw(screen);
-    if (isAudioInitializing()) {
-      print("Initializing audio", "center", 132);
+    print("press any ←,→,↑ to start", "center", 132);
+    if (isSoundUnavailable()) {
+      print("Sound unavailable", "center", 186);
+    } else if (isSoundOn()) {
+      print("Sound ON", "center", 186);
     } else {
-      print("←,→,↑ to start", "center", 132);
-      if (audioEnabled) {
-        print("Audio ON", "center", 186);
-        print("Press S to toggle", "center", 202);
-      } else {
-        print("Audio OFF", "center", 186);
-        print("Press S to toggle", "center", 202);
-      }
+      print("Sound OFF", "center", 186);
     }
+    print("press S to toggle sound", "center", 202);
   },
 };
 
@@ -642,8 +622,7 @@ states[GAME_STATE.PLAYING] = {
     time = 0;
     resetInput();
     platforms.setMode("playing");
-    stopMusic();
-    music(songs.theme, 0.5);
+    playTheme();
   },
   update() {
     time += 1;
@@ -677,8 +656,8 @@ states[GAME_STATE.PLAYING] = {
         (time > 16 && time < 20) ||
         (time > 24 && time < 30)
       ) {
-        print("←,→,↑ to start", "center", 186);
-        print("S to toggle sound", "center", 202);
+        print("press any ←,→,↑ to start", "center", 186);
+        print("press S to toggle sound", "center", 202);
       }
     }
 
@@ -803,10 +782,6 @@ states[GAME_STATE.ENDING] = {
  * State transition functions
  */
 
-function insertCoin() {
-  game.setState(states[GAME_STATE.PRESS_START]);
-}
-
 function startGame() {
   game.setState(states[GAME_STATE.PLAYING]);
 }
@@ -868,7 +843,7 @@ function init() {
   lastAngelSpawnTime = -COLLECTIBLE_SPAWN_COOLDOWN;
 
   if (!game.state) {
-    game.setState(states[GAME_STATE.INSERT_COIN]);
+    game.setState(states[GAME_STATE.PRESS_START]);
   }
 }
 
@@ -880,14 +855,11 @@ function init() {
 
 function update() {
   if (input.soundToggle) {
-    toggleAudio();
+    toggleSound(themePosition);
     input.soundToggle = false;
   }
 
-  if (paused !== lastPausedForAudio) {
-    syncAudioWithGamePaused(paused);
-    lastPausedForAudio = paused;
-  }
+  syncAudioWithGamePaused(paused);
 
   if (paused) {
     return;

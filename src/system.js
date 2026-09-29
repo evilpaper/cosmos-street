@@ -59,53 +59,68 @@ window.onload = () => {
 };
 
 /**
- * Audio
+ * Sound
+ *
+ * Sound is off on every page load and only the player turns it on.
+ * Browsers don't allow audio until the user has interacted with the page,
+ * so the audio context is created and all audio is loaded the first time sound is turned on.
+ * The game never waits for sound; anything played before loading finishes is skipped.
  */
 let audioCtx;
-let audioInitStarted = false;
-let audioInitReady = false;
-let audioInitError = null;
-let audioInitPromise = null;
+let soundOn = false;
+let soundReady = false;
+let soundUnavailable = false;
+let soundLoading = null;
 
-function initAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function isSoundOn() {
+  return soundOn;
+}
+
+function isSoundUnavailable() {
+  return soundUnavailable;
+}
+
+function loadAudio() {
+  if (!soundLoading) {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    soundLoading = Promise.all([loadSounds(), loadSongs()])
+      .then(() => {
+        soundReady = true;
+      })
+      .catch((error) => {
+        soundLoading = null;
+        throw error;
+      });
   }
+  return soundLoading;
 }
 
 /**
- * Some browsers don't allow audio to play until the user interacts with the page.
- * So to be sure we start silent and unlock audio on first interaction.
+ * themePosition returns where in the theme (in seconds) playback should start
+ * once sound is ready, so the theme can follow the run's clock.
  */
-function unlockAudio() {
-  initAudio();
-  if (audioInitPromise) {
-    return audioInitPromise;
+function toggleSound(themePosition) {
+  soundOn = !soundOn;
+  soundUnavailable = false;
+
+  if (!soundOn) {
+    stopTheme();
+    return;
   }
 
-  audioInitStarted = true;
-  audioInitPromise = Promise.all([loadSounds(), loadSongs()])
+  loadAudio()
     .then(() => {
-      audioInitReady = true;
+      if (soundOn) {
+        playTheme(themePosition());
+      }
     })
     .catch((error) => {
-      audioInitError = error;
-      console.error("Audio init failed:", error);
+      console.error("Sound failed to load:", error);
+      soundOn = false;
+      soundUnavailable = true;
     });
-
-  return audioInitPromise;
-}
-
-function isAudioReady() {
-  return audioInitReady;
-}
-
-function isAudioInitializing() {
-  return audioInitStarted && !audioInitReady && !audioInitError;
-}
-
-function isAudioInitFailed() {
-  return audioInitError !== null;
 }
 
 const sounds = {};
@@ -130,7 +145,7 @@ async function loadSounds() {
 
 // Play a sound effect
 function sfx(buffer, volume = 1) {
-  if (!audioEnabled || !buffer || !audioCtx) return;
+  if (!soundOn || !soundReady || !buffer) return;
 
   const source = audioCtx.createBufferSource();
   const gain = audioCtx.createGain();
@@ -145,10 +160,8 @@ function sfx(buffer, volume = 1) {
 }
 
 const songs = {};
-let songPlaying = false;
-let currentMusicSource = null;
-let currentMusicGain = null;
-let musicWasPlaying = false;
+const THEME_VOLUME = 0.5;
+let themeSource = null;
 
 // Load a song into the music object
 async function loadSong(url) {
@@ -162,38 +175,34 @@ async function loadSongs() {
   songs.theme = await loadSong("audio/retro-platforming-david-fesliyan.mp3");
 }
 
-// Play a song
-function music(buffer, volume = 1) {
-  if (!audioEnabled || songPlaying || !buffer || !audioCtx) return;
+// Play the theme on a loop, starting `position` seconds in
+function playTheme(position = 0) {
+  stopTheme();
+  const buffer = songs.theme;
+  if (!soundOn || !soundReady || !buffer) return;
 
   const source = audioCtx.createBufferSource();
   const gain = audioCtx.createGain();
 
   source.buffer = buffer;
-  gain.gain.value = volume;
+  gain.gain.value = THEME_VOLUME;
   source.loop = true;
 
   source.connect(gain);
   gain.connect(audioCtx.destination);
 
-  currentMusicSource = source;
-  currentMusicGain = gain;
-  source.start();
-
-  songPlaying = true;
+  themeSource = source;
+  source.start(0, position % buffer.duration);
 }
 
-function stopMusic() {
-  if (currentMusicSource) {
+function stopTheme() {
+  if (themeSource) {
     try {
-      currentMusicSource.stop();
+      themeSource.stop();
     } catch (e) {
       // Ignore if already stopped
     }
-    currentMusicSource = null;
-    currentMusicGain = null;
-    songPlaying = false;
-    musicWasPlaying = true;
+    themeSource = null;
   }
 }
 
@@ -207,23 +216,6 @@ function syncAudioWithGamePaused(isPaused) {
     audioCtx.resume().catch(() => {});
   }
 }
-
-/**
- * Toggle audio on/off during gameplay
- */
-
-let audioEnabled = true;
-
-function toggleAudio() {
-  audioEnabled = !audioEnabled;
-  if (!audioEnabled) {
-    stopMusic();
-  } else if (musicWasPlaying) {
-    music(songs.theme, 0.5);
-    musicWasPlaying = false;
-  }
-}
-
 /**
  * Font
  */

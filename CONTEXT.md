@@ -27,3 +27,18 @@ _Avoid_: leave, dismiss
 **Step**:
 The gap between neighboring angels along the path, about one angel width.
 _Avoid_: offset, slot
+
+**Run**:
+One play from the moment the player starts until game over or the ending.
+
+**Sound**:
+The single on/off switch for everything the player hears, the theme and all sound effects. Off on every page load; only the player turns it on.
+_Avoid_: audio, mute
+
+**Theme**:
+The level's song. It starts over at the beginning of every run and follows the run's clock, so turning sound on mid-run joins the song where it would be. Outside a run it simply loops.
+_Avoid_: music, soundtrack
+
+**Sound effect**:
+A short one-off sound tied to a game event, such as a jump or a crash.
+_Avoid_: sfx

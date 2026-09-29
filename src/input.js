@@ -21,7 +21,7 @@ const soundToggleButton = document.getElementById("sound-toggle");
  * code: string
  * type: string
  */
-input.keyListener = function ({ code, type }) {
+input.keyListener = function ({ code, type, repeat = false }) {
   const eventType = type === "keydown" ? true : false;
   switch (code) {
     case KEY_CODES.LEFT:
@@ -62,7 +62,10 @@ input.keyListener = function ({ code, type }) {
       }
       break;
     case KEY_CODES.SOUND_TOGGLE:
-      input.soundToggle = eventType;
+      // Only a new press toggles; update() clears the flag once handled.
+      if (eventType && !repeat) {
+        input.soundToggle = true;
+      }
       // Toggle pressed state for sound-toggle button
       if (eventType) {
         soundToggleButton.classList.add("pressed");
@@ -79,7 +82,7 @@ document.addEventListener(
   "keydown",
   (event) => {
     const code = event.code;
-    input.keyListener({ code, type: "keydown" });
+    input.keyListener({ code, type: "keydown", repeat: event.repeat });
   },
   { passive: true },
 );

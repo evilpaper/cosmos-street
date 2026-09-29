@@ -21,9 +21,9 @@ The game is primarily designed to be played using the left, up, and right arrow 
 
 That's it! Good luck!
 
-### Music playback
+### Sound
 
-Background music starts when you begin playing and loops continuously. Use the S key (or the sound button on mobile) to mute or unmute both music and sound effects.
+Sound is off every time the page loads. Press the S key (or the sound button on mobile) to turn the theme and sound effects on or off. The theme starts over at the beginning of every run.
 
 ## Constraints and Requirements
 
