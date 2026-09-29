@@ -22,6 +22,11 @@ const TILE_HEIGHT = 16;
 const COLLECTIBLE_SPAWN_COOLDOWN = 3 * 60;
 const ANGEL_STEP = 16;
 const ANGEL_LINE_EASE = 0.2;
+const ANGEL_STAGGER_FRAMES = 4;
+const ANGEL_STAGGER_MAX_FRAMES = 24;
+const ANGEL_FOLLOW_EASE = 0.5;
+const ANGEL_FOLLOW_EASE_DROP = 0.06;
+const ANGEL_FOLLOW_EASE_MIN = 0.15;
 const ANGEL_PATH_LENGTH = ANGEL_STEP * 40;
 
 /**
@@ -435,9 +440,15 @@ function placeAngelLine() {
     const target = (index + 1) * ANGEL_STEP;
     if (angel.trailDistance == null) {
       angel.trailDistance = target;
+    } else if (angel.stepDelay > 0) {
+      angel.stepDelay -= 1;
     } else {
       angel.trailDistance += (target - angel.trailDistance) * ANGEL_LINE_EASE;
     }
+    angel.followEase = Math.max(
+      ANGEL_FOLLOW_EASE_MIN,
+      ANGEL_FOLLOW_EASE - index * ANGEL_FOLLOW_EASE_DROP,
+    );
     const slot = playerPath.pointAt(angel.trailDistance);
     if (!slot) continue;
     angel.slotX = slot.x;
@@ -451,6 +462,12 @@ function spendAngelForAirJump() {
     return false;
   }
   angel.state = "dispatch";
+  angelLine.forEach((follower, index) => {
+    follower.stepDelay = Math.min(
+      ANGEL_STAGGER_MAX_FRAMES,
+      index * ANGEL_STAGGER_FRAMES,
+    );
+  });
   return true;
 }
 
