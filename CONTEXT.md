@@ -29,7 +29,7 @@ The gap between neighboring angels along the path, about one angel width.
 _Avoid_: offset, slot
 
 **Stagger**:
-The way each angel in the line reacts a little later and a little more loosely than the one in front of it, both when following the player and when stepping forward after a dispatch. The longer the line, the looser its tail, up to a limit.
+The way each angel in the line lags a little more than the one in front when the player rises or falls, then settles into its step by the time the player lands. The longer the line, the looser its tail, up to a limit, and the same lag closes the gap after a dispatch.
 
 **Run**:
 One play from the moment the player starts until game over or the ending.

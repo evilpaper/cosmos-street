@@ -48,23 +48,16 @@ function createAngel(tiles, existingBoxes = []) {
       angel.pickedUpY + (angel.slotY - angel.pickedUpY) * eased,
     );
     if (introProgress >= 1) {
-      angel.followX = angel.slotX;
-      angel.followY = angel.slotY;
       angel.state = "follow";
     }
   }
 
-  // Chase the slot rather than sit on it, moving with the world's scroll
-  // so the lag only shows when the player's path bends.
+  // The line spring owns the lag. Follow sits on its slot.
   function updateFollow(angel) {
     tick += 1;
-    angel.followX -= frameScroll;
-    angel.followX += (angel.slotX - angel.followX) * angel.followEase;
-    angel.followY += (angel.slotY - angel.followY) * angel.followEase;
-    angel.x = Math.round(angel.followX);
+    angel.x = Math.round(angel.slotX);
     angel.y = Math.round(
-      angel.followY +
-        Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
+      angel.slotY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
     );
   }
 
@@ -89,10 +82,7 @@ function createAngel(tiles, existingBoxes = []) {
     slotX: x,
     slotY: y,
     trailDistance: null,
-    stepDelay: 0,
-    followEase: 1,
-    followX: x,
-    followY: y,
+    trailVelocity: 0,
 
     getHitbox() {
       return {
