@@ -11,7 +11,7 @@
   --color-key-blue-pressed: #2f5cd6;
   --color-key-red: #e03131;
   --color-key-red-pressed: #c42828;
-  --nominal-size: 3.33rem;
+  --nominal-size: 4.2rem;
 }
 
 /* Disable long-press callout menu (Safari) */
@@ -64,6 +64,7 @@ canvas {
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: 100;
 }
 
 .controls-left,
@@ -110,7 +111,7 @@ canvas {
     background-color 0.2s,
     color 0.2s,
     transform 0.1s ease;
-  font-size: 0.5rem;
+  font-size: 0.6rem;
 }
 
 /* This add the round elevation on the button. Making it look crazy nice.*/
