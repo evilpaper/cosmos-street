@@ -5,6 +5,12 @@
   --color-surface--200: #e0d8cc;
   --color-on-surface: hsl(236, 18%, 30%);
   --color-sound-on: hsl(99, 97%, 45%);
+  --color-key-orange: #f26d45;
+  --color-key-orange-pressed: #de5c35;
+  --color-key-blue: #3a6ef5;
+  --color-key-blue-pressed: #2f5cd6;
+  --color-key-red: #e03131;
+  --color-key-red-pressed: #c42828;
   --nominal-size: 3.33rem;
 }
 
@@ -124,6 +130,45 @@ canvas {
 .controls .square.pressed {
   transform: scale(0.9);
   background-color: var(--color-surface--200);
+}
+
+#break,
+#speed-up,
+#toggle-sound,
+#jump {
+  color: #fff;
+}
+
+#break path,
+#speed-up path,
+#jump path {
+  stroke: #fff;
+}
+
+#break,
+#speed-up {
+  background-color: var(--color-key-orange);
+}
+
+#break.pressed,
+#speed-up.pressed {
+  background-color: var(--color-key-orange-pressed);
+}
+
+#toggle-sound {
+  background-color: var(--color-key-blue);
+}
+
+#toggle-sound.pressed {
+  background-color: var(--color-key-blue-pressed);
+}
+
+#jump {
+  background-color: var(--color-key-red);
+}
+
+#jump.pressed {
+  background-color: var(--color-key-red-pressed);
 }
 
 /* Mobile portrait - touch-first devices in portrait */
