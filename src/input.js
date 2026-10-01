@@ -15,7 +15,7 @@ const KEY_CODES = {
 const breakButton = document.getElementById("break");
 const speedUpButton = document.getElementById("speed-up");
 const jumpButton = document.getElementById("jump");
-const soundToggleButton = document.getElementById("sound-toggle");
+const soundToggleButton = document.getElementById("toggle-sound");
 
 /**
  * code: string
@@ -66,7 +66,7 @@ input.keyListener = function ({ code, type, repeat = false }) {
       if (eventType && !repeat) {
         input.soundToggle = true;
       }
-      // Toggle pressed state for sound-toggle button
+      // Toggle pressed state for toggle-sound button
       if (eventType) {
         soundToggleButton.classList.add("pressed");
       } else {

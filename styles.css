@@ -60,25 +60,28 @@ canvas {
   height: 100%;
 }
 
+.controls-left,
+.controls-right {
+  display: grid;
+  grid-template-columns: repeat(2, var(--nominal-size));
+  grid-template-rows: repeat(2, var(--nominal-size));
+  gap: 0.2rem;
+}
+
 .controls-left {
   position: absolute;
   left: 0;
   bottom: 0;
-  padding-left: 4rem;
-  padding-bottom: 4rem;
-  display: flex;
-  gap: 0.2rem;
+  padding-left: 2rem;
+  padding-bottom: 2rem;
 }
 
 .controls-right {
   position: absolute;
   right: 0;
   bottom: 0;
-  padding-right: 4rem;
-  padding-bottom: 4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
 }
 
 .controls .square {
@@ -101,6 +104,7 @@ canvas {
     background-color 0.2s,
     color 0.2s,
     transform 0.1s ease;
+  font-size: 0.5rem;
 }
 
 /* This add the round elevation on the button. Making it look crazy nice.*/
@@ -122,38 +126,6 @@ canvas {
   background-color: var(--color-surface--200);
 }
 
-/* Sound toggle */
-#sound-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--nominal-size);
-  padding: 0.3rem;
-
-  background-color: var(--color-surface--100);
-  border-radius: var(--border-radius);
-  border-color: transparent;
-  color: var(--color-on-surface);
-
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
-
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-
-  transition:
-    background-color 0.2s,
-    color 0.2s,
-    transform 0.1s ease;
-}
-
-/* Sound toggle pressed state */
-#sound-toggle.pressed {
-  transform: scale(0.9);
-  background-color: var(--color-surface--200);
-}
-
 /* Mobile portrait - touch-first devices in portrait */
 @media (max-width: 480px) and (max-height: 960px) and (hover: none) and (pointer: coarse) {
   .game {
@@ -163,10 +135,6 @@ canvas {
   .crt-container {
     margin-top: 1rem;
   }
-  /* canvas {
-    width: min(104vw, 104vh);
-    height: min(104vw, 104vh);
-  } */
   .controls {
     display: block;
     padding: 0 1rem;
@@ -175,10 +143,6 @@ canvas {
 
 /* Mobile landscape - touch-first devices in landscape */
 @media (max-height: 600px) and (hover: none) and (pointer: coarse) {
-  /* canvas {
-    width: min(100vw, 100vh);
-    height: min(100vw, 100vh);
-  } */
   .controls {
     display: flex;
     justify-content: center;
@@ -190,8 +154,8 @@ canvas {
   }
   .controls-left,
   .controls-right {
-    padding-right: 4rem;
-    padding-left: 4rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
   }
 }
 
