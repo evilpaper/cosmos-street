@@ -11,6 +11,8 @@
   --color-key-blue-pressed: #2f5cd6;
   --color-key-red: #e03131;
   --color-key-red-pressed: #c42828;
+  --color-key-yellow: #ffd401;
+  --color-key-yellow-pressed: #e6c000;
   --nominal-size: 4.2rem;
 }
 
@@ -111,7 +113,8 @@ canvas {
     background-color 0.2s,
     color 0.2s,
     transform 0.1s ease;
-  font-size: 0.6rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
 }
 
 /* This add the round elevation on the button. Making it look crazy nice.*/
@@ -135,15 +138,21 @@ canvas {
 
 #break,
 #speed-up,
-#toggle-sound,
-#jump {
+#toggle-sound {
   color: #fff;
 }
 
 #break path,
-#speed-up path,
-#jump path {
+#speed-up path {
   stroke: #fff;
+}
+
+#jump {
+  color: #000;
+}
+
+#jump path {
+  stroke: #000;
 }
 
 #break,
@@ -165,11 +174,11 @@ canvas {
 }
 
 #jump {
-  background-color: var(--color-key-red);
+  background-color: var(--color-key-yellow);
 }
 
 #jump.pressed {
-  background-color: var(--color-key-red-pressed);
+  background-color: var(--color-key-yellow-pressed);
 }
 
 /* Mobile portrait - touch-first devices in portrait */
