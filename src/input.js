@@ -16,6 +16,7 @@ const breakButton = document.getElementById("break");
 const speedUpButton = document.getElementById("speed-up");
 const jumpButton = document.getElementById("jump");
 const soundToggleButton = document.getElementById("toggle-sound");
+const resetButton = document.getElementById("reset");
 
 /**
  * code: string
@@ -116,6 +117,7 @@ const TOUCH_CONTROLS = [
 ];
 
 let activeTouchCodes = new Set();
+let resetTouchActive = false;
 
 function touchHitsButton(touch, button) {
   const rect = button.getBoundingClientRect();
@@ -157,8 +159,29 @@ function reconcileTouchCodes(nextActiveCodes) {
   activeTouchCodes = nextActiveCodes;
 }
 
+function isResetTouched(touches) {
+  for (const touch of Array.from(touches)) {
+    if (touchHitsButton(touch, resetButton)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function reconcileResetTouch(touches) {
+  const isActive = isResetTouched(touches);
+
+  if (isActive && !resetTouchActive) {
+    refreshPage();
+  }
+
+  resetTouchActive = isActive;
+}
+
 function handleTouchEvent(event) {
   event.preventDefault();
+  reconcileResetTouch(event.touches);
   const nextActiveCodes = getActiveTouchCodes(event.touches);
   reconcileTouchCodes(nextActiveCodes);
 }
@@ -188,4 +211,8 @@ function resetInput() {
   input.up = false;
   input.upJustPressed = false;
   upHeld = false;
+}
+
+function refreshPage() {
+  window.location.reload();
 }
