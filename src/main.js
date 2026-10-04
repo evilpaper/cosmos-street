@@ -858,6 +858,11 @@ function update() {
     input.soundToggle = false;
   }
 
+  if (input.reset) {
+    input.reset = false;
+    resetGame();
+  }
+
   syncAudioWithGamePaused(paused);
 
   if (paused) {

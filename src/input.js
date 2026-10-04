@@ -10,6 +10,7 @@ const KEY_CODES = {
   RIGHT: "ArrowRight",
   LEFT: "ArrowLeft",
   SOUND_TOGGLE: "KeyS",
+  RESET: "KeyR",
 };
 
 const breakButton = document.getElementById("break");
@@ -74,6 +75,17 @@ input.keyListener = function ({ code, type, repeat = false }) {
         soundToggleButton.classList.remove("pressed");
       }
       break;
+    case KEY_CODES.RESET:
+      // Only a new press resets; update() clears the flag once handled.
+      if (eventType && !repeat) {
+        input.reset = true;
+      }
+      if (eventType) {
+        resetButton.classList.add("pressed");
+      } else {
+        resetButton.classList.remove("pressed");
+      }
+      break;
   }
 };
 
@@ -114,10 +126,10 @@ const TOUCH_CONTROLS = [
   { button: jumpButton, code: KEY_CODES.UP },
   { button: speedUpButton, code: KEY_CODES.RIGHT },
   { button: soundToggleButton, code: KEY_CODES.SOUND_TOGGLE },
+  { button: resetButton, code: KEY_CODES.RESET },
 ];
 
 let activeTouchCodes = new Set();
-let resetTouchActive = false;
 
 function touchHitsButton(touch, button) {
   const rect = button.getBoundingClientRect();
@@ -159,29 +171,8 @@ function reconcileTouchCodes(nextActiveCodes) {
   activeTouchCodes = nextActiveCodes;
 }
 
-function isResetTouched(touches) {
-  for (const touch of Array.from(touches)) {
-    if (touchHitsButton(touch, resetButton)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function reconcileResetTouch(touches) {
-  const isActive = isResetTouched(touches);
-
-  if (isActive && !resetTouchActive) {
-    refreshPage();
-  }
-
-  resetTouchActive = isActive;
-}
-
 function handleTouchEvent(event) {
   event.preventDefault();
-  reconcileResetTouch(event.touches);
   const nextActiveCodes = getActiveTouchCodes(event.touches);
   reconcileTouchCodes(nextActiveCodes);
 }
@@ -211,8 +202,4 @@ function resetInput() {
   input.up = false;
   input.upJustPressed = false;
   upHeld = false;
-}
-
-function refreshPage() {
-  window.location.reload();
 }
