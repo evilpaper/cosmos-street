@@ -19,21 +19,29 @@ const jumpButton = document.getElementById("jump");
 const soundToggleButton = document.getElementById("toggle-sound");
 const resetButton = document.getElementById("reset");
 
+const BUTTON_BY_CODE = {
+  [KEY_CODES.LEFT]: breakButton,
+  [KEY_CODES.UP]: jumpButton,
+  [KEY_CODES.RIGHT]: speedUpButton,
+  [KEY_CODES.SOUND_TOGGLE]: soundToggleButton,
+  [KEY_CODES.RESET]: resetButton,
+};
+
+function setButtonPressed(code, pressed) {
+  BUTTON_BY_CODE[code]?.classList.toggle("pressed", pressed);
+}
+
 /**
  * code: string
  * type: string
  */
 input.keyListener = function ({ code, type, repeat = false }) {
-  const eventType = type === "keydown" ? true : false;
+  const eventType = type === "keydown";
+  setButtonPressed(code, eventType);
+
   switch (code) {
     case KEY_CODES.LEFT:
       input.left = eventType;
-      // Toggle pressed state for break button
-      if (eventType) {
-        breakButton.classList.add("pressed");
-      } else {
-        breakButton.classList.remove("pressed");
-      }
       break;
     case KEY_CODES.UP:
       if (eventType) {
@@ -47,43 +55,20 @@ input.keyListener = function ({ code, type, repeat = false }) {
         input.up = false;
         input.upJustPressed = false;
       }
-      // Toggle pressed state for jump button
-      if (eventType) {
-        jumpButton.classList.add("pressed");
-      } else {
-        jumpButton.classList.remove("pressed");
-      }
       break;
     case KEY_CODES.RIGHT:
       input.right = eventType;
-      // Toggle pressed state for speed-up button
-      if (eventType) {
-        speedUpButton.classList.add("pressed");
-      } else {
-        speedUpButton.classList.remove("pressed");
-      }
       break;
     case KEY_CODES.SOUND_TOGGLE:
       // Only a new press toggles; update() clears the flag once handled.
       if (eventType && !repeat) {
         input.soundToggle = true;
       }
-      // Toggle pressed state for toggle-sound button
-      if (eventType) {
-        soundToggleButton.classList.add("pressed");
-      } else {
-        soundToggleButton.classList.remove("pressed");
-      }
       break;
     case KEY_CODES.RESET:
       // Only a new press resets; update() clears the flag once handled.
       if (eventType && !repeat) {
         input.reset = true;
-      }
-      if (eventType) {
-        resetButton.classList.add("pressed");
-      } else {
-        resetButton.classList.remove("pressed");
       }
       break;
   }
