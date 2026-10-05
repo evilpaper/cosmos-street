@@ -3,10 +3,10 @@
  */
 
 const GRAVITY = 0.058;
-const FRICTION = 0.32; // A value between 0 and 1 that determines how much friction slows down the player.
-const SCROLL_SPEED_BREAKING = 0.3;
-const SCROLL_SPEED_SKATING = 1.6;
-const SCROLL_SPEED_SPEEDING = 2.4;
+const FRICTION = 0.34; // A value between 0 and 1 that determines how much friction slows down the player.
+const SCROLL_SPEED_BREAKING = 0.2;
+const SCROLL_SPEED_SKATING = 1.4;
+const SCROLL_SPEED_SPEEDING = 2.6;
 const PLAYTIME_IN_SECONDS = 60;
 const PLAYING_TIME = 60 * PLAYTIME_IN_SECONDS; // First number is ticks. Remember, we do 60 times per second
 
@@ -603,15 +603,15 @@ states[GAME_STATE.PRESS_START] = {
       print("High Score " + highScore, "center", 44);
     }
     title.draw(screen);
-    print("press any ←,→,↑ to start", "center", 132);
+    print("press any ←,→,↑ to start", "center", 130);
     if (isSoundUnavailable()) {
-      print("Sound unavailable", "center", 186);
+      print("Sound unavailable", "center", 188);
     } else if (isSoundOn()) {
-      print("Sound ON", "center", 186);
+      print("Sound ON", "center", 188);
     } else {
-      print("Sound OFF", "center", 186);
+      print("Sound OFF", "center", 188);
     }
-    print("press S to toggle sound", "center", 202);
+    print("press S to toggle sound", "center", 210);
   },
 };
 
@@ -655,8 +655,8 @@ states[GAME_STATE.PLAYING] = {
         (time > 16 && time < 20) ||
         (time > 24 && time < 30)
       ) {
-        print("press any ←,→,↑ to start", "center", 186);
-        print("press S to toggle sound", "center", 202);
+        print("press any ←,→,↑ to start", "center", 130);
+        print("press S to toggle sound", "center", 210);
       }
     }
 

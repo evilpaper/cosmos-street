@@ -5,13 +5,7 @@ const player = {
     img.src = "./images/player-sprite-sheet.png";
     return img;
   })(),
-  states: [
-    "skating",
-    "jumping",
-    "breaking",
-    "speeding",
-    "obliterating",
-  ],
+  states: ["skating", "jumping", "breaking", "speeding", "obliterating"],
   width: 26,
   height: 36,
   totalFrames: 2, // For skating and speeding states
@@ -23,8 +17,8 @@ const player = {
   dy: 0,
   dx: 0,
 
-  jumpStrength: 7.2,
-  jumpStrengthBreaking: 6,
+  jumpStrength: 7.4,
+  jumpStrengthBreaking: 7,
   jumpStrengthSpeeding: 8,
   state: "skating", // Initial state is "skating" (this.states[0])
   isDead: false,
