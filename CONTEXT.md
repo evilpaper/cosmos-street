@@ -5,31 +5,24 @@ A side-scrolling skate through an asteroid belt. The player collects companions 
 ## Language
 
 **Angel**:
-A companion the player carries in a line. Each angel is one air jump.
+A companion the player carries. Each angel is one air jump.
 _Avoid_: shield, Astro Angel
 
 **Air jump**:
-A jump the player makes while already airborne, on a new press. Each one spends the closest angel still in line.
+A jump the player makes while already airborne, on a new press. Each one spends the closest carried angel (the oldest still carried).
 _Avoid_: double jump
 
-**Line**:
-The angels the player is carrying, ordered along the path the player has already traveled. The closest angel is the one in the first step behind the player. A newly collected angel joins the far end at the moment it is collected.
-_Avoid_: tow, queue
-
 **Egg**:
-A score pickup. Collecting one leaves the line unchanged.
+A score pickup. Collecting one leaves the carried angels unchanged.
 _Avoid_: Cosmic Egg
 
+**Approach**:
+The flight from pickup into the angel’s slot behind the player. Slow, along a slight arc; ends when the angel reaches the slot and starts following.
+_Avoid_: intro, tween, lerp
+
 **Dispatch**:
-The closest angel leaving the line by flying up off the screen. The angels behind it step forward.
+The closest carried angel leaving by flying up off the screen. The others each move one slot closer to the player.
 _Avoid_: leave, dismiss
-
-**Step**:
-The gap between neighboring angels along the path, about one angel width.
-_Avoid_: offset, slot
-
-**Stagger**:
-The way each angel in the line lags a little more than the one in front when the player rises or falls, then settles into its step by the time the player lands. The longer the line, the looser its tail, up to a limit, and the same lag closes the gap after a dispatch.
 
 **Run**:
 One play from the moment the player starts until game over or the ending.
@@ -45,3 +38,6 @@ _Avoid_: music, soundtrack
 **Sound effect**:
 A short one-off sound tied to a game event, such as a jump or a crash.
 _Avoid_: sfx
+
+**Enemy**:
+A enemy. Can can be in states Roaming, Shaking (Telegraphing), Zapping (Emitting electric flashes) and Exploding (Dying)

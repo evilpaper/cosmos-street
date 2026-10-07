@@ -20,7 +20,6 @@ const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 
 const COLLECTIBLE_SPAWN_COOLDOWN = 3 * 60;
-const ANGEL_PATH_LENGTH = ANGEL_STEP * 40;
 
 /**
  * Difficulty stages
@@ -119,9 +118,7 @@ let time = 0;
 let stars;
 let platforms;
 let angels;
-let angelLine;
-let playerPath;
-let frameScroll = 0;
+let carriedAngels;
 let eggs;
 let sparkles;
 let electricExplosions;
@@ -253,15 +250,11 @@ function hasPassedTopEdge(entity) {
 }
 
 function updateEntities() {
-  frameScroll = scrollSpeed;
   platforms.update();
-
-  const yBeforeMove = player.y;
   player.update(platforms.tiles, time);
 
-  if (time >= 40) {
-    playerPath.record(player.x, player.y, frameScroll);
-    placeAngelLine(player.y - yBeforeMove);
+  for (let i = 0; i < carriedAngels.length; i++) {
+    carriedAngels[i].slotIndex = i;
   }
 
   for (const angel of angels) {
@@ -270,7 +263,7 @@ function updateEntities() {
   angels = angels.filter(
     (angel) => !(hasPassedLeftEdge(angel) || hasPassedTopEdge(angel)),
   );
-  angelLine = angelLine.filter((angel) => angels.includes(angel));
+  carriedAngels = carriedAngels.filter((angel) => angels.includes(angel));
 
   for (const egg of eggs) {
     egg.update();
@@ -429,18 +422,8 @@ function updateVisualEffects() {
 
 // Rules
 
-function placeAngelLine(verticalMove) {
-  advanceAngelLine(angelLine, verticalMove);
-  for (const angel of angelLine) {
-    const slot = playerPath.pointAt(angel.trailDistance);
-    if (!slot) continue;
-    angel.slotX = slot.x;
-    angel.slotY = slot.y;
-  }
-}
-
 function spendAngelForAirJump() {
-  const angel = angelLine.shift();
+  const angel = carriedAngels.shift();
   if (!angel) {
     return false;
   }
@@ -449,10 +432,11 @@ function spendAngelForAirJump() {
 }
 
 function collectAngel(angel) {
-  angel.pickedUpX = angel.x;
-  angel.pickedUpY = angel.y;
+  angel.approachStartX = angel.x;
+  angel.approachStartY = angel.y;
+  angel.approachProgress = 0;
   angel.state = "approach";
-  angelLine.push(angel);
+  carriedAngels.push(angel);
   addScore(scoring.award("angel"));
   sfx(sounds.angel);
 }
@@ -820,8 +804,7 @@ function init() {
   stars = createStars(30);
   platforms = createPlatforms(60);
   angels = [];
-  angelLine = [];
-  playerPath = createPlayerPath(ANGEL_PATH_LENGTH);
+  carriedAngels = [];
   eggs = [];
   sparkles = [];
   electricExplosions = [];

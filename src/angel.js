@@ -1,21 +1,24 @@
 const angelSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png");
 
+const ANGEL_WIDTH = 16;
+const ANGEL_HEIGHT = 16;
+const ANGEL_BASE_GAP = 16;
+const ANGEL_CHASE = 0.2;
+const ANGEL_JITTER = 3;
+const ANGEL_APPROACH_FRAMES = 75;
+const ANGEL_APPROACH_ARC = 14;
+
 function createAngel(tiles, existingBoxes = []) {
-  const WIDTH = 16;
-  const HEIGHT = 16;
   const HITBOX_WIDTH = 8;
   const HITBOX_HEIGHT = 8;
   const OSCILLATION_AMPLITUDE = 2;
   const OSCILLATION_SPEED = 0.1;
-  const INTRO_DURATION_FRAMES = 30;
   const FLOAT_HEIGHT = 10;
   const DEPART_SPEED = 2;
 
-  const STATES = ["idle", "approach", "follow", "dispatch"];
-
   const initialPosition = findSpreadCollectiblePosition(tiles, existingBoxes, {
-    spriteWidth: WIDTH,
-    spriteHeight: HEIGHT,
+    spriteWidth: ANGEL_WIDTH,
+    spriteHeight: ANGEL_HEIGHT,
     floatHeight: FLOAT_HEIGHT,
   });
 
@@ -24,9 +27,18 @@ function createAngel(tiles, existingBoxes = []) {
   }
 
   let tick = 0;
-  let x = initialPosition.x;
-  let y = initialPosition.y;
-  let introProgress = 0;
+  const jitterX = randomInRange(-ANGEL_JITTER, ANGEL_JITTER);
+  const jitterY = randomInRange(-ANGEL_JITTER, ANGEL_JITTER);
+  const bobAmplitude = 2 + Math.random() * 2;
+  const bobSpeed = 0.1 + Math.random() * 0.07;
+  const bobPhase = Math.random() * Math.PI * 2;
+
+  function slotTarget(player, slotIndex) {
+    return {
+      x: player.x - (ANGEL_BASE_GAP + slotIndex * ANGEL_WIDTH) + jitterX,
+      y: player.y + jitterY,
+    };
+  }
 
   function updateIdle(angel) {
     angel.x -= scrollSpeed;
@@ -37,28 +49,32 @@ function createAngel(tiles, existingBoxes = []) {
     );
   }
 
-  function updateApproach(angel) {
-    angel.pickedUpX -= frameScroll;
-    introProgress = Math.min(1, introProgress + 1 / INTRO_DURATION_FRAMES);
-    const eased = 1 - (1 - introProgress) ** 3;
-    angel.x = Math.round(
-      angel.pickedUpX + (angel.slotX - angel.pickedUpX) * eased,
+  function updateApproach(angel, player) {
+    angel.approachStartX -= scrollSpeed;
+    angel.approachProgress = Math.min(
+      1,
+      angel.approachProgress + 1 / ANGEL_APPROACH_FRAMES,
     );
-    angel.y = Math.round(
-      angel.pickedUpY + (angel.slotY - angel.pickedUpY) * eased,
-    );
-    if (introProgress >= 1) {
+    const t = angel.approachProgress;
+    const eased = 1 - (1 - t) ** 3;
+    const slot = slotTarget(player, angel.slotIndex);
+    const arc = Math.sin(Math.PI * t) * ANGEL_APPROACH_ARC;
+
+    angel.x = angel.approachStartX + (slot.x - angel.approachStartX) * eased;
+    angel.y =
+      angel.approachStartY + (slot.y - angel.approachStartY) * eased - arc;
+
+    if (t >= 1) {
       angel.state = "follow";
     }
   }
 
-  // The line spring owns the lag. Follow sits on its slot.
-  function updateFollow(angel) {
+  function updateFollow(angel, player) {
     tick += 1;
-    angel.x = Math.round(angel.slotX);
-    angel.y = Math.round(
-      angel.slotY + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE,
-    );
+    const slot = slotTarget(player, angel.slotIndex);
+    const bob = Math.sin(tick * bobSpeed + bobPhase) * bobAmplitude;
+    angel.x += (slot.x - angel.x) * ANGEL_CHASE;
+    angel.y += (slot.y + bob - angel.y) * ANGEL_CHASE;
   }
 
   function updateDispatch(angel) {
@@ -74,20 +90,20 @@ function createAngel(tiles, existingBoxes = []) {
   };
 
   return {
-    x: x,
-    y: y,
-    width: WIDTH,
-    height: HEIGHT,
-    state: STATES[0],
-    slotX: x,
-    slotY: y,
-    trailDistance: null,
-    trailVelocity: 0,
+    x: initialPosition.x,
+    y: initialPosition.y,
+    width: ANGEL_WIDTH,
+    height: ANGEL_HEIGHT,
+    state: "idle",
+    slotIndex: 0,
+    approachStartX: 0,
+    approachStartY: 0,
+    approachProgress: 0,
 
     getHitbox() {
       return {
-        x: this.x + (WIDTH - HITBOX_WIDTH) / 2,
-        y: this.y + (HEIGHT - HITBOX_HEIGHT) / 2,
+        x: this.x + (ANGEL_WIDTH - HITBOX_WIDTH) / 2,
+        y: this.y + (ANGEL_HEIGHT - HITBOX_HEIGHT) / 2,
         width: HITBOX_WIDTH,
         height: HITBOX_HEIGHT,
       };
@@ -102,22 +118,19 @@ function createAngel(tiles, existingBoxes = []) {
     },
 
     draw(screen) {
-      const spriteFrameX = 0;
-      const spriteFrameY = 0;
-
       const drawX = Math.round(this.x);
       const drawY = Math.round(this.y);
 
       screen.drawImage(
         angelSpriteSheet,
-        spriteFrameX,
-        spriteFrameY,
-        WIDTH,
-        HEIGHT,
+        0,
+        0,
+        ANGEL_WIDTH,
+        ANGEL_HEIGHT,
         drawX,
         drawY,
-        WIDTH,
-        HEIGHT,
+        ANGEL_WIDTH,
+        ANGEL_HEIGHT,
       );
     },
   };
