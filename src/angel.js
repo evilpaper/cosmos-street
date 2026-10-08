@@ -11,8 +11,8 @@ const ANGEL_APPROACH_ARC = 14;
 function createAngel(tiles, existingBoxes = []) {
   const HITBOX_WIDTH = 8;
   const HITBOX_HEIGHT = 8;
-  const OSCILLATION_AMPLITUDE = 2;
-  const OSCILLATION_SPEED = 0.1;
+  const OSCILLATION_AMPLITUDE = 2 + Math.random() * 2;
+  const OSCILLATION_SPEED = 0.1 + Math.random() * 0.07;
   const FLOAT_HEIGHT = 10;
   const DEPART_SPEED = 2;
 
@@ -29,9 +29,6 @@ function createAngel(tiles, existingBoxes = []) {
   let tick = 0;
   const jitterX = randomInRange(-ANGEL_JITTER, ANGEL_JITTER);
   const jitterY = randomInRange(-ANGEL_JITTER, ANGEL_JITTER);
-  const bobAmplitude = 2 + Math.random() * 2;
-  const bobSpeed = 0.1 + Math.random() * 0.07;
-  const bobPhase = Math.random() * Math.PI * 2;
 
   function slotTarget(player, slotIndex) {
     return {
@@ -72,7 +69,8 @@ function createAngel(tiles, existingBoxes = []) {
   function updateFollow(angel, player) {
     tick += 1;
     const slot = slotTarget(player, angel.slotIndex);
-    const bob = Math.sin(tick * bobSpeed + bobPhase) * bobAmplitude;
+    const bob =
+      Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE;
     angel.x += (slot.x - angel.x) * ANGEL_CHASE;
     angel.y += (slot.y + bob - angel.y) * ANGEL_CHASE;
   }
