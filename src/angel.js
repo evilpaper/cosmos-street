@@ -69,9 +69,10 @@ function createAngel(tiles, existingBoxes = []) {
   function updateFollow(angel, leader) {
     tick += 1;
     const slot = slotBehind(leader);
-    const bob = Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE;
+    const oscillation =
+      Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE;
     angel.x += (slot.x - angel.x) * ANGEL_CHASE;
-    angel.y += (slot.y + bob - angel.y) * ANGEL_CHASE;
+    angel.y += (slot.y + oscillation - angel.y) * ANGEL_CHASE;
   }
 
   function updateDispatch(angel) {
