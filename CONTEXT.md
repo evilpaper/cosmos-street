@@ -17,11 +17,11 @@ A score pickup. Collecting one leaves the carried angels unchanged.
 _Avoid_: Cosmic Egg
 
 **Approach**:
-The flight from pickup into the angel’s slot behind the player. Slow, along a slight arc; ends when the angel reaches the slot and starts following.
+The flight from pickup into place behind its leader — the player for the closest angel, the angel ahead for the rest. Slow, along a slight arc; ends when the angel reaches that place and starts following.
 _Avoid_: intro, tween, lerp
 
 **Dispatch**:
-The closest carried angel leaving by flying up off the screen. The others each move one slot closer to the player.
+The closest carried angel leaving by flying up off the screen. The others each move one place closer.
 _Avoid_: leave, dismiss
 
 **Run**:

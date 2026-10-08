@@ -253,12 +253,14 @@ function updateEntities() {
   platforms.update();
   player.update(platforms.tiles, time);
 
-  for (let i = 0; i < carriedAngels.length; i++) {
-    carriedAngels[i].slotIndex = i;
-  }
-
   for (const angel of angels) {
-    angel.update(player);
+    if (angel.state === "idle" || angel.state === "dispatch") {
+      angel.update();
+    }
+  }
+  for (let i = 0; i < carriedAngels.length; i++) {
+    const leader = i === 0 ? player : carriedAngels[i - 1];
+    carriedAngels[i].update(leader);
   }
   angels = angels.filter(
     (angel) => !(hasPassedLeftEdge(angel) || hasPassedTopEdge(angel)),

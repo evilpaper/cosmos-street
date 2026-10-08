@@ -30,10 +30,10 @@ function createAngel(tiles, existingBoxes = []) {
   const jitterX = randomInRange(-ANGEL_JITTER, ANGEL_JITTER);
   const jitterY = randomInRange(-ANGEL_JITTER, ANGEL_JITTER);
 
-  function slotTarget(player, slotIndex) {
+  function slotBehind(leader) {
     return {
-      x: player.x - (ANGEL_BASE_GAP + slotIndex * ANGEL_WIDTH) + jitterX,
-      y: player.y + jitterY,
+      x: leader.x - ANGEL_BASE_GAP + jitterX,
+      y: leader.y + jitterY,
     };
   }
 
@@ -46,7 +46,7 @@ function createAngel(tiles, existingBoxes = []) {
     );
   }
 
-  function updateApproach(angel, player) {
+  function updateApproach(angel, leader) {
     angel.approachStartX -= scrollSpeed;
     angel.approachProgress = Math.min(
       1,
@@ -54,7 +54,7 @@ function createAngel(tiles, existingBoxes = []) {
     );
     const t = angel.approachProgress;
     const eased = 1 - (1 - t) ** 3;
-    const slot = slotTarget(player, angel.slotIndex);
+    const slot = slotBehind(leader);
     const arc = Math.sin(Math.PI * t) * ANGEL_APPROACH_ARC;
 
     angel.x = angel.approachStartX + (slot.x - angel.approachStartX) * eased;
@@ -66,11 +66,10 @@ function createAngel(tiles, existingBoxes = []) {
     }
   }
 
-  function updateFollow(angel, player) {
+  function updateFollow(angel, leader) {
     tick += 1;
-    const slot = slotTarget(player, angel.slotIndex);
-    const bob =
-      Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE;
+    const slot = slotBehind(leader);
+    const bob = Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_AMPLITUDE;
     angel.x += (slot.x - angel.x) * ANGEL_CHASE;
     angel.y += (slot.y + bob - angel.y) * ANGEL_CHASE;
   }
@@ -93,7 +92,6 @@ function createAngel(tiles, existingBoxes = []) {
     width: ANGEL_WIDTH,
     height: ANGEL_HEIGHT,
     state: "idle",
-    slotIndex: 0,
     approachStartX: 0,
     approachStartY: 0,
     approachProgress: 0,
@@ -111,8 +109,8 @@ function createAngel(tiles, existingBoxes = []) {
       return tick;
     },
 
-    update(player) {
-      updateByState[this.state]?.(this, player);
+    update(leader) {
+      updateByState[this.state]?.(this, leader);
     },
 
     draw(screen) {
