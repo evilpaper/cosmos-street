@@ -2,9 +2,6 @@ const angelSpriteSheet = loadOnce("./images/collectibles-sprite-sheet.png");
 
 const ANGEL_WIDTH = 16;
 const ANGEL_HEIGHT = 16;
-const ANGEL_BASE_GAP = 16;
-const ANGEL_CHASE = 0.2;
-const ANGEL_JITTER = 3;
 const ANGEL_APPROACH_FRAMES = 75;
 const ANGEL_APPROACH_ARC = 14;
 
@@ -27,13 +24,13 @@ function createAngel(tiles, existingBoxes = []) {
   }
 
   let tick = 0;
-  const jitterX = randomInRange(-ANGEL_JITTER, ANGEL_JITTER);
-  const jitterY = randomInRange(-ANGEL_JITTER, ANGEL_JITTER);
+  const individualOffsetX = randomInRange(-2, 2);
+  const individualOffsetY = randomInRange(-3, 3);
 
   function slotBehind(leader) {
     return {
-      x: leader.x - ANGEL_BASE_GAP + jitterX,
-      y: leader.y + jitterY,
+      x: leader.x - ANGEL_WIDTH + individualOffsetX,
+      y: leader.y + individualOffsetY,
     };
   }
 
@@ -68,9 +65,9 @@ function createAngel(tiles, existingBoxes = []) {
   function updateFollow(angel, leader) {
     tick += 1;
     const slot = slotBehind(leader);
-    const oscillation = Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_Y;
-    angel.x += (slot.x - angel.x) * ANGEL_CHASE;
-    angel.y += (slot.y + oscillation - angel.y) * ANGEL_CHASE;
+    const oscillationY = Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_Y;
+    angel.x += slot.x - angel.x;
+    angel.y += slot.y + oscillationY - angel.y;
   }
 
   function updateDispatch(angel) {
