@@ -4,6 +4,10 @@ const ANGEL_WIDTH = 16;
 const ANGEL_HEIGHT = 16;
 const ANGEL_APPROACH_FRAMES = 75;
 const ANGEL_APPROACH_ARC = 14;
+/**
+ * Follower ease towards the one in front of them.
+ */
+const ANGEL_FOLLOW_LERP = 0.1;
 
 function createAngel(tiles, existingBoxes = []) {
   const HITBOX_WIDTH = 8;
@@ -66,8 +70,8 @@ function createAngel(tiles, existingBoxes = []) {
     tick += 1;
     const slot = slotBehind(leader);
     const oscillationY = Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_Y;
-    angel.x += slot.x - angel.x;
-    angel.y += slot.y + oscillationY - angel.y;
+    angel.x += (slot.x - angel.x) * ANGEL_FOLLOW_LERP;
+    angel.y += (slot.y + oscillationY - angel.y) * ANGEL_FOLLOW_LERP;
   }
 
   function updateDispatch(angel) {
