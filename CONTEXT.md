@@ -13,8 +13,11 @@ A jump the player makes while already airborne, on a new press. Each one spends 
 _Avoid_: double jump
 
 **Egg**:
-A score pickup. Collecting one leaves the carried angels unchanged.
-_Avoid_: Cosmic Egg
+A pickup. Not involved in scoring.
+_Avoid_: Cosmic Egg, score pickup
+
+**Score**:
+Points added when collecting an angel, equal to how many angels are carried after that collect.
 
 **Approach**:
 The flight from pickup into place behind its leader — the player for the closest angel, the angel ahead for the rest. Slow, along a slight arc; ends when the angel reaches that place and starts following.

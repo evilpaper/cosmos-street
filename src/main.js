@@ -127,7 +127,6 @@ let startMessage;
 let deadTimer;
 let winTimer;
 let score;
-let scoring;
 let highScore = 0;
 let highScoreUpdated = false;
 let collectibleStageIndex = 0;
@@ -439,7 +438,7 @@ function collectAngel(angel) {
   angel.approachProgress = 0;
   angel.state = "approach";
   carriedAngels.push(angel);
-  addScore(scoring.award("angel"));
+  addScore(carriedAngels.length);
   sfx(sounds.angel);
 }
 
@@ -464,7 +463,6 @@ function collectEgg(index) {
   sparkles.push(createSparkle(egg.x, egg.y - 8));
   eggs.splice(index, 1);
   sfx(sounds.egg);
-  addScore(scoring.award("egg"));
 }
 
 function collectEggs() {
@@ -818,7 +816,6 @@ function init() {
   deadTimer = 0;
   winTimer = 0;
   score = 0;
-  scoring = createScoring();
   highScoreUpdated = false;
   collectibleStageIndex = 0;
   eggsSpawnedInStage = 0;
