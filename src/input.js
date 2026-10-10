@@ -11,6 +11,7 @@ const KEY_CODES = {
   LEFT: "ArrowLeft",
   SOUND_TOGGLE: "KeyS",
   RESET: "KeyR",
+  PAUSE: "KeyP",
 };
 
 const breakButton = document.getElementById("break");
@@ -18,6 +19,7 @@ const speedUpButton = document.getElementById("speed-up");
 const jumpButton = document.getElementById("jump");
 const soundToggleButton = document.getElementById("toggle-sound");
 const resetButton = document.getElementById("reset");
+const pauseButton = document.getElementById("pause");
 
 const BUTTON_BY_CODE = {
   [KEY_CODES.LEFT]: breakButton,
@@ -25,6 +27,7 @@ const BUTTON_BY_CODE = {
   [KEY_CODES.RIGHT]: speedUpButton,
   [KEY_CODES.SOUND_TOGGLE]: soundToggleButton,
   [KEY_CODES.RESET]: resetButton,
+  [KEY_CODES.PAUSE]: pauseButton,
 };
 
 function setButtonPressed(code, pressed) {
@@ -71,6 +74,11 @@ input.keyListener = function ({ code, type, repeat = false }) {
         input.reset = true;
       }
       break;
+    case KEY_CODES.PAUSE:
+      if (eventType && !repeat) {
+        input.pause = true;
+      }
+      break;
   }
 };
 
@@ -112,6 +120,7 @@ const TOUCH_CONTROLS = [
   { button: speedUpButton, code: KEY_CODES.RIGHT },
   { button: soundToggleButton, code: KEY_CODES.SOUND_TOGGLE },
   { button: resetButton, code: KEY_CODES.RESET },
+  { button: pauseButton, code: KEY_CODES.PAUSE },
 ];
 
 let activeTouchCodes = new Set();

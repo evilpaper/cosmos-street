@@ -850,6 +850,11 @@ function update() {
 
   syncAudioWithGamePaused(paused);
 
+  if (input.pause) {
+    input.pause = false;
+    paused = !paused;
+  }
+
   if (paused) {
     return;
   }
