@@ -2,10 +2,10 @@
  * Constants
  */
 
-const GRAVITY = 0.058;
-const FRICTION = 0.34; // A value between 0 and 1 that determines how much friction slows down the player.
+const GRAVITY = 0.05;
+const FRICTION = 0.36; // A value between 0 and 1 that determines how much friction slows down the player.
 const SCROLL_SPEED_BREAKING = 0.2;
-const SCROLL_SPEED_SKATING = 1.4;
+const SCROLL_SPEED_SKATING = 1.8;
 const SCROLL_SPEED_SPEEDING = 2.6;
 const PLAYTIME_IN_SECONDS = 60;
 const PLAYING_TIME = 60 * PLAYTIME_IN_SECONDS; // First number is ticks. Remember, we do 60 times per second
@@ -28,8 +28,8 @@ const COLLECTIBLE_SPAWN_COOLDOWN = 3 * 60;
 const DIFFICULTY_STAGES = [
   {
     time: 0,
-    gapMin: 24,
-    gapMax: 40,
+    gapMin: 40,
+    gapMax: 64,
     tilesMin: 4,
     tilesMax: 14,
     platformYMin: 80,
@@ -44,8 +44,8 @@ const DIFFICULTY_STAGES = [
   },
   {
     time: 12 * 60,
-    gapMin: 32,
-    gapMax: 56,
+    gapMin: 48,
+    gapMax: 72,
     tilesMin: 3,
     tilesMax: 12,
     platformYMin: 80,
@@ -60,8 +60,8 @@ const DIFFICULTY_STAGES = [
   },
   {
     time: 24 * 60,
-    gapMin: 40,
-    gapMax: 72,
+    gapMin: 56,
+    gapMax: 80,
     tilesMin: 2,
     tilesMax: 10,
     platformYMin: 80,
@@ -76,8 +76,8 @@ const DIFFICULTY_STAGES = [
   },
   {
     time: 36 * 60,
-    gapMin: 48,
-    gapMax: 80,
+    gapMin: 64,
+    gapMax: 96,
     tilesMin: 2,
     tilesMax: 8,
     platformYMin: 80,
@@ -92,8 +92,8 @@ const DIFFICULTY_STAGES = [
   },
   {
     time: 48 * 60,
-    gapMin: 56,
-    gapMax: 96,
+    gapMin: 72,
+    gapMax: 104,
     tilesMin: 1,
     tilesMax: 6,
     platformYMin: 80,
