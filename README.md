@@ -1,12 +1,12 @@
 # Cosmos Street
 
-Trapped in swarms of nefarious alien machines, you must skate your way to safety! Luckily, Astro Angels and Cosmic Eggs are scattered throughout the asteroid belt to aid your escape from the galatic chaos!
+The robotic armada is closing in, can you skate to safety? Rocket through the galactic chaos and dodge deadly alien machines in a high-stakes race across the asteroid belt. Luckily, you aren't completely alone. Seek out the legendary Astro Angels and harvest hidden Cosmic Eggs to turn the tide against your mechanical pursuers. Lace up, power up, and escape the alien trap!
 
 [--> Click here to play <--](https://evilpaper.github.io/cosmos-street/)
 
 ## About this project
 
-Cosmos Street is an old-school auto-runner inspired by the skateboard sequences in Wonder Boy, complete with borrowed sprites and reused sound effects. Made purely for fun and as an experiment in pushing creative limits within the constraints of classic video game design.
+Cosmos Street is an old-school auto-runner inspired by the skateboard sequences in Wonder Boy, complete with borrowed sprites and reused sound effects. Made purely for fun.
 
 The game runs right in the browser, built with just plain HTML, CSS, and JavaScript, no frameworks, no build tools, nothing fancy.
 
