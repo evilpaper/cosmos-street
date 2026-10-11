@@ -27,7 +27,7 @@ Sound is off every time the page loads. Press the S key (or the sound button on 
 
 ## Constraints and Requirements
 
-This game was made with the following ideas in mind:
+The game was made with the following ideas in mind:
 
 Avoid creating new assets. Instead focus on piecing together what already exists to make something fun. Producing art, sound effects, and music is time-consuming, so for the main character I chose the skateboard sprites from the original Wonder Boy. I find the art style expressive and am impressed by how much personality can be squeezed out of just a few frames of animation.
 
@@ -105,10 +105,11 @@ core browser security boundary.
 
 ## Future Plans
 
-- Fix broken visuals after visible part of screen got larger with the replacement of svg clipPath.
-- Refactor touch control logic. Something is broken there. Become unresponsive and behave weird.
-- Redesign touch control UI. Doesn't feel completed now. Maybe go full out neumorphism like descibed in this article: https://www.setproduct.com/blog/neumorphism-design-guide
-- Refactor game play. Does not feel or challanging enough today. Maybe go full out clone of In Tow. Kind of make sense.
+- Connect Cosmic Egg effect. It should do something.
+- Let the Astro Angels start chatting and singing with each other.
+- Let the enemies shake before they zap off their electricity.
+- Add interesting stuff in the background.
+- Refactor collision. Allow player to jump through platforms.
 
 ## License
 
