@@ -34,8 +34,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 14,
     platformYMin: 80,
     platformYRange: 120,
-    eggsMaxPerStage: 3,
-    eggsMaxActive: 2,
+    eggs: 1,
     angelsMaxPerStage: 3,
     angelsMaxActive: 2,
     enemiesMin: 1,
@@ -50,8 +49,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 12,
     platformYMin: 80,
     platformYRange: 120,
-    eggsMaxPerStage: 3,
-    eggsMaxActive: 2,
+    eggs: 1,
     angelsMaxPerStage: 3,
     angelsMaxActive: 2,
     enemiesMin: 1,
@@ -66,8 +64,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 10,
     platformYMin: 80,
     platformYRange: 120,
-    eggsMaxPerStage: 4,
-    eggsMaxActive: 3,
+    eggs: 1,
     angelsMaxPerStage: 4,
     angelsMaxActive: 3,
     enemiesMin: 2,
@@ -82,8 +79,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 8,
     platformYMin: 80,
     platformYRange: 120,
-    eggsMaxPerStage: 4,
-    eggsMaxActive: 3,
+    eggs: 2,
     angelsMaxPerStage: 4,
     angelsMaxActive: 3,
     enemiesMin: 3,
@@ -98,8 +94,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 6,
     platformYMin: 80,
     platformYRange: 120,
-    eggsMaxPerStage: 1,
-    eggsMaxActive: 1,
+    eggs: 2,
     angelsMaxPerStage: 1,
     angelsMaxActive: 1,
     enemiesMin: 4,
@@ -350,7 +345,6 @@ function ensureCollectibles() {
   let existingBoxes = collectiblesSpawnBoxes();
 
   const idleAngels = angels.filter((angel) => angel.state === "idle");
-  const activeEggs = eggs.filter((egg) => egg.active);
 
   if (
     idleAngels.length < diff.angelsMaxActive &&
@@ -372,8 +366,7 @@ function ensureCollectibles() {
   }
 
   if (
-    activeEggs.length < diff.eggsMaxActive &&
-    eggsSpawnedInStage < diff.eggsMaxPerStage &&
+    eggsSpawnedInStage < diff.eggs &&
     time - lastEggSpawnTime >= COLLECTIBLE_SPAWN_COOLDOWN
   ) {
     const egg = createEgg(platforms.tiles, existingBoxes);

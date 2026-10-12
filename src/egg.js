@@ -24,7 +24,6 @@ function createEgg(tiles, existingBoxes = []) {
     y: position.y,
     width: WIDTH,
     height: HEIGHT,
-    active: true,
 
     getHitbox() {
       return {
