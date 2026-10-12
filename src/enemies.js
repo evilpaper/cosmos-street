@@ -12,12 +12,14 @@ function createEnemy(x, y) {
   let animationFrameIndex = 0;
 
   let electricityActive = false;
+  let explosion = null;
 
   const enemy = {
     x: x,
     y: y,
     width: WIDTH,
     height: HEIGHT,
+    state: "roaming",
 
     getHitbox() {
       return {
@@ -28,7 +30,27 @@ function createEnemy(x, y) {
       };
     },
 
+    explode() {
+      if (this.state === "exploding") {
+        return;
+      }
+      this.state = "exploding";
+      electricityActive = false;
+      explosion = createElectricExplosion(this);
+    },
+
+    isDone() {
+      return this.state === "exploding" && explosion?.isDone();
+    },
+
     update() {
+      if (this.state === "exploding") {
+        this.x -= scrollSpeed;
+        this.y -= 0.2;
+        explosion.update();
+        return;
+      }
+
       const diff = getDifficulty();
       this.x -= scrollSpeed + 0.5 + diff.enemySpeedBonus;
 
@@ -64,6 +86,11 @@ function createEnemy(x, y) {
     },
 
     draw(screen) {
+      if (this.state === "exploding") {
+        explosion.draw(screen);
+        return;
+      }
+
       const spriteFrameX = animationFrameIndex * WIDTH;
       const spriteFrameY = 0;
 

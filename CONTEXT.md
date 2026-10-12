@@ -13,7 +13,7 @@ A jump the player makes while already airborne, on a new press. Each one spends 
 _Avoid_: double jump
 
 **Egg**:
-A pickup. Not involved in scoring.
+A pickup. Collecting one destroys every enemy overlapping the playfield. Not involved in scoring.
 _Avoid_: Cosmic Egg, score pickup
 
 **Score**:
@@ -43,4 +43,5 @@ A short one-off sound tied to a game event, such as a jump or a crash.
 _Avoid_: sfx
 
 **Enemy**:
-A enemy. Can can be in states Roaming, Shaking (Telegraphing), Zapping (Emitting electric flashes) and Exploding (Dying)
+An alien machine that threatens the player. States: Roaming, Shaking (telegraphing), Zapping (emitting electric flashes), and Exploding (dying — owns its death animation, inert to the player).
+_Avoid_: Relic Telly, robot

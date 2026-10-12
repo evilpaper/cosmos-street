@@ -2,31 +2,32 @@ const electricExplosionSpriteSheet = loadOnce(
   "./images/electric-explosion-sprite-sheet.png",
 );
 
-function createElectricExplosion(x, y) {
+/**
+ * Death explosion drawn on an enemy while it is Exploding.
+ * Follows target.x / target.y (centered), same idea as createEnemyElectricity.
+ */
+function createElectricExplosion(target) {
   const FRAME_WIDTH = 35;
   const FRAME_HEIGHT = 35;
   const TOTAL_FRAMES = 4;
   const TICKS_PER_FRAME = 6;
 
+  const OFFSET_X = (target.width - FRAME_WIDTH) / 2;
+  const OFFSET_Y = (target.height - FRAME_HEIGHT) / 2;
+
   let animationTick = 0;
   let animationFrameIndex = 0;
-  let posX = x;
-  let posY = y;
   let done = false;
 
   return {
-    x: posX,
-    y: posY,
-    width: FRAME_WIDTH,
-    height: FRAME_HEIGHT,
-
     isDone() {
       return done;
     },
 
     update() {
-      posX -= scrollSpeed;
-      posY -= 0.2;
+      if (done) {
+        return;
+      }
 
       animationTick += 1;
 
@@ -38,19 +39,18 @@ function createElectricExplosion(x, y) {
           done = true;
         }
       }
-
-      this.x = posX;
-      this.y = posY;
     },
 
     draw(screen) {
-      if (done) return;
+      if (done) {
+        return;
+      }
 
       const spriteFrameX = animationFrameIndex * FRAME_WIDTH;
       const spriteFrameY = 0;
 
-      const drawX = Math.round(posX);
-      const drawY = Math.round(posY);
+      const drawX = Math.round(target.x + OFFSET_X);
+      const drawY = Math.round(target.y + OFFSET_Y);
 
       screen.drawImage(
         electricExplosionSpriteSheet,

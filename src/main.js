@@ -121,7 +121,6 @@ let angels;
 let carriedAngels;
 let eggs;
 let sparkles;
-let electricExplosions;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
 let deadTimer;
@@ -276,6 +275,7 @@ function updateEntities() {
   for (const enemy of enemies) {
     enemy.update();
   }
+  enemies = enemies.filter((enemy) => !enemy.isDone());
 }
 
 function drawWorld(screen) {
@@ -297,10 +297,6 @@ function drawWorld(screen) {
 
   for (const egg of eggs) {
     egg.draw(screen);
-  }
-
-  for (const explosion of electricExplosions) {
-    explosion.draw(screen);
   }
 }
 
@@ -402,9 +398,9 @@ function updateUI() {
 }
 
 function updateInteractions() {
-  handleEnemyEncounters();
   collectAngels();
   collectEggs();
+  handleEnemyEncounters();
 }
 
 function updateVisualEffects() {
@@ -412,13 +408,6 @@ function updateVisualEffects() {
     sparkle.update();
   }
   sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
-
-  for (const explosion of electricExplosions) {
-    explosion.update();
-  }
-  electricExplosions = electricExplosions.filter(
-    (explosion) => !explosion.isDone(),
-  );
 }
 
 // Rules
@@ -458,11 +447,39 @@ function collectAngels() {
   }
 }
 
+function overlapsPlayfield(entity) {
+  return (
+    entity.x < SCREEN_WIDTH &&
+    entity.x + entity.width > 0 &&
+    entity.y < SCREEN_HEIGHT &&
+    entity.y + entity.height > 0
+  );
+}
+
+function destroyOnScreenEnemies() {
+  let destroyed = 0;
+  for (const enemy of enemies) {
+    if (enemy.state === "exploding") {
+      continue;
+    }
+    if (!overlapsPlayfield(enemy)) {
+      continue;
+    }
+    enemy.explode();
+    destroyed += 1;
+  }
+  return destroyed;
+}
+
 function collectEgg(index) {
   const egg = eggs[index];
   sparkles.push(createSparkle(egg.x, egg.y - 8));
   eggs.splice(index, 1);
   sfx(sounds.egg);
+
+  if (destroyOnScreenEnemies() > 0) {
+    sfx(sounds.enemyKill);
+  }
 }
 
 function collectEggs() {
@@ -484,8 +501,12 @@ function respawnEnemy(enemy) {
 }
 
 function handleEnemyEncounters() {
-  for (const enemy of enemies) {
-    if (checkCollision(player, enemy.getHitbox())) {
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    const enemy = enemies[i];
+    if (
+      enemy.state !== "exploding" &&
+      checkCollision(player, enemy.getHitbox())
+    ) {
       if (player.state !== "obliterating") {
         sfx(sounds.crash);
       }
@@ -495,7 +516,11 @@ function handleEnemyEncounters() {
     }
 
     if (enemy.x + enemy.width < 0) {
-      respawnEnemy(enemy);
+      if (enemy.state === "exploding") {
+        enemies.splice(i, 1);
+      } else {
+        respawnEnemy(enemy);
+      }
     }
   }
 }
@@ -807,7 +832,6 @@ function init() {
   carriedAngels = [];
   eggs = [];
   sparkles = [];
-  electricExplosions = [];
   enemies = [];
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
