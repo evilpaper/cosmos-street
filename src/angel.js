@@ -9,7 +9,7 @@ const ANGEL_APPROACH_ARC = 14;
  */
 const ANGEL_FOLLOW_LERP = 0.1;
 
-function createAngel(tiles, existingBoxes = []) {
+function createAngel(tiles, occupiedSpots = []) {
   const HITBOX_WIDTH = 8;
   const HITBOX_HEIGHT = 8;
   const OSCILLATION_Y = 2 + Math.random() * 2;
@@ -17,7 +17,7 @@ function createAngel(tiles, existingBoxes = []) {
   const FLOAT_HEIGHT = 10;
   const DEPART_SPEED = 2;
 
-  const initialPosition = findSpreadCollectiblePosition(tiles, existingBoxes, {
+  const initialPosition = findSpreadCollectiblePosition(tiles, occupiedSpots, {
     spriteWidth: ANGEL_WIDTH,
     spriteHeight: ANGEL_HEIGHT,
     floatHeight: FLOAT_HEIGHT,

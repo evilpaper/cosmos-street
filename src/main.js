@@ -34,7 +34,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 14,
     platformYMin: 80,
     platformYRange: 120,
-    eggs: 1,
+    eggBudget: 1,
     angelsMaxPerStage: 3,
     angelsMaxActive: 2,
     enemiesMin: 1,
@@ -49,7 +49,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 12,
     platformYMin: 80,
     platformYRange: 120,
-    eggs: 1,
+    eggBudget: 1,
     angelsMaxPerStage: 3,
     angelsMaxActive: 2,
     enemiesMin: 1,
@@ -64,7 +64,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 10,
     platformYMin: 80,
     platformYRange: 120,
-    eggs: 1,
+    eggBudget: 1,
     angelsMaxPerStage: 4,
     angelsMaxActive: 3,
     enemiesMin: 2,
@@ -79,7 +79,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 8,
     platformYMin: 80,
     platformYRange: 120,
-    eggs: 2,
+    eggBudget: 2,
     angelsMaxPerStage: 4,
     angelsMaxActive: 3,
     enemiesMin: 3,
@@ -94,7 +94,7 @@ const DIFFICULTY_STAGES = [
     tilesMax: 6,
     platformYMin: 80,
     platformYRange: 120,
-    eggs: 2,
+    eggBudget: 2,
     angelsMaxPerStage: 1,
     angelsMaxActive: 1,
     enemiesMin: 4,
@@ -322,27 +322,34 @@ function resetCollectibleBudgetOnStageChange() {
   }
 }
 
-function collectiblesSpawnBoxes() {
-  const boxes = [];
+function stageMidpointReached() {
+  const start = DIFFICULTY_STAGES[collectibleStageIndex].time;
+  const next = DIFFICULTY_STAGES[collectibleStageIndex + 1];
+  const end = next ? next.time : PLAYING_TIME;
+  return time >= start + (end - start) / 2;
+}
+
+function occupiedCollectibleSpots() {
+  const spots = [];
   for (const egg of eggs) {
-    boxes.push({ x: egg.x, y: egg.y, width: egg.width, height: egg.height });
+    spots.push({ x: egg.x, y: egg.y, width: egg.width, height: egg.height });
   }
   for (const angel of angels) {
     if (angel.state !== "idle") continue;
-    boxes.push({
+    spots.push({
       x: angel.x,
       y: angel.y,
       width: angel.width,
       height: angel.height,
     });
   }
-  return boxes;
+  return spots;
 }
 
 function ensureCollectibles() {
   resetCollectibleBudgetOnStageChange();
   const diff = getDifficulty();
-  let existingBoxes = collectiblesSpawnBoxes();
+  let occupiedSpots = occupiedCollectibleSpots();
 
   const idleAngels = angels.filter((angel) => angel.state === "idle");
 
@@ -351,10 +358,10 @@ function ensureCollectibles() {
     angelsSpawnedInStage < diff.angelsMaxPerStage &&
     time - lastAngelSpawnTime >= COLLECTIBLE_SPAWN_COOLDOWN
   ) {
-    const angel = createAngel(platforms.tiles, existingBoxes);
+    const angel = createAngel(platforms.tiles, occupiedSpots);
     if (angel) {
       angels.push(angel);
-      existingBoxes.push({
+      occupiedSpots.push({
         x: angel.x,
         y: angel.y,
         width: angel.width,
@@ -366,10 +373,12 @@ function ensureCollectibles() {
   }
 
   if (
-    eggsSpawnedInStage < diff.eggs &&
+    angelsSpawnedInStage >= 1 &&
+    stageMidpointReached() &&
+    eggsSpawnedInStage < diff.eggBudget &&
     time - lastEggSpawnTime >= COLLECTIBLE_SPAWN_COOLDOWN
   ) {
-    const egg = createEgg(platforms.tiles, existingBoxes);
+    const egg = createEgg(platforms.tiles, occupiedSpots);
     if (egg) {
       eggs.push(egg);
       eggsSpawnedInStage += 1;

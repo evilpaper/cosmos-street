@@ -2,7 +2,7 @@ const collectibleSpriteSheet = loadOnce(
   "./images/collectibles-sprite-sheet.png",
 );
 
-function createEgg(tiles, existingBoxes = []) {
+function createEgg(tiles, occupiedSpots = []) {
   const WIDTH = 16;
   const HEIGHT = 16;
   const HITBOX_WIDTH = 8;
@@ -10,7 +10,7 @@ function createEgg(tiles, existingBoxes = []) {
   const SPRITE_SHEET_FRAME_X = 32;
   const SPRITE_SHEET_FRAME_Y = 0;
 
-  const position = findSpreadCollectiblePosition(tiles, existingBoxes, {
+  const position = findSpreadCollectiblePosition(tiles, occupiedSpots, {
     spriteWidth: WIDTH,
     spriteHeight: HEIGHT,
   });

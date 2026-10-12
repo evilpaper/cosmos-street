@@ -360,7 +360,7 @@ function boxesTooClose(a, b, gap) {
 
 const COLLECTIBLE_SPAWN_GAP = 96;
 
-function findSpreadCollectiblePosition(tiles, existingBoxes, options = {}) {
+function findSpreadCollectiblePosition(tiles, occupiedSpots, options = {}) {
   const {
     minGap = COLLECTIBLE_SPAWN_GAP,
     minX = SCREEN_WIDTH + 32,
@@ -372,14 +372,14 @@ function findSpreadCollectiblePosition(tiles, existingBoxes, options = {}) {
   const candidates = [];
   for (const tile of tiles) {
     if (tile.x < minX) continue;
-    const box = {
+    const spot = {
       x: tile.x + tile.width / 2 - spriteWidth / 2,
       y: tile.y - spriteHeight - floatHeight,
       width: spriteWidth,
       height: spriteHeight,
     };
-    const tooClose = existingBoxes.some((b) => boxesTooClose(box, b, minGap));
-    if (!tooClose) candidates.push({ x: box.x, y: box.y, tileX: tile.x });
+    const tooClose = occupiedSpots.some((b) => boxesTooClose(spot, b, minGap));
+    if (!tooClose) candidates.push({ x: spot.x, y: spot.y, tileX: tile.x });
   }
 
   if (candidates.length === 0) return null;
