@@ -116,6 +116,7 @@ let angels;
 let carriedAngels;
 let eggs;
 let sparkles;
+let dotExplosions;
 let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
 let deadTimer;
@@ -284,6 +285,10 @@ function drawWorld(screen) {
     sparkle.draw(screen);
   }
 
+  for (const explosion of dotExplosions) {
+    explosion.draw();
+  }
+
   for (const angel of angels) {
     angel.draw(screen);
   }
@@ -410,6 +415,11 @@ function updateVisualEffects() {
     sparkle.update();
   }
   sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
+
+  for (const explosion of dotExplosions) {
+    explosion.update();
+  }
+  dotExplosions = dotExplosions.filter((explosion) => !explosion.isDone());
 }
 
 // Rules
@@ -478,6 +488,11 @@ function collectEgg(index) {
   const egg = eggs[index];
   eggs.splice(index, 1);
   sfx(sounds.egg);
+  dotExplosions.push(
+    createDotExplosion(egg.x + egg.width / 2, egg.y + egg.height / 2, {
+      cycleColors: false,
+    }),
+  );
 
   if (destroyOnScreenEnemies() > 0) {
     sfx(sounds.enemyKill);
@@ -834,6 +849,7 @@ function init() {
   carriedAngels = [];
   eggs = [];
   sparkles = [];
+  dotExplosions = [];
   enemies = [];
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
