@@ -446,6 +446,7 @@ function collectAngels() {
     if (angel.state !== "idle") continue;
     if (!checkCollision(player, angel.getHitbox())) continue;
     collectAngel(angel);
+    sparkles.push(createSparkle(angel.x, angel.y - 8));
   }
 }
 
@@ -475,7 +476,6 @@ function destroyOnScreenEnemies() {
 
 function collectEgg(index) {
   const egg = eggs[index];
-  sparkles.push(createSparkle(egg.x, egg.y - 8));
   eggs.splice(index, 1);
   sfx(sounds.egg);
 
