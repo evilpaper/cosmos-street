@@ -350,14 +350,105 @@ function o(value) {
 }
 
 /**
+ * Resolve a palette index to a CSS color. col must be an integer 0–3.
+ */
+function paletteColor(col) {
+  if (!Number.isInteger(col) || col < 0 || col >= PALETTE.length) {
+    throw new Error("palette col must be an integer 0–3");
+  }
+  return PALETTE[col];
+}
+
+/**
  * Plot one palette-colored pixel. Coordinates are rounded. col must be 0–3.
  */
 function pset(x, y, col) {
-  if (!Number.isInteger(col) || col < 0 || col >= PALETTE.length) {
-    throw new Error("pset: col must be an integer 0–3");
-  }
-  screen.fillStyle = PALETTE[col];
+  screen.fillStyle = paletteColor(col);
   screen.fillRect(Math.round(x), Math.round(y), 1, 1);
+}
+
+/**
+ * Draw a circle outline. Center and radius are rounded. col must be 0–3.
+ * Negative radius draws nothing.
+ */
+function circ(x, y, r, col) {
+  const cx = Math.round(x);
+  const cy = Math.round(y);
+  const radius = Math.round(r);
+  const color = paletteColor(col);
+
+  if (radius < 0) {
+    return;
+  }
+  if (radius === 0) {
+    screen.fillStyle = color;
+    screen.fillRect(cx, cy, 1, 1);
+    return;
+  }
+
+  screen.fillStyle = color;
+  let px = radius;
+  let py = 0;
+  let err = 1 - radius;
+
+  while (px >= py) {
+    screen.fillRect(cx + px, cy + py, 1, 1);
+    screen.fillRect(cx + py, cy + px, 1, 1);
+    screen.fillRect(cx - py, cy + px, 1, 1);
+    screen.fillRect(cx - px, cy + py, 1, 1);
+    screen.fillRect(cx - px, cy - py, 1, 1);
+    screen.fillRect(cx - py, cy - px, 1, 1);
+    screen.fillRect(cx + py, cy - px, 1, 1);
+    screen.fillRect(cx + px, cy - py, 1, 1);
+
+    py += 1;
+    if (err < 0) {
+      err += 2 * py + 1;
+    } else {
+      px -= 1;
+      err += 2 * (py - px) + 1;
+    }
+  }
+}
+
+/**
+ * Draw a filled circle. Center and radius are rounded. col must be 0–3.
+ * Negative radius draws nothing.
+ */
+function circfill(x, y, r, col) {
+  const cx = Math.round(x);
+  const cy = Math.round(y);
+  const radius = Math.round(r);
+  const color = paletteColor(col);
+
+  if (radius < 0) {
+    return;
+  }
+  if (radius === 0) {
+    screen.fillStyle = color;
+    screen.fillRect(cx, cy, 1, 1);
+    return;
+  }
+
+  screen.fillStyle = color;
+  let px = radius;
+  let py = 0;
+  let err = 1 - radius;
+
+  while (px >= py) {
+    screen.fillRect(cx - px, cy + py, 2 * px + 1, 1);
+    screen.fillRect(cx - px, cy - py, 2 * px + 1, 1);
+    screen.fillRect(cx - py, cy + px, 2 * py + 1, 1);
+    screen.fillRect(cx - py, cy - px, 2 * py + 1, 1);
+
+    py += 1;
+    if (err < 0) {
+      err += 2 * py + 1;
+    } else {
+      px -= 1;
+      err += 2 * (py - px) + 1;
+    }
+  }
 }
 
 /**
