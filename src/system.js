@@ -16,6 +16,9 @@ const FIXED_TIMESTEP_MS = 1000 / FPS;
 const SCREEN_WIDTH = 256;
 const SCREEN_HEIGHT = 256;
 
+// Palette: void, purple, magenta, light (indices 0–3)
+const PALETTE = ["#0b0630", "#6b1fb1", "#cc3495", "#f8e3c4"];
+
 /**
  * Game loop with fixed frame rate
  */
@@ -344,6 +347,17 @@ resizeCanvas();
  */
 function o(value) {
   return Math.round(value);
+}
+
+/**
+ * Plot one palette-colored pixel. Coordinates are rounded. col must be 0–3.
+ */
+function pset(x, y, col) {
+  if (!Number.isInteger(col) || col < 0 || col >= PALETTE.length) {
+    throw new Error("pset: col must be an integer 0–3");
+  }
+  screen.fillStyle = PALETTE[col];
+  screen.fillRect(Math.round(x), Math.round(y), 1, 1);
 }
 
 /**

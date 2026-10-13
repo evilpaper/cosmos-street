@@ -45,3 +45,7 @@ _Avoid_: sfx
 **Enemy**:
 An alien machine that threatens the player. States: Roaming, Shaking (telegraphing), Zapping (emitting electric flashes), and Exploding (dying — owns its death animation, inert to the player).
 _Avoid_: Relic Telly, robot
+
+**Palette**:
+The four colors allowed on the playfield, ordered dark to light: void, purple, magenta, light. Anything drawn on the canvas uses only these.
+_Avoid_: theme colors, CSS variables, Game Boy greens
