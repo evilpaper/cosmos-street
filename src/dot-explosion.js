@@ -44,6 +44,8 @@ function createDotExplosion(x, y, options = {}) {
       radius: startRadius,
       colorIndex,
       col: DOT_COLORS[colorIndex],
+      // Chosen once — draw still runs while paused, so random here would flicker.
+      filled: Math.random() < 0.5,
     });
   }
 
@@ -104,11 +106,10 @@ function createDotExplosion(x, y, options = {}) {
         if (dot.radius < 0.5) {
           continue;
         }
-        const type = Math.random() < 0.5;
-        if (type) {
-          circ(dot.x, dot.y, dot.radius, dot.col);
-        } else {
+        if (dot.filled) {
           circfill(dot.x, dot.y, dot.radius, dot.col);
+        } else {
+          circ(dot.x, dot.y, dot.radius, dot.col);
         }
       }
     },
