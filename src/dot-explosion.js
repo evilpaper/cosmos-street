@@ -19,11 +19,17 @@ function createDotExplosion(x, y, options = {}) {
   const originY = y;
 
   const dots = [];
+  let prevColorIndex = -1;
   for (let i = 0; i < DOT_COUNT; i++) {
     const angle = (Math.PI * 2 * i) / DOT_COUNT + (Math.random() - 0.5) * 0.6;
     const speed = 3 + Math.random() * 2;
     const startRadius = 8 + Math.random() * 3.5;
-    const colorIndex = Math.floor(Math.random() * DOT_COLORS.length);
+    // Never the same palette color as the previous dot.
+    let colorIndex;
+    do {
+      colorIndex = Math.floor(Math.random() * DOT_COLORS.length);
+    } while (colorIndex === prevColorIndex);
+    prevColorIndex = colorIndex;
     const startX = originX + (Math.random() - 0.5) * 3;
     const startY = originY + (Math.random() - 0.5) * 3;
 

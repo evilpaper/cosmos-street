@@ -17,13 +17,15 @@ The game runs right in the browser, built with just plain HTML, CSS, and JavaScr
 - Speed up = Arrow Right
 - Sound on/off = S
 
+- Each carried Angel grants you an air jump. Use it wisely.
+
 The game is primarily designed to be played using the left, up, and right arrow keys on a physical keyboard. The movement simply feels better this way. Virtual buttons have been added to make the game playable on touch devices, which is great, since many games aren’t, but the controls aren’t quite as tight as with physical keys.
 
 That's it! Good luck!
 
 ### Sound
 
-Sound is off every time the page loads. Press the S key (or the sound button on mobile) to turn the theme and sound effects on or off. The theme starts over at the beginning of every run.
+Sound is off every time the page loads. Press the S key (or the sound button on mobile) to turn the theme and sound effects on or off.
 
 ## Constraints and Requirements
 
@@ -105,10 +107,9 @@ core browser security boundary.
 
 ## Future Plans
 
-- Connect Cosmic Egg effect. It should do something.
-- Let the Astro Angels start chatting and singing with each other.
-- Let the enemies shake before they zap off their electricity.
-- Add interesting stuff in the background.
+- Let the Astro Angels start chatting and singing together.
+- Make enemies shake before they zap off their electricity.
+- Add stuff in the background.
 - Refactor collision. Allow player to jump through platforms.
 
 ## License
