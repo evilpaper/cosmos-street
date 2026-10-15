@@ -17,50 +17,61 @@ The game runs right in the browser, built with just plain HTML, CSS, and JavaScr
 - Speed up = Arrow Right
 - Sound on/off = S
 
-- Each carried Angel grants you an air jump. Use it wisely.
+- Each carried Astro Angel grants you an air jump. Use it wisely.
 
 The game is primarily designed to be played using the left, up, and right arrow keys on a physical keyboard. The movement simply feels better this way. Virtual buttons have been added to make the game playable on touch devices, which is great, since many games aren’t, but the controls aren’t quite as tight as with physical keys.
 
 That's it! Good luck!
 
-### Sound
+## About
 
-Sound is off every time the page loads. Press the S key (or the sound button on mobile) to turn the theme and sound effects on or off.
+Cosmos Street was built around a few simple ideas: work with what exists, embrace limitations, and keep things small.
 
-## Constraints and Requirements
+### Reuse, don't reinvent
 
-The game was made with the following ideas in mind:
+Creating art, sound effects, and music takes time. Rather than making everything from scratch, I wanted to see what I could build by piecing together existing assets. The main character uses skateboard sprites from the original Wonder Boy. I love how expressive the art is, and how much personality a handful of animation frames can convey.
 
-Avoid creating new assets. Instead focus on piecing together what already exists to make something fun. Producing art, sound effects, and music is time-consuming, so for the main character I chose the skateboard sprites from the original Wonder Boy. I find the art style expressive and am impressed by how much personality can be squeezed out of just a few frames of animation.
+### Four colors, no more
 
-To capture the right feeling, I borrowed sound effects from games of the same era as well.
+The entire game uses a four-color palette, inspired by the original Game Boy and tweaked to give it a distinct, retro-futuristic feel. A small palette is a constraint, but also an opportunity to create a strong visual identity.
 
-Other contraints and requirements:
+### Small screen, big atmosphere
 
-- Limited palette. Only allowed to use four colors palette. Inspired by the original Game Boy and tweaked for a distinct vintage futuristic look. Can't remember the inspiration source.
-- Small screen, 256 x 256 px. Wrapped in a CSS Clip Path to get a round-ish shape. No other reason than it's nice.
-- Only use standard HTML, CSS and JavaScript. No dependecies.
-- Should have Keyboard and Touch Controls.
+The game runs at just 256 × 256 pixels. No deeper reason, it just looks good.
+
+### No dependencies
+
+Just standard HTML, CSS, and JavaScript. No frameworks, no libraries, no fuss.
+
+### Play your way
+
+Supports both keyboard and touch controls, so you can play on a desktop or a mobile device.
 
 ## Architecture notes
 
-- The CRT effect is created with CSS. More precise CSS Keyframes.
-- The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
+The CRT effect is created with CSS. More precise CSS Keyframes.
+
+The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
 
 ## Credits
 
-- The art for the enemy, called [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207), is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery). Slightly modifed.
-- Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6) by [David Fesliyan](https://www.fesliyanstudios.com/). Lovely tune.
-- Font is modelled after [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980) by [Void](https://arcade.itch.io/). Redrawn in Aseprite.
-- Sounds Effects, all credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/) for providing. The following sound effects are used.
-  - [Wonder Boy III: The Dragon's Trap](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/)
-    - dragon-breath.wav
-    - box-get.wav
-    - enemy-hurt.wav
-    - fireball.wav
-    - jump.wav
-    - select-cursor.wav
-    - select-wrong.wav
+Enemy art is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery). Slightly modifed. Orignal name [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207).
+
+Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6) by [David Fesliyan](https://www.fesliyanstudios.com/). Lovely tune.
+
+Font is modelled after [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980) by [Void](https://arcade.itch.io/). Redrawn in Aseprite.
+
+Sounds Effects, all credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/) for providing. The following sound effects are used.
+
+[Wonder Boy III: The Dragon's Trap](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/)
+
+- dragon-breath.wav
+- box-get.wav
+- enemy-hurt.wav
+- fireball.wav
+- jump.wav
+- select-cursor.wav
+- select-wrong.wav
 
 ## Running Locally
 
