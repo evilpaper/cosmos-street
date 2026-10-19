@@ -7,6 +7,8 @@ function createEnemy(x, y) {
   const TOTAL_FRAMES = 10;
   const HITBOX_WIDTH = 8;
   const HITBOX_HEIGHT = 16;
+  const CHASE_SPEED_MIN = 0.25;
+  const CHASE_SPEED_MAX = 1;
 
   let animationTick = 0;
   let animationFrameIndex = 0;
@@ -20,6 +22,8 @@ function createEnemy(x, y) {
     width: WIDTH,
     height: HEIGHT,
     state: "roaming",
+    speed:
+      CHASE_SPEED_MIN + Math.random() * (CHASE_SPEED_MAX - CHASE_SPEED_MIN),
 
     getHitbox() {
       return {
@@ -52,7 +56,7 @@ function createEnemy(x, y) {
       }
 
       const diff = getDifficulty();
-      this.x -= scrollSpeed + 0.5 + diff.enemySpeedBonus;
+      this.x -= scrollSpeed + this.speed + diff.enemySpeedBonus;
 
       // Advance animation tick
       animationTick += 1;
