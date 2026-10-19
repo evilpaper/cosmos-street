@@ -7,7 +7,7 @@ const FRICTION = 0.36; // A value between 0 and 1 that determines how much frict
 const SCROLL_SPEED_BREAKING = 0.2;
 const SCROLL_SPEED_SKATING = 1.8;
 const SCROLL_SPEED_SPEEDING = 2.6;
-const PLAYTIME_IN_SECONDS = 60;
+const PLAYTIME_IN_SECONDS = 30;
 const PLAYING_TIME = 60 * PLAYTIME_IN_SECONDS; // First number is ticks. Remember, we do 60 times per second
 
 /**
@@ -42,7 +42,7 @@ const DIFFICULTY_STAGES = [
     electricityChance: 0.015,
   },
   {
-    time: 12 * 60,
+    time: 6 * 60,
     gapMin: 48,
     gapMax: 72,
     tilesMin: 3,
@@ -57,7 +57,7 @@ const DIFFICULTY_STAGES = [
     electricityChance: 0.02,
   },
   {
-    time: 24 * 60,
+    time: 12 * 60,
     gapMin: 56,
     gapMax: 80,
     tilesMin: 2,
@@ -72,7 +72,7 @@ const DIFFICULTY_STAGES = [
     electricityChance: 0.025,
   },
   {
-    time: 36 * 60,
+    time: 18 * 60,
     gapMin: 64,
     gapMax: 96,
     tilesMin: 2,
@@ -87,7 +87,7 @@ const DIFFICULTY_STAGES = [
     electricityChance: 0.03,
   },
   {
-    time: 48 * 60,
+    time: 24 * 60,
     gapMin: 72,
     gapMax: 104,
     tilesMin: 1,
