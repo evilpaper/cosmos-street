@@ -392,8 +392,11 @@ function ensureCollectibles() {
   }
 }
 
+const ENEMY_SPAWN_X = SCREEN_WIDTH + 12;
 const ENEMY_SPAWN_Y_MIN = 48;
 const ENEMY_SPAWN_Y_MAX = 164;
+const ENEMY_SPAWN_GAP_MIN = 80;
+const ENEMY_SPAWN_GAP_MAX = 140;
 
 function enemyYIsTaken(y) {
   return enemies.some(
@@ -412,9 +415,19 @@ function rollEnemyY() {
   return randomInRange(ENEMY_SPAWN_Y_MIN, ENEMY_SPAWN_Y_MAX);
 }
 
+function enemySpawnX() {
+  const gap = randomInRange(ENEMY_SPAWN_GAP_MIN, ENEMY_SPAWN_GAP_MAX);
+  const rightmost = enemies.reduce((max, enemy) => Math.max(max, enemy.x), 0);
+  return Math.max(ENEMY_SPAWN_X, rightmost + gap);
+}
+
+function spawnEnemy() {
+  enemies.push(createEnemy(enemySpawnX(), rollEnemyY()));
+}
+
 function ensureEnemies() {
   if (enemies.length < getDifficulty().enemiesMin) {
-    enemies.push(createEnemy(SCREEN_WIDTH + 12, rollEnemyY()));
+    spawnEnemy();
   }
 }
 
@@ -534,7 +547,7 @@ function respawnEnemy(enemy) {
     return; // remove only — no new enemy
   }
 
-  enemies.push(createEnemy(SCREEN_WIDTH + 12, rollEnemyY()));
+  spawnEnemy();
 }
 
 function handleEnemyEncounters() {
