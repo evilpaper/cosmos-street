@@ -56,7 +56,7 @@ const player = {
       return;
     }
     input.upJustPressed = false;
-    if (spendAngelForAirJump()) {
+    if (run?.spendAirJump()) {
       this.jump(this.jumpStrength);
     }
   },
