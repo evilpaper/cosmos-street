@@ -351,10 +351,7 @@ function createRun(playingTicks, startTime = 0) {
   }
 
   function collectAngel(angel) {
-    angel.approachStartX = angel.x;
-    angel.approachStartY = angel.y;
-    angel.approachProgress = 0;
-    angel.state = "approach";
+    angel.beginApproach();
     carriedAngels.push(angel);
     addScore(carriedAngels.length);
     sfx(sounds.angel);

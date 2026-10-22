@@ -38,12 +38,14 @@ function createAngel(tiles, occupiedSpots = []) {
     };
   }
 
+  function bobOffset() {
+    return Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_Y;
+  }
+
   function updateIdle(angel) {
     angel.x -= scrollSpeed;
     tick += 1;
-    angel.y = Math.round(
-      initialPosition.y + Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_Y,
-    );
+    angel.y = Math.round(initialPosition.y + bobOffset());
   }
 
   function updateApproach(angel, leader) {
@@ -69,9 +71,8 @@ function createAngel(tiles, occupiedSpots = []) {
   function updateFollow(angel, leader) {
     tick += 1;
     const slot = slotBehind(leader);
-    const oscillationY = Math.sin(tick * OSCILLATION_SPEED) * OSCILLATION_Y;
     angel.x += (slot.x - angel.x) * ANGEL_FOLLOW_LERP;
-    angel.y += (slot.y + oscillationY - angel.y) * ANGEL_FOLLOW_LERP;
+    angel.y += (slot.y + bobOffset() - angel.y) * ANGEL_FOLLOW_LERP;
   }
 
   function updateDispatch(angel) {
@@ -105,8 +106,11 @@ function createAngel(tiles, occupiedSpots = []) {
       };
     },
 
-    getTick() {
-      return tick;
+    beginApproach() {
+      this.approachStartX = this.x;
+      this.approachStartY = this.y;
+      this.approachProgress = 0;
+      this.state = "approach";
     },
 
     update(leader) {
