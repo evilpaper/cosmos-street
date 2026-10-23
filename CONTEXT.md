@@ -1,30 +1,30 @@
 # Cosmos Street
 
-A side-scrolling skate through an asteroid belt. The player collects companions and pickups while escaping alien machines.
+A side-scrolling 2D skateboard auto-runner in space. The player lasts as long as possible.
 
 ## Language
 
-**Angel**:
-A companion the player carries. Each angel is one air jump.
-_Avoid_: shield, Astro Angel
+**Astro Angel**:
+A companion the player carries. Each Astro Angel is one air jump.
+_Avoid_: companion, shield
 
 **Air jump**:
-A jump the player makes while already airborne, on a new press. Each one spends the closest carried angel (the oldest still carried).
+A jump the player makes while already airborne, on a new press. Each one spends the closest carried Astro Angel (the oldest still carried).
 _Avoid_: double jump
 
-**Egg**:
+**Cosmic Egg**:
 A pickup. Collecting one destroys every enemy overlapping the playfield. Not involved in scoring.
-_Avoid_: Cosmic Egg, score pickup
+_Avoid_: score pickup
 
 **Score**:
-Points added when collecting an angel, equal to how many angels are carried after that collect.
+Points added when collecting an Astro Angel, equal to how many Astro Angels are carried after that collect.
 
 **Approach**:
-The flight from pickup into place behind its leader — the player for the closest angel, the angel ahead for the rest. Slow, along a slight arc; ends when the angel reaches that place and starts following.
+The flight from pickup into place behind its leader — the player for the closest Astro Angel, the Astro Angel ahead for the rest. Slow, along a slight arc; ends when the Astro Angel reaches that place and starts following.
 _Avoid_: intro, tween, lerp
 
 **Dispatch**:
-The closest carried angel leaving by flying up off the screen. The others each move one place closer.
+The closest carried Astro Angel leaving by flying up off the screen. The others each move one place closer.
 _Avoid_: leave, dismiss
 
 **Run**:
@@ -44,7 +44,7 @@ _Avoid_: sfx
 
 **Enemy**:
 An alien machine that threatens the player. States: Roaming, Shaking (telegraphing), Zapping (emitting electric flashes), and Exploding (dying — owns its death animation, inert to the player).
-_Avoid_: Relic Telly, robot
+_Avoid_: antagonist, Relic Telly, robot
 
 **Palette**:
 The four colors allowed on the playfield, ordered dark to light: void, purple, magenta, light. Anything drawn on the canvas uses only these.

@@ -65,7 +65,7 @@ Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-
 
 Font is modelled after [Highway Chase / Data East / 1980](https://arcade.itch.io/arcade-game-typography-fonts/devlog/611049/highway-chase-data-east-1980) by [Void](https://arcade.itch.io/). Redrawn in Aseprite.
 
-Sounds Effects, all credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/) for providing. The following sound effects are used.
+Sound effects, all credits to the original creators and [The Spriters Resource](https://sounds.spriters-resource.com/) for providing. The following sound effects are used.
 
 [Wonder Boy III: The Dragon's Trap](https://sounds.spriters-resource.com/master_system/wonderboyiiithedragonstrap/asset/441223/)
 
