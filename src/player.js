@@ -18,8 +18,8 @@ const player = {
   dx: 0,
 
   jumpStrength: 7.6,
-  jumpStrengthBreaking: 7.4,
-  jumpStrengthSpeeding: 8,
+  jumpStrengthBreaking: 7.6,
+  jumpStrengthSpeeding: 7.8,
   state: "skating", // Initial state is "skating" (this.states[0])
   isDead: false,
 
