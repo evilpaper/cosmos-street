@@ -1,6 +1,6 @@
 # Cosmos Street
 
-A side-scrolling 2D skateboard auto-runner in space. The player lasts as long as possible.
+Cosmos Street is an old-school auto-runner inspired by the skateboard sequences in Wonder Boy, complete with borrowed sprites and reused sound effects. Made purely for fun.
 
 ## Language
 
