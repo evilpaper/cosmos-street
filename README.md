@@ -57,6 +57,8 @@ The CRT effect is created with CSS. More precise CSS Keyframes.
 
 The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
 
+An entity that changes behavior over time uses one handler table. That is the pattern for creating or modifying the Player, an Enemy, an Astro Angel, or any new entity that grows a second mode. See [One handler table per entity](docs/adr/0001-one-handler-table-per-entity.md).
+
 ## Credits
 
 Enemy art is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery). Slightly modifed. Orignal name [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207).
@@ -123,7 +125,7 @@ core browser security boundary.
 ## Future Plans
 
 - Let the Astro Angels start chatting and singing together.
-- Make enemies shake before they zap off their electricity.
+- Make enemies shake before they zap off their electricity. Add a shaking handler between roaming and zapping.
 - Add stuff in the background.
 - Refactor collision. Allow player to jump through platforms.
 

@@ -1,3 +1,174 @@
+/**
+ * One table for the Player. enter runs on the transition;
+ * update runs on the next update() call.
+ */
+function transitionPlayer(player, next) {
+  if (player.state === next) {
+    return;
+  }
+  playerHandlers[player.state]?.exit?.(player);
+  player.state = next;
+  playerHandlers[next].enter?.(player);
+}
+
+function holdSkating(player) {
+  player.totalFrames = 2;
+  player.ticksPerFrame = 16;
+  player.ground = "skating";
+  scrollSpeed = SCROLL_SPEED_SKATING;
+}
+
+function holdBreaking(player) {
+  player.totalFrames = 1;
+  player.ground = "breaking";
+  scrollSpeed = SCROLL_SPEED_BREAKING;
+}
+
+function holdSpeeding(player) {
+  player.totalFrames = 2;
+  player.ticksPerFrame = 8;
+  player.ground = "speeding";
+  scrollSpeed = SCROLL_SPEED_SPEEDING;
+}
+
+function holdObliterating(player) {
+  player.totalFrames = 6;
+  player.ticksPerFrame = 6;
+  player.dy = 0;
+  scrollSpeed = 0;
+}
+
+function drawSkating(player, screen) {
+  if (player.animationFrameIndex === 0) {
+    screen.drawImage(
+      player.image,
+      0,
+      0,
+      26,
+      35,
+      o(player.x),
+      o(player.y),
+      26,
+      35,
+    );
+  } else {
+    screen.drawImage(
+      player.image,
+      26,
+      0,
+      26,
+      35,
+      o(player.x),
+      o(player.y),
+      26,
+      35,
+    );
+  }
+}
+
+function drawCrouched(player, screen) {
+  screen.drawImage(
+    player.image,
+    52,
+    0,
+    26,
+    35,
+    o(player.x),
+    o(player.y),
+    26,
+    35,
+  );
+}
+
+function drawObliterating(player, screen) {
+  if (player.isDead) {
+    return;
+  }
+  screen.drawImage(
+    player.image,
+    player.animationFrameIndex * 40,
+    35,
+    40,
+    40,
+    o(player.x),
+    o(player.y),
+    40,
+    40,
+  );
+}
+
+const playerHandlers = {
+  skating: {
+    enter: holdSkating,
+    update(player) {
+      holdSkating(player);
+      if (input.left) {
+        return transitionPlayer(player, "breaking");
+      }
+      if (input.up) {
+        return player.jump(player.jumpStrength);
+      }
+      if (input.right) {
+        return transitionPlayer(player, "speeding");
+      }
+      if (player.dy > 1) {
+        return transitionPlayer(player, "jumping");
+      }
+    },
+    draw: drawSkating,
+  },
+
+  jumping: {
+    enter(player) {
+      player.totalFrames = 1;
+    },
+    update(player) {
+      player.totalFrames = 1;
+      if (input.upJustPressed) {
+        player.tryAirJump();
+      }
+    },
+    draw: drawCrouched,
+  },
+
+  breaking: {
+    enter: holdBreaking,
+    update(player) {
+      holdBreaking(player);
+      if (!input.left) {
+        return transitionPlayer(player, "skating");
+      }
+      if (input.up) {
+        return player.jump(player.jumpStrengthBreaking);
+      }
+    },
+    draw: drawCrouched,
+  },
+
+  speeding: {
+    enter: holdSpeeding,
+    update(player) {
+      holdSpeeding(player);
+      if (!input.right) {
+        return transitionPlayer(player, "skating");
+      }
+      if (input.left) {
+        return transitionPlayer(player, "breaking");
+      }
+      if (input.up) {
+        return player.jump(player.jumpStrengthSpeeding);
+      }
+    },
+    draw: drawSkating,
+  },
+
+  obliterating: {
+    enter: holdObliterating,
+    update: holdObliterating,
+    draw: drawObliterating,
+  },
+};
+
 const player = {
   name: "player",
   image: (() => {
@@ -5,7 +176,6 @@ const player = {
     img.src = "./images/player-sprite-sheet.png";
     return img;
   })(),
-  states: ["skating", "jumping", "breaking", "speeding", "obliterating"],
   width: 26,
   height: 36,
   totalFrames: 2, // For skating and speeding states
@@ -20,35 +190,29 @@ const player = {
   jumpStrength: 7.6,
   jumpStrengthBreaking: 7.6,
   jumpStrengthSpeeding: 7.8,
-  state: "skating", // Initial state is "skating" (this.states[0])
+  state: "skating",
+  ground: "skating",
   isDead: false,
 
   reset() {
-    this.totalFrames = 2;
-    this.ticksPerFrame = 16;
     this.animationTick = 0;
     this.animationFrameIndex = 0;
     this.x = 50;
     this.y = 0 - this.height; // Out of screen, please
     this.dy = 0;
     this.dx = 0;
-    this.state = this.states[0];
     this.isDead = false;
+    this.state = "skating";
+    playerHandlers.skating.enter(this);
   },
 
   jump(jumpStrength) {
     this.dy = -jumpStrength;
-    this.state = this.states[1]; // jumping
     // Consume input to require fresh key press for next jump
     input.up = false;
     input.upJustPressed = false;
     sfx(sounds.jump, 0.8);
-  },
-
-  speedUp() {
-    scrollSpeed = SCROLL_SPEED_SPEEDING;
-    this.state = this.states[3];
-    this.ticksPerFrame = 8;
+    transitionPlayer(this, "jumping");
   },
 
   tryAirJump() {
@@ -61,62 +225,17 @@ const player = {
     }
   },
 
+  obliterate() {
+    transitionPlayer(this, "obliterating");
+  },
+
   update(tiles, time) {
     // Just a short delay before we introduce the player.
     if (time < 40) {
       return;
     }
 
-    if (this.state === "skating") {
-      this.totalFrames = 2;
-      this.ticksPerFrame = 16;
-      scrollSpeed = SCROLL_SPEED_SKATING;
-
-      if (input.left) {
-        this.state = this.states[2]; // skating -> breaking
-      } else if (input.up) {
-        this.jump(this.jumpStrength);
-      } else if (input.right) {
-        this.speedUp();
-      } else if (this.dy > 1) {
-        this.state = this.states[1]; // skating -> jumping. This happens when user fall of a platform.
-      }
-    }
-
-    if (this.state === "jumping") {
-      this.totalFrames = 1;
-      if (input.upJustPressed) {
-        this.tryAirJump();
-      }
-    }
-
-    if (this.state === "breaking") {
-      this.totalFrames = 1;
-      scrollSpeed = SCROLL_SPEED_BREAKING;
-
-      if (!input.left) {
-        this.state = this.states[0]; // Only stay in breaking state if left arrow is pressed
-      } else if (input.up) {
-        this.jump(this.jumpStrengthBreaking);
-      }
-    }
-
-    if (this.state === "speeding") {
-      this.totalFrames = 2;
-      if (!input.right) {
-        this.state = this.states[0]; // -> Only stay in speeding state if right arrow is pressed
-      } else if (input.left) {
-        this.state = this.states[2]; // -> breaking
-      } else if (input.up) {
-        this.jump(this.jumpStrengthSpeeding);
-      }
-    }
-
-    if (this.state === "obliterating") {
-      this.totalFrames = 6;
-      this.ticksPerFrame = 6;
-      this.dy = 0;
-    }
+    playerHandlers[this.state].update(this);
 
     // Store previous position BEFORE movement
     // Used to determine collision type (landing vs wall)
@@ -153,15 +272,8 @@ const player = {
         this.dy = 0;
         landed = true;
 
-        // Update state when landing
-        if (scrollSpeed === SCROLL_SPEED_BREAKING) {
-          this.state = this.states[2]; // Stay in breaking state
-        } else if (scrollSpeed === SCROLL_SPEED_SPEEDING) {
-          this.state = this.states[3]; // Stay in speeding state
-        } else if (this.state === "obliterating") {
-          this.state = this.states[4]; // Stay in obliterating state
-        } else {
-          this.state = this.states[0]; // Return to skating
+        if (this.state !== "obliterating") {
+          transitionPlayer(this, this.ground);
         }
       } else if (!landed) {
         // Player came from the side → wall collision
@@ -190,56 +302,7 @@ const player = {
   },
 
   draw(screen) {
-    const sx = this.animationFrameIndex * 40;
-    const sy = 35;
-
-    if (this.state === "skating" || this.state === "speeding") {
-      if (this.animationFrameIndex === 0) {
-        screen.drawImage(
-          this.image,
-          0,
-          0,
-          26,
-          35,
-          o(this.x),
-          o(this.y),
-          26,
-          35,
-        );
-      } else {
-        screen.drawImage(
-          this.image,
-          26,
-          0,
-          26,
-          35,
-          o(this.x),
-          o(this.y),
-          26,
-          35,
-        );
-      }
-    }
-
-    if (this.state === "jumping" || this.state === "breaking") {
-      screen.drawImage(this.image, 52, 0, 26, 35, o(this.x), o(this.y), 26, 35);
-    }
-
-    if (this.state === "obliterating") {
-      if (!this.isDead) {
-        screen.drawImage(
-          this.image,
-          sx,
-          sy,
-          40,
-          40,
-          o(this.x),
-          o(this.y),
-          40,
-          40,
-        );
-      }
-    }
+    playerHandlers[this.state].draw(this, screen);
 
     /**
      *

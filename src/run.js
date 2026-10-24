@@ -150,7 +150,7 @@ function createRun(playingTicks, startTime = 0) {
     player.update(platforms.tiles, time);
 
     for (const angel of angels) {
-      if (angel.state === "idle" || angel.state === "dispatch") {
+      if (!carriedAngels.includes(angel)) {
         angel.update();
       }
     }
@@ -338,7 +338,7 @@ function createRun(playingTicks, startTime = 0) {
     if (!angel) {
       return false;
     }
-    angel.state = "dispatch";
+    angel.dispatch();
     return true;
   }
 
@@ -424,9 +424,7 @@ function createRun(playingTicks, startTime = 0) {
         if (player.state !== "obliterating") {
           sfx(sounds.crash);
         }
-        player.state = "obliterating";
-        scrollSpeed = 0;
-        player.dy = 0;
+        player.obliterate();
       }
 
       if (enemy.x + enemy.width < 0) {

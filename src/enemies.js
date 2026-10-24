@@ -1,128 +1,160 @@
 const enemySpriteSheet = loadOnce("./images/enemy-sprite-sheet.png");
 
+const ENEMY_WIDTH = 16;
+const ENEMY_HEIGHT = 25;
+const ENEMY_TICKS_PER_FRAME = 8;
+const ENEMY_TOTAL_FRAMES = 10;
+const ENEMY_HITBOX_WIDTH = 8;
+const ENEMY_HITBOX_HEIGHT = 16;
+const ENEMY_CHASE_SPEED_MIN = 0.25;
+const ENEMY_CHASE_SPEED_MAX = 1;
+
+/**
+ * One table for every Enemy. enter runs on the transition;
+ * update runs on the next update() call.
+ */
+function transitionEnemy(enemy, next) {
+  if (enemy.state === next) {
+    return;
+  }
+  enemyHandlers[enemy.state]?.exit?.(enemy);
+  enemy.state = next;
+  enemyHandlers[next].enter?.(enemy);
+}
+
+function chaseEnemy(enemy) {
+  const diff = getDifficulty();
+  enemy.x -= scrollSpeed + enemy.speed + diff.enemySpeedBonus;
+}
+
+function advanceEnemySprite(enemy) {
+  enemy.animationTick += 1;
+
+  if (enemy.animationTick >= ENEMY_TICKS_PER_FRAME) {
+    enemy.animationTick = 0;
+    enemy.animationFrameIndex += 1;
+
+    if (enemy.animationFrameIndex >= ENEMY_TOTAL_FRAMES) {
+      enemy.animationFrameIndex = 0;
+    }
+  }
+}
+
+function drawEnemySprite(enemy, screen) {
+  const spriteFrameX = enemy.animationFrameIndex * ENEMY_WIDTH;
+  const drawX = Math.round(enemy.x);
+  const drawY = Math.round(enemy.y);
+
+  /**
+   * Draw enemy hitbox. For debugging purposes.
+   */
+  // screen.lineWidth = 1;
+  // screen.strokeStyle = "magenta";
+  // screen.strokeRect(enemy.getHitbox().x, enemy.getHitbox().y, enemy.getHitbox().width, enemy.getHitbox().height);
+
+  screen.drawImage(
+    enemySpriteSheet,
+    spriteFrameX,
+    0,
+    ENEMY_WIDTH,
+    ENEMY_HEIGHT,
+    drawX,
+    drawY,
+    ENEMY_WIDTH,
+    ENEMY_HEIGHT,
+  );
+}
+
+const enemyHandlers = {
+  roaming: {
+    update(enemy) {
+      chaseEnemy(enemy);
+      advanceEnemySprite(enemy);
+
+      if (Math.random() < getDifficulty().electricityChance) {
+        transitionEnemy(enemy, "zapping");
+      }
+    },
+    draw: drawEnemySprite,
+  },
+
+  zapping: {
+    enter(enemy) {
+      // Only play sound if enemy is on the screen.
+      if (enemy.x > 20 && enemy.x < 236) {
+        sfx(sounds.electrified, 1);
+      }
+      enemy.electricity.reset();
+    },
+    update(enemy) {
+      chaseEnemy(enemy);
+      advanceEnemySprite(enemy);
+
+      // Stop after the electricity animation finishes.
+      if (enemy.electricity.isDone()) {
+        transitionEnemy(enemy, "roaming");
+        return;
+      }
+      enemy.electricity.update();
+    },
+    draw(enemy, screen) {
+      drawEnemySprite(enemy, screen);
+      enemy.electricity.draw(screen);
+    },
+  },
+
+  exploding: {
+    enter(enemy) {
+      enemy.explosion = createElectricExplosion(enemy);
+    },
+    update(enemy) {
+      enemy.x -= scrollSpeed;
+      enemy.y -= 0.2;
+      enemy.explosion.update();
+    },
+    draw(enemy, screen) {
+      enemy.explosion.draw(screen);
+    },
+  },
+};
+
 function createEnemy(x, y) {
-  const WIDTH = 16;
-  const HEIGHT = 25;
-  const TICKS_PER_FRAME = 8;
-  const TOTAL_FRAMES = 10;
-  const HITBOX_WIDTH = 8;
-  const HITBOX_HEIGHT = 16;
-  const CHASE_SPEED_MIN = 0.25;
-  const CHASE_SPEED_MAX = 1;
-
-  let animationTick = 0;
-  let animationFrameIndex = 0;
-
-  let electricityActive = false;
-  let explosion = null;
-
   const enemy = {
     x: x,
     y: y,
-    width: WIDTH,
-    height: HEIGHT,
+    width: ENEMY_WIDTH,
+    height: ENEMY_HEIGHT,
     state: "roaming",
     speed:
-      CHASE_SPEED_MIN + Math.random() * (CHASE_SPEED_MAX - CHASE_SPEED_MIN),
+      ENEMY_CHASE_SPEED_MIN +
+      Math.random() * (ENEMY_CHASE_SPEED_MAX - ENEMY_CHASE_SPEED_MIN),
+    animationTick: 0,
+    animationFrameIndex: 0,
+    explosion: null,
 
     getHitbox() {
       return {
-        x: this.x + (WIDTH - HITBOX_WIDTH) / 2,
-        y: this.y + (HEIGHT - HITBOX_HEIGHT) / 2,
-        width: HITBOX_WIDTH,
-        height: HITBOX_HEIGHT,
+        x: this.x + (ENEMY_WIDTH - ENEMY_HITBOX_WIDTH) / 2,
+        y: this.y + (ENEMY_HEIGHT - ENEMY_HITBOX_HEIGHT) / 2,
+        width: ENEMY_HITBOX_WIDTH,
+        height: ENEMY_HITBOX_HEIGHT,
       };
     },
 
     explode() {
-      if (this.state === "exploding") {
-        return;
-      }
-      this.state = "exploding";
-      electricityActive = false;
-      explosion = createElectricExplosion(this);
+      transitionEnemy(this, "exploding");
     },
 
     isDone() {
-      return this.state === "exploding" && explosion?.isDone();
+      return this.state === "exploding" && this.explosion?.isDone();
     },
 
     update() {
-      if (this.state === "exploding") {
-        this.x -= scrollSpeed;
-        this.y -= 0.2;
-        explosion.update();
-        return;
-      }
-
-      const diff = getDifficulty();
-      this.x -= scrollSpeed + this.speed + diff.enemySpeedBonus;
-
-      // Advance animation tick
-      animationTick += 1;
-
-      // Advance frame when tick threshold reached
-      if (animationTick >= TICKS_PER_FRAME) {
-        animationTick = 0;
-        animationFrameIndex += 1;
-
-        // Loop animation
-        if (animationFrameIndex >= TOTAL_FRAMES) {
-          animationFrameIndex = 0;
-        }
-      }
-
-      if (electricityActive) {
-        // Stop after the electricity animation finishes.
-        if (this.electricity.isDone()) {
-          electricityActive = false;
-        } else {
-          this.electricity.update();
-        }
-      } else if (Math.random() < diff.electricityChance) {
-        electricityActive = true;
-        // Only play sound if enemy is on the screen.
-        if (this.x > 20 && this.x < 236) {
-          sfx(sounds.electrified, 1);
-        }
-        this.electricity.reset();
-      }
+      enemyHandlers[this.state].update(this);
     },
 
     draw(screen) {
-      if (this.state === "exploding") {
-        explosion.draw(screen);
-        return;
-      }
-
-      const spriteFrameX = animationFrameIndex * WIDTH;
-      const spriteFrameY = 0;
-
-      const drawX = Math.round(this.x);
-      const drawY = Math.round(this.y);
-
-      /**
-       * Draw enemy hitbox. For debugging purposes.
-       */
-      // screen.lineWidth = 1;
-      // screen.strokeStyle = "magenta";
-      // screen.strokeRect(this.getHitbox().x, this.getHitbox().y, this.getHitbox().width, this.getHitbox().height);
-
-      screen.drawImage(
-        enemySpriteSheet,
-        spriteFrameX,
-        spriteFrameY,
-        WIDTH,
-        HEIGHT,
-        drawX,
-        drawY,
-        WIDTH,
-        HEIGHT,
-      );
-
-      if (electricityActive) {
-        this.electricity.draw(screen);
-      }
+      enemyHandlers[this.state].draw(this, screen);
     },
   };
 

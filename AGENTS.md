@@ -11,3 +11,7 @@ Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-
 ### Domain docs
 
 Single-context: one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Entities
+
+When creating or modifying an entity that has modes of behavior, use one handler table. See `docs/adr/0001-one-handler-table-per-entity.md`.
