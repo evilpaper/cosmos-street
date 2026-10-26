@@ -43,7 +43,7 @@ A short one-off sound tied to a game event, such as a jump or a crash.
 _Avoid_: sfx
 
 **Enemy**:
-An alien machine that threatens the player. States: Roaming, Shaking (telegraphing), Zapping (emitting electric flashes), and Exploding (dying — owns its death animation, inert to the player).
+An alien machine that threatens the player. States: Roaming, Shaking (telegraphing, before any flashes), Zapping (electric flashes, while the shake continues), and Exploding (dying — owns its death animation, inert to the player).
 _Avoid_: antagonist, Relic Telly, robot
 
 **Palette**:

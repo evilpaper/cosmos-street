@@ -8,6 +8,11 @@ const ENEMY_HITBOX_WIDTH = 8;
 const ENEMY_HITBOX_HEIGHT = 16;
 const ENEMY_CHASE_SPEED_MIN = 0.25;
 const ENEMY_CHASE_SPEED_MAX = 1;
+const ENEMY_SHAKE_MIN = 1;
+const ENEMY_SHAKE_MAX = 2;
+const ENEMY_SHAKE_TICKS_MIN = 20;
+const ENEMY_SHAKE_TICKS_MAX = 40;
+const ENEMY_SHAKE_HOLD_TICKS = 2;
 
 /**
  * One table for every Enemy. enter runs on the transition;
@@ -25,6 +30,37 @@ function transitionEnemy(enemy, next) {
 function chaseEnemy(enemy) {
   const diff = getDifficulty();
   enemy.x -= scrollSpeed + enemy.speed + diff.enemySpeedBonus;
+}
+
+/** Take the shake off x and y without forgetting it. */
+function unhookEnemyShake(enemy) {
+  enemy.x -= enemy.shakeX;
+  enemy.y -= enemy.shakeY;
+}
+
+/** Undo the shake so the chase step stays on the Enemy's path. */
+function clearEnemyShake(enemy) {
+  unhookEnemyShake(enemy);
+  enemy.shakeX = 0;
+  enemy.shakeY = 0;
+  enemy.shakeStepTick = 0;
+}
+
+function enemyShakeOffset() {
+  const magnitude = randomInRange(ENEMY_SHAKE_MIN, ENEMY_SHAKE_MAX);
+  const sign = Math.random() < 0.5 ? -1 : 1;
+  return magnitude * sign;
+}
+
+function applyEnemyShake(enemy) {
+  if (enemy.shakeStepTick <= 0) {
+    // enemy.shakeX = enemyShakeOffset();
+    enemy.shakeY = enemyShakeOffset();
+    enemy.shakeStepTick = ENEMY_SHAKE_HOLD_TICKS;
+  }
+  enemy.shakeStepTick -= 1;
+  enemy.x += enemy.shakeX;
+  enemy.y += enemy.shakeY;
 }
 
 function advanceEnemySprite(enemy) {
@@ -72,8 +108,31 @@ const enemyHandlers = {
       advanceEnemySprite(enemy);
 
       if (Math.random() < getDifficulty().electricityChance) {
-        transitionEnemy(enemy, "zapping");
+        transitionEnemy(enemy, "shaking");
       }
+    },
+    draw: drawEnemySprite,
+  },
+
+  shaking: {
+    enter(enemy) {
+      enemy.shakeTicks = randomInRange(
+        ENEMY_SHAKE_TICKS_MIN,
+        ENEMY_SHAKE_TICKS_MAX,
+      );
+    },
+    update(enemy) {
+      unhookEnemyShake(enemy);
+      chaseEnemy(enemy);
+      advanceEnemySprite(enemy);
+      applyEnemyShake(enemy);
+
+      // A frame that starts with no ticks left is Zapping, and it keeps this shake.
+      if (enemy.shakeTicks <= 0) {
+        transitionEnemy(enemy, "zapping");
+        return;
+      }
+      enemy.shakeTicks -= 1;
     },
     draw: drawEnemySprite,
   },
@@ -86,16 +145,24 @@ const enemyHandlers = {
       }
       enemy.electricity.reset();
     },
+    exit(enemy) {
+      clearEnemyShake(enemy);
+    },
     update(enemy) {
+      unhookEnemyShake(enemy);
       chaseEnemy(enemy);
       advanceEnemySprite(enemy);
 
       // Stop after the electricity animation finishes.
       if (enemy.electricity.isDone()) {
+        enemy.shakeX = 0;
+        enemy.shakeY = 0;
+        enemy.shakeStepTick = 0;
         transitionEnemy(enemy, "roaming");
         return;
       }
       enemy.electricity.update();
+      applyEnemyShake(enemy);
     },
     draw(enemy, screen) {
       drawEnemySprite(enemy, screen);
@@ -105,6 +172,7 @@ const enemyHandlers = {
 
   exploding: {
     enter(enemy) {
+      clearEnemyShake(enemy);
       enemy.explosion = createElectricExplosion(enemy);
     },
     update(enemy) {
@@ -130,6 +198,10 @@ function createEnemy(x, y) {
       Math.random() * (ENEMY_CHASE_SPEED_MAX - ENEMY_CHASE_SPEED_MIN),
     animationTick: 0,
     animationFrameIndex: 0,
+    shakeX: 0,
+    shakeY: 0,
+    shakeStepTick: 0,
+    shakeTicks: 0,
     explosion: null,
 
     getHitbox() {
