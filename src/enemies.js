@@ -10,8 +10,8 @@ const ENEMY_CHASE_SPEED_MIN = 0.25;
 const ENEMY_CHASE_SPEED_MAX = 1;
 const ENEMY_SHAKE_MIN = 1;
 const ENEMY_SHAKE_MAX = 2;
-const ENEMY_SHAKE_TICKS_MIN = 20;
-const ENEMY_SHAKE_TICKS_MAX = 40;
+const ENEMY_SHAKE_TICKS_MIN = 10;
+const ENEMY_SHAKE_TICKS_MAX = 30;
 const ENEMY_SHAKE_HOLD_TICKS = 2;
 
 /**
@@ -32,16 +32,14 @@ function chaseEnemy(enemy) {
   enemy.x -= scrollSpeed + enemy.speed + diff.enemySpeedBonus;
 }
 
-/** Take the shake off x and y without forgetting it. */
+/** Take the shake off y without forgetting it. */
 function unhookEnemyShake(enemy) {
-  enemy.x -= enemy.shakeX;
   enemy.y -= enemy.shakeY;
 }
 
 /** Undo the shake so the chase step stays on the Enemy's path. */
 function clearEnemyShake(enemy) {
   unhookEnemyShake(enemy);
-  enemy.shakeX = 0;
   enemy.shakeY = 0;
   enemy.shakeStepTick = 0;
 }
@@ -54,12 +52,10 @@ function enemyShakeOffset() {
 
 function applyEnemyShake(enemy) {
   if (enemy.shakeStepTick <= 0) {
-    // enemy.shakeX = enemyShakeOffset();
     enemy.shakeY = enemyShakeOffset();
     enemy.shakeStepTick = ENEMY_SHAKE_HOLD_TICKS;
   }
   enemy.shakeStepTick -= 1;
-  enemy.x += enemy.shakeX;
   enemy.y += enemy.shakeY;
 }
 
@@ -155,7 +151,6 @@ const enemyHandlers = {
 
       // Stop after the electricity animation finishes.
       if (enemy.electricity.isDone()) {
-        enemy.shakeX = 0;
         enemy.shakeY = 0;
         enemy.shakeStepTick = 0;
         transitionEnemy(enemy, "roaming");
@@ -198,7 +193,6 @@ function createEnemy(x, y) {
       Math.random() * (ENEMY_CHASE_SPEED_MAX - ENEMY_CHASE_SPEED_MIN),
     animationTick: 0,
     animationFrameIndex: 0,
-    shakeX: 0,
     shakeY: 0,
     shakeStepTick: 0,
     shakeTicks: 0,
