@@ -6,8 +6,8 @@ const ENEMY_TICKS_PER_FRAME = 8;
 const ENEMY_TOTAL_FRAMES = 10;
 const ENEMY_HITBOX_WIDTH = 8;
 const ENEMY_HITBOX_HEIGHT = 16;
-const ENEMY_CHASE_SPEED_MIN = 0.25;
-const ENEMY_CHASE_SPEED_MAX = 1;
+const ENEMY_SPEED_MIN = 0.25;
+const ENEMY_SPEED_MAX = 1;
 const ENEMY_SHAKE_MIN = 1;
 const ENEMY_SHAKE_MAX = 2;
 const ENEMY_SHAKE_TICKS_MIN = 10;
@@ -27,19 +27,20 @@ function transitionEnemy(enemy, next) {
   enemyHandlers[next].enter?.(enemy);
 }
 
-function chaseEnemy(enemy) {
+/** One step left: world scroll, plus this Enemy's own speed. */
+function moveEnemyLeft(enemy) {
   const diff = getDifficulty();
   enemy.x -= scrollSpeed + enemy.speed + diff.enemySpeedBonus;
 }
 
-/** Take the shake off y without forgetting it. */
-function unhookEnemyShake(enemy) {
+/** Take this frame's shake off y. shakeY stays, so the next apply can put it back. */
+function unapplyEnemyShake(enemy) {
   enemy.y -= enemy.shakeY;
 }
 
-/** Undo the shake so the chase step stays on the Enemy's path. */
+/** Take the shake off y and forget it, so later steps stay on the path. */
 function clearEnemyShake(enemy) {
-  unhookEnemyShake(enemy);
+  unapplyEnemyShake(enemy);
   enemy.shakeY = 0;
   enemy.shakeStepTick = 0;
 }
@@ -100,7 +101,7 @@ function drawEnemySprite(enemy, screen) {
 const enemyHandlers = {
   roaming: {
     update(enemy) {
-      chaseEnemy(enemy);
+      moveEnemyLeft(enemy);
       advanceEnemySprite(enemy);
 
       if (Math.random() < getDifficulty().electricityChance) {
@@ -118,8 +119,8 @@ const enemyHandlers = {
       );
     },
     update(enemy) {
-      unhookEnemyShake(enemy);
-      chaseEnemy(enemy);
+      unapplyEnemyShake(enemy);
+      moveEnemyLeft(enemy);
       advanceEnemySprite(enemy);
       applyEnemyShake(enemy);
 
@@ -145,8 +146,8 @@ const enemyHandlers = {
       clearEnemyShake(enemy);
     },
     update(enemy) {
-      unhookEnemyShake(enemy);
-      chaseEnemy(enemy);
+      unapplyEnemyShake(enemy);
+      moveEnemyLeft(enemy);
       advanceEnemySprite(enemy);
 
       // Stop after the electricity animation finishes.
@@ -189,8 +190,8 @@ function createEnemy(x, y) {
     height: ENEMY_HEIGHT,
     state: "roaming",
     speed:
-      ENEMY_CHASE_SPEED_MIN +
-      Math.random() * (ENEMY_CHASE_SPEED_MAX - ENEMY_CHASE_SPEED_MIN),
+      ENEMY_SPEED_MIN +
+      Math.random() * (ENEMY_SPEED_MAX - ENEMY_SPEED_MIN),
     animationTick: 0,
     animationFrameIndex: 0,
     shakeY: 0,
