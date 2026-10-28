@@ -27,37 +27,40 @@ function transitionEnemy(enemy, next) {
   enemyHandlers[next].enter?.(enemy);
 }
 
-/** One step left: world scroll, plus this Enemy's own speed. */
+/**
+ * One step left: world scroll, plus this Enemy's own speed.
+ */
 function moveEnemyLeft(enemy) {
   const diff = getDifficulty();
   enemy.x -= scrollSpeed + enemy.speed + diff.enemySpeedBonus;
 }
 
-/** Take this frame's shake off y. shakeY stays, so the next apply can put it back. */
-function unapplyEnemyShake(enemy) {
-  enemy.y -= enemy.shakeY;
+function shakeAmount() {
+  const distance = randomInRange(ENEMY_SHAKE_MIN, ENEMY_SHAKE_MAX);
+  const direction = Math.random() < 0.5 ? -1 : 1;
+  return distance * direction;
 }
 
-/** Take the shake off y and forget it, so later steps stay on the path. */
-function clearEnemyShake(enemy) {
-  unapplyEnemyShake(enemy);
-  enemy.shakeY = 0;
-  enemy.shakeStepTick = 0;
-}
-
-function enemyShakeOffset() {
-  const magnitude = randomInRange(ENEMY_SHAKE_MIN, ENEMY_SHAKE_MAX);
-  const sign = Math.random() < 0.5 ? -1 : 1;
-  return magnitude * sign;
-}
-
-function applyEnemyShake(enemy) {
+/**
+ * Same distance, opposite direction from the last step.
+ * y is the original position plus that amount.
+ */
+function shake(enemy) {
   if (enemy.shakeStepTick <= 0) {
-    enemy.shakeY = enemyShakeOffset();
+    enemy.shakeY = enemy.shakeY === 0 ? shakeAmount() : -enemy.shakeY;
     enemy.shakeStepTick = ENEMY_SHAKE_HOLD_TICKS;
   }
   enemy.shakeStepTick -= 1;
-  enemy.y += enemy.shakeY;
+  enemy.y = enemy.originY + enemy.shakeY;
+}
+
+/**
+ * Put the Enemy back on its original y and forget the shake.
+ */
+function stopShake(enemy) {
+  enemy.y = enemy.originY;
+  enemy.shakeY = 0;
+  enemy.shakeStepTick = 0;
 }
 
 function advanceEnemySprite(enemy) {
@@ -81,6 +84,7 @@ function drawEnemySprite(enemy, screen) {
   /**
    * Draw enemy hitbox. For debugging purposes.
    */
+
   // screen.lineWidth = 1;
   // screen.strokeStyle = "magenta";
   // screen.strokeRect(enemy.getHitbox().x, enemy.getHitbox().y, enemy.getHitbox().width, enemy.getHitbox().height);
@@ -119,12 +123,14 @@ const enemyHandlers = {
       );
     },
     update(enemy) {
-      unapplyEnemyShake(enemy);
       moveEnemyLeft(enemy);
       advanceEnemySprite(enemy);
-      applyEnemyShake(enemy);
+      shake(enemy);
 
-      // A frame that starts with no ticks left is Zapping, and it keeps this shake.
+      /**
+       * A frame that starts with no ticks left is Zapping,
+       * and it keeps this shake.
+       */
       if (enemy.shakeTicks <= 0) {
         transitionEnemy(enemy, "zapping");
         return;
@@ -136,29 +142,28 @@ const enemyHandlers = {
 
   zapping: {
     enter(enemy) {
-      // Only play sound if enemy is on the screen.
+      /**
+       * Only play sound if enemy is on the screen.
+       */
       if (enemy.x > 20 && enemy.x < 236) {
         sfx(sounds.electrified, 1);
       }
       enemy.electricity.reset();
     },
     exit(enemy) {
-      clearEnemyShake(enemy);
+      stopShake(enemy);
     },
     update(enemy) {
-      unapplyEnemyShake(enemy);
       moveEnemyLeft(enemy);
       advanceEnemySprite(enemy);
 
       // Stop after the electricity animation finishes.
       if (enemy.electricity.isDone()) {
-        enemy.shakeY = 0;
-        enemy.shakeStepTick = 0;
         transitionEnemy(enemy, "roaming");
         return;
       }
       enemy.electricity.update();
-      applyEnemyShake(enemy);
+      shake(enemy);
     },
     draw(enemy, screen) {
       drawEnemySprite(enemy, screen);
@@ -168,7 +173,7 @@ const enemyHandlers = {
 
   exploding: {
     enter(enemy) {
-      clearEnemyShake(enemy);
+      stopShake(enemy);
       enemy.explosion = createElectricExplosion(enemy);
     },
     update(enemy) {
@@ -186,12 +191,12 @@ function createEnemy(x, y) {
   const enemy = {
     x: x,
     y: y,
+    originY: y,
     width: ENEMY_WIDTH,
     height: ENEMY_HEIGHT,
     state: "roaming",
     speed:
-      ENEMY_SPEED_MIN +
-      Math.random() * (ENEMY_SPEED_MAX - ENEMY_SPEED_MIN),
+      ENEMY_SPEED_MIN + Math.random() * (ENEMY_SPEED_MAX - ENEMY_SPEED_MIN),
     animationTick: 0,
     animationFrameIndex: 0,
     shakeY: 0,
