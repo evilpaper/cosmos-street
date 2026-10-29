@@ -8,11 +8,11 @@ const ENEMY_HITBOX_WIDTH = 8;
 const ENEMY_HITBOX_HEIGHT = 16;
 const ENEMY_SPEED_MIN = 0.25;
 const ENEMY_SPEED_MAX = 1;
-const ENEMY_SHAKE_MIN = 1;
-const ENEMY_SHAKE_MAX = 2;
-const ENEMY_SHAKE_TICKS_MIN = 10;
-const ENEMY_SHAKE_TICKS_MAX = 30;
-const ENEMY_SHAKE_HOLD_TICKS = 2;
+const ENEMY_SHAKE_DISTANCE_MIN = 1;
+const ENEMY_SHAKE_DISTANCE_MAX = 2;
+const ENEMY_SHAKE_DURATION_MIN = 15;
+const ENEMY_SHAKE_DURATION_MAX = 25;
+const ENEMY_SHAKE_TICKS_PER_POSITION = 3;
 
 /**
  * One table for every Enemy. enter runs on the transition;
@@ -36,7 +36,10 @@ function moveEnemyLeft(enemy) {
 }
 
 function shakeAmount() {
-  const distance = randomInRange(ENEMY_SHAKE_MIN, ENEMY_SHAKE_MAX);
+  const distance = randomInRange(
+    ENEMY_SHAKE_DISTANCE_MIN,
+    ENEMY_SHAKE_DISTANCE_MAX,
+  );
   const direction = Math.random() < 0.5 ? -1 : 1;
   return distance * direction;
 }
@@ -48,7 +51,7 @@ function shakeAmount() {
 function shake(enemy) {
   if (enemy.shakeStepTick <= 0) {
     enemy.shakeY = enemy.shakeY === 0 ? shakeAmount() : -enemy.shakeY;
-    enemy.shakeStepTick = ENEMY_SHAKE_HOLD_TICKS;
+    enemy.shakeStepTick = ENEMY_SHAKE_TICKS_PER_POSITION;
   }
   enemy.shakeStepTick -= 1;
   enemy.y = enemy.originY + enemy.shakeY;
@@ -118,9 +121,12 @@ const enemyHandlers = {
   shaking: {
     enter(enemy) {
       enemy.shakeTicks = randomInRange(
-        ENEMY_SHAKE_TICKS_MIN,
-        ENEMY_SHAKE_TICKS_MAX,
+        ENEMY_SHAKE_DURATION_MIN,
+        ENEMY_SHAKE_DURATION_MAX,
       );
+    },
+    exit(enemy) {
+      stopShake(enemy);
     },
     update(enemy) {
       moveEnemyLeft(enemy);
@@ -150,9 +156,7 @@ const enemyHandlers = {
       }
       enemy.electricity.reset();
     },
-    exit(enemy) {
-      stopShake(enemy);
-    },
+    exit(enemy) {},
     update(enemy) {
       moveEnemyLeft(enemy);
       advanceEnemySprite(enemy);
@@ -163,7 +167,6 @@ const enemyHandlers = {
         return;
       }
       enemy.electricity.update();
-      shake(enemy);
     },
     draw(enemy, screen) {
       drawEnemySprite(enemy, screen);
