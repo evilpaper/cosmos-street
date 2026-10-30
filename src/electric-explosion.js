@@ -3,8 +3,8 @@ const electricExplosionSpriteSheet = loadOnce(
 );
 
 /**
- * Death explosion drawn on an enemy while it is Exploding.
- * Follows target.x / target.y (centered), same idea as makeEnemyElectricity.
+ * Death explosion drawn on a Relic Telly while it is Exploding.
+ * Follows target.x / target.y (centered), same idea as makeRelicTellyElectricity.
  */
 function makeElectricExplosion(target) {
   const FRAME_WIDTH = 35;

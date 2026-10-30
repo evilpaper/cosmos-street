@@ -158,7 +158,7 @@ async function loadSounds() {
   sounds.egg = await loadSound("audio/box-get.ogg");
   sounds.drop = await loadSound("audio/fireball.ogg");
   sounds.electrified = await loadSound("audio/select-wrong.ogg");
-  sounds.enemyKill = await loadSound("audio/dragon-breath.ogg");
+  sounds.relicTellyKill = await loadSound("audio/dragon-breath.ogg");
 }
 
 // Play a sound effect

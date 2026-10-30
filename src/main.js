@@ -33,7 +33,7 @@ let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
 let deadTimer;
 
-const game = makeGame();
+const scene = makeScene();
 const states = {};
 
 /**
@@ -122,7 +122,7 @@ function firstTimeStarting() {
  * The theme follows the run's clock. Outside a run it starts from the beginning.
  */
 function themePosition() {
-  return game.state.name === "play" ? time / FPS : 0;
+  return scene.state.name === "play" ? time / FPS : 0;
 }
 
 /**
@@ -187,7 +187,7 @@ states.play = {
     }
 
     if (frame.timeUp) {
-      game.setState(states.ending);
+      scene.setState(states.ending);
     }
   },
   draw(_, screen) {
@@ -314,18 +314,18 @@ states.ending = {
  */
 
 function startGame() {
-  game.setState(states.play);
+  scene.setState(states.play);
 }
 
 function resetGame() {
   init();
-  game.setState(states.title);
+  scene.setState(states.title);
 }
 
 function restartGame() {
   pendingRunTime = 1;
   init();
-  game.setState(states.play);
+  scene.setState(states.play);
 }
 
 /**
@@ -338,7 +338,7 @@ function enterGameOverFromPlaying({ playDropSound = false } = {}) {
   }
   resetInput();
   scrollSpeed = 0;
-  game.setState(states.over);
+  scene.setState(states.over);
 }
 
 /**
@@ -367,8 +367,8 @@ function init() {
   startMessage = getStartMessage();
   deadTimer = 0;
 
-  if (!game.state) {
-    game.setState(states.title);
+  if (!scene.state) {
+    scene.setState(states.title);
   }
 }
 
@@ -405,7 +405,7 @@ function update() {
     star.update();
   }
 
-  game.update();
+  scene.update();
 }
 
 /**
@@ -425,5 +425,5 @@ function draw(screen) {
     star.draw(screen);
   }
 
-  game.draw(screen);
+  scene.draw(screen);
 }

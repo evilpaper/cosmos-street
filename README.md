@@ -57,11 +57,11 @@ The CRT effect is created with CSS. More precise CSS Keyframes.
 
 The game runs an update() loop at a fixed 60 frames per second. The frame rate is not configurable, which means the game logic is entirely frame-rate dependent and does not require handling deltaTime.
 
-An entity that changes behavior over time uses one state machine. That is the pattern for creating or modifying the Player, an Enemy, an Astro Angel, or any new entity that grows a second state. See [One state machine per entity](docs/adr/0001-one-state-machine-per-entity.md).
+An entity that changes behavior over time uses one state machine. That is the pattern for creating or modifying the Player, a Relic Telly, an Astro Angel, or any new entity that grows a second state. See [One state machine per entity](docs/adr/0001-one-state-machine-per-entity.md).
 
 ## Credits
 
-Enemy art is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery). Slightly modifed. Orignal name [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207).
+Relic Telly art is made by [calegaea75432](https://www.deviantart.com/calegaea75432/gallery). Slightly modifed. Source: [Relic Telly](https://www.deviantart.com/calegaea75432/art/ye-more-megaman-custom-enemies-168698207).
 
 Music track is [Retro Platforming](https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6) by [David Fesliyan](https://www.fesliyanstudios.com/). Lovely tune.
 
@@ -125,7 +125,7 @@ core browser security boundary.
 ## Future Plans
 
 - Let the Astro Angels start chatting and singing together.
-- Make enemies shake before they zap off their electricity. Add a shaking state between roaming and zapping.
+- Make Relic Tellies shake before they zap off their electricity. Add a shaking state between roaming and zapping.
 - Add stuff in the background.
 - Refactor collision. Allow player to jump through platforms.
 

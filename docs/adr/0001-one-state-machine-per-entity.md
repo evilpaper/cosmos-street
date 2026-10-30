@@ -3,11 +3,11 @@
 **Status:** Accepted
 **Date:** 2026-10-24
 
-The Player, each Enemy, and each Astro Angel keep one state machine in their own file. Use that same machine when creating an entity, and when adding or changing a state on an existing one.
+The Player, each Relic Telly, and each Astro Angel keep one state machine in their own file. Use that same machine when creating an entity, and when adding or changing a state on an existing one.
 
 A state is a stretch of behavior with its own movement, picture, or ending: skating, Zapping, Approach, Dispatch. A thing with only one behavior, such as the Cosmic Egg, stays a single `update`. Give it a state machine when a second state appears.
 
-The screen flow — title, play, over, ending — is a separate machine in `src/game.js`. Leave it there.
+The scenes — title, play, over, ending — are a separate machine in `src/scene.js`. Leave it there.
 
 ## Pattern
 
@@ -24,14 +24,14 @@ Each key is the state name. Each value has:
 
 The Run may read `state`. It does not assign it. A transition that sets something up is a method on the entity — `obliterate`, `explode`, `beginApproach`, `dispatch` — so `enter` runs.
 
-Each file owns its change-state function. These scripts share one global scope, so the names stay unique: `changePlayerState`, `changeEnemyState`, `changeAngelState`.
+Each file owns its change-state function. These scripts share one global scope, so the names stay unique: `changePlayerState`, `changeRelicTellyState`, `changeAngelState`.
 
-Enemy shaking, when it is built, is a state between roaming and zapping.
+Relic Telly shaking, when it is built, is a state between roaming and zapping.
 
 ## Why this shape
 
 A frame should be readable: one state. The Player used to run every matching branch in one frame, so skating into braking applied braking immediately, and speeding into braking waited a frame. The state machine makes those the same.
 
-A shared lookup module was set aside. The Player's frame needs tiles and time, the Astro Angel's needs a leader, and the Enemy's needs neither. The states are the behavior. A module that only dispatched would be another surface to learn, and deleting it would leave the three state machines in place.
+A shared lookup module was set aside. The Player's frame needs tiles and time, the Astro Angel's needs a leader, and the Relic Telly's needs neither. The states are the behavior. A module that only dispatched would be another surface to learn, and deleting it would leave the three state machines in place.
 
 Parallel fields updated together — a locomotion slot, an action slot, and a life slot — were set aside. A hit replaces skating. Dispatch replaces follow. Zapping replaces roaming. One state name covers that. The Player remembers the ground state it left so a landing can return to braking or speeding. `scrollSpeed` stays the world's speed.

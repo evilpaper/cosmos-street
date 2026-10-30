@@ -1,4 +1,4 @@
-function makeGame() {
+function makeScene() {
   let state = null;
 
   return {

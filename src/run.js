@@ -17,8 +17,8 @@ const DIFFICULTY_STAGES = [
     eggBudget: 1,
     angelsMaxPerStage: 3,
     angelsMaxActive: 2,
-    enemiesMin: 1,
-    enemySpeedBonus: 0,
+    relicTelliesMin: 1,
+    relicTellySpeedBonus: 0,
     electricityChance: 0.015,
   },
   {
@@ -32,8 +32,8 @@ const DIFFICULTY_STAGES = [
     eggBudget: 1,
     angelsMaxPerStage: 3,
     angelsMaxActive: 2,
-    enemiesMin: 1,
-    enemySpeedBonus: 0.15,
+    relicTelliesMin: 1,
+    relicTellySpeedBonus: 0.15,
     electricityChance: 0.02,
   },
   {
@@ -47,8 +47,8 @@ const DIFFICULTY_STAGES = [
     eggBudget: 1,
     angelsMaxPerStage: 4,
     angelsMaxActive: 3,
-    enemiesMin: 2,
-    enemySpeedBonus: 0.3,
+    relicTelliesMin: 2,
+    relicTellySpeedBonus: 0.3,
     electricityChance: 0.025,
   },
   {
@@ -62,8 +62,8 @@ const DIFFICULTY_STAGES = [
     eggBudget: 2,
     angelsMaxPerStage: 4,
     angelsMaxActive: 3,
-    enemiesMin: 3,
-    enemySpeedBonus: 0.5,
+    relicTelliesMin: 3,
+    relicTellySpeedBonus: 0.5,
     electricityChance: 0.03,
   },
   {
@@ -77,8 +77,8 @@ const DIFFICULTY_STAGES = [
     eggBudget: 2,
     angelsMaxPerStage: 1,
     angelsMaxActive: 1,
-    enemiesMin: 4,
-    enemySpeedBonus: 0.75,
+    relicTelliesMin: 4,
+    relicTellySpeedBonus: 0.75,
     electricityChance: 0.035,
   },
 ];
@@ -98,11 +98,11 @@ function getDifficulty() {
 }
 
 const MIN_DISTANCE_AFTER_EDGE = -100;
-const ENEMY_SPAWN_X = SCREEN_WIDTH + 12;
-const ENEMY_SPAWN_Y_MIN = 48;
-const ENEMY_SPAWN_Y_MAX = 164;
-const ENEMY_SPAWN_GAP_MIN = 80;
-const ENEMY_SPAWN_GAP_MAX = 140;
+const RELIC_TELLY_SPAWN_X = SCREEN_WIDTH + 12;
+const RELIC_TELLY_SPAWN_Y_MIN = 48;
+const RELIC_TELLY_SPAWN_Y_MAX = 164;
+const RELIC_TELLY_SPAWN_GAP_MIN = 80;
+const RELIC_TELLY_SPAWN_GAP_MAX = 140;
 
 function hasPassedLeftEdge(entity) {
   return entity.x + entity.width < MIN_DISTANCE_AFTER_EDGE;
@@ -127,7 +127,7 @@ function makeRun(playingTicks, startTime = 0) {
   let eggs = [];
   let sparkles = [];
   let dotExplosions = [];
-  let enemies = [];
+  let relicTellies = [];
   let score = 0;
   let highScoreUpdated = false;
   let collectibleStageIndex = 0;
@@ -143,7 +143,7 @@ function makeRun(playingTicks, startTime = 0) {
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
   platforms.setMode("playing");
-  enemies.push(makeEnemy(SCREEN_WIDTH * 2, 72));
+  relicTellies.push(makeRelicTelly(SCREEN_WIDTH * 2, 72));
 
   function updateEntities() {
     platforms.update();
@@ -170,17 +170,17 @@ function makeRun(playingTicks, startTime = 0) {
       (egg) => !(hasPassedLeftEdge(egg) || hasPassedTopEdge(egg)),
     );
 
-    for (const enemy of enemies) {
-      enemy.update();
+    for (const relicTelly of relicTellies) {
+      relicTelly.update();
     }
-    enemies = enemies.filter((enemy) => !enemy.isDone());
+    relicTellies = relicTellies.filter((relicTelly) => !relicTelly.isDone());
   }
 
   function draw(screen) {
     platforms.draw(screen);
 
-    for (const enemy of enemies) {
-      enemy.draw(screen);
+    for (const relicTelly of relicTellies) {
+      relicTelly.draw(screen);
     }
 
     for (const sparkle of sparkles) {
@@ -288,36 +288,36 @@ function makeRun(playingTicks, startTime = 0) {
     }
   }
 
-  function enemyYIsTaken(y) {
-    return enemies.some(
-      (enemy) =>
-        enemy.x + enemy.width > 0 && Math.abs(enemy.y - y) < enemy.height,
+  function relicTellyYIsTaken(y) {
+    return relicTellies.some(
+      (relicTelly) =>
+        relicTelly.x + relicTelly.width > 0 && Math.abs(relicTelly.y - y) < relicTelly.height,
     );
   }
 
-  function rollEnemyY() {
+  function rollRelicTellyY() {
     for (let attempt = 0; attempt < 8; attempt++) {
-      const y = randomInRange(ENEMY_SPAWN_Y_MIN, ENEMY_SPAWN_Y_MAX);
-      if (!enemyYIsTaken(y)) {
+      const y = randomInRange(RELIC_TELLY_SPAWN_Y_MIN, RELIC_TELLY_SPAWN_Y_MAX);
+      if (!relicTellyYIsTaken(y)) {
         return y;
       }
     }
-    return randomInRange(ENEMY_SPAWN_Y_MIN, ENEMY_SPAWN_Y_MAX);
+    return randomInRange(RELIC_TELLY_SPAWN_Y_MIN, RELIC_TELLY_SPAWN_Y_MAX);
   }
 
-  function enemySpawnX() {
-    const gap = randomInRange(ENEMY_SPAWN_GAP_MIN, ENEMY_SPAWN_GAP_MAX);
-    const rightmost = enemies.reduce((max, enemy) => Math.max(max, enemy.x), 0);
-    return Math.max(ENEMY_SPAWN_X, rightmost + gap);
+  function relicTellySpawnX() {
+    const gap = randomInRange(RELIC_TELLY_SPAWN_GAP_MIN, RELIC_TELLY_SPAWN_GAP_MAX);
+    const rightmost = relicTellies.reduce((max, relicTelly) => Math.max(max, relicTelly.x), 0);
+    return Math.max(RELIC_TELLY_SPAWN_X, rightmost + gap);
   }
 
-  function spawnEnemy() {
-    enemies.push(makeEnemy(enemySpawnX(), rollEnemyY()));
+  function spawnRelicTelly() {
+    relicTellies.push(makeRelicTelly(relicTellySpawnX(), rollRelicTellyY()));
   }
 
-  function ensureEnemies() {
-    if (enemies.length < getDifficulty().enemiesMin) {
-      spawnEnemy();
+  function ensureRelicTellies() {
+    if (relicTellies.length < getDifficulty().relicTelliesMin) {
+      spawnRelicTelly();
     }
   }
 
@@ -366,16 +366,16 @@ function makeRun(playingTicks, startTime = 0) {
     }
   }
 
-  function destroyOnScreenEnemies() {
+  function destroyOnScreenRelicTellies() {
     let destroyed = 0;
-    for (const enemy of enemies) {
-      if (enemy.state === "exploding") {
+    for (const relicTelly of relicTellies) {
+      if (relicTelly.state === "exploding") {
         continue;
       }
-      if (!overlapsPlayfield(enemy)) {
+      if (!overlapsPlayfield(relicTelly)) {
         continue;
       }
-      enemy.explode();
+      relicTelly.explode();
       destroyed += 1;
     }
     return destroyed;
@@ -391,8 +391,8 @@ function makeRun(playingTicks, startTime = 0) {
       }),
     );
 
-    if (destroyOnScreenEnemies() > 0) {
-      sfx(sounds.enemyKill);
+    if (destroyOnScreenRelicTellies() > 0) {
+      sfx(sounds.relicTellyKill);
     }
   }
 
@@ -404,22 +404,22 @@ function makeRun(playingTicks, startTime = 0) {
     }
   }
 
-  function respawnEnemy(enemy) {
-    enemies.splice(enemies.indexOf(enemy), 1);
+  function respawnRelicTelly(relicTelly) {
+    relicTellies.splice(relicTellies.indexOf(relicTelly), 1);
 
     if (timeUp) {
       return;
     }
 
-    spawnEnemy();
+    spawnRelicTelly();
   }
 
-  function handleEnemyEncounters() {
-    for (let i = enemies.length - 1; i >= 0; i--) {
-      const enemy = enemies[i];
+  function handleRelicTellyEncounters() {
+    for (let i = relicTellies.length - 1; i >= 0; i--) {
+      const relicTelly = relicTellies[i];
       if (
-        enemy.state !== "exploding" &&
-        checkCollision(player, enemy.getHitbox())
+        relicTelly.state !== "exploding" &&
+        checkCollision(player, relicTelly.getHitbox())
       ) {
         if (player.state !== "obliterating") {
           sfx(sounds.crash);
@@ -427,11 +427,11 @@ function makeRun(playingTicks, startTime = 0) {
         player.obliterate();
       }
 
-      if (enemy.x + enemy.width < 0) {
-        if (enemy.state === "exploding") {
-          enemies.splice(i, 1);
+      if (relicTelly.x + relicTelly.width < 0) {
+        if (relicTelly.state === "exploding") {
+          relicTellies.splice(i, 1);
         } else {
-          respawnEnemy(enemy);
+          respawnRelicTelly(relicTelly);
         }
       }
     }
@@ -440,7 +440,7 @@ function makeRun(playingTicks, startTime = 0) {
   function updateInteractions() {
     collectAngels();
     collectEggs();
-    handleEnemyEncounters();
+    handleRelicTellyEncounters();
   }
 
   function playerHasFallenOffScreen() {
@@ -467,7 +467,7 @@ function makeRun(playingTicks, startTime = 0) {
 
   function stepPlaying() {
     ensureCollectibles();
-    ensureEnemies();
+    ensureRelicTellies();
     updateEntities();
     updateInteractions();
     updateVisualEffects();
