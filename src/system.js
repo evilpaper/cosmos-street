@@ -258,7 +258,7 @@ const CHARS_PER_ROW = 13;
  * A map of characters to their x and y coordinates on the font image
  */
 
-function createCharMap() {
+function makeCharMap() {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789.,←↑→↓!+";
   const charMap = {};
 
@@ -272,7 +272,7 @@ function createCharMap() {
   return charMap;
 }
 
-const letters = createCharMap();
+const letters = makeCharMap();
 
 /**
  * Get character position with validation

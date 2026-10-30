@@ -5,7 +5,7 @@
  *   false (default) — each dot keeps one palette color for the whole effect
  *   true — each dot steps through palette colors every frame
  */
-function createDotExplosion(x, y, options = {}) {
+function makeDotExplosion(x, y, options = {}) {
   const { cycleColors = false } = options;
 
   const TOTAL_FRAMES = 40;

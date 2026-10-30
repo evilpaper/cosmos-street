@@ -121,7 +121,7 @@ function overlapsPlayfield(entity) {
   );
 }
 
-function createRun(playingTicks, startTime = 0) {
+function makeRun(playingTicks, startTime = 0) {
   let angels = [];
   let carriedAngels = [];
   let eggs = [];
@@ -143,7 +143,7 @@ function createRun(playingTicks, startTime = 0) {
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
   platforms.setMode("playing");
-  enemies.push(createEnemy(SCREEN_WIDTH * 2, 72));
+  enemies.push(makeEnemy(SCREEN_WIDTH * 2, 72));
 
   function updateEntities() {
     platforms.update();
@@ -259,7 +259,7 @@ function createRun(playingTicks, startTime = 0) {
       angelsSpawnedInStage < diff.angelsMaxPerStage &&
       time - lastAngelSpawnTime >= COLLECTIBLE_SPAWN_COOLDOWN
     ) {
-      const angel = createAngel(platforms.tiles, occupiedSpots);
+      const angel = makeAngel(platforms.tiles, occupiedSpots);
       if (angel) {
         angels.push(angel);
         occupiedSpots.push({
@@ -279,7 +279,7 @@ function createRun(playingTicks, startTime = 0) {
       eggsSpawnedInStage < diff.eggBudget &&
       time - lastEggSpawnTime >= COLLECTIBLE_SPAWN_COOLDOWN
     ) {
-      const egg = createEgg(platforms.tiles, occupiedSpots);
+      const egg = makeEgg(platforms.tiles, occupiedSpots);
       if (egg) {
         eggs.push(egg);
         eggsSpawnedInStage += 1;
@@ -312,7 +312,7 @@ function createRun(playingTicks, startTime = 0) {
   }
 
   function spawnEnemy() {
-    enemies.push(createEnemy(enemySpawnX(), rollEnemyY()));
+    enemies.push(makeEnemy(enemySpawnX(), rollEnemyY()));
   }
 
   function ensureEnemies() {
@@ -362,7 +362,7 @@ function createRun(playingTicks, startTime = 0) {
       if (angel.state !== "idle") continue;
       if (!checkCollision(player, angel.getHitbox())) continue;
       collectAngel(angel);
-      sparkles.push(createSparkle(angel.x, angel.y - 8));
+      sparkles.push(makeSparkle(angel.x, angel.y - 8));
     }
   }
 
@@ -386,7 +386,7 @@ function createRun(playingTicks, startTime = 0) {
     eggs.splice(index, 1);
     sfx(sounds.egg);
     dotExplosions.push(
-      createDotExplosion(egg.x + egg.width / 2, egg.y + egg.height / 2, {
+      makeDotExplosion(egg.x + egg.width / 2, egg.y + egg.height / 2, {
         cycleColors: false,
       }),
     );

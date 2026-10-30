@@ -180,7 +180,7 @@ const enemyStates = {
   exploding: {
     enter(enemy) {
       stopShake(enemy);
-      enemy.explosion = createElectricExplosion(enemy);
+      enemy.explosion = makeElectricExplosion(enemy);
     },
     update(enemy) {
       enemy.x -= scrollSpeed;
@@ -193,7 +193,7 @@ const enemyStates = {
   },
 };
 
-function createEnemy(x, y) {
+function makeEnemy(x, y) {
   const enemy = {
     x: x,
     y: y,
@@ -237,13 +237,13 @@ function createEnemy(x, y) {
   };
 
   /**
-   * createEnemyElectricity(enemy) closes over that enemy object.
+   * makeEnemyElectricity(enemy) closes over that enemy object.
    * On each frame, draw uses target.x / target.y (and width / height for offsets) so the
-   * lightning follows the enemy—same idea as createSkateboardSparkle(player) following the player.
+   * lightning follows the enemy—same idea as makeSkateboardSparkle(player) following the player.
    * The factory has to receive the real enemy instance, not a copy of coordinates.
    */
 
-  enemy.electricity = createEnemyElectricity(enemy);
+  enemy.electricity = makeEnemyElectricity(enemy);
 
   return enemy;
 }

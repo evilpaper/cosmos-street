@@ -2,7 +2,7 @@ const tileSpriteSheet = loadOnce("./images/tiles-sheet.png");
 
 const PLATFORM_START_Y = 156;
 
-function createTile(options = {}) {
+function makeTile(options = {}) {
   const {
     x = 0,
     y = 0,
@@ -43,7 +43,7 @@ function createTile(options = {}) {
   };
 }
 
-function createPlatforms(options = {}) {
+function makePlatforms(options = {}) {
   const { amount = 30 } = options;
 
   const MIN_RUNWAY_RIGHT_EDGE_X = SCREEN_WIDTH + SCREEN_WIDTH / 2;
@@ -56,7 +56,7 @@ function createPlatforms(options = {}) {
 
   for (let i = 0; i < amount; i++) {
     tiles.push(
-      createTile({
+      makeTile({
         x: i * TILE_WIDTH,
         y: PLATFORM_START_Y,
       }),
@@ -95,7 +95,7 @@ function createPlatforms(options = {}) {
 
     for (let i = 0; i < segmentLength; i++) {
       tiles.push(
-        createTile({
+        makeTile({
           x: rightEdgeX + i * TILE_WIDTH,
           y: segmentY,
         }),
@@ -112,7 +112,7 @@ function createPlatforms(options = {}) {
 
     for (let i = 0; i < segementLength; i++) {
       tiles.push(
-        createTile({
+        makeTile({
           x: startX + i * TILE_WIDTH,
           y: 160,
           type: "flat",

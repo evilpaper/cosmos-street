@@ -7,7 +7,7 @@ The Player, each Enemy, and each Astro Angel keep one state machine in their own
 
 A state is a stretch of behavior with its own movement, picture, or ending: skating, Zapping, Approach, Dispatch. A thing with only one behavior, such as the Cosmic Egg, stays a single `update`. Give it a state machine when a second state appears.
 
-The screen flow — press start, playing, game over, ending — is a separate machine in `src/game.js`. Leave it there.
+The screen flow — title, play, over, ending — is a separate machine in `src/game.js`. Leave it there.
 
 ## Pattern
 

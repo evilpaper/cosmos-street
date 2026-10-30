@@ -1,6 +1,6 @@
 const sparkleSpriteSheet = loadOnce("./images/sparkle-sprite-sheet.png");
 
-function createSparkle(x, y) {
+function makeSparkle(x, y) {
   const FRAME_WIDTH = 20;
   const FRAME_HEIGHT = 20;
   const TOTAL_FRAMES = 8;
@@ -76,7 +76,7 @@ const skateboardSparkleSpriteSheet = loadOnce(
   "./images/skateboard-sparkle-sprite-sheet.png",
 );
 
-function createSkateboardSparkle(target) {
+function makeSkateboardSparkle(target) {
   if (!target) {
     return;
   }

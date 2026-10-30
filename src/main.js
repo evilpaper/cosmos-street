@@ -11,9 +11,9 @@ const PLAYTIME_IN_SECONDS = 30;
 const PLAYING_TIME = 60 * PLAYTIME_IN_SECONDS; // First number is ticks. Remember, we do 60 times per second
 
 /**
- * TILE_WIDTH AND TILE_HEIGHT are shared between the functions createTile() and createPlatforms()
+ * TILE_WIDTH AND TILE_HEIGHT are shared between the functions makeTile() and makePlatforms()
  * Therefore defined as global constants.
- * The natural would otherwise be to define them inside the createTile() and createPlatforms() functions.
+ * The natural would otherwise be to define them inside the makeTile() and makePlatforms() functions.
  */
 
 const TILE_WIDTH = 16;
@@ -33,29 +33,22 @@ let scrollSpeed = SCROLL_SPEED_SKATING;
 let startMessage;
 let deadTimer;
 
-const GAME_STATE = {
-  PRESS_START: "PRESS_START",
-  PLAYING: "PLAYING",
-  GAME_OVER: "GAME_OVER",
-  ENDING: "ENDING",
-};
-
-const game = createGame();
+const game = makeGame();
 const states = {};
 
 /**
  * General utilities
  */
 
-function createStars(amount) {
+function makeStars(amount) {
   const result = [];
 
   for (let i = 0; i < amount / 2; i++) {
-    result.push(createStar());
+    result.push(makeStar());
   }
 
   for (let i = 0; i < amount; i++) {
-    result.push(createStar({ small: true }));
+    result.push(makeStar({ small: true }));
   }
 
   return result;
@@ -129,15 +122,15 @@ function firstTimeStarting() {
  * The theme follows the run's clock. Outside a run it starts from the beginning.
  */
 function themePosition() {
-  return game.state.name === GAME_STATE.PLAYING ? time / FPS : 0;
+  return game.state.name === "play" ? time / FPS : 0;
 }
 
 /**
  * States
  */
 
-states[GAME_STATE.PRESS_START] = {
-  name: GAME_STATE.PRESS_START,
+states.title = {
+  name: "title",
   enter() {
     titleTime = 0;
     title.y = 64;
@@ -176,12 +169,12 @@ states[GAME_STATE.PRESS_START] = {
   },
 };
 
-states[GAME_STATE.PLAYING] = {
-  name: GAME_STATE.PLAYING,
+states.play = {
+  name: "play",
   enter() {
     resetInput();
     playTheme();
-    run = createRun(PLAYING_TIME, pendingRunTime);
+    run = makeRun(PLAYING_TIME, pendingRunTime);
     pendingRunTime = 0;
   },
   update() {
@@ -194,7 +187,7 @@ states[GAME_STATE.PLAYING] = {
     }
 
     if (frame.timeUp) {
-      game.setState(states[GAME_STATE.ENDING]);
+      game.setState(states.ending);
     }
   },
   draw(_, screen) {
@@ -227,8 +220,8 @@ states[GAME_STATE.PLAYING] = {
   },
 };
 
-states[GAME_STATE.GAME_OVER] = {
-  name: GAME_STATE.GAME_OVER,
+states.over = {
+  name: "over",
   enter() {
     deadTimer = 0;
   },
@@ -265,8 +258,8 @@ states[GAME_STATE.GAME_OVER] = {
   },
 };
 
-states[GAME_STATE.ENDING] = {
-  name: GAME_STATE.ENDING,
+states.ending = {
+  name: "ending",
   enter() {
     resetInput();
     platforms.setMode("ending");
@@ -321,22 +314,22 @@ states[GAME_STATE.ENDING] = {
  */
 
 function startGame() {
-  game.setState(states[GAME_STATE.PLAYING]);
+  game.setState(states.play);
 }
 
 function resetGame() {
   init();
-  game.setState(states[GAME_STATE.PRESS_START]);
+  game.setState(states.title);
 }
 
 function restartGame() {
   pendingRunTime = 1;
   init();
-  game.setState(states[GAME_STATE.PLAYING]);
+  game.setState(states.play);
 }
 
 /**
- * Leave PLAYING or ENDING for GAME_OVER (fall off screen or player death).
+ * Leave play or ending for over (fall off screen or player death).
  * @param {{ playDropSound?: boolean }} [options]
  */
 function enterGameOverFromPlaying({ playDropSound = false } = {}) {
@@ -345,7 +338,7 @@ function enterGameOverFromPlaying({ playDropSound = false } = {}) {
   }
   resetInput();
   scrollSpeed = 0;
-  game.setState(states[GAME_STATE.GAME_OVER]);
+  game.setState(states.over);
 }
 
 /**
@@ -367,15 +360,15 @@ function enterGameOverFromPlaying({ playDropSound = false } = {}) {
  * State transitions are handled by startGame() and resetGame() functions.
  */
 function init() {
-  stars = createStars(30);
-  platforms = createPlatforms(60);
+  stars = makeStars(30);
+  platforms = makePlatforms(60);
   scrollSpeed = SCROLL_SPEED_SKATING;
   player.reset();
   startMessage = getStartMessage();
   deadTimer = 0;
 
   if (!game.state) {
-    game.setState(states[GAME_STATE.PRESS_START]);
+    game.setState(states.title);
   }
 }
 

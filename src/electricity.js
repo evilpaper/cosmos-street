@@ -2,7 +2,7 @@ const electricitySpriteSheet = loadOnce(
   "./images/electricity-sprite-sheet.png",
 );
 
-function createEnemyElectricity(target) {
+function makeEnemyElectricity(target) {
   if (!target) {
     return;
   }

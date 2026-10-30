@@ -90,7 +90,7 @@ const angelStates = {
   },
 };
 
-function createAngel(tiles, occupiedSpots = []) {
+function makeAngel(tiles, occupiedSpots = []) {
   const initialPosition = findSpreadCollectiblePosition(tiles, occupiedSpots, {
     spriteWidth: ANGEL_WIDTH,
     spriteHeight: ANGEL_HEIGHT,

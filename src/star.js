@@ -1,7 +1,7 @@
 // No need to load the sprite sheet multiple times.
 const starSpriteSheet = loadOnce("./images/star-sprite-sheet.png");
 
-function createStar(options = {}) {
+function makeStar(options = {}) {
   const { small = false } = options;
 
   const FRAME_WIDTH = 7;

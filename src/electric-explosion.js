@@ -4,9 +4,9 @@ const electricExplosionSpriteSheet = loadOnce(
 
 /**
  * Death explosion drawn on an enemy while it is Exploding.
- * Follows target.x / target.y (centered), same idea as createEnemyElectricity.
+ * Follows target.x / target.y (centered), same idea as makeEnemyElectricity.
  */
-function createElectricExplosion(target) {
+function makeElectricExplosion(target) {
   const FRAME_WIDTH = 35;
   const FRAME_HEIGHT = 35;
   const TOTAL_FRAMES = 4;

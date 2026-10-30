@@ -1,4 +1,4 @@
-function createGame() {
+function makeGame() {
   let state = null;
 
   return {
