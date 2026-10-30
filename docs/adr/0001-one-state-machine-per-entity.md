@@ -30,8 +30,8 @@ Enemy shaking, when it is built, is a state between roaming and zapping.
 
 ## Why this shape
 
-A frame should be readable: one state. The Player used to run every matching branch in one frame, so skating into breaking applied breaking immediately, and speeding into breaking waited a frame. The state machine makes those the same.
+A frame should be readable: one state. The Player used to run every matching branch in one frame, so skating into braking applied braking immediately, and speeding into braking waited a frame. The state machine makes those the same.
 
 A shared lookup module was set aside. The Player's frame needs tiles and time, the Astro Angel's needs a leader, and the Enemy's needs neither. The states are the behavior. A module that only dispatched would be another surface to learn, and deleting it would leave the three state machines in place.
 
-Parallel fields updated together — a locomotion slot, an action slot, and a life slot — were set aside. A hit replaces skating. Dispatch replaces follow. Zapping replaces roaming. One state name covers that. The Player remembers the ground state it left so a landing can return to breaking or speeding. `scrollSpeed` stays the world's speed.
+Parallel fields updated together — a locomotion slot, an action slot, and a life slot — were set aside. A hit replaces skating. Dispatch replaces follow. Zapping replaces roaming. One state name covers that. The Player remembers the ground state it left so a landing can return to braking or speeding. `scrollSpeed` stays the world's speed.

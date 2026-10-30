@@ -18,10 +18,10 @@ function setSkating(player) {
   scrollSpeed = SCROLL_SPEED_SKATING;
 }
 
-function setBreaking(player) {
+function setBraking(player) {
   player.totalFrames = 1;
-  player.ground = "breaking";
-  scrollSpeed = SCROLL_SPEED_BREAKING;
+  player.ground = "braking";
+  scrollSpeed = SCROLL_SPEED_BRAKING;
 }
 
 function setSpeeding(player) {
@@ -103,7 +103,7 @@ const playerStates = {
     update(player) {
       setSkating(player);
       if (input.left) {
-        return changePlayerState(player, "breaking");
+        return changePlayerState(player, "braking");
       }
       if (input.up) {
         return player.jump(player.jumpStrength);
@@ -131,15 +131,15 @@ const playerStates = {
     draw: drawCrouched,
   },
 
-  breaking: {
-    enter: setBreaking,
+  braking: {
+    enter: setBraking,
     update(player) {
-      setBreaking(player);
+      setBraking(player);
       if (!input.left) {
         return changePlayerState(player, "skating");
       }
       if (input.up) {
-        return player.jump(player.jumpStrengthBreaking);
+        return player.jump(player.jumpStrengthBraking);
       }
     },
     draw: drawCrouched,
@@ -153,7 +153,7 @@ const playerStates = {
         return changePlayerState(player, "skating");
       }
       if (input.left) {
-        return changePlayerState(player, "breaking");
+        return changePlayerState(player, "braking");
       }
       if (input.up) {
         return player.jump(player.jumpStrengthSpeeding);
@@ -188,7 +188,7 @@ const player = {
   dx: 0,
 
   jumpStrength: 7.6,
-  jumpStrengthBreaking: 7.6,
+  jumpStrengthBraking: 7.6,
   jumpStrengthSpeeding: 7.8,
   state: "skating",
   ground: "skating",

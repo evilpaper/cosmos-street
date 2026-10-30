@@ -55,7 +55,7 @@ function makeStar(options = {}) {
       // 2) move left
       x -= scrollSpeed
         ? scrollSpeed * speedFactor
-        : SCROLL_SPEED_BREAKING * speedFactor;
+        : SCROLL_SPEED_BRAKING * speedFactor;
 
       // 3) move to right side of the screen after it has scrolled off the left side
       if (x < LAST_X) {
