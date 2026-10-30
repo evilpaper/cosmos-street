@@ -14,8 +14,8 @@ const ANGEL_DEPART_SPEED = 2;
 const ANGEL_FLOAT_HEIGHT = 10;
 
 /**
- * One table for every Astro Angel. enter runs on the transition;
- * update runs on the next update() call.
+ * exit and enter run once, at this switch: clear the old state, prepare the new one.
+ * The new state's update starts on the next update() call, then every frame it stays there.
  */
 function changeAngelState(angel, next) {
   if (angel.state === next) {

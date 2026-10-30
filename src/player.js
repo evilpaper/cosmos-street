@@ -1,6 +1,6 @@
 /**
- * One table for the Player. enter runs on the transition;
- * update runs on the next update() call.
+ * exit and enter run once, at this switch: clear the old state, prepare the new one.
+ * The new state's update starts on the next update() call, then every frame it stays there.
  */
 function changePlayerState(player, next) {
   if (player.state === next) {
