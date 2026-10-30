@@ -1,6 +1,8 @@
 /**
  * One Run: the lists and the frame order for a single play.
- * Playing, Game over, and Ending all call step().
+ * Playing, Over, and Ending all call step() on the same run,
+ * so the world keeps moving after the scene changes.
+ * The scene switches itself from the report step() returns.
  */
 
 const COLLECTIBLE_SPAWN_COOLDOWN = 3 * 60;
@@ -83,6 +85,11 @@ const DIFFICULTY_STAGES = [
   },
 ];
 
+/**
+ * Shared with the rest of the cart.
+ * The theme reads time. highScore stays so the title can show it.
+ * run is the one the player and the scenes call.
+ */
 let time = 0;
 let highScore = 0;
 let run = null;
@@ -176,6 +183,9 @@ function makeRun(playingTicks, startTime = 0) {
     relicTellies = relicTellies.filter((relicTelly) => !relicTelly.isDone());
   }
 
+  /**
+   * The world for this run. The scene draws its own text around this.
+   */
   function draw(screen) {
     platforms.draw(screen);
 
@@ -333,6 +343,10 @@ function makeRun(playingTicks, startTime = 0) {
     dotExplosions = dotExplosions.filter((explosion) => !explosion.isDone());
   }
 
+  /**
+   * The player calls this from outside the run.
+   * The carried Astro Angels live here, so the spend happens here.
+   */
   function spendAirJump() {
     const angel = carriedAngels.shift();
     if (!angel) {
@@ -459,6 +473,11 @@ function makeRun(playingTicks, startTime = 0) {
     return player.x > 256;
   }
 
+  /**
+   * Remember the failed end on the frame the run accepts it.
+   * fell is fixed then. A crash can keep falling afterwards,
+   * and the drop sound is only for a fall.
+   */
   function latchOver() {
     over = true;
     fell = playerHasFallenOffScreen();
@@ -508,6 +527,11 @@ function makeRun(playingTicks, startTime = 0) {
     updateVisualEffects();
   }
 
+  /**
+   * One frame of whichever phase the scene is in.
+   * Returns the report for the frame just stepped, so Playing and Ending
+   * can leave before the next draw.
+   */
   function step() {
     time += 1;
 
@@ -522,6 +546,18 @@ function makeRun(playingTicks, startTime = 0) {
     return report();
   }
 
+  /**
+   * Facts Playing, Over, and Ending may see.
+   * They change scene from these, and they draw the HUD from these.
+   *
+   * over and fell stay as latchOver wrote them.
+   * failed is the player right now, dead or off the screen.
+   * Death becomes true during a step, and over is latched on the
+   * step after that, so Ending can see failed while over is still false.
+   *
+   * flatTile and skatedOff are the street right now.
+   * The flat tile arrives first. The player skates off on a later frame.
+   */
   function report() {
     return {
       time,
@@ -540,6 +576,10 @@ function makeRun(playingTicks, startTime = 0) {
     step,
     draw,
     spendAirJump,
+    /**
+     * The same snapshot step() returns.
+     * Draw reads it. Ending reads it before calling step().
+     */
     get report() {
       return report();
     },
