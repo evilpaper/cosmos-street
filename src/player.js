@@ -2,13 +2,13 @@
  * One table for the Player. enter runs on the transition;
  * update runs on the next update() call.
  */
-function transitionPlayer(player, next) {
+function changePlayerState(player, next) {
   if (player.state === next) {
     return;
   }
-  playerHandlers[player.state]?.exit?.(player);
+  playerStates[player.state]?.exit?.(player);
   player.state = next;
-  playerHandlers[next].enter?.(player);
+  playerStates[next].enter?.(player);
 }
 
 function holdSkating(player) {
@@ -97,22 +97,22 @@ function drawObliterating(player, screen) {
   );
 }
 
-const playerHandlers = {
+const playerStates = {
   skating: {
     enter: holdSkating,
     update(player) {
       holdSkating(player);
       if (input.left) {
-        return transitionPlayer(player, "breaking");
+        return changePlayerState(player, "breaking");
       }
       if (input.up) {
         return player.jump(player.jumpStrength);
       }
       if (input.right) {
-        return transitionPlayer(player, "speeding");
+        return changePlayerState(player, "speeding");
       }
       if (player.dy > 1) {
-        return transitionPlayer(player, "jumping");
+        return changePlayerState(player, "jumping");
       }
     },
     draw: drawSkating,
@@ -136,7 +136,7 @@ const playerHandlers = {
     update(player) {
       holdBreaking(player);
       if (!input.left) {
-        return transitionPlayer(player, "skating");
+        return changePlayerState(player, "skating");
       }
       if (input.up) {
         return player.jump(player.jumpStrengthBreaking);
@@ -150,10 +150,10 @@ const playerHandlers = {
     update(player) {
       holdSpeeding(player);
       if (!input.right) {
-        return transitionPlayer(player, "skating");
+        return changePlayerState(player, "skating");
       }
       if (input.left) {
-        return transitionPlayer(player, "breaking");
+        return changePlayerState(player, "breaking");
       }
       if (input.up) {
         return player.jump(player.jumpStrengthSpeeding);
@@ -203,7 +203,7 @@ const player = {
     this.dx = 0;
     this.isDead = false;
     this.state = "skating";
-    playerHandlers.skating.enter(this);
+    playerStates.skating.enter(this);
   },
 
   jump(jumpStrength) {
@@ -212,7 +212,7 @@ const player = {
     input.up = false;
     input.upJustPressed = false;
     sfx(sounds.jump, 0.8);
-    transitionPlayer(this, "jumping");
+    changePlayerState(this, "jumping");
   },
 
   tryAirJump() {
@@ -226,7 +226,7 @@ const player = {
   },
 
   obliterate() {
-    transitionPlayer(this, "obliterating");
+    changePlayerState(this, "obliterating");
   },
 
   update(tiles, time) {
@@ -235,7 +235,7 @@ const player = {
       return;
     }
 
-    playerHandlers[this.state].update(this);
+    playerStates[this.state].update(this);
 
     // Store previous position BEFORE movement
     // Used to determine collision type (landing vs wall)
@@ -273,7 +273,7 @@ const player = {
         landed = true;
 
         if (this.state !== "obliterating") {
-          transitionPlayer(this, this.ground);
+          changePlayerState(this, this.ground);
         }
       } else if (!landed) {
         // Player came from the side → wall collision
@@ -302,7 +302,7 @@ const player = {
   },
 
   draw(screen) {
-    playerHandlers[this.state].draw(this, screen);
+    playerStates[this.state].draw(this, screen);
 
     /**
      *

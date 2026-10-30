@@ -14,4 +14,4 @@ Single-context: one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agent
 
 ### Entities
 
-When creating or modifying an entity that has modes of behavior, use one handler table. See `docs/adr/0001-one-handler-table-per-entity.md`.
+When creating or modifying an entity that has states, use one state machine. See `docs/adr/0001-one-state-machine-per-entity.md`.

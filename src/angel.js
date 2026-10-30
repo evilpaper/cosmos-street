@@ -17,13 +17,13 @@ const ANGEL_FLOAT_HEIGHT = 10;
  * One table for every Astro Angel. enter runs on the transition;
  * update runs on the next update() call.
  */
-function transitionAngel(angel, next) {
+function changeAngelState(angel, next) {
   if (angel.state === next) {
     return;
   }
-  angelHandlers[angel.state]?.exit?.(angel);
+  angelStates[angel.state]?.exit?.(angel);
   angel.state = next;
-  angelHandlers[next].enter?.(angel);
+  angelStates[next].enter?.(angel);
 }
 
 function angelBob(angel) {
@@ -37,7 +37,7 @@ function slotBehind(angel, leader) {
   };
 }
 
-const angelHandlers = {
+const angelStates = {
   idle: {
     update(angel) {
       angel.x -= scrollSpeed;
@@ -68,7 +68,7 @@ const angelHandlers = {
         angel.approachStartY + (slot.y - angel.approachStartY) * eased - arc;
 
       if (t >= 1) {
-        transitionAngel(angel, "follow");
+        changeAngelState(angel, "follow");
       }
     },
   },
@@ -127,15 +127,15 @@ function createAngel(tiles, occupiedSpots = []) {
     },
 
     beginApproach() {
-      transitionAngel(this, "approach");
+      changeAngelState(this, "approach");
     },
 
     dispatch() {
-      transitionAngel(this, "dispatch");
+      changeAngelState(this, "dispatch");
     },
 
     update(leader) {
-      angelHandlers[this.state].update(this, leader);
+      angelStates[this.state].update(this, leader);
     },
 
     draw(screen) {

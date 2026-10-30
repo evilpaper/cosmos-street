@@ -15,16 +15,16 @@ const ENEMY_SHAKE_DURATION_MAX = 25;
 const ENEMY_SHAKE_TICKS_PER_POSITION = 3;
 
 /**
- * One table for every Enemy. enter runs on the transition;
- * update runs on the next update() call.
+ * exit and enter run once, at this switch: clear the old state, prepare the new one.
+ * The new state's update starts on the next update() call, then every frame it stays there.
  */
-function transitionEnemy(enemy, next) {
+function changeEnemyState(enemy, next) {
   if (enemy.state === next) {
     return;
   }
-  enemyHandlers[enemy.state]?.exit?.(enemy);
+  enemyStates[enemy.state]?.exit?.(enemy);
   enemy.state = next;
-  enemyHandlers[next].enter?.(enemy);
+  enemyStates[next].enter?.(enemy);
 }
 
 /**
@@ -92,6 +92,10 @@ function drawEnemySprite(enemy, screen) {
   // screen.strokeStyle = "magenta";
   // screen.strokeRect(enemy.getHitbox().x, enemy.getHitbox().y, enemy.getHitbox().width, enemy.getHitbox().height);
 
+  /**
+   * End of debugging code.
+   */
+
   screen.drawImage(
     enemySpriteSheet,
     spriteFrameX,
@@ -105,14 +109,14 @@ function drawEnemySprite(enemy, screen) {
   );
 }
 
-const enemyHandlers = {
+const enemyStates = {
   roaming: {
     update(enemy) {
       moveEnemyLeft(enemy);
       advanceEnemySprite(enemy);
 
       if (Math.random() < getDifficulty().electricityChance) {
-        transitionEnemy(enemy, "shaking");
+        changeEnemyState(enemy, "shaking");
       }
     },
     draw: drawEnemySprite,
@@ -138,7 +142,7 @@ const enemyHandlers = {
        * and it keeps this shake.
        */
       if (enemy.shakeTicks <= 0) {
-        transitionEnemy(enemy, "zapping");
+        changeEnemyState(enemy, "zapping");
         return;
       }
       enemy.shakeTicks -= 1;
@@ -156,14 +160,13 @@ const enemyHandlers = {
       }
       enemy.electricity.reset();
     },
-    exit(enemy) {},
     update(enemy) {
       moveEnemyLeft(enemy);
       advanceEnemySprite(enemy);
 
       // Stop after the electricity animation finishes.
       if (enemy.electricity.isDone()) {
-        transitionEnemy(enemy, "roaming");
+        changeEnemyState(enemy, "roaming");
         return;
       }
       enemy.electricity.update();
@@ -217,7 +220,7 @@ function createEnemy(x, y) {
     },
 
     explode() {
-      transitionEnemy(this, "exploding");
+      changeEnemyState(this, "exploding");
     },
 
     isDone() {
@@ -225,11 +228,11 @@ function createEnemy(x, y) {
     },
 
     update() {
-      enemyHandlers[this.state].update(this);
+      enemyStates[this.state].update(this);
     },
 
     draw(screen) {
-      enemyHandlers[this.state].draw(this, screen);
+      enemyStates[this.state].draw(this, screen);
     },
   };
 
