@@ -11,27 +11,27 @@ function changePlayerState(player, next) {
   playerStates[next].enter?.(player);
 }
 
-function holdSkating(player) {
+function setSkating(player) {
   player.totalFrames = 2;
   player.ticksPerFrame = 16;
   player.ground = "skating";
   scrollSpeed = SCROLL_SPEED_SKATING;
 }
 
-function holdBreaking(player) {
+function setBreaking(player) {
   player.totalFrames = 1;
   player.ground = "breaking";
   scrollSpeed = SCROLL_SPEED_BREAKING;
 }
 
-function holdSpeeding(player) {
+function setSpeeding(player) {
   player.totalFrames = 2;
   player.ticksPerFrame = 8;
   player.ground = "speeding";
   scrollSpeed = SCROLL_SPEED_SPEEDING;
 }
 
-function holdObliterating(player) {
+function setObliterating(player) {
   player.totalFrames = 6;
   player.ticksPerFrame = 6;
   player.dy = 0;
@@ -99,9 +99,9 @@ function drawObliterating(player, screen) {
 
 const playerStates = {
   skating: {
-    enter: holdSkating,
+    enter: setSkating,
     update(player) {
-      holdSkating(player);
+      setSkating(player);
       if (input.left) {
         return changePlayerState(player, "breaking");
       }
@@ -132,9 +132,9 @@ const playerStates = {
   },
 
   breaking: {
-    enter: holdBreaking,
+    enter: setBreaking,
     update(player) {
-      holdBreaking(player);
+      setBreaking(player);
       if (!input.left) {
         return changePlayerState(player, "skating");
       }
@@ -146,9 +146,9 @@ const playerStates = {
   },
 
   speeding: {
-    enter: holdSpeeding,
+    enter: setSpeeding,
     update(player) {
-      holdSpeeding(player);
+      setSpeeding(player);
       if (!input.right) {
         return changePlayerState(player, "skating");
       }
@@ -163,8 +163,8 @@ const playerStates = {
   },
 
   obliterating: {
-    enter: holdObliterating,
-    update: holdObliterating,
+    enter: setObliterating,
+    update: setObliterating,
     draw: drawObliterating,
   },
 };
