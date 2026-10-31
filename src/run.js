@@ -135,6 +135,7 @@ function makeRun(playingTicks, startTime = 0) {
   let carriedAngels = [];
   let eggs = [];
   let sparkles = [];
+  let compulsions = [];
   let cosmicEggExplosions = [];
   let relicTellies = [];
   let score = 0;
@@ -156,6 +157,7 @@ function makeRun(playingTicks, startTime = 0) {
 
   function updateEntities() {
     platforms.update();
+
     player.update(platforms.tiles, time);
 
     for (const angel of angels) {
@@ -197,6 +199,10 @@ function makeRun(playingTicks, startTime = 0) {
 
     for (const sparkle of sparkles) {
       sparkle.draw(screen);
+    }
+
+    for (const compulsion of compulsions) {
+      compulsion.draw(screen);
     }
 
     for (const explosion of cosmicEggExplosions) {
@@ -303,7 +309,8 @@ function makeRun(playingTicks, startTime = 0) {
   function relicTellyYIsTaken(y) {
     return relicTellies.some(
       (relicTelly) =>
-        relicTelly.x + relicTelly.width > 0 && Math.abs(relicTelly.y - y) < relicTelly.height,
+        relicTelly.x + relicTelly.width > 0 &&
+        Math.abs(relicTelly.y - y) < relicTelly.height,
     );
   }
 
@@ -318,8 +325,14 @@ function makeRun(playingTicks, startTime = 0) {
   }
 
   function relicTellySpawnX() {
-    const gap = randomInRange(RELIC_TELLY_SPAWN_GAP_MIN, RELIC_TELLY_SPAWN_GAP_MAX);
-    const rightmost = relicTellies.reduce((max, relicTelly) => Math.max(max, relicTelly.x), 0);
+    const gap = randomInRange(
+      RELIC_TELLY_SPAWN_GAP_MIN,
+      RELIC_TELLY_SPAWN_GAP_MAX,
+    );
+    const rightmost = relicTellies.reduce(
+      (max, relicTelly) => Math.max(max, relicTelly.x),
+      0,
+    );
     return Math.max(RELIC_TELLY_SPAWN_X, rightmost + gap);
   }
 
@@ -339,10 +352,17 @@ function makeRun(playingTicks, startTime = 0) {
     }
     sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
 
+    for (const compulsion of compulsions) {
+      compulsion.update();
+    }
+    compulsions = compulsions.filter((compulsion) => !compulsion.isDone());
+
     for (const explosion of cosmicEggExplosions) {
       explosion.update();
     }
-    cosmicEggExplosions = cosmicEggExplosions.filter((explosion) => !explosion.isDone());
+    cosmicEggExplosions = cosmicEggExplosions.filter(
+      (explosion) => !explosion.isDone(),
+    );
   }
 
   /**
