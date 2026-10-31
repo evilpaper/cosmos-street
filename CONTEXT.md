@@ -61,3 +61,7 @@ _Avoid_: theme colors, CSS variables, Game Boy greens
 **Cosmic egg explosion**:
 A short burst of filled circles from a point — large in the center, then outward and smaller until they stop and vanish. Palette colors only; may keep one color or cycle colors each frame.
 _Avoid_: particle system, VFX, circfill burst, dot explosion
+
+**Relic Telly explosion**:
+The Relic Telly's death animation while Exploding — a short sprite-sheet burst centered on the machine, inert to the player.
+_Avoid_: electric explosion, particle system, VFX

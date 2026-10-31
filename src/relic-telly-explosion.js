@@ -1,12 +1,12 @@
-const electricExplosionSpriteSheet = loadOnce(
+const relicTellyExplosionSpriteSheet = loadOnce(
   "./images/electric-explosion-sprite-sheet.png",
 );
 
 /**
- * Death explosion drawn on a Relic Telly while it is Exploding.
+ * Relic Telly explosion — death animation drawn while Exploding.
  * Follows target.x / target.y (centered), same idea as makeRelicTellyElectricity.
  */
-function makeElectricExplosion(target) {
+function makeRelicTellyExplosion(target) {
   const FRAME_WIDTH = 35;
   const FRAME_HEIGHT = 35;
   const TOTAL_FRAMES = 4;
@@ -53,7 +53,7 @@ function makeElectricExplosion(target) {
       const drawY = Math.round(target.y + OFFSET_Y);
 
       screen.drawImage(
-        electricExplosionSpriteSheet,
+        relicTellyExplosionSpriteSheet,
         spriteFrameX,
         spriteFrameY,
         FRAME_WIDTH,

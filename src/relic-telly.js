@@ -181,7 +181,7 @@ const relicTellyStates = {
   exploding: {
     enter(relicTelly) {
       stopShake(relicTelly);
-      relicTelly.explosion = makeElectricExplosion(relicTelly);
+      relicTelly.explosion = makeRelicTellyExplosion(relicTelly);
     },
     update(relicTelly) {
       relicTelly.x -= scrollSpeed;
