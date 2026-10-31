@@ -11,6 +11,33 @@ const PLAYTIME_IN_SECONDS = 30;
 const PLAYING_TIME = 60 * PLAYTIME_IN_SECONDS; // First number is ticks. Remember, we do 60 times per second
 
 /**
+ * Play HUD timing (ticks).
+ */
+const HINT_BLINK_RANGES = [
+  [6, 12],
+  [16, 20],
+  [24, 30],
+];
+const START_MESSAGE_START = 24;
+const START_MESSAGE_END = 64;
+const SCORE_VISIBLE_AFTER = 10;
+
+/**
+ * HUD layout (pixels). Banner lines sit around vertical middle.
+ */
+const BANNER_GAP = 4;
+const BANNER_TITLE_Y = SCREEN_HEIGHT / 2 - FONT_HEIGHT - BANNER_GAP;
+const BANNER_SUBTITLE_Y = SCREEN_HEIGHT / 2 + BANNER_GAP;
+const HUD_START_HINT_Y = 130;
+const HUD_SOUND_HINT_Y = 210;
+const HUD_SOUND_STATUS_Y = 188;
+const HUD_TITLE_HIGH_SCORE_Y = 44;
+const HUD_SCORE_PLAY_Y = 12;
+const HUD_SCORE_ENDING_Y = 36;
+const HUD_END_PROMPT_Y = 186;
+const HUD_END_TITLE_PROMPT_Y = 202;
+
+/**
  * TILE_WIDTH AND TILE_HEIGHT are shared between the functions makeTile() and makePlatforms()
  * Therefore defined as global constants.
  * The natural would otherwise be to define them inside the makeTile() and makePlatforms() functions.
@@ -39,6 +66,15 @@ const states = {};
 /**
  * General utilities
  */
+
+function inRanges(value, ranges) {
+  for (const [start, end] of ranges) {
+    if (value > start && value < end) {
+      return true;
+    }
+  }
+  return false;
+}
 
 function makeStars(amount) {
   const result = [];
@@ -154,18 +190,18 @@ states.title = {
   draw(_, screen) {
     platforms.draw(screen);
     if (highScore > 0) {
-      print("High Score " + highScore, "center", 44);
+      print("High Score " + highScore, "center", HUD_TITLE_HIGH_SCORE_Y);
     }
     title.draw(screen);
-    print("press any ←,→,↑ to start", "center", 130);
+    print("press any ←,→,↑ to start", "center", HUD_START_HINT_Y);
     if (isSoundUnavailable()) {
-      print("Sound unavailable", "center", 188);
+      print("Sound unavailable", "center", HUD_SOUND_STATUS_Y);
     } else if (isSoundOn()) {
-      print("Sound ON", "center", 188);
+      print("Sound ON", "center", HUD_SOUND_STATUS_Y);
     } else {
-      print("Sound OFF", "center", 188);
+      print("Sound OFF", "center", HUD_SOUND_STATUS_Y);
     }
-    print("press S to toggle sound", "center", 210);
+    print("press S to toggle sound", "center", HUD_SOUND_HINT_Y);
   },
 };
 
@@ -197,25 +233,21 @@ states.play = {
     if (firstTimeStarting()) {
       title.draw(screen);
 
-      if (
-        (frame.time > 6 && frame.time < 12) ||
-        (frame.time > 16 && frame.time < 20) ||
-        (frame.time > 24 && frame.time < 30)
-      ) {
-        print("press any ←,→,↑ to start", "center", 130);
-        print("press S to toggle sound", "center", 210);
+      if (inRanges(frame.time, HINT_BLINK_RANGES)) {
+        print("press any ←,→,↑ to start", "center", HUD_START_HINT_Y);
+        print("press S to toggle sound", "center", HUD_SOUND_HINT_Y);
       }
     }
 
-    if (frame.time > 24 && frame.time < 64) {
-      print(startMessage, "center", 128 - 4 - 8);
+    if (frame.time > START_MESSAGE_START && frame.time < START_MESSAGE_END) {
+      print(startMessage, "center", BANNER_TITLE_Y);
       if (highScore > 0) {
-        print("High Score " + highScore, "center", 128 + 4);
+        print("High Score " + highScore, "center", BANNER_SUBTITLE_Y);
       }
     }
 
-    if (frame.time > 10) {
-      print("" + frame.score, "center", 12);
+    if (frame.time > SCORE_VISIBLE_AFTER) {
+      print("" + frame.score, "center", HUD_SCORE_PLAY_Y);
     }
   },
 };
@@ -246,14 +278,14 @@ states.over = {
 
     if (deadTimer > 0) {
       if (frame.highScoreUpdated) {
-        print("Game Over", "center", 128 - 4 - 8);
-        print("New high " + highScore, "center", 128 + 4);
+        print("Game Over", "center", BANNER_TITLE_Y);
+        print("New high " + highScore, "center", BANNER_SUBTITLE_Y);
       } else {
         print("Game Over", "center", "middle");
       }
 
-      print("Restart ← or →", "center", 186);
-      print("Title screen ↑", "center", 202);
+      print("Restart ← or →", "center", HUD_END_PROMPT_Y);
+      print("Title screen ↑", "center", HUD_END_TITLE_PROMPT_Y);
     }
   },
 };
@@ -293,19 +325,19 @@ states.ending = {
 
     if (frame.flatTile) {
       if (frame.highScoreUpdated) {
-        print("You made it!", "center", 128 - 4 - 8);
-        print("New high " + highScore, "center", 128 + 4);
+        print("You made it!", "center", BANNER_TITLE_Y);
+        print("New high " + highScore, "center", BANNER_SUBTITLE_Y);
       } else {
         print("You made it!", "center", "middle");
       }
 
       if (frame.skatedOff) {
-        print("Play again ← or →", "center", 186);
-        print("Back to title ↑", "center", 202);
+        print("Play again ← or →", "center", HUD_END_PROMPT_Y);
+        print("Back to title ↑", "center", HUD_END_TITLE_PROMPT_Y);
       }
     }
 
-    print("" + frame.score, "center", 36);
+    print("" + frame.score, "center", HUD_SCORE_ENDING_Y);
   },
 };
 

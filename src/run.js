@@ -105,6 +105,8 @@ function getDifficulty() {
 }
 
 const MIN_DISTANCE_AFTER_EDGE = -100;
+const FALL_OFF_Y = 500;
+const FLAT_TILE_ARRIVE_X = 24;
 const RELIC_TELLY_SPAWN_X = SCREEN_WIDTH + 12;
 const RELIC_TELLY_SPAWN_Y_MIN = 48;
 const RELIC_TELLY_SPAWN_Y_MAX = 164;
@@ -458,7 +460,7 @@ function makeRun(playingTicks, startTime = 0) {
   }
 
   function playerHasFallenOffScreen() {
-    return player.y > 500;
+    return player.y > FALL_OFF_Y;
   }
 
   function isGameOver() {
@@ -466,7 +468,9 @@ function makeRun(playingTicks, startTime = 0) {
   }
 
   function flatTileReached() {
-    return platforms.tiles.some((tile) => tile.type === "flat" && tile.x < 24);
+    return platforms.tiles.some(
+      (tile) => tile.type === "flat" && tile.x < FLAT_TILE_ARRIVE_X,
+    );
   }
 
   function skatedOff() {
@@ -516,7 +520,7 @@ function makeRun(playingTicks, startTime = 0) {
 
     if (flatTileReached()) {
       scrollSpeed = 0;
-      player.dx = 1.8;
+      player.dx = SCROLL_SPEED_SKATING;
     }
 
     if (!skatedOff()) {
