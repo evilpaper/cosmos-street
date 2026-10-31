@@ -478,11 +478,11 @@ function boxesTooClose(a, b, gap) {
   );
 }
 
-const COLLECTIBLE_SPAWN_GAP = 96;
+const SPAWN_GAP = 96;
 
-function findSpreadCollectiblePosition(tiles, occupiedSpots, options = {}) {
+function findSpreadSpawnPosition(tiles, occupiedSpots, options = {}) {
   const {
-    minGap = COLLECTIBLE_SPAWN_GAP,
+    minGap = SPAWN_GAP,
     minX = SCREEN_WIDTH + 32,
     spriteWidth,
     spriteHeight,

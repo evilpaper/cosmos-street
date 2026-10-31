@@ -9,7 +9,7 @@ const RELIC_TELLY_HITBOX_HEIGHT = 16;
 const RELIC_TELLY_SPEED_MIN = 0.25;
 const RELIC_TELLY_SPEED_MAX = 1;
 const RELIC_TELLY_SHAKE_DISTANCE_MIN = 1;
-const RELIC_TELLY_SHAKE_DISTANCE_MAX = 2;
+const RELIC_TELLY_SHAKE_DISTANCE_MAX = 1;
 const RELIC_TELLY_SHAKE_DURATION_MIN = 15;
 const RELIC_TELLY_SHAKE_DURATION_MAX = 25;
 const RELIC_TELLY_SHAKE_TICKS_PER_POSITION = 3;
@@ -50,7 +50,8 @@ function shakeAmount() {
  */
 function shake(relicTelly) {
   if (relicTelly.shakeStepTick <= 0) {
-    relicTelly.shakeY = relicTelly.shakeY === 0 ? shakeAmount() : -relicTelly.shakeY;
+    relicTelly.shakeY =
+      relicTelly.shakeY === 0 ? shakeAmount() : -relicTelly.shakeY;
     relicTelly.shakeStepTick = RELIC_TELLY_SHAKE_TICKS_PER_POSITION;
   }
   relicTelly.shakeStepTick -= 1;
@@ -202,7 +203,8 @@ function makeRelicTelly(x, y) {
     height: RELIC_TELLY_HEIGHT,
     state: "roaming",
     speed:
-      RELIC_TELLY_SPEED_MIN + Math.random() * (RELIC_TELLY_SPEED_MAX - RELIC_TELLY_SPEED_MIN),
+      RELIC_TELLY_SPEED_MIN +
+      Math.random() * (RELIC_TELLY_SPEED_MAX - RELIC_TELLY_SPEED_MIN),
     animationTick: 0,
     animationFrameIndex: 0,
     shakeY: 0,

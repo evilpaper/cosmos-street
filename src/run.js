@@ -5,7 +5,7 @@
  * The scene switches itself from the report step() returns.
  */
 
-const COLLECTIBLE_SPAWN_COOLDOWN = 3 * 60;
+const SPAWN_COOLDOWN = 3 * 60;
 
 const DIFFICULTY_STAGES = [
   {
@@ -137,11 +137,11 @@ function makeRun(playingTicks, startTime = 0) {
   let relicTellies = [];
   let score = 0;
   let highScoreUpdated = false;
-  let collectibleStageIndex = 0;
+  let spawnStageIndex = 0;
   let eggsSpawnedInStage = 0;
   let angelsSpawnedInStage = 0;
-  let lastEggSpawnTime = -COLLECTIBLE_SPAWN_COOLDOWN;
-  let lastAngelSpawnTime = -COLLECTIBLE_SPAWN_COOLDOWN;
+  let lastEggSpawnTime = -SPAWN_COOLDOWN;
+  let lastAngelSpawnTime = -SPAWN_COOLDOWN;
   let over = false;
   let fell = false;
   let timeUp = false;
@@ -212,7 +212,7 @@ function makeRun(playingTicks, startTime = 0) {
     }
   }
 
-  function getCollectibleStageIndex() {
+  function getSpawnStageIndex() {
     let idx = 0;
     for (let i = 0; i < DIFFICULTY_STAGES.length; i++) {
       if (time >= DIFFICULTY_STAGES[i].time) {
@@ -222,25 +222,25 @@ function makeRun(playingTicks, startTime = 0) {
     return idx;
   }
 
-  function resetCollectibleBudgetOnStageChange() {
-    const idx = getCollectibleStageIndex();
-    if (idx !== collectibleStageIndex) {
-      collectibleStageIndex = idx;
+  function resetSpawnBudgetOnStageChange() {
+    const idx = getSpawnStageIndex();
+    if (idx !== spawnStageIndex) {
+      spawnStageIndex = idx;
       eggsSpawnedInStage = 0;
       angelsSpawnedInStage = 0;
-      lastEggSpawnTime = time - COLLECTIBLE_SPAWN_COOLDOWN;
-      lastAngelSpawnTime = time - COLLECTIBLE_SPAWN_COOLDOWN;
+      lastEggSpawnTime = time - SPAWN_COOLDOWN;
+      lastAngelSpawnTime = time - SPAWN_COOLDOWN;
     }
   }
 
   function stageMidpointReached() {
-    const start = DIFFICULTY_STAGES[collectibleStageIndex].time;
-    const next = DIFFICULTY_STAGES[collectibleStageIndex + 1];
+    const start = DIFFICULTY_STAGES[spawnStageIndex].time;
+    const next = DIFFICULTY_STAGES[spawnStageIndex + 1];
     const end = next ? next.time : playingTicks;
     return time >= start + (end - start) / 2;
   }
 
-  function occupiedCollectibleSpots() {
+  function occupiedSpawnSpots() {
     const spots = [];
     for (const egg of eggs) {
       spots.push({ x: egg.x, y: egg.y, width: egg.width, height: egg.height });
@@ -257,17 +257,17 @@ function makeRun(playingTicks, startTime = 0) {
     return spots;
   }
 
-  function ensureCollectibles() {
-    resetCollectibleBudgetOnStageChange();
+  function ensureSpawns() {
+    resetSpawnBudgetOnStageChange();
     const diff = getDifficulty();
-    let occupiedSpots = occupiedCollectibleSpots();
+    let occupiedSpots = occupiedSpawnSpots();
 
     const idleAngels = angels.filter((angel) => angel.state === "idle");
 
     if (
       idleAngels.length < diff.angelsMaxActive &&
       angelsSpawnedInStage < diff.angelsMaxPerStage &&
-      time - lastAngelSpawnTime >= COLLECTIBLE_SPAWN_COOLDOWN
+      time - lastAngelSpawnTime >= SPAWN_COOLDOWN
     ) {
       const angel = makeAngel(platforms.tiles, occupiedSpots);
       if (angel) {
@@ -287,7 +287,7 @@ function makeRun(playingTicks, startTime = 0) {
       angelsSpawnedInStage >= 1 &&
       stageMidpointReached() &&
       eggsSpawnedInStage < diff.eggBudget &&
-      time - lastEggSpawnTime >= COLLECTIBLE_SPAWN_COOLDOWN
+      time - lastEggSpawnTime >= SPAWN_COOLDOWN
     ) {
       const egg = makeEgg(platforms.tiles, occupiedSpots);
       if (egg) {
@@ -451,7 +451,7 @@ function makeRun(playingTicks, startTime = 0) {
     }
   }
 
-  function updateInteractions() {
+  function resolveEncounters() {
     collectAngels();
     collectEggs();
     handleRelicTellyEncounters();
@@ -485,10 +485,10 @@ function makeRun(playingTicks, startTime = 0) {
   }
 
   function stepPlaying() {
-    ensureCollectibles();
+    ensureSpawns();
     ensureRelicTellies();
     updateEntities();
-    updateInteractions();
+    resolveEncounters();
     updateVisualEffects();
 
     if (isGameOver()) {
@@ -521,7 +521,7 @@ function makeRun(playingTicks, startTime = 0) {
 
     if (!skatedOff()) {
       updateEntities();
-      updateInteractions();
+      resolveEncounters();
     }
 
     updateVisualEffects();

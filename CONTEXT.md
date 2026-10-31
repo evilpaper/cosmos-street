@@ -6,7 +6,7 @@ Cosmos Street is an old-school auto-runner inspired by the skateboard sequences 
 
 **Astro Angel**:
 A companion the player carries. Each Astro Angel is one air jump.
-_Avoid_: companion, shield
+_Avoid_: companion, shield, collectible
 
 **Air jump**:
 A jump the player makes while already airborne, on a new press. Each one spends the closest carried Astro Angel (the oldest still carried).
@@ -14,7 +14,7 @@ _Avoid_: double jump
 
 **Cosmic Egg**:
 A pickup. Collecting one destroys every Relic Telly overlapping the playfield. Not involved in scoring.
-_Avoid_: score pickup
+_Avoid_: score pickup, collectible
 
 **Score**:
 Points added when collecting an Astro Angel, equal to how many Astro Angels are carried after that collect.

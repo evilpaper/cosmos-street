@@ -1,4 +1,4 @@
-const collectibleSpriteSheet = loadOnce(
+const eggSpriteSheet = loadOnce(
   "./images/collectibles-sprite-sheet.png",
 );
 
@@ -10,7 +10,7 @@ function makeEgg(tiles, occupiedSpots = []) {
   const SPRITE_SHEET_FRAME_X = 32;
   const SPRITE_SHEET_FRAME_Y = 0;
 
-  const position = findSpreadCollectiblePosition(tiles, occupiedSpots, {
+  const position = findSpreadSpawnPosition(tiles, occupiedSpots, {
     spriteWidth: WIDTH,
     spriteHeight: HEIGHT,
   });
@@ -46,7 +46,7 @@ function makeEgg(tiles, occupiedSpots = []) {
       const drawY = Math.round(this.y);
 
       screen.drawImage(
-        collectibleSpriteSheet,
+        eggSpriteSheet,
         spriteFrameX,
         spriteFrameY,
         WIDTH,
