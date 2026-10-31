@@ -1,11 +1,11 @@
 /**
- * Dot explosion — short burst of circfill dots from a point.
+ * Cosmic egg explosion — short burst of circfill dots from a point.
  *
  * options.cycleColors:
  *   false (default) — each dot keeps one palette color for the whole effect
  *   true — each dot steps through palette colors every frame
  */
-function makeDotExplosion(x, y, options = {}) {
+function makeCosmicEggExplosion(x, y, options = {}) {
   const { cycleColors = false } = options;
 
   const TOTAL_FRAMES = 40;

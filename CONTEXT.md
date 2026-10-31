@@ -58,6 +58,6 @@ _Avoid_: antagonist, robot
 The four colors allowed on the playfield, ordered dark to light: void, purple, magenta, light. Anything drawn on the canvas uses only these.
 _Avoid_: theme colors, CSS variables, Game Boy greens
 
-**Dot explosion**:
+**Cosmic egg explosion**:
 A short burst of filled circles from a point — large in the center, then outward and smaller until they stop and vanish. Palette colors only; may keep one color or cycle colors each frame.
-_Avoid_: particle system, VFX, circfill burst
+_Avoid_: particle system, VFX, circfill burst, dot explosion

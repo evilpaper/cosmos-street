@@ -135,7 +135,7 @@ function makeRun(playingTicks, startTime = 0) {
   let carriedAngels = [];
   let eggs = [];
   let sparkles = [];
-  let dotExplosions = [];
+  let cosmicEggExplosions = [];
   let relicTellies = [];
   let score = 0;
   let highScoreUpdated = false;
@@ -199,7 +199,7 @@ function makeRun(playingTicks, startTime = 0) {
       sparkle.draw(screen);
     }
 
-    for (const explosion of dotExplosions) {
+    for (const explosion of cosmicEggExplosions) {
       explosion.draw();
     }
 
@@ -339,10 +339,10 @@ function makeRun(playingTicks, startTime = 0) {
     }
     sparkles = sparkles.filter((sparkle) => !sparkle.isDone());
 
-    for (const explosion of dotExplosions) {
+    for (const explosion of cosmicEggExplosions) {
       explosion.update();
     }
-    dotExplosions = dotExplosions.filter((explosion) => !explosion.isDone());
+    cosmicEggExplosions = cosmicEggExplosions.filter((explosion) => !explosion.isDone());
   }
 
   /**
@@ -401,8 +401,8 @@ function makeRun(playingTicks, startTime = 0) {
     const egg = eggs[index];
     eggs.splice(index, 1);
     sfx(sounds.egg);
-    dotExplosions.push(
-      makeDotExplosion(egg.x + egg.width / 2, egg.y + egg.height / 2, {
+    cosmicEggExplosions.push(
+      makeCosmicEggExplosion(egg.x + egg.width / 2, egg.y + egg.height / 2, {
         cycleColors: false,
       }),
     );
