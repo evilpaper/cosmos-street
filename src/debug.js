@@ -11,7 +11,7 @@ let fpsOverlayHasSample = false;
 
 /**
  * Draws callback-rate FPS at the bottom of the canvas (after game content).
- * Uses global `print` and constants from system.js (SCREEN_HEIGHT, FONT_HEIGHT).
+ * Uses global `print` and constants from engine.js (SCREEN_HEIGHT, FONT_HEIGHT).
  */
 function drawFps() {
   if (!SHOW_FPS) {
