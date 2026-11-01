@@ -1,6 +1,6 @@
-const compulsionSpriteSheet = loadOnce("./images/compulsion-sprite-sheet.png");
+const plumeSpriteSheet = loadOnce("./images/plume-sprite-sheet.png");
 
-function makeCompulsion(x, y) {
+function makePlume(x, y) {
   const FRAME_WIDTH = 16;
   const FRAME_HEIGHT = 25;
   const TOTAL_FRAMES = 6;
