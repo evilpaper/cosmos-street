@@ -127,7 +127,6 @@ core browser security boundary.
 - Let the Astro Angels start chatting and singing together.
 - Add stuff in the background.
 - Refactor collision. Allow player to jump through platforms.
-- Add a frame by frame stepper, to debug.
 - Refactor input to use button and button presses like PICO-8.
 - Add jetpacks to player, like Mars Mars.
 
