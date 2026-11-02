@@ -125,9 +125,11 @@ core browser security boundary.
 ## Future Plans
 
 - Let the Astro Angels start chatting and singing together.
-- Make Relic Tellies shake before they zap off their electricity. Add a shaking state between roaming and zapping.
 - Add stuff in the background.
 - Refactor collision. Allow player to jump through platforms.
+- Add a frame by frame stepper, to debug.
+- Refactor input to use button and button presses like PICO-8.
+- Add jetpacks to player, like Mars Mars.
 
 ## License
 
