@@ -12,6 +12,8 @@ const KEY_CODES = {
   SOUND_TOGGLE: "KeyS",
   RESET: "KeyR",
   PAUSE: "KeyP",
+  FRAME_STEP: "KeyF",
+  CONTINUE: "KeyC",
 };
 
 const breakButton = document.getElementById("break");
@@ -77,6 +79,16 @@ input.keyListener = function ({ code, type, repeat = false }) {
     case KEY_CODES.PAUSE:
       if (eventType && !repeat) {
         input.pause = true;
+      }
+      break;
+    case KEY_CODES.FRAME_STEP:
+      if (eventType && !repeat) {
+        input.frameStep = true;
+      }
+      break;
+    case KEY_CODES.CONTINUE:
+      if (eventType && !repeat) {
+        input.continue = true;
       }
       break;
   }

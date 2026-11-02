@@ -42,6 +42,14 @@ _Avoid_: outro, credits
 The single on/off switch for everything the player hears, the theme and all sound effects. Off on every page load; only the player turns it on.
 _Avoid_: audio, mute
 
+**Freeze**:
+The game standing still: nothing moves and nothing is heard. P or F enters it; P or C leaves it.
+_Avoid_: f mode, step mode
+
+**Frame step**:
+While frozen, advancing the game by exactly one frame. Held keys count on that frame.
+_Avoid_: tick, advance
+
 **Theme**:
 The level's song. It starts again at the beginning of every run and follows the run's clock, so turning sound on mid-run joins the song where it would be. Outside a run it simply loops.
 _Avoid_: music, soundtrack

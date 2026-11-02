@@ -428,7 +428,20 @@ function update() {
     paused = !paused;
   }
 
-  if (paused) {
+  if (input.continue) {
+    input.continue = false;
+    paused = false;
+  }
+
+  // F freezes a running game; each further F advances one frame.
+  let frameStep = false;
+  if (input.frameStep) {
+    input.frameStep = false;
+    frameStep = paused;
+    paused = true;
+  }
+
+  if (paused && !frameStep) {
     return;
   }
 
