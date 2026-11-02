@@ -44,7 +44,7 @@ function makePlume(x, y) {
       const drawY = Math.round(posY);
 
       screen.drawImage(
-        compulsionSpriteSheet,
+        plumeSpriteSheet,
         spriteFrameX,
         0,
         FRAME_WIDTH,
