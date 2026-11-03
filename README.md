@@ -124,11 +124,10 @@ core browser security boundary.
 
 ## Future Plans
 
+- Add jetpacks to the player, like Mars Mars.
 - Let the Astro Angels start chatting and singing together.
 - Add stuff in the background.
-- Refactor collision. Allow player to jump through platforms.
-- Refactor input to use button and button presses like PICO-8.
-- Add jetpacks to player, like Mars Mars.
+- Refactor collision. Allow player to jump through platforms?
 
 ## License
 

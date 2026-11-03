@@ -47,6 +47,19 @@ const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 
 /**
+ * Control buttons work during Freeze, so they are polled every frame.
+ * Play buttons are polled only on frames the game runs.
+ */
+const CONTROL_BUTTONS = [
+  BUTTONS.SOUND,
+  BUTTONS.RESET,
+  BUTTONS.PAUSE,
+  BUTTONS.FRAME_STEP,
+  BUTTONS.CONTINUE,
+];
+const PLAY_BUTTONS = [BUTTONS.LEFT, BUTTONS.RIGHT, BUTTONS.UP];
+
+/**
  * Mutables
  */
 
@@ -170,7 +183,6 @@ states.title = {
   enter() {
     titleTime = 0;
     title.y = 64;
-    resetInput();
     // Platforms only slide in on first load, not when returning to the title.
     platforms.setMode("intro", { slideIn: !titleShown });
     titleShown = true;
@@ -183,7 +195,7 @@ states.title = {
 
     platforms.update();
 
-    if (hasAnyDirectionInput()) {
+    if (btnp(BUTTONS.LEFT) || btnp(BUTTONS.RIGHT) || btnp(BUTTONS.UP)) {
       startGame();
     }
   },
@@ -208,7 +220,6 @@ states.title = {
 states.play = {
   name: "play",
   enter() {
-    resetInput();
     playTheme();
     run = makeRun(PLAYING_TIME, pendingRunTime);
     pendingRunTime = 0;
@@ -260,12 +271,12 @@ states.over = {
   update() {
     deadTimer += 1;
 
-    if (input.left || input.right) {
+    if (btnp(BUTTONS.LEFT) || btnp(BUTTONS.RIGHT)) {
       restartGame();
       return;
     }
 
-    if (input.up) {
+    if (btnp(BUTTONS.UP)) {
       resetGame();
       return;
     }
@@ -293,7 +304,6 @@ states.over = {
 states.ending = {
   name: "ending",
   enter() {
-    resetInput();
     platforms.setMode("ending");
   },
   update() {
@@ -306,12 +316,12 @@ states.ending = {
     }
 
     if (run.report.flatTile && run.report.skatedOff) {
-      if (input.left || input.right) {
+      if (btnp(BUTTONS.LEFT) || btnp(BUTTONS.RIGHT)) {
         restartGame();
         return;
       }
 
-      if (input.up) {
+      if (btnp(BUTTONS.UP)) {
         resetGame();
         return;
       }
@@ -368,7 +378,6 @@ function enterGameOverFromPlaying({ playDropSound = false } = {}) {
   if (playDropSound) {
     sfx(sounds.drop);
   }
-  resetInput();
   scrollSpeed = 0;
   scene.setState(states.over);
 }
@@ -411,32 +420,29 @@ function init() {
  */
 
 function update() {
-  if (input.soundToggle) {
+  pollInput(CONTROL_BUTTONS);
+
+  if (btnp(BUTTONS.SOUND)) {
     toggleSound(themePosition);
-    input.soundToggle = false;
   }
 
-  if (input.reset) {
-    input.reset = false;
+  if (btnp(BUTTONS.RESET)) {
     resetGame();
   }
 
   syncAudioWithGamePaused(paused);
 
-  if (input.pause) {
-    input.pause = false;
+  if (btnp(BUTTONS.PAUSE)) {
     paused = !paused;
   }
 
-  if (input.continue) {
-    input.continue = false;
+  if (btnp(BUTTONS.CONTINUE)) {
     paused = false;
   }
 
   // F freezes a running game; each further F advances one frame.
   let frameStep = false;
-  if (input.frameStep) {
-    input.frameStep = false;
+  if (btnp(BUTTONS.FRAME_STEP)) {
     frameStep = paused;
     paused = true;
   }
@@ -444,6 +450,10 @@ function update() {
   if (paused && !frameStep) {
     return;
   }
+
+  // Polled only on frames the game runs, so a press made while frozen
+  // is still a new press on the stepped frame.
+  pollInput(PLAY_BUTTONS);
 
   // The stars are ever-present in the background.
   for (const star of stars) {

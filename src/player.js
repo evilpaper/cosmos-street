@@ -102,13 +102,13 @@ const playerStates = {
     enter: setSkating,
     update(player) {
       setSkating(player);
-      if (input.left) {
+      if (btn(BUTTONS.LEFT)) {
         return changePlayerState(player, "braking");
       }
-      if (input.up) {
+      if (btn(BUTTONS.UP)) {
         return player.jump(player.jumpStrength);
       }
-      if (input.right) {
+      if (btn(BUTTONS.RIGHT)) {
         return changePlayerState(player, "speeding");
       }
       if (player.dy > 1) {
@@ -124,7 +124,7 @@ const playerStates = {
     },
     update(player) {
       player.totalFrames = 1;
-      if (input.upJustPressed) {
+      if (btnp(BUTTONS.UP)) {
         player.tryAirJump();
       }
     },
@@ -135,10 +135,10 @@ const playerStates = {
     enter: setBraking,
     update(player) {
       setBraking(player);
-      if (!input.left) {
+      if (!btn(BUTTONS.LEFT)) {
         return changePlayerState(player, "skating");
       }
-      if (input.up) {
+      if (btn(BUTTONS.UP)) {
         return player.jump(player.jumpStrengthBraking);
       }
     },
@@ -149,13 +149,13 @@ const playerStates = {
     enter: setSpeeding,
     update(player) {
       setSpeeding(player);
-      if (!input.right) {
+      if (!btn(BUTTONS.RIGHT)) {
         return changePlayerState(player, "skating");
       }
-      if (input.left) {
+      if (btn(BUTTONS.LEFT)) {
         return changePlayerState(player, "braking");
       }
-      if (input.up) {
+      if (btn(BUTTONS.UP)) {
         return player.jump(player.jumpStrengthSpeeding);
       }
     },
@@ -208,18 +208,11 @@ const player = {
 
   jump(jumpStrength) {
     this.dy = -jumpStrength;
-    // Consume input to require fresh key press for next jump
-    input.up = false;
-    input.upJustPressed = false;
     sfx(sounds.jump, 0.8);
     changePlayerState(this, "jumping");
   },
 
   tryAirJump() {
-    if (!input.upJustPressed) {
-      return;
-    }
-    input.upJustPressed = false;
     if (run?.spendAirJump()) {
       this.jump(this.jumpStrength);
     }

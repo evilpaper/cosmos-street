@@ -1,106 +1,94 @@
-const input = {
-  upJustPressed: false,
+/**
+ * Input works like PICO-8's btn and btnp.
+ *
+ * Keyboard and touch events only record which buttons are held.
+ * pollInput() copies that into a snapshot, and the game reads only the snapshot:
+ * btn is true while a button is down, btnp only on the poll where it went down.
+ */
+const BUTTONS = {
+  LEFT: "left",
+  RIGHT: "right",
+  UP: "up",
+  SOUND: "sound",
+  RESET: "reset",
+  PAUSE: "pause",
+  FRAME_STEP: "frameStep",
+  CONTINUE: "continue",
 };
 
-let upHeld = false;
-
-// Key code constants for better readability
-const KEY_CODES = {
-  UP: "ArrowUp",
-  RIGHT: "ArrowRight",
-  LEFT: "ArrowLeft",
-  SOUND_TOGGLE: "KeyS",
-  RESET: "KeyR",
-  PAUSE: "KeyP",
-  FRAME_STEP: "KeyF",
-  CONTINUE: "KeyC",
+const KEY_TO_BUTTON = {
+  ArrowLeft: BUTTONS.LEFT,
+  ArrowRight: BUTTONS.RIGHT,
+  ArrowUp: BUTTONS.UP,
+  KeyS: BUTTONS.SOUND,
+  KeyR: BUTTONS.RESET,
+  KeyP: BUTTONS.PAUSE,
+  KeyF: BUTTONS.FRAME_STEP,
+  KeyC: BUTTONS.CONTINUE,
 };
 
-const breakButton = document.getElementById("break");
-const speedUpButton = document.getElementById("speed-up");
-const jumpButton = document.getElementById("jump");
-const soundToggleButton = document.getElementById("toggle-sound");
-const resetButton = document.getElementById("reset");
-const pauseButton = document.getElementById("pause");
-
-const BUTTON_BY_CODE = {
-  [KEY_CODES.LEFT]: breakButton,
-  [KEY_CODES.UP]: jumpButton,
-  [KEY_CODES.RIGHT]: speedUpButton,
-  [KEY_CODES.SOUND_TOGGLE]: soundToggleButton,
-  [KEY_CODES.RESET]: resetButton,
-  [KEY_CODES.PAUSE]: pauseButton,
+const BUTTON_ELEMENTS = {
+  [BUTTONS.LEFT]: document.getElementById("break"),
+  [BUTTONS.UP]: document.getElementById("jump"),
+  [BUTTONS.RIGHT]: document.getElementById("speed-up"),
+  [BUTTONS.SOUND]: document.getElementById("toggle-sound"),
+  [BUTTONS.RESET]: document.getElementById("reset"),
+  [BUTTONS.PAUSE]: document.getElementById("pause"),
 };
 
-function setButtonPressed(code, pressed) {
-  BUTTON_BY_CODE[code]?.classList.toggle("pressed", pressed);
+const heldButtons = new Set();
+// A press and release between two polls still counts as down on the next poll.
+const buttonsPressedSincePoll = new Set();
+
+const currentButtons = {};
+const previousButtons = {};
+
+for (const button of Object.values(BUTTONS)) {
+  currentButtons[button] = false;
+  previousButtons[button] = false;
+}
+
+function pressButton(button) {
+  heldButtons.add(button);
+  buttonsPressedSincePoll.add(button);
+  BUTTON_ELEMENTS[button]?.classList.add("pressed");
+}
+
+function releaseButton(button) {
+  heldButtons.delete(button);
+  BUTTON_ELEMENTS[button]?.classList.remove("pressed");
 }
 
 /**
- * code: string
- * type: string
+ * Take a new snapshot of the given buttons. The old snapshot becomes previous,
+ * so btnp is measured against the last poll of that same button.
  */
-input.keyListener = function ({ code, type, repeat = false }) {
-  const eventType = type === "keydown";
-  setButtonPressed(code, eventType);
-
-  switch (code) {
-    case KEY_CODES.LEFT:
-      input.left = eventType;
-      break;
-    case KEY_CODES.UP:
-      if (eventType) {
-        if (!upHeld) {
-          input.upJustPressed = true;
-        }
-        upHeld = true;
-        input.up = true;
-      } else {
-        upHeld = false;
-        input.up = false;
-        input.upJustPressed = false;
-      }
-      break;
-    case KEY_CODES.RIGHT:
-      input.right = eventType;
-      break;
-    case KEY_CODES.SOUND_TOGGLE:
-      // Only a new press toggles; update() clears the flag once handled.
-      if (eventType && !repeat) {
-        input.soundToggle = true;
-      }
-      break;
-    case KEY_CODES.RESET:
-      // Only a new press resets; update() clears the flag once handled.
-      if (eventType && !repeat) {
-        input.reset = true;
-      }
-      break;
-    case KEY_CODES.PAUSE:
-      if (eventType && !repeat) {
-        input.pause = true;
-      }
-      break;
-    case KEY_CODES.FRAME_STEP:
-      if (eventType && !repeat) {
-        input.frameStep = true;
-      }
-      break;
-    case KEY_CODES.CONTINUE:
-      if (eventType && !repeat) {
-        input.continue = true;
-      }
-      break;
+function pollInput(buttons) {
+  for (const button of buttons) {
+    previousButtons[button] = currentButtons[button];
+    currentButtons[button] =
+      heldButtons.has(button) || buttonsPressedSincePoll.has(button);
+    buttonsPressedSincePoll.delete(button);
   }
-};
+}
+
+function btn(button) {
+  return currentButtons[button];
+}
+
+function btnp(button) {
+  return currentButtons[button] && !previousButtons[button];
+}
 
 // Keyboard events
 
 document.addEventListener(
   "keydown",
   (event) => {
-    const code = event.code;
-    input.keyListener({ code, type: "keydown", repeat: event.repeat });
+    const button = KEY_TO_BUTTON[event.code];
+    if (button) {
+      pressButton(button);
+    }
   },
   { passive: true },
 );
@@ -108,8 +96,10 @@ document.addEventListener(
 document.addEventListener(
   "keyup",
   (event) => {
-    const code = event.code;
-    input.keyListener({ code, type: "keyup" });
+    const button = KEY_TO_BUTTON[event.code];
+    if (button) {
+      releaseButton(button);
+    }
   },
   { passive: true },
 );
@@ -119,26 +109,14 @@ document.addEventListener(
 // Recalculate control state from every currently active touch.
 // Browser gestures are disabled so touches remain dedicated to the game.
 
-function setTouchAction(code, isActive) {
-  input.keyListener({
-    code,
-    type: isActive ? "keydown" : "keyup",
-  });
-}
+const TOUCH_CONTROLS = Object.entries(BUTTON_ELEMENTS).map(
+  ([button, element]) => ({ button, element }),
+);
 
-const TOUCH_CONTROLS = [
-  { button: breakButton, code: KEY_CODES.LEFT },
-  { button: jumpButton, code: KEY_CODES.UP },
-  { button: speedUpButton, code: KEY_CODES.RIGHT },
-  { button: soundToggleButton, code: KEY_CODES.SOUND_TOGGLE },
-  { button: resetButton, code: KEY_CODES.RESET },
-  { button: pauseButton, code: KEY_CODES.PAUSE },
-];
+let activeTouchButtons = new Set();
 
-let activeTouchCodes = new Set();
-
-function touchHitsButton(touch, button) {
-  const rect = button.getBoundingClientRect();
+function touchHitsElement(touch, element) {
+  const rect = element.getBoundingClientRect();
 
   return (
     touch.clientX >= rect.left &&
@@ -148,39 +126,42 @@ function touchHitsButton(touch, button) {
   );
 }
 
-function getActiveTouchCodes(touches) {
-  const activeCodes = new Set();
+function getActiveTouchButtons(touches) {
+  const activeButtons = new Set();
 
   for (const touch of Array.from(touches)) {
     for (const control of TOUCH_CONTROLS) {
-      if (touchHitsButton(touch, control.button)) {
-        activeCodes.add(control.code);
+      if (touchHitsElement(touch, control.element)) {
+        activeButtons.add(control.button);
       }
     }
   }
 
-  return activeCodes;
+  return activeButtons;
 }
 
-function reconcileTouchCodes(nextActiveCodes) {
-  for (const control of TOUCH_CONTROLS) {
-    const wasActive = activeTouchCodes.has(control.code);
-    const isActive = nextActiveCodes.has(control.code);
+function reconcileTouchButtons(nextActiveButtons) {
+  for (const { button } of TOUCH_CONTROLS) {
+    const wasActive = activeTouchButtons.has(button);
+    const isActive = nextActiveButtons.has(button);
 
     if (wasActive === isActive) {
       continue;
     }
 
-    setTouchAction(control.code, isActive);
+    if (isActive) {
+      pressButton(button);
+    } else {
+      releaseButton(button);
+    }
   }
 
-  activeTouchCodes = nextActiveCodes;
+  activeTouchButtons = nextActiveButtons;
 }
 
 function handleTouchEvent(event) {
   event.preventDefault();
-  const nextActiveCodes = getActiveTouchCodes(event.touches);
-  reconcileTouchCodes(nextActiveCodes);
+  reconcileTouchButtons(getActiveTouchButtons(event.touches));
 }
 
 const TOUCH_EVENT_TYPES = [
@@ -194,18 +175,4 @@ for (const eventType of TOUCH_EVENT_TYPES) {
   window.addEventListener(eventType, handleTouchEvent, {
     passive: false,
   });
-}
-
-// Helper functions
-
-function hasAnyDirectionInput() {
-  return input.left || input.right || input.up;
-}
-
-function resetInput() {
-  input.left = false;
-  input.right = false;
-  input.up = false;
-  input.upJustPressed = false;
-  upHeld = false;
 }

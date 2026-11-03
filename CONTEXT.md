@@ -47,7 +47,7 @@ The game standing still: nothing moves and nothing is heard. P or F enters it; P
 _Avoid_: f mode, step mode
 
 **Frame step**:
-While frozen, advancing the game by exactly one frame. Held keys count on that frame.
+While frozen, advancing the game by exactly one frame. Held keys count on that frame, and a key pressed while frozen counts as a new press on it.
 _Avoid_: tick, advance
 
 **Theme**:
