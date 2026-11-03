@@ -1,56 +1,57 @@
 const plumeSpriteSheet = loadOnce("./images/plume-sprite-sheet.png");
 
-function makePlume(x, y) {
+/**
+ * Jetpack exhaust. Starts when the jetpack fires and repeats while it stays on.
+ * Once the jetpack stops, the current cycle still plays to its last frame.
+ */
+function makePlume() {
   const FRAME_WIDTH = 16;
   const FRAME_HEIGHT = 25;
   const TOTAL_FRAMES = 6;
-  const TICKS_PER_FRAME = 6;
+  const TICKS_PER_FRAME = 3;
 
   let animationTick = 0;
   let animationFrameIndex = 0;
-  let posX = x;
-  let posY = y;
-  let done = false;
+  let playing = false;
 
   return {
-    isDone() {
-      return done;
-    },
+    width: FRAME_WIDTH,
 
-    update() {
-      if (done) {
+    update(jetpackOn) {
+      if (!playing) {
+        if (!jetpackOn) {
+          return;
+        }
+        playing = true;
+        animationTick = 0;
+        animationFrameIndex = 0;
         return;
       }
-
-      posX -= scrollSpeed;
 
       animationTick += 1;
       if (animationTick >= TICKS_PER_FRAME) {
         animationTick = 0;
         animationFrameIndex += 1;
         if (animationFrameIndex >= TOTAL_FRAMES) {
-          done = true;
+          animationFrameIndex = 0;
+          playing = jetpackOn;
         }
       }
     },
 
-    draw(screen) {
-      if (done) {
+    draw(screen, x, y) {
+      if (!playing) {
         return;
       }
 
-      const spriteFrameX = animationFrameIndex * FRAME_WIDTH;
-      const drawX = Math.round(posX);
-      const drawY = Math.round(posY);
-
       screen.drawImage(
         plumeSpriteSheet,
-        spriteFrameX,
+        animationFrameIndex * FRAME_WIDTH,
         0,
         FRAME_WIDTH,
         FRAME_HEIGHT,
-        drawX,
-        drawY,
+        Math.round(x),
+        Math.round(y),
         FRAME_WIDTH,
         FRAME_HEIGHT,
       );

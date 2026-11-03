@@ -212,6 +212,7 @@ const player = {
     this.jetpackLocked = false;
     this.jetpackTicks = 0;
     this.jetpackThrust = 0;
+    this.plume = makePlume();
     this.state = "skating";
     playerStates.skating.enter(this);
   },
@@ -313,6 +314,8 @@ const player = {
       }
     }
 
+    this.plume.update(this.jetpackThrust > 0);
+
     // Advance animation tick
     this.animationTick += 1;
 
@@ -333,6 +336,11 @@ const player = {
   },
 
   draw(screen) {
+    this.plume.draw(
+      screen,
+      this.x + (this.width - this.plume.width) / 2,
+      this.y + this.height,
+    );
     playerStates[this.state].draw(this, screen);
 
     /**
