@@ -4,6 +4,11 @@
 
 const GRAVITY = 0.05;
 const FRICTION = 0.36; // A value between 0 and 1 that determines how much friction slows down the player.
+const JETPACK_THRUST_START = 0.2;
+const JETPACK_THRUST_RAMP = 0.01; // Added per tick the jetpack is held while falling.
+const JETPACK_THRUST_MAX = 0.7;
+// Below 1 the floored y would stop changing, so the player would hover.
+const JETPACK_MIN_FALL_SPEED = 1;
 const SCROLL_SPEED_BRAKING = 0.2;
 const SCROLL_SPEED_SKATING = 1.8;
 const SCROLL_SPEED_SPEEDING = 2.6;
