@@ -20,6 +20,7 @@ The game runs right in the browser, just plain HTML, CSS, and JavaScript, no fra
 - Slow down = Arrow Left
 - Speed up = Arrow Right
 - Sound on/off = S
+- Slow down fall = Arrow Left while jumping
 
 - Each carried Astro Angel grants you an air jump. Use it wisely.
 
@@ -124,7 +125,6 @@ core browser security boundary.
 
 ## Future Plans
 
-- Add jetpacks to the player, like Mars Mars.
 - Let the Astro Angels start chatting and singing together.
 - Add stuff in the background.
 - Refactor collision. Allow player to jump through platforms?
