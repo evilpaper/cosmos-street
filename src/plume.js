@@ -14,17 +14,21 @@ function makePlume() {
   let animationFrameIndex = 0;
   let playing = false;
 
+  function startCycle() {
+    playing = true;
+    animationTick = 0;
+    animationFrameIndex = 0;
+    sfx(sounds.plume);
+  }
+
   return {
     width: FRAME_WIDTH,
 
     update(jetpackOn) {
       if (!playing) {
-        if (!jetpackOn) {
-          return;
+        if (jetpackOn) {
+          startCycle();
         }
-        playing = true;
-        animationTick = 0;
-        animationFrameIndex = 0;
         return;
       }
 
@@ -33,8 +37,12 @@ function makePlume() {
         animationTick = 0;
         animationFrameIndex += 1;
         if (animationFrameIndex >= TOTAL_FRAMES) {
-          animationFrameIndex = 0;
-          playing = jetpackOn;
+          if (jetpackOn) {
+            startCycle();
+          } else {
+            playing = false;
+            animationFrameIndex = 0;
+          }
         }
       }
     },
