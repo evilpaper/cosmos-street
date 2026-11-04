@@ -338,7 +338,7 @@ const player = {
   draw(screen) {
     this.plume.draw(
       screen,
-      this.x + (this.width - this.plume.width) / 2,
+      this.x + (this.width - this.plume.width + 2) / 2,
       this.y + this.height,
     );
     playerStates[this.state].draw(this, screen);
