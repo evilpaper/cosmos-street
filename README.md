@@ -19,8 +19,8 @@ The game runs right in the browser, just plain HTML, CSS, and JavaScript, no fra
 - Jump = Arrow Up
 - Slow down = Arrow Left
 - Speed up = Arrow Right
+- Jetpack = Hold Arrow Left in the air to fire your jetpack. It won't lift you, but the longer you hold, the softer the fall.
 - Sound on/off = S
-- Slow down fall = Arrow Left while jumping
 
 - Each carried Astro Angel grants you an air jump. Use it wisely.
 
